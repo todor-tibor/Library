@@ -34,7 +34,7 @@ public interface IEntity<X extends BaseEntity> {
 	 * @return Search result entity, null if nothing found.
 	 * @throws BeanException 
 	 */
-	public X getById(String p_id) throws BeanException;
+	public X getById(int p_id) throws BeanException;
 	
 	/**
 	 * 
@@ -42,7 +42,7 @@ public interface IEntity<X extends BaseEntity> {
 	 * @return True if operation successful, false if not.
 	 * @throws BeanException 
 	 */
-	public X store(String p_value) throws BeanException;
+	public void store(X p_value) throws BeanException;
 	
 	/**
 	 * 
@@ -50,7 +50,7 @@ public interface IEntity<X extends BaseEntity> {
 	 * @return True if operation successful, false if not.
 	 * @throws BeanException 
 	 */
-	public boolean update(String p_id, String p_newTxt) throws BeanException;
+	public void update(X p_user) throws BeanException;
 	
 	/**
 	 * 
@@ -58,5 +58,5 @@ public interface IEntity<X extends BaseEntity> {
 	 * @return True if operation successful, false if not.
 	 * @throws BeanException 
 	 */
-	public boolean remove(String p_id) throws BeanException;
+	public void remove(int p_id) throws BeanException;
 }

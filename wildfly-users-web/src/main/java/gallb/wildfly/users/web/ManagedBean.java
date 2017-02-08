@@ -61,10 +61,10 @@ public class ManagedBean implements Serializable{
 	public void setCurrentUser(User currentUser) {
 		this.currentUser = currentUser;
 	}
-	public void showRoles() {
-		currentUser = getById(selectedUser);
-		oLogger.info("Current user:   " + currentUser.getUsername() + " " +currentUser.getRoles().get(0));
-	}
+//	public void showRoles() {
+//		currentUser = getById(selectedUser);
+//		oLogger.info("Current user:   " + currentUser.getUserName() + " " +currentUser.getRoles().get(0));
+//	}
 	public String getSelectedRole() {
 		return selectedRole;
 	}
@@ -158,45 +158,45 @@ public class ManagedBean implements Serializable{
 		return oRoleBean;
 	}
 
-	public boolean store(String p_value) {
-		oLogger.info("--store user--");
-		oLogger.info("--store param: " + p_value);
-		if (p_value.isEmpty()) {
-			this.error("Empty field");
-			return false;
-		}
-		if (p_value == "") {
-			this.error("Empty field");
-			return false;
-		}
-		try {
-			userList.add(getUserBean().store(p_value));
-			this.info("Succesfully added: " + p_value);
-		} catch (BeanException e) {
-			this.error(e.getMessage());
-		}
-		return false;
-	}
-
-	public boolean storeRole(String p_value) {
-		oLogger.info("--store role--");
-		oLogger.info("--store param: " + p_value);
-		if (p_value.isEmpty()) {
-			this.error("Empty field");
-			return false;
-		}
-		if (p_value == "") {
-			this.error("Empty field");
-			return false;
-		}
-		try {
-			roleList.add(getRoleBean().store(p_value));
-			this.info("Succesfully added: " + p_value);
-		} catch (BeanException e) {
-			this.error(e.getMessage());
-		}
-		return false;
-	}
+//	public boolean store(String p_value) {
+//		oLogger.info("--store user--");
+//		oLogger.info("--store param: " + p_value);
+//		if (p_value.isEmpty()) {
+//			this.error("Empty field");
+//			return false;
+//		}
+//		if (p_value == "") {
+//			this.error("Empty field");
+//			return false;
+//		}
+//		try {
+//			userList.add(getUserBean().store(p_value));
+//			this.info("Succesfully added: " + p_value);
+//		} catch (BeanException e) {
+//			this.error(e.getMessage());
+//		}
+//		return false;
+//	}
+//
+//	public boolean storeRole(String p_value) {
+//		oLogger.info("--store role--");
+//		oLogger.info("--store param: " + p_value);
+//		if (p_value.isEmpty()) {
+//			this.error("Empty field");
+//			return false;
+//		}
+//		if (p_value == "") {
+//			this.error("Empty field");
+//			return false;
+//		}
+//		try {
+//			roleList.add(getRoleBean().store(p_value));
+//			this.info("Succesfully added: " + p_value);
+//		} catch (BeanException e) {
+//			this.error(e.getMessage());
+//		}
+//		return false;
+//	}
 
 	public List<User> search(String p_searchTxt) {
 		oLogger.info("--search user--" + p_searchTxt);
@@ -236,139 +236,139 @@ public class ManagedBean implements Serializable{
 		return roleList;
 	}
 
-	public boolean update(String p_newTxt) {
-		oLogger.info("--update user ManagedBean--id:" + selectedUser + "new name: " +p_newTxt);
-		if ((selectedUser != null) && (p_newTxt.length() >= 3)) {
-			//if ()
-			try {
-				getUserBean().update(selectedUser, p_newTxt);
-				userList = getUserBean().getAll(); 
-				oLogger.info("**********************update succesfull************************************");
-				this.info("Update succesfull.");
-			} catch (BeanException e) {
-				oLogger.error(e);
-				this.error(e.getMessage());
-			}
-		} else {
-			this.error("New name too short.");
-		}
-		return true;
-	}
+//	public boolean update(String p_newTxt) {
+//		oLogger.info("--update user ManagedBean--id:" + selectedUser + "new name: " +p_newTxt);
+//		if ((selectedUser != null) && (p_newTxt.length() >= 3)) {
+//			//if ()
+//			try {
+//				getUserBean().update(selectedUser, p_newTxt);
+//				userList = getUserBean().getAll(); 
+//				oLogger.info("**********************update succesfull************************************");
+//				this.info("Update succesfull.");
+//			} catch (BeanException e) {
+//				oLogger.error(e);
+//				this.error(e.getMessage());
+//			}
+//		} else {
+//			this.error("New name too short.");
+//		}
+//		return true;
+//	}
 	
-	public boolean updateRole(String p_newTxt) {
-		oLogger.info("--update role ManagedBean--id:" + selectedRole + "new name: " +p_newTxt);
-		if ((selectedRole != null) && (p_newTxt.length() >= 3)) {
-			try {
-				getRoleBean().update(selectedRole, p_newTxt);
-				getRoleBean().getAll();
-				oLogger.info("**********************update succesfull************************************");
-				this.info("Update succesfull.");
-			} catch (BeanException e) {
-				oLogger.error(e);
-				this.error(e.getMessage());
-			}
-		} else {
-			this.error("New name too short.");
-		}
-		return true;
-	}
+//	public boolean updateRole(String p_newTxt) {
+//		oLogger.info("--update role ManagedBean--id:" + selectedRole + "new name: " +p_newTxt);
+//		if ((selectedRole != null) && (p_newTxt.length() >= 3)) {
+//			try {
+//				getRoleBean().update(selectedRole, p_newTxt);
+//				getRoleBean().getAll();
+//				oLogger.info("**********************update succesfull************************************");
+//				this.info("Update succesfull.");
+//			} catch (BeanException e) {
+//				oLogger.error(e);
+//				this.error(e.getMessage());
+//			}
+//		} else {
+//			this.error("New name too short.");
+//		}
+//		return true;
+//	}
 
-	public boolean remove() {
-		oLogger.info("--remove user by Id ManagedBean--p_id: " + selectedUser);
-		if (selectedUser == "") {
-			this.error("Empty field");
-			return false;
-		} else {
-			try {
-				getUserBean().remove(selectedUser);
-				userList = getUserBean().getAll(); 
-				this.info("Delete succesfull.");
-			} catch (BeanException e) {
-				oLogger.error(e);
-				this.error(e.getMessage());
-			}
-		}
-		return true;
-	}
+//	public boolean remove() {
+//		oLogger.info("--remove user by Id ManagedBean--p_id: " + selectedUser);
+//		if (selectedUser == "") {
+//			this.error("Empty field");
+//			return false;
+//		} else {
+//			try {
+//				getUserBean().remove(selectedUser);
+//				userList = getUserBean().getAll(); 
+//				this.info("Delete succesfull.");
+//			} catch (BeanException e) {
+//				oLogger.error(e);
+//				this.error(e.getMessage());
+//			}
+//		}
+//		return true;
+//	}
 	
-	public boolean removeRole() {
-		oLogger.info("--remove role by Id ManagedBean--p_id: " + selectedRole);
-		if (selectedRole == "") {
-			this.error("Empty field");
-			return false;
-		} else {
-			try {
-				getRoleBean().remove(selectedRole);
-				roleList = getRoleBean().getAll(); 
-				this.info("Delete succesfull.");
-			} catch (BeanException e) {
-				oLogger.error(e);
-				this.error(e.getMessage());
-			}
-		}
-		return true;
-	}
+//	public boolean removeRole() {
+//		oLogger.info("--remove role by Id ManagedBean--p_id: " + selectedRole);
+//		if (selectedRole == "") {
+//			this.error("Empty field");
+//			return false;
+//		} else {
+//			try {
+//				getRoleBean().remove(selectedRole);
+//				roleList = getRoleBean().getAll(); 
+//				this.info("Delete succesfull.");
+//			} catch (BeanException e) {
+//				oLogger.error(e);
+//				this.error(e.getMessage());
+//			}
+//		}
+//		return true;
+//	}
 
-	public User getById(String p_id) {
-		oLogger.info("--search user by Id ManagedBean--");
-		try {
-			return getUserBean().getById(p_id);
-		}  catch (BeanException e) {
-			oLogger.error(e);
-			this.error(e.getMessage());
-		}
-		return null;
-	}
-	
-	public Role getRoleById(String p_id) {
-		oLogger.info("--search user by Id ManagedBean--");
-		try {
-			return getRoleBean().getById(p_id);
-		}  catch (BeanException e) {
-			oLogger.error(e);
-			this.error(e.getMessage());
-		}
-		return null;
-	}
-	
-	public boolean assignRole() {
-		oLogger.info("--assign role ManagedBean--");
-		if (selectedUser == null) {
-			this.error("No user selected.");
-			return false;
-		}
-		if (selectedRole == null) {
-			this.error("No role selected.");
-			return false;
-		}
-		try {
-			getUserBean().addRole(selectedUser, selectedRole);
-			this.info("Succesfully assigned.");
-		} catch (BeanException e) {
-			oLogger.error(e);
-			this.error(e.getMessage());
-		}
-		return true;
-	}
-	
-	public boolean revokeRole() {
-		oLogger.info("--revoke role ManagedBean--");
-		if (selectedUser == null) {
-			this.error("No user selected.");
-			return false;
-		}
-		if (selectedRole == null) {
-			this.error("No role selected.");
-			return false;
-		}
-		try {
-			getUserBean().removeRole(selectedUser, selectedRole);
-			this.info("Succesfully revoked.");
-		} catch (BeanException e) {
-			oLogger.error(e);
-			this.error(e.getMessage());
-		}
-		return true;
-	}
+//	public User getById(String p_id) {
+//		oLogger.info("--search user by Id ManagedBean--");
+//		try {
+//			return getUserBean().getById(p_id);
+//		}  catch (BeanException e) {
+//			oLogger.error(e);
+//			this.error(e.getMessage());
+//		}
+//		return null;
+//	}
+//	
+//	public Role getRoleById(String p_id) {
+//		oLogger.info("--search user by Id ManagedBean--");
+//		try {
+//			return getRoleBean().getById(p_id);
+//		}  catch (BeanException e) {
+//			oLogger.error(e);
+//			this.error(e.getMessage());
+//		}
+//		return null;
+//	}
+//	
+//	public boolean assignRole() {
+//		oLogger.info("--assign role ManagedBean--");
+//		if (selectedUser == null) {
+//			this.error("No user selected.");
+//			return false;
+//		}
+//		if (selectedRole == null) {
+//			this.error("No role selected.");
+//			return false;
+//		}
+//		try {
+//			getUserBean().addRole(selectedUser, selectedRole);
+//			this.info("Succesfully assigned.");
+//		} catch (BeanException e) {
+//			oLogger.error(e);
+//			this.error(e.getMessage());
+//		}
+//		return true;
+//	}
+//	
+//	public boolean revokeRole() {
+//		oLogger.info("--revoke role ManagedBean--");
+//		if (selectedUser == null) {
+//			this.error("No user selected.");
+//			return false;
+//		}
+//		if (selectedRole == null) {
+//			this.error("No role selected.");
+//			return false;
+//		}
+//		try {
+//			getUserBean().removeRole(selectedUser, selectedRole);
+//			this.info("Succesfully revoked.");
+//		} catch (BeanException e) {
+//			oLogger.error(e);
+//			this.error(e.getMessage());
+//		}
+//		return true;
+//	}
 	
 }

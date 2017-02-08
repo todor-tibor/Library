@@ -1,210 +1,142 @@
 package gallb.wildfly.users.ejb;
 
-import java.util.ArrayList;
 import java.util.List;
-import org.jboss.logging.Logger;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityExistsException;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import javax.persistence.TransactionRequiredException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import gallb.wildfly.users.common.BeanException;
-import gallb.wildfly.users.common.IEntity;
+import org.jboss.logging.Logger;
+
 import gallb.wildfly.users.common.IUser;
-import model.Role;
 import model.User;
 
-@Stateless
-public class UserBean implements IUser{
 
-	private Logger oLogger = Logger.getLogger(UserBean.class);
-	
+
+@Stateless
+public class UserBean implements IUser {
 	@PersistenceContext(unitName = "WildflyUsers")
 	private EntityManager oEntityManager;
-	
-	@Override
-	public List<User> getAll() throws BeanException {
-		CriteriaBuilder cb = oEntityManager.getCriteriaBuilder();
-		CriteriaQuery<User> criteria = cb.createQuery(User.class);
-		Root<User> member = criteria.from(User.class);
-		criteria.select(member).orderBy(cb.asc(member.get("username")));
-		List<User> usrList = new ArrayList();
-		try {
-			usrList = oEntityManager.createQuery(criteria).getResultList();
-		} catch (IllegalArgumentException e) {
-			oLogger.error(e);
-			throw new BeanException("Illegal argument.");
-		} catch (TransactionRequiredException e) {
-			oLogger.error(e);
-			throw new BeanException("Transaction error.");
-		}	
-		return usrList;
-	}
+	private Logger oLogger = Logger.getLogger(UserBean.class);
 
 	@Override
-	public User store(String p_value) throws BeanException {
-		List<User> listByName  = this.search(p_value);
-		if (!listByName.isEmpty()) {
-			oLogger.error("Username allready exists.");
-			throw new BeanException("Username allready exists.");
-		}
-		User tmpUsr = new User();
-		tmpUsr.setUsername(p_value);
+	public List<User> getAll() {
 		try {
-			oEntityManager.persist(tmpUsr);
-		} catch (EntityExistsException e) {
-			oLogger.error(e);
-			throw new BeanException("Username allready exists.");
-		} catch (IllegalArgumentException e) {
-			oLogger.error(e);
-			throw new BeanException("Illegal argument.");
-		} catch (TransactionRequiredException e) {
-			oLogger.error(e);
-			throw new BeanException("Transaction error.");
-		}	
-		return tmpUsr;
-	}
-
-	@Override
-	public List<User> search(String p_searchTxt) throws BeanException {
-		CriteriaBuilder cb = oEntityManager.getCriteriaBuilder();
-		CriteriaQuery<User> criteria = cb.createQuery(User.class);
-		Root<User> member = criteria.from(User.class);
-		criteria.select(member).where(cb.like(member.get("username"), "%"+p_searchTxt+"%")).orderBy(cb.asc(member.get("username")));
-		List<User> tmpUserList = new ArrayList<>();
-		try {
-			tmpUserList = oEntityManager.createQuery(criteria).getResultList();
-		} catch (IllegalArgumentException e) {
-			oLogger.error(e);
-			throw new BeanException("Illegal argument.");
-		} catch (TransactionRequiredException e) {
-			oLogger.error(e);
-			throw new BeanException("Transaction error.");
-		}	
-		//oLogger.info("Users found for searchstring: " + p_searchTxt);
-		//tmpUserList.forEach(e -> oLogger.info(e.getUsername()));
-		return tmpUserList;
-	}
-
-	@Override
-	public boolean update(String p_id, String p_newTxt) throws BeanException{
-		User tmpUsr = oEntityManager.find(User.class, p_id);
-		if (tmpUsr == null) {
-			oLogger.info("--delete by Id UserBean didn't find user--");
-			throw new BeanException("Didn't find entity by id");
-		}
-		oLogger.info("--update by Id UserBean - user found - call update--");
-		try{
-			tmpUsr.setUsername(p_newTxt);
-			//oEntityManager.merge(tmpUsr);	
-			oEntityManager.flush();
-		} catch (TransactionRequiredException e) {
-			oLogger.error(e);
-			throw new BeanException("Transaction error.");
+			@SuppressWarnings("unchecked")
+			List<User> users = (List<User>) oEntityManager.createNamedQuery("User.findAll").getResultList();
+			return users;
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new BeanException("Please verify if given name is not taken.");
-		} 
-		return true;
+			EjbExeption.getCause(e);
+			throw new EjbExeption("Can't find users", e);
+		}
 	}
 
 	@Override
-	public boolean remove(String p_id) throws BeanException{
-		User tmpUsr = oEntityManager.find(User.class, p_id); 
-		if (tmpUsr == null) {
-			oLogger.error("--delete by Id UserBean didn't find user--");
-			throw new BeanException("Didn't find entity by id");
-		}
-		oLogger.info("--delete by Id UserBean - user found - call delete--");
+	public User getById(int id) {
 		try {
-			oEntityManager.remove(tmpUsr);
-		} catch (IllegalArgumentException e) {
+			User u = oEntityManager.find(User.class, id);
+			return u;
+		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new BeanException("Illegal argument.");
-		} catch (TransactionRequiredException e) {
-			oLogger.error(e);
-			throw new BeanException("Transaction error.");
+			EjbExeption.getCause(e);
+			throw new EjbExeption("Can't find user with specifiel id: <" + id + ">", e);
 		}
-		return true;
 	}
 
 	@Override
-	public User getById(String p_id) throws BeanException {
-		oLogger.info("--search user by Id UserBean--");
+	public void store(User user) {
 		try {
-			return oEntityManager.find(User.class, p_id);
-		}  catch (IllegalArgumentException e) {
-			oLogger.error(e);
-			throw new BeanException("Illegal argument.");
-		} catch (TransactionRequiredException e) {
-			oLogger.error(e);
-			throw new BeanException("Transaction error.");
-		}	
-	}
-
-	@Override
-	public boolean addRole(String p_userId, String p_roleId) throws BeanException {
-		User tmpUsr = oEntityManager.find(User.class, p_userId); 
-		if (tmpUsr == null) {
-			oLogger.info("--addRole UserBean didn't find user--");
-			throw new BeanException("Didn't find entity by id");
-		}
-		Role tmpRole = oEntityManager.find(Role.class, p_roleId);
-		if (tmpRole == null) {
-			oLogger.info("--addRole by Id UserBean didn't find role--");
-			throw new BeanException("Didn't find entity by id");
-		}
-		oLogger.info("--add role UserBean - user found - call update--");
-		try{
-			List<Role> tmpRoleList= tmpUsr.getRoles();
-			tmpRoleList.add(tmpRole);
-			tmpUsr.setRoles(tmpRoleList);
-			oEntityManager.merge(tmpUsr);	
-		} catch (IllegalArgumentException e) {
-			oLogger.error(e);
-			throw new BeanException("Illegal argument.");
-		} catch (TransactionRequiredException e) {
-			oLogger.error(e);
-			throw new BeanException("Transaction error.");
-		}
-		return true;
-	}
-
-	@Override
-	public boolean removeRole(String p_userId, String p_roleId) throws BeanException {
-		User tmpUsr = oEntityManager.find(User.class, p_userId); 
-		if (tmpUsr == null) {
-			oLogger.info("--addRole UserBean didn't find user--");
-			throw new BeanException("Didn't find entity by id");
-		}
-		oLogger.info("--remove role UserBean - user found - call update--");
-		List<Role> tmpRoleList= tmpUsr.getRoles();
-		oLogger.info("-----------------------" + tmpRoleList.size());
-		for (int i = 0; i < tmpRoleList.size(); i++) {
-			oLogger.info(p_roleId + " == " + tmpRoleList.get(i).getUuid());
-			if (tmpRoleList.get(i).getUuid().equals(p_roleId)) {
-				oLogger.info("belepett");
-				tmpRoleList.remove(tmpRoleList.get(i));
-			}
-		}
-		tmpUsr.setRoles(tmpRoleList);
-		try {
-			oLogger.error("************************************IDE ELJUT************************");
-			//oEntityManager.merge(tmpUsr);	
+			int n = ((Number) oEntityManager.createNamedQuery("User.maxId").getSingleResult()).intValue();
+			user.setUuid(n + 1);
+			oEntityManager.persist(user);
 			oEntityManager.flush();
-		} catch (IllegalArgumentException e) {
+		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new BeanException("Illegal argument.");
-		} catch (TransactionRequiredException e) {
-			oLogger.error(e);
-			throw new BeanException("Transaction error.");
+			EjbExeption.getCause(e);
+			throw new EjbExeption("--------Could not insert user.", e);
 		}
-		return false;
 	}
+
+	@Override
+	public void remove(int id) {
+		try {
+			oEntityManager.clear();
+			User u = getById(id);
+			oEntityManager.remove(u);
+			oEntityManager.flush();
+		} catch (PersistenceException e) {
+			oLogger.error(e);
+			EjbExeption.getCause(e);
+			throw new EjbExeption("Can't delete user with specifield id: <" + id + ">", e);
+		}
+	}
+
+	@Override
+	public void update(User user) {
+		try {
+			oEntityManager.merge(user);
+			oEntityManager.flush();
+		} catch (PersistenceException e) {
+			oLogger.error(e);
+			EjbExeption.getCause(e);
+			throw new EjbExeption("Can't update user with specifield id: <" + user.getUuid() + ">", e);
+
+		}
+	}
+
+	@Override
+	public List<User> search(String name) {
+		try {
+			CriteriaBuilder cb = oEntityManager.getCriteriaBuilder();
+			CriteriaQuery<User> criteria = cb.createQuery(User.class);
+			Root<User> member = criteria.from(User.class);
+
+			criteria.select(member).where(cb.like(member.get("username"), "%" + name + "%"));
+			return oEntityManager.createQuery(criteria).getResultList();
+		} catch (PersistenceException e) {
+			oLogger.error(e);
+			EjbExeption.getCause(e);
+			throw new EjbExeption("Can't find any user.", e);
+		}
+	}
+
+//	@Override
+//	public boolean login(String username, int role) {
+//		oLogger.warn("--------------------------" + role);
+//		try {
+//			CriteriaBuilder cb = oEntityManager.getCriteriaBuilder();
+//			CriteriaQuery<User> criteria = cb.createQuery(User.class);
+//			Root<User> member = criteria.from(User.class);
+//
+//			criteria.select(member).where(cb.equal(member.get("username"), username));
+//			User u = oEntityManager.createQuery(criteria).getSingleResult();
+//
+//			InitialContext jndi = new InitialContext();
+//			IRole oRoleBean = (IRole) jndi.lookup(IRole.jndiNAME);
+//
+//			Role r = oRoleBean.getRoleById(role);
+//			oLogger.warn("--------------------------" + r);
+//			if (u.getRoles().contains(r)) {
+//				oLogger.info("----------user loged in as " + r.getRole());
+//				return true;
+//			} else {
+//				oLogger.info(username + " can't log in as " + r.getRole());
+//			}
+//		} catch (PersistenceException e) {
+//			oLogger.error(e);
+//			EjbExeption.getCause(e);
+//			throw new EjbExeption("Invalid username, can't login.", e);
+//		} catch (NamingException e) {
+//			oLogger.error(e);
+//			throw new EjbExeption("Invalid role, can't login", e);
+//		}
+//		return false;
+//	}
 }
