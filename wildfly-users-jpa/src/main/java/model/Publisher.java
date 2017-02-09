@@ -9,8 +9,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
- * The persistent class for the publishers database table.
- * 
+ * @author nagys The persistent class for the publishers database table.
  */
 @Entity
 @Table(name = "publishers")
@@ -21,19 +20,26 @@ import javax.persistence.Table;
 public class Publisher extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	private int uuid;
-
+	/**
+	 * Publisher name
+	 */
 	private String name;
 
 	public Publisher() {
 	}
 
-
+	/**
+	 * @return publisher name
+	 */
 	public String getName() {
 		return this.name;
 	}
 
+	/**
+	 * set publisher name
+	 * 
+	 * @param name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package gallb.wildfly.users.ejb;
+package gallb.wildfly.users.ejb.publicationManagement.business;
 
 import java.util.List;
 
@@ -17,20 +17,18 @@ import gallb.wildfly.users.ejb.exception.EjbException;
 import model.Publisher;
 
 /**
+ * crud operations from publisher Entity
  * @author nagys
  *
  */
+
 @Stateless
 public class PublisherManager implements IPublisher {
 	@PersistenceContext(unitName = "WildflyUsers")
+
 	private EntityManager oEntityManager;
 	private Logger oLogger = Logger.getLogger(Publisher.class);
 
-	/**
-	 * get all Publisher
-	 * 
-	 * @return Publisher list
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Publisher> getAll() throws EjbException {
@@ -42,11 +40,7 @@ public class PublisherManager implements IPublisher {
 		}
 	}
 
-	/**
-	 * serach publisher by name use % name %
-	 * 
-	 * @return publisher list
-	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Publisher> search(String p_searchTxt) throws EjbException {
 		try {
@@ -60,13 +54,8 @@ public class PublisherManager implements IPublisher {
 		}
 	}
 
-	/**
-	 * search publisher by uuid
-	 * 
-	 * @return publisher
-	 */
 	@Override
-	public Publisher getById(int p_id) throws EjbException {
+	public Publisher getById(String p_id) throws EjbException {
 		try {
 			return (Publisher) oEntityManager.createNamedQuery("Publisher.findById").setParameter("uuid", p_id)
 					.getSingleResult();
@@ -106,7 +95,7 @@ public class PublisherManager implements IPublisher {
 	}
 
 	@Override
-	public void remove(int p_id) throws EjbException {
+	public void remove(String p_id) throws EjbException {
 		try {
 			Publisher publisher = getById(p_id);
 			oEntityManager.remove(publisher);
