@@ -29,13 +29,6 @@ public class Publisher extends BaseEntity {
 	public Publisher() {
 	}
 
-	public int getUuid() {
-		return this.uuid;
-	}
-
-	public void setUuid(int uuid) {
-		this.uuid = uuid;
-	}
 
 	public String getName() {
 		return this.name;

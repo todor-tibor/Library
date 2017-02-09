@@ -1,8 +1,15 @@
 package model;
 
-import java.io.Serializable;
-import javax.persistence.*;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 /**
@@ -15,8 +22,6 @@ import java.util.Date;
 public class Borrow extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	private int uuid;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name="borrow_from")
@@ -37,14 +42,6 @@ public class Borrow extends BaseEntity {
 	private User user;
 
 	public Borrow() {
-	}
-
-	public int getUuid() {
-		return this.uuid;
-	}
-
-	public void setUuid(int uuid) {
-		this.uuid = uuid;
 	}
 
 	public Date getBorrowFrom() {
