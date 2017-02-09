@@ -6,39 +6,39 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
 
 /**
  * The persistent class for the borrows database table.
  * 
  */
 @Entity
-@Table(name="borrows")
-@NamedQuery(name="Borrow.findAll", query="SELECT b FROM Borrow b")
+@Table(name = "borrows")
+@NamedQueries({ @NamedQuery(name = "Borrow.findAll", query = "SELECT b FROM Borrow b"),
+		@NamedQuery(name = "Borrow.findById", query = "SELECT b FROM Borrow b WHERE b.uuid = :uuid") })
 public class Borrow extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
-
 	@Temporal(TemporalType.DATE)
-	@Column(name="borrow_from")
+	@Column(name = "borrow_from")
 	private Date borrowFrom;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="borrow_until")
+	@Column(name = "borrow_until")
 	private Date borrowUntil;
 
-	//bi-directional many-to-one association to Publication
+	// bi-directional many-to-one association to Publication
 	@ManyToOne
-	@JoinColumn(name="publication_id")
+	@JoinColumn(name = "publication_id")
 	private Publication publication;
 
-	//bi-directional many-to-one association to User
+	// bi-directional many-to-one association to User
 	@ManyToOne
-	@JoinColumn(name="user_id")
+	@JoinColumn(name = "user_id")
 	private User user;
 
 	public Borrow() {
