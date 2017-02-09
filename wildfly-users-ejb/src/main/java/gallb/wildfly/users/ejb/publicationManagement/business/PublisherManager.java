@@ -1,6 +1,3 @@
-/**
- * 
- */
 package gallb.wildfly.users.ejb.publicationManagement.business;
 
 import java.util.List;
@@ -29,23 +26,23 @@ public class PublisherManager implements IPublisher {
 	private EntityManager oEntityManager;
 	private Logger oLogger = Logger.getLogger(Publisher.class);
 
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public List<Publisher> getAll() throws EjbException {
 		try {
-			return oEntityManager.createNamedQuery("Publisher.findAll").getResultList();
+			return oEntityManager.createNamedQuery("Publisher.findAll",Publisher.class).getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public List<Publisher> search(String p_searchTxt) throws EjbException {
 		try {
 
-			return oEntityManager.createNamedQuery("Publisher.findByName").setParameter("name", "%" + p_searchTxt + "%")
+			return oEntityManager.createNamedQuery("Publisher.findByName",Publisher.class).setParameter("name", "%" + p_searchTxt + "%")
 					.getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
@@ -57,7 +54,7 @@ public class PublisherManager implements IPublisher {
 	@Override
 	public Publisher getById(String p_id) throws EjbException {
 		try {
-			return (Publisher) oEntityManager.createNamedQuery("Publisher.findById").setParameter("uuid", p_id)
+			return  oEntityManager.createNamedQuery("Publisher.findById",Publisher.class).setParameter("uuid", p_id)
 					.getSingleResult();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
