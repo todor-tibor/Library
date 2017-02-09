@@ -13,6 +13,7 @@
 		<p:panel header="User management">
 			<h:form id="actions_form">
 
+<<<<<<< HEAD
 				<p:inputText id="searchTextBox" binding="#{srch}" />
 				<p:commandButton value="Search" update="userDT"
 					action="#{userbean.search(srch.value)}">
@@ -71,6 +72,59 @@
 					<f:param name="p_value" value="#{newName.value}" />
 				</p:commandButton>
 				
+=======
+				<p:dataTable id="userDT" var="user" value="#{userbean.userList}"
+					selectionMode="single" selection="#{userbean.currentUser}"
+					rowKey="#{user.uuid}">
+					<f:facet name="header">
+            			Users
+        			</f:facet>
+					<p:column headerText="Username">
+						<h:outputText value="#{user.userName}" />
+					</p:column>
+					<f:facet name="footer">
+						<p:commandButton process="userDT" icon="ui-icon-search"
+							value="Details" oncomplete="PF('roleDialog').show()" />
+					</f:facet>
+				</p:dataTable>
+
+				<p:dialog id="first" modal="true" showEffect="fade"
+					hideEffect="fade" widgetVar="roleDialog" header="#{currentUser.userName}"
+					width="300" height="300">
+					<p:messages id="messages" showDetail="true" autoUpdate="true"
+						closable="true" />
+					<p:inputText id="renameTextBox" binding="#{renameuser}" />
+					<p:commandButton value="Rename" update=""
+						action="#{userbean.update(renameuser.value)}">
+						<f:param name="p_newTxt" value="#{renameuser.value}" />
+					</p:commandButton>
+					<p:dataList id="displayRoles" value="#{userbean.currentUser.roles}"
+						var="role" width="250">
+						<h:outputText value="#{role.userrole}" />
+					</p:dataList>
+				</p:dialog>
+
+
+				<p:commandButton value="List all users" update="userDT"
+					action="#{userbean.getAll}">
+				</p:commandButton>
+				<br> </br>
+
+				<br> </br>
+				<p:separator />
+				<p:inputText id="addUserTxtBox" binding="#{newName}" />
+				<p:commandButton value="Add" update="userDT"
+					action="#{userbean.store(newName.value)}">
+					<f:param name="p_value" value="#{newName.value}" />
+				</p:commandButton>
+
+				<p:inputText id="searchTextBox" binding="#{srch}" />
+				<p:commandButton value="Search" update="userDT"
+					action="#{userbean.search(srch.value)}">
+					<f:param name="p_value" value="#{srch.value}" />
+				</p:commandButton>
+
+>>>>>>> branch 'DataTable' of https://github.com/todor-tibor/Library.git
 			</h:form>
 	</p:panel>
 	</h:panelGrid>
