@@ -15,7 +15,10 @@ import org.jboss.logging.Logger;
 import gallb.wildfly.users.common.IUser;
 import gallb.wildfly.users.ejb.exception.EjbException;
 import model.User;
-
+/**
+ * @author kiska
+ *
+ */
 @Stateless
 public class UserBean implements IUser {
 	@PersistenceContext(unitName = "WildflyUsers")
@@ -95,6 +98,11 @@ public class UserBean implements IUser {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param userName - the user name of the user for which to search 
+	 * @return - a User object
+	 */
 	public User getByName(String userName){
 		return (User) oEntityManager.createNamedQuery("User.findByName").setParameter("user_name", userName).getSingleResult();
 	}

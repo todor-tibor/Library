@@ -18,8 +18,15 @@ import gallb.wildfly.users.ejb.userManagement.business.RoleBean;
  */
 public class PasswordEncrypter {
 	private static Logger oLogger = Logger.getLogger(RoleBean.class);
-	private final static String ENCRYPTER_ERROR = "Password encrypter error!";
+	private final static String ENCRYPTER_ERROR = "password.error.message";
 
+	/**
+	 * 
+	 * @param password - the raw password
+	 * @param salt - a random data used for hashing
+	 * @return - the hashed password generated from the raw password and salt value
+	 * @throws EjbException
+	 */
 	public static String encypted(String password, String salt) throws EjbException {
 		try {
 			byte[] initialBytes;
