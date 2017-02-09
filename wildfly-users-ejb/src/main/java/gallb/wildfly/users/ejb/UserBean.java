@@ -98,7 +98,7 @@ public class UserBean implements IUser {
 			CriteriaQuery<User> criteria = cb.createQuery(User.class);
 			Root<User> member = criteria.from(User.class);
 
-			criteria.select(member).where(cb.like(member.get("username"), "%" + name + "%"));
+			criteria.select(member).where(cb.like(member.get("userName"), "%" + name + "%"));
 			return oEntityManager.createQuery(criteria).getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
