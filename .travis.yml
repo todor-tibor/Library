@@ -3,3 +3,5 @@ sudo: false
 script: mvn clean verify
 jdk:
   - oraclejdk8
+env:
+  - MAVEN_OPTS="-Dmaven.skip.deploy=true"
