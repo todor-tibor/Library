@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -13,8 +14,10 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "publishers")
-@NamedQuery(name = "Publisher.findAll", query = "SELECT p FROM Publisher p")
-public class Publisher extends BaseEntity{
+@NamedQueries({ @NamedQuery(name = "Publisher.findAll", query = "SELECT p FROM Publisher p"),
+		@NamedQuery(name = "Publisher.findById", query = "Select p from Publisher p Where p.uuid = :uuid") })
+
+public class Publisher extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Id
