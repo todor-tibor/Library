@@ -36,12 +36,12 @@ import javax.faces.context.FacesContext;
 //@RequestScoped
 @SessionScoped
 //@ViewScoped
-public class ManagedBean implements Serializable{
+public class UserMB implements Serializable{
 
 	/**
 	 * 
 	 */
-	private Logger oLogger = Logger.getLogger(ManagedBean.class);
+	private Logger oLogger = Logger.getLogger(UserMB.class);
 	private static final long serialVersionUID = -4702598250751689454L;
 	@Inject
 	private IUser oUserBean;
@@ -49,9 +49,11 @@ public class ManagedBean implements Serializable{
 	private IRole oRoleBean = null;
 	private List<User> userList =  new ArrayList<>();
 	private List<Role> roleList = null;
-	private String selectedUser = null;
+	private User selectedUser = null;
 	private String selectedRole = null;
 	private User currentUser = null;
+	private User user;
+	private String option;
 	
 	
 	
@@ -73,11 +75,11 @@ public class ManagedBean implements Serializable{
 		this.selectedRole = selectedRole;
 	}
 
-	public String getSelectedUser() {
+	public User getSelectedUser() {
 		return selectedUser;
 	}
 
-	public void setSelectedUser(String selectedUser) {
+	public void setSelectedUser(User selectedUser) {
 		this.selectedUser = selectedUser;
 	}
 
@@ -115,7 +117,7 @@ public class ManagedBean implements Serializable{
 		try {
 			oLogger.info("--getAllUsers()--users queried");
 			userList = oUserBean.getAll();
-			//userList = getUserBean().getAll();
+			oLogger.info(userList.size() + " users queried.");
 		} catch (BeanException e) {
 			this.error("Server internal error.");
 		}

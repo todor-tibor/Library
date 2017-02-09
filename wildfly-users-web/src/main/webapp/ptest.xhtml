@@ -24,9 +24,10 @@
 				<f:param name="p_value" value="#{srch.value}" />
 			</p:commandButton>
 
-			<p:selectOneListbox id="selector" value="#{userbean.selectedUser}">
+			<p:selectOneListbox id="selector" value="#{userbean.selectedUser}" converter="userConverter"
+									filter="true" filterMatchMode="contains">
 				<f:selectItems value="#{userbean.userList}" var="user"
-					itemValue="#{user.uuid}" itemLabel="#{user.userName}" />
+					itemValue="#{user}" itemLabel="#{user.userName}" />
 				<f:ajax render="actions_form" />
 			</p:selectOneListbox>
 
