@@ -6,7 +6,7 @@ GRANT ALL privileges on library2.* to 'librarian'@'localhost';
 drop table if exists `publication_authors`;
 drop table if exists `authors`;
 CREATE TABLE `authors` (
-  `uuid` int NOT NULL,
+  `uuid` varchar(80) NOT NULL,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -23,7 +23,7 @@ CREATE TABLE `publishers` (
 
 
 CREATE TABLE `publications` (
-  `uuid` int NOT NULL,
+  `uuid` varchar(80) NOT NULL,
   `title` varchar(45) NOT NULL,
   `publication_date` date NOT NULL,
   `type` enum('Book','Newspaper','Magazine') NOT NULL,
@@ -37,8 +37,8 @@ CREATE TABLE `publications` (
 
 
 CREATE TABLE `publication_authors` (
-  `publication_id` int NOT NULL,
-  `author_id` int NOT NULL,
+  `publication_id` varchar(80) NOT NULL,
+  `author_id` varchar(80) NOT NULL,
   PRIMARY KEY (`publication_id`,`author_id`),
   CONSTRAINT `fk_authors` FOREIGN KEY (`author_id`) REFERENCES `authors` (`uuid`) MATCH SIMPLE
         ON UPDATE NO ACTION
@@ -51,7 +51,7 @@ CREATE TABLE `publication_authors` (
 drop table if exists `users_roles`;
 drop table if exists `users`;
 CREATE TABLE `users` (
-  `uuid` int NOT NULL,
+  `uuid` varchar(80) NOT NULL,
   `user_name` varchar(50) NOT NULL,
   `loyalty_index` int(11) NOT NULL,
   `password` varchar(80) NOT NULL,
@@ -61,9 +61,9 @@ CREATE TABLE `users` (
 
 
 CREATE TABLE `borrows` (
-  `uuid` int NOT NULL,
-  `user_id` int NOT NULL,
-  `publication_id` int NOT NULL,
+  `uuid` varchar(80) NOT NULL,
+  `user_id` varchar(80) NOT NULL,
+  `publication_id` varchar(80) NOT NULL,
   `borrow_from` date NOT NULL,
   `borrow_until` date NOT NULL,
   PRIMARY KEY (`uuid`),
@@ -80,9 +80,9 @@ CREATE TABLE `borrows` (
 drop table if exists `roles`;
 CREATE TABLE `roles`
 (
-    `id` int NOT NULL,
+    `uuid` varchar(80) NOT NULL,
     `role` varchar(80) NOT NULL,
-    CONSTRAINT pk_roles PRIMARY KEY (`id`),
+    CONSTRAINT pk_roles PRIMARY KEY (`uuid`),
     CONSTRAINT uk_role UNIQUE (`role`)
 );
 ----------------------------------------
@@ -92,11 +92,11 @@ CREATE TABLE `roles`
 
 CREATE TABLE `users_roles`
 (
-    `user_id` int NOT NULL,
-    `role_id` int NOT NULL,
+    `user_id` varchar(80) NOT NULL,
+    `role_id` varchar(80) NOT NULL,
     CONSTRAINT pk_user_roles PRIMARY KEY (`role_id`, `user_id`),
     CONSTRAINT fk_role FOREIGN KEY (`role_id`)
-        REFERENCES library2.roles (`id`) MATCH SIMPLE
+        REFERENCES library2.roles (`uuid`) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE CASCADE,
     CONSTRAINT fk_user FOREIGN KEY (`user_id`)
@@ -124,8 +124,8 @@ INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`
 INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`) VALUES ('4', 'Szilard Nagy', '5', 'almafa');
 INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`) VALUES ('5', 'Admin', '10', 'almafa');
 
-INSERT INTO `library2`.`roles` (`id`, `role`) VALUES ('1', 'LIBRARIAN');
-INSERT INTO `library2`.`roles` (`id`, `role`) VALUES ('2', 'READER');
+INSERT INTO `library2`.`roles` (`uuid`, `role`) VALUES ('1', 'LIBRARIAN');
+INSERT INTO `library2`.`roles` (`uuid`, `role`) VALUES ('2', 'READER');
 
 INSERT INTO `library2`.`users_roles` (`user_id`, `role_id`) VALUES ('1', '1');
 INSERT INTO `library2`.`users_roles` (`user_id`, `role_id`) VALUES ('2', '2');

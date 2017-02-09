@@ -35,7 +35,7 @@ public class RoleBean implements IRole {
 	}
 
 	@Override
-	public Role getById(int id) throws EjbException {
+	public Role getById(String id) throws EjbException {
 		try {
 			return oEntityManager.find(Role.class, id);
 		} catch (PersistenceException e) {
@@ -47,8 +47,6 @@ public class RoleBean implements IRole {
 	@Override
 	public void store(Role role) throws EjbException {
 		try {
-			int n = ((Number) oEntityManager.createNamedQuery("Role.maxId").getSingleResult()).intValue();
-			role.setId(n + 1);
 			oEntityManager.persist(role);
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
@@ -58,7 +56,7 @@ public class RoleBean implements IRole {
 	}
 
 	@Override
-	public void remove(int id) throws EjbException {
+	public void remove(String id) throws EjbException {
 		try {
 			Role r = oEntityManager.find(Role.class, id);
 			oEntityManager.remove(r);
@@ -73,7 +71,7 @@ public class RoleBean implements IRole {
 	@Override
 	public void update(Role role) throws EjbException {
 		try {
-			Role r = oEntityManager.find(Role.class, role.getId());
+			Role r = oEntityManager.find(Role.class, role.getUuid());
 			if (r != null) {
 				oEntityManager.merge(role);
 				oEntityManager.flush();

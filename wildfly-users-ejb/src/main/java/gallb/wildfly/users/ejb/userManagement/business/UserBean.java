@@ -37,7 +37,7 @@ public class UserBean implements IUser {
 	}
 
 	@Override
-	public User getById(int id) throws EjbException {
+	public User getById(String id) throws EjbException {
 		try {
 			return oEntityManager.find(User.class, id);
 		} catch (PersistenceException e) {
@@ -49,8 +49,6 @@ public class UserBean implements IUser {
 	@Override
 	public void store(User user) throws EjbException {
 		try {
-			int n = ((Number) oEntityManager.createNamedQuery("User.maxId").getSingleResult()).intValue();
-			user.setUuid(n + 1);
 			oEntityManager.persist(user);
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
@@ -60,7 +58,7 @@ public class UserBean implements IUser {
 	}
 
 	@Override
-	public void remove(int id) throws EjbException {
+	public void remove(String id) throws EjbException {
 		try {
 			oEntityManager.clear();
 			User u = getById(id);
