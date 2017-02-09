@@ -14,7 +14,9 @@ import org.jboss.logging.Logger;
 
 import gallb.wildfly.users.common.IUser;
 import gallb.wildfly.users.ejb.exception.EjbException;
+import gallb.wildfly.users.ejb.util.PasswordEncrypter;
 import model.User;
+
 /**
  * @author kiska
  *
@@ -49,6 +51,7 @@ public class UserBean implements IUser {
 	@Override
 	public void store(User user) throws EjbException {
 		try {
+			user.setPassword(PasswordEncrypter.encypted(user.getPassword(), " "));
 			oEntityManager.persist(user);
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
@@ -95,13 +98,16 @@ public class UserBean implements IUser {
 			throw new EjbException(e);
 		}
 	}
-	
+
 	/**
+	 * Returns the user of {@param userName}
 	 * 
-	 * @param userName - the user name of the user for which to search 
+	 * @param userName
+	 *            - the user name of the user for which to search
 	 * @return - a User object
 	 */
-	public User getByName(String userName){
-		return (User) oEntityManager.createNamedQuery("User.findByName").setParameter("user_name", userName).getSingleResult();
+	public User getByName(String userName) {
+		return (User) oEntityManager.createNamedQuery("User.findByName").setParameter("user_name", userName)
+				.getSingleResult();
 	}
 }
