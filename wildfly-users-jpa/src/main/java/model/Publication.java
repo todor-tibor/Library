@@ -29,8 +29,6 @@ import javax.persistence.TemporalType;
 public abstract class Publication extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	private int uuid;
 
 	@Column(name="nr_of_copys")
 	private int nrOfCopys;
@@ -58,14 +56,6 @@ public abstract class Publication extends BaseEntity {
 	
 
 	public Publication() {
-	}
-
-	public int getUuid() {
-		return this.uuid;
-	}
-
-	public void setUuid(int uuid) {
-		this.uuid = uuid;
 	}
 
 	public int getNrOfCopys() {

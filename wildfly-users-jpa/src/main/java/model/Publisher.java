@@ -17,20 +17,10 @@ import javax.persistence.Table;
 public class Publisher extends BaseEntity{
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	private int uuid;
 
 	private String name;
 
 	public Publisher() {
-	}
-
-	public int getUuid() {
-		return this.uuid;
-	}
-
-	public void setUuid(int uuid) {
-		this.uuid = uuid;
 	}
 
 	public String getName() {

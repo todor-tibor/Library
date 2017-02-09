@@ -46,8 +46,6 @@ public class UserBean implements IUser {
 	@Override
 	public void store(User user) throws EjbException {
 		try {
-			int n = ((Number) oEntityManager.createNamedQuery("User.maxId").getSingleResult()).intValue();
-			user.setUuid(n + 1);
 			oEntityManager.persist(user);
 			oEntityManager.flush();
 		} catch (PersistenceException e) {

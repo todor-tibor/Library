@@ -15,8 +15,6 @@ import java.util.Date;
 public class Borrow extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	private int uuid;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name="borrow_from")
@@ -37,14 +35,6 @@ public class Borrow extends BaseEntity {
 	private User user;
 
 	public Borrow() {
-	}
-
-	public int getUuid() {
-		return this.uuid;
-	}
-
-	public void setUuid(int uuid) {
-		this.uuid = uuid;
 	}
 
 	public Date getBorrowFrom() {
