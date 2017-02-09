@@ -30,12 +30,10 @@ public abstract class BaseEntity implements Serializable{
 	
 	@PrePersist
 	public void onPrePersist() {
-		ensureUuid();
+		getUuid();
 	}
 	
 	private void ensureUuid() {
-		if (uuid == null) {
 			setUuid (UUID.randomUUID().toString());
-		}
 	}
 }
