@@ -1,8 +1,9 @@
 package model;
 
-import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 
 /**
@@ -11,24 +12,16 @@ import java.util.List;
  */
 @Entity
 @Table(name="authors")
-@NamedQuery(name="Author.findAll", query="SELECT a FROM Author a")
+@NamedQueries({@NamedQuery(name="Author.findAll", query="SELECT a FROM Author a"),
+	@NamedQuery(name = "Author.searchByName", query = "SELECT a FROM Author a WHERE a.name like :name"),
+	@NamedQuery(name = "Author.getById", query = "SELECT a FROM Author a WHERE a.uuid = :uuid")})
 public class Author extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	private int uuid;
 
 	private String name;
 
 	public Author() {
-	}
-
-	public int getUuid() {
-		return this.uuid;
-	}
-
-	public void setUuid(int uuid) {
-		this.uuid = uuid;
 	}
 
 	public String getName() {
