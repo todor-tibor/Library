@@ -1,27 +1,23 @@
 package model;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
- * @author nagys The persistent class for the publishers database table.
+ * The persistent class for the publishers database table.
+ * 
+ * @author sipost
+ * @author kiska
  */
 @Entity
 @Table(name = "publishers")
-@NamedQueries({ @NamedQuery(name = "Publisher.findAll", query = "SELECT p FROM Publisher p"),
-		@NamedQuery(name = "Publisher.findById", query = "Select p from Publisher p Where p.uuid = :uuid"),
-		@NamedQuery(name = "Publisher.findByName", query = "Select p from Publisher p where p.name like :name") })
-
+@NamedQuery(name = "Publisher.findAll", query = "SELECT p FROM Publisher p")
 public class Publisher extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Publisher name
+	 * publisher name
 	 */
 	private String name;
 
@@ -37,7 +33,6 @@ public class Publisher extends BaseEntity {
 
 	/**
 	 * set publisher name
-	 * 
 	 * @param name
 	 */
 	public void setName(String name) {
