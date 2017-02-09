@@ -33,8 +33,8 @@ public class UserBean implements IUser {
 			return users;
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			EjbExeption.getCause(e);
-			throw new EjbExeption("Can't find users", e);
+			EjbException.getCause(e);
+			throw new EjbException("Can't find users", e);
 		}
 	}
 
@@ -45,8 +45,8 @@ public class UserBean implements IUser {
 			return u;
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			EjbExeption.getCause(e);
-			throw new EjbExeption("Can't find user with specifiel id: <" + id + ">", e);
+			EjbException.getCause(e);
+			throw new EjbException("Can't find user with specifiel id: <" + id + ">", e);
 		}
 	}
 
@@ -59,8 +59,8 @@ public class UserBean implements IUser {
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			EjbExeption.getCause(e);
-			throw new EjbExeption("--------Could not insert user.", e);
+			EjbException.getCause(e);
+			throw new EjbException("--------Could not insert user.", e);
 		}
 	}
 
@@ -73,8 +73,8 @@ public class UserBean implements IUser {
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			EjbExeption.getCause(e);
-			throw new EjbExeption("Can't delete user with specifield id: <" + id + ">", e);
+			EjbException.getCause(e);
+			throw new EjbException("Can't delete user with specifield id: <" + id + ">", e);
 		}
 	}
 
@@ -85,8 +85,8 @@ public class UserBean implements IUser {
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			EjbExeption.getCause(e);
-			throw new EjbExeption("Can't update user with specifield id: <" + user.getUuid() + ">", e);
+			EjbException.getCause(e);
+			throw new EjbException("Can't update user with specifield id: <" + user.getUuid() + ">", e);
 
 		}
 	}
@@ -102,8 +102,8 @@ public class UserBean implements IUser {
 			return oEntityManager.createQuery(criteria).getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			EjbExeption.getCause(e);
-			throw new EjbExeption("Can't find any user.", e);
+			EjbException.getCause(e);
+			throw new EjbException("Can't find any user.", e);
 		}
 	}
 

@@ -30,8 +30,8 @@ public class RoleBean implements IRole {
 			return roles;
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			EjbExeption.getCause(e);
-			throw new EjbExeption(e.getMessage());
+			EjbException.getCause(e);
+			throw new EjbException(e.getMessage());
 		}
 	}
 
@@ -41,8 +41,8 @@ public class RoleBean implements IRole {
 			return oEntityManager.find(Role.class, id);
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			EjbExeption.getCause(e);
-			throw new EjbExeption(e.getMessage());
+			EjbException.getCause(e);
+			throw new EjbException(e.getMessage());
 		}
 	}
 
@@ -55,8 +55,8 @@ public class RoleBean implements IRole {
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			EjbExeption.getCause(e);
-			throw new EjbExeption("Can't insert role <"+role.getRole()+">", e);
+			EjbException.getCause(e);
+			throw new EjbException("Can't insert role <"+role.getRole()+">", e);
 		}
 	}
 
@@ -68,8 +68,8 @@ public class RoleBean implements IRole {
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			EjbExeption.getCause(e);
-			throw new EjbExeption("Can't delete role", e);
+			EjbException.getCause(e);
+			throw new EjbException("Can't delete role", e);
 		}
 
 	}
@@ -84,8 +84,8 @@ public class RoleBean implements IRole {
 			}
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			EjbExeption.getCause(e);
-			throw new EjbExeption("Can't update role", e);
+			EjbException.getCause(e);
+			throw new EjbException("Can't update role", e);
 		}
 	}
 
