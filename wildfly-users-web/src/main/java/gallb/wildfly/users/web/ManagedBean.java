@@ -18,7 +18,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import gallb.wildfly.users.common.IUser;
-import gallb.wildfly.users.common.BeanException;
+import gallb.wildfly.users.common.LibraryException;
 import gallb.wildfly.users.common.IRole;
 import model.Role;
 import model.User;
@@ -104,7 +104,7 @@ public class ManagedBean implements Serializable{
     	userList = new ArrayList<>();
 		try {
 			userList = getUserBean().getAll();
-		} catch (BeanException e) {
+		} catch (LibraryException e) {
 			this.error("Server internal error.");
 		}
     }
@@ -116,7 +116,7 @@ public class ManagedBean implements Serializable{
 			oLogger.info("--getAllUsers()--users queried");
 			userList = oUserBean.getAll();
 			//userList = getUserBean().getAll();
-		} catch (BeanException e) {
+		} catch (LibraryException e) {
 			this.error("Server internal error.");
 		}
 		return userList;
@@ -128,7 +128,7 @@ public class ManagedBean implements Serializable{
 		try {
 			oLogger.info("--getAllUsers()--users queried");
 			roleList = getRoleBean().getAll();
-		} catch (BeanException e) {
+		} catch (LibraryException e) {
 			this.error("Server internal error.");
 		}
 		return roleList;
@@ -204,7 +204,7 @@ public class ManagedBean implements Serializable{
 			userList = new ArrayList<>();
 			try {
 				userList = getUserBean().search(p_searchTxt);
-			} catch (BeanException e) {
+			} catch (LibraryException e) {
 				this.error(e.getMessage());
 			}
 		} else {
@@ -219,7 +219,7 @@ public class ManagedBean implements Serializable{
 			roleList = new ArrayList<>();
 			try {
 				roleList = getRoleBean().search(p_searchTxt);
-			} catch (BeanException e) {
+			} catch (LibraryException e) {
 				this.error(e.getMessage());
 			}			
 		} else {

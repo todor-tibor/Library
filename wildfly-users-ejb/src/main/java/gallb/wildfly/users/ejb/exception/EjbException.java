@@ -1,19 +1,20 @@
-package gallb.wildfly.users.ejb;
+package gallb.wildfly.users.ejb.exception;
 
 import java.sql.SQLException;
 
-import javax.ejb.EJBException;
 import javax.persistence.PersistenceException;
 
 import org.jboss.logging.Logger;
 
-public class EjbExeption extends EJBException {
+import gallb.wildfly.users.common.LibraryException;
+
+public class EjbException extends LibraryException {
 	private final static String DELETE_ERROR_MESSAGE = "Cannot delete role (have user with coresponding role)";
 
 	private static final long serialVersionUID = 5633917663462543264L;
-	private static Logger oLogger = Logger.getLogger(EjbExeption.class);
+	private static Logger oLogger = Logger.getLogger(EjbException.class);
 
-	public static void getCause(PersistenceException e) {
+	public static void getCause(PersistenceException e) throws EjbException {
 		Throwable throwable = e;
 		while (throwable != null && !(throwable instanceof SQLException)) {
 			throwable = throwable.getCause();
@@ -27,19 +28,19 @@ public class EjbExeption extends EJBException {
 			if (sqlex.getMessage().indexOf("Cannot delete") >= 0) {
 				mess = DELETE_ERROR_MESSAGE;
 			}
-			throw new EjbExeption(mess, sqlex);
+			throw new EjbException(mess, sqlex);
 		}
 	}
 
-	public EjbExeption() {
+	public EjbException() {
 		super();
 	}
 
-	public EjbExeption(String message) {
+	public EjbException(String message) {
 		super(message);
 	}
 
-	public EjbExeption(String message, Throwable cause) {
+	public EjbException(String message, Throwable cause) {
 		super(message);
 	}
 

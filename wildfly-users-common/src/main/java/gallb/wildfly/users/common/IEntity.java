@@ -16,47 +16,47 @@ public interface IEntity<X extends BaseEntity> {
 	/**
 	 * 
 	 * @return List containing all entities.
-	 * @throws BeanException 
+	 * @throws LibraryException 
 	 */
-	public List<X> getAll() throws BeanException;
+	public List<X> getAll() throws LibraryException;
 	
 	/**
 	 * 
 	 * @param p_searchTxt String to search for
 	 * @return List of of entities found, empty list if nothing found.
-	 * @throws BeanException 
+	 * @throws LibraryException 
 	 */
-	public List<X> search(String p_searchTxt) throws BeanException;
+	public List<X> search(String p_searchTxt) throws LibraryException;
 	
 	/**
 	 * 
 	 * @param p_id Id of entity
 	 * @return Search result entity, null if nothing found.
-	 * @throws BeanException 
+	 * @throws LibraryException 
 	 */
-	public X getById(int p_id) throws BeanException;
+	public X getById(int p_id) throws LibraryException;
 	
 	/**
 	 * 
 	 * @param p_value String with new value.
 	 * @return True if operation successful, false if not.
-	 * @throws BeanException 
+	 * @throws LibraryException 
 	 */
-	public void store(X p_value) throws BeanException;
+	public void store(X p_value) throws LibraryException;
 	
 	/**
 	 * 
 	 * @param p_newTxt String with new value.
 	 * @return True if operation successful, false if not.
-	 * @throws BeanException 
+	 * @throws LibraryException 
 	 */
-	public void update(X p_user) throws BeanException;
+	public void update(X p_user) throws LibraryException;
 	
 	/**
 	 * 
 	 * @param p_id Id of entity that should be removed from persistence.
 	 * @return True if operation successful, false if not.
-	 * @throws BeanException 
+	 * @throws LibraryException 
 	 */
-	public void remove(int p_id) throws BeanException;
+	public void remove(int p_id) throws LibraryException;
 }
