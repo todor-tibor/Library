@@ -23,9 +23,7 @@ public abstract class BaseEntity implements Serializable {
 	private String uuid;
 
 	public String getUuid() {
-		if (this.uuid == null) {
-			ensureUuid();
-		}
+		ensureUuid();
 		return this.uuid;
 	}
 
@@ -35,10 +33,12 @@ public abstract class BaseEntity implements Serializable {
 
 	@PrePersist
 	public void onPrePersist() {
-		getUuid();
+		ensureUuid();
 	}
 
 	private void ensureUuid() {
-		setUuid(UUID.randomUUID().toString());
+		if (this.uuid == null) {
+			setUuid(UUID.randomUUID().toString());
+		}
 	}
 }
