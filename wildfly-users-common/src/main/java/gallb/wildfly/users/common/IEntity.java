@@ -3,7 +3,6 @@ package gallb.wildfly.users.common;
 import java.util.List;
 
 import model.BaseEntity;
-import model.User;
 /**
  * 
  * @author gallb

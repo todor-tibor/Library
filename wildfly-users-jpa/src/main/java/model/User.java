@@ -4,11 +4,9 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -16,13 +14,14 @@ import javax.persistence.Table;
 /**
  * The persistent class for the users database table.
  * 
+ * @author sipost
+ * @author kiska
  */
 @Entity
 @Table(name = "users")
 @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u")
 public class User extends BaseEntity {
 	private static final long serialVersionUID = 1L;
-
 
 	@Column(name = "loyalty_index")
 	private int loyaltyIndex;
@@ -42,7 +41,6 @@ public class User extends BaseEntity {
 
 	public User() {
 	}
-
 
 	public int getLoyaltyIndex() {
 		return this.loyaltyIndex;

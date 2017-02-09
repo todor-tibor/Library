@@ -7,7 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
@@ -17,43 +16,41 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-
 /**
- * The persistent class for the publications database table.
+ * The persistent abstract class for the publications database table.
  * 
+ * @author sipost
+ * @author kiska
  */
 @Entity
-@Table(name="publications")
+@Table(name = "publications")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 public abstract class Publication extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
-
-	@Column(name="nr_of_copys")
+	@Column(name = "nr_of_copys")
 	private int nrOfCopys;
 
-	@Column(name="on_stock")
+	@Column(name = "on_stock")
 	private int onStock;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="publication_date")
+	@Column(name = "publication_date")
 	private Date publicationDate;
 
 	private String title;
 
-	//private String type;
+	// private String type;
 
-	//bi-directional many-to-one association to Borrow
-	@OneToMany(mappedBy="publication")
+	// bi-directional many-to-one association to Borrow
+	@OneToMany(mappedBy = "publication")
 	private List<Borrow> borrows;
 
-	//bi-directional many-to-one association to Publisher
+	// bi-directional many-to-one association to Publisher
 	@ManyToOne
-	@JoinColumn(name="publisher_id")
+	@JoinColumn(name = "publisher_id")
 	private Publisher publisher;
-
-	
 
 	public Publication() {
 	}
@@ -89,7 +86,6 @@ public abstract class Publication extends BaseEntity {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
 
 	public List<Borrow> getBorrows() {
 		return this.borrows;

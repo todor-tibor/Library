@@ -7,13 +7,18 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 
+/**
+ * 
+ * @author sipost
+ * @author gallb
+ */
 @MappedSuperclass
-public abstract class BaseEntity implements Serializable{
+public abstract class BaseEntity implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3333408811149331428L;
-	
+
 	@Id
 	private String uuid;
 
@@ -26,14 +31,14 @@ public abstract class BaseEntity implements Serializable{
 
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
-	}	
-	
+	}
+
 	@PrePersist
 	public void onPrePersist() {
 		getUuid();
 	}
-	
+
 	private void ensureUuid() {
-			setUuid (UUID.randomUUID().toString());
+		setUuid(UUID.randomUUID().toString());
 	}
 }
