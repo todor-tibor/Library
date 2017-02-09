@@ -9,8 +9,8 @@ import java.security.NoSuchAlgorithmException;
 
 import org.jboss.logging.Logger;
 
-import gallb.wildfly.users.ejb.EjbException;
-import gallb.wildfly.users.ejb.RoleBean;
+import gallb.wildfly.users.ejb.exception.EjbException;
+import gallb.wildfly.users.ejb.userManagement.business.RoleBean;
 
 /**
  * @author kiska
@@ -20,7 +20,7 @@ public class PasswordEncrypter {
 	private static Logger oLogger = Logger.getLogger(RoleBean.class);
 	private final static String ENCRYPTER_ERROR = "Password encrypter error!";
 
-	public static String encypted(String password, String salt) {
+	public static String encypted(String password, String salt) throws EjbException {
 		try {
 			byte[] initialBytes;
 			initialBytes = (password + salt).getBytes("utf-8");

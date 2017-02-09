@@ -94,4 +94,8 @@ public class UserBean implements IUser {
 			throw new EjbException(e);
 		}
 	}
+	
+	public User getByName(String userName){
+		return (User) oEntityManager.createNamedQuery("User.findByName").setParameter("user_name", userName).getSingleResult();
+	}
 }

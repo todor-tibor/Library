@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import gallb.wildfly.users.ejb.UserBean;
+import gallb.wildfly.users.ejb.exception.EjbException;
 import gallb.wildfly.users.ejb.util.PasswordEncrypter;
 import model.Role;
 import model.RoleType;
@@ -18,7 +18,7 @@ public class LoginManagementBusiness {
 	@Inject
 	private UserBean userBean;
 
-	public RoleType authentication(String userName, String password) {
+	public RoleType authentication(String userName, String password) throws EjbException {
 		User user = userBean.getByName(userName);
 		if (PasswordEncrypter.encypted(password, " ").equals(user.getPassword())) {
 			List<Role> roles = user.getRoles();
