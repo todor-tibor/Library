@@ -25,11 +25,11 @@ public class UserBean implements IUser {
 	private EntityManager oEntityManager;
 	private Logger oLogger = Logger.getLogger(UserBean.class);
 
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public List<User> getAll() throws EjbException {
 		try {
-			return oEntityManager.createNamedQuery("User.findAll").getResultList();
+			return oEntityManager.createNamedQuery("User.findAll",User.class).getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
