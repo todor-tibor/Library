@@ -11,32 +11,34 @@ import model.RoleType;
 import model.User;
 
 /**
- * @author kiska
- *
+ * @author kiska Implements a simple authentication process of a user.
  */
 public class LoginManagementBusiness {
 	@Inject
 	private UserBean userBean;
+	/**
+	 * Error message for the case when passwords don't match.
+	 */
+	private static final String PASSWORD_MISMATCH = "loginManagementBusiness.authentication.passwordMismatch";
 
 	/**
+	 * Checks whether the provided password is the same as the stored hashed
+	 * password of the user. If the passwords match, the role of the user is
+	 * returned
 	 * 
-	 * @param userName - the user name of the user who wants to log in
-	 * @param password - the hashed password that the user typed in
-	 * @return - the role (type) of the user
-		if login was not successful, returns an INVALID type, otherwise returns the highest priority roel
+	 * @param userName
+	 *            - the user name of the user who wants to log in
+	 * @param password
+	 *            - the hashed password that the user typed in
+	 * @return - the roles (type) of the user if login was not successful,
+	 *         otherwise throws an error
 	 * @throws EjbException
 	 */
-	public RoleType authentication(String userName, String password) throws EjbException {
+	public List<Role> authentication(String userName, String password) throws EjbException {
 		User user = userBean.getByName(userName);
 		if (PasswordEncrypter.encypted(password, " ").equals(user.getPassword())) {
-			List<Role> roles = user.getRoles();
-			//check roles one by one, highest priority role comes first
-			if (roles.contains(RoleType.LIBRARIAN.toString())) {
-				return RoleType.LIBRARIAN;
-			} else if (roles.contains(RoleType.READER.toString())) {
-				return RoleType.READER;
-			}
+			return user.getRoles();
 		}
-		return RoleType.INVALID;
+		throw new EjbException(PASSWORD_MISMATCH);
 	}
 }

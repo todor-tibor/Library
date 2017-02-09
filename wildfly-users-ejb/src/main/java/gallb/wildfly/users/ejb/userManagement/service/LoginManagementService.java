@@ -1,24 +1,25 @@
 package gallb.wildfly.users.ejb.userManagement.service;
 
+import java.util.List;
+
+import gallb.wildfly.users.common.ILogin;
 import gallb.wildfly.users.ejb.exception.EjbException;
 import gallb.wildfly.users.ejb.userManagement.business.LoginManagementBusiness;
 import gallb.wildfly.users.ejb.util.ServiceValidation;
+import model.Role;
 import model.RoleType;
 /**
  * @author kiska
- *
+ *Implements the basics of user login. 
+ *Validates the given the input data.
  */
-public class LoginManagementService {
-	private static final String INPUT_DATA_VALIDATION_EXCEPTION = "loginManagementService.login.invalidData";
-	
+public class LoginManagementService implements ILogin{
 	/**
-	 * 
-	 * @param userName - the user name of the user
-	 * @param password - the password the user typed in
-	 * @return - the role of the user
-	 * @throws EjbException
+	 * Error message for incorrect data
 	 */
-	public RoleType login(String userName, String password) throws EjbException{
+	private static final String INPUT_DATA_VALIDATION_EXCEPTION = "loginManagementService.login.invalidData";
+
+	public List<Role> login(String userName, String password) throws EjbException{
 		if (ServiceValidation.checkString(userName) && ServiceValidation.checkPassword(password)){
 			return new LoginManagementBusiness().authentication(userName, password);
 		} 
