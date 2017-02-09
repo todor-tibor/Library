@@ -34,7 +34,7 @@ public interface IEntity<X extends BaseEntity> {
 	 * @return Search result entity, null if nothing found.
 	 * @throws LibraryException 
 	 */
-	public X getById(int p_id) throws LibraryException;
+	public X getById(String p_id) throws LibraryException;
 	
 	/**
 	 * 
@@ -58,5 +58,5 @@ public interface IEntity<X extends BaseEntity> {
 	 * @return True if operation successful, false if not.
 	 * @throws LibraryException 
 	 */
-	public void remove(int p_id) throws LibraryException;
+	public void remove(String p_id) throws LibraryException;
 }

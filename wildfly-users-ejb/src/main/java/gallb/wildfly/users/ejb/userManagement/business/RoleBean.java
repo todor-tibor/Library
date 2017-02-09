@@ -35,7 +35,7 @@ public class RoleBean implements IRole {
 	}
 
 	@Override
-	public Role getById(int id) throws EjbException {
+	public Role getById(String id) throws EjbException {
 		try {
 			return oEntityManager.find(Role.class, id);
 		} catch (PersistenceException e) {
@@ -56,7 +56,7 @@ public class RoleBean implements IRole {
 	}
 
 	@Override
-	public void remove(int id) throws EjbException {
+	public void remove(String id) throws EjbException {
 		try {
 			Role r = oEntityManager.find(Role.class, id);
 			oEntityManager.remove(r);
