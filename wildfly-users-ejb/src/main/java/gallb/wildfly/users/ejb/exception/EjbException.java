@@ -1,7 +1,5 @@
 package gallb.wildfly.users.ejb.exception;
 
-import java.sql.SQLException;
-
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceException;
@@ -12,7 +10,7 @@ import org.jboss.logging.Logger;
 import gallb.wildfly.users.common.LibraryException;
 
 public class EjbException extends LibraryException {
-	
+
 	private static final long serialVersionUID = 5633917663462543264L;
 	private static Logger oLogger = Logger.getLogger(EjbException.class);
 
@@ -25,7 +23,7 @@ public class EjbException extends LibraryException {
 		} else if (e instanceof RollbackException) {
 			message = "ejb.message.cantExecute";
 		}
-		oLogger.error("-------" + message + "---------" + e);
+		oLogger.error(message);
 		throw new EjbException(message, e);
 	}
 

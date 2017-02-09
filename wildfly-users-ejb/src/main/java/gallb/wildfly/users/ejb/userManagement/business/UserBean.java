@@ -3,8 +3,6 @@ package gallb.wildfly.users.ejb.userManagement.business;
 import java.util.List;
 
 import javax.ejb.Stateless;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
@@ -18,36 +16,30 @@ import gallb.wildfly.users.common.IUser;
 import gallb.wildfly.users.ejb.exception.EjbException;
 import model.User;
 
-
-
 @Stateless
 public class UserBean implements IUser {
 	@PersistenceContext(unitName = "WildflyUsers")
 	private EntityManager oEntityManager;
 	private Logger oLogger = Logger.getLogger(UserBean.class);
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> getAll() throws EjbException {
 		try {
-			@SuppressWarnings("unchecked")
-			List<User> users = (List<User>) oEntityManager.createNamedQuery("User.findAll").getResultList();
-			return users;
+			return oEntityManager.createNamedQuery("User.findAll").getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			EjbException.getCause(e);
-			throw new EjbException("Can't find users", e);
+			throw new EjbException(e);
 		}
 	}
 
 	@Override
 	public User getById(int id) throws EjbException {
 		try {
-			User u = oEntityManager.find(User.class, id);
-			return u;
+			return oEntityManager.find(User.class, id);
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			EjbException.getCause(e);
-			throw new EjbException("Can't find user with specifiel id: <" + id + ">", e);
+			throw new EjbException(e);
 		}
 	}
 
@@ -60,8 +52,7 @@ public class UserBean implements IUser {
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			EjbException.getCause(e);
-			throw new EjbException("--------Could not insert user.", e);
+			throw new EjbException(e);
 		}
 	}
 
@@ -74,8 +65,7 @@ public class UserBean implements IUser {
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			EjbException.getCause(e);
-			throw new EjbException("Can't delete user with specifield id: <" + id + ">", e);
+			throw new EjbException(e);
 		}
 	}
 
@@ -86,9 +76,7 @@ public class UserBean implements IUser {
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			EjbException.getCause(e);
-			throw new EjbException("Can't update user with specifield id: <" + user.getUuid() + ">", e);
-
+			throw new EjbException(e);
 		}
 	}
 
@@ -103,8 +91,7 @@ public class UserBean implements IUser {
 			return oEntityManager.createQuery(criteria).getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			EjbException.getCause(e);
-			throw new EjbException("Can't find any user.", e);
+			throw new EjbException(e);
 		}
 	}
 }

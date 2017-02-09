@@ -6,33 +6,31 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.jboss.logging.Logger;
 
-import gallb.wildfly.users.common.LibraryException;
-import gallb.wildfly.users.ejb.exception.EjbException;
 import gallb.wildfly.users.common.IRole;
+import gallb.wildfly.users.ejb.exception.EjbException;
 import model.Role;
-
-
 
 @Stateless
 public class RoleBean implements IRole {
-	
+
 	@PersistenceContext(unitName = "WildflyUsers")
 	private EntityManager oEntityManager;
-	private Logger oLogger = Logger.getLogger(RoleBean.class);
+	private static Logger oLogger = Logger.getLogger(RoleBean.class);
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Role> getAll() throws EjbException {
 		try {
-			@SuppressWarnings("unchecked")
-			List<Role> roles = (List<Role>) oEntityManager.createNamedQuery("Role.findAll").getResultList();
-			return roles;
+			return oEntityManager.createNamedQuery("Role.findAll").getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			EjbException.getCause(e);
-			throw new EjbException(e.getMessage());
+			throw new EjbException(e);
 		}
 	}
 
@@ -42,8 +40,7 @@ public class RoleBean implements IRole {
 			return oEntityManager.find(Role.class, id);
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			EjbException.getCause(e);
-			throw new EjbException(e.getMessage());
+			throw new EjbException(e);
 		}
 	}
 
@@ -56,8 +53,7 @@ public class RoleBean implements IRole {
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			EjbException.getCause(e);
-			throw new EjbException("Can't insert role <"+role.getRole()+">", e);
+			throw new EjbException(e);
 		}
 	}
 
@@ -69,8 +65,7 @@ public class RoleBean implements IRole {
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			EjbException.getCause(e);
-			throw new EjbException("Can't delete role", e);
+			throw new EjbException(e);
 		}
 
 	}
@@ -85,15 +80,22 @@ public class RoleBean implements IRole {
 			}
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			EjbException.getCause(e);
-			throw new EjbException("Can't update role", e);
+			throw new EjbException(e);
 		}
 	}
 
 	@Override
-	public List<Role> search(String p_searchTxt) throws LibraryException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Role> search(String p_searchTxt) throws EjbException {
+		try {
+			CriteriaBuilder cb = oEntityManager.getCriteriaBuilder();
+			CriteriaQuery<Role> criteria = cb.createQuery(Role.class);
+			Root<Role> member = criteria.from(Role.class);
+			criteria.select(member).where(cb.like(member.get("role"), "%" + p_searchTxt + "%"));
+			return oEntityManager.createQuery(criteria).getResultList();
+		} catch (PersistenceException e) {
+			oLogger.error(e);
+			throw new EjbException(e);
+		}
 	}
 
 }
