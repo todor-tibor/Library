@@ -19,12 +19,12 @@ import gallb.wildfly.users.ejb.RoleBean;
 public class PasswordEncrypter {
 	private static Logger oLogger = Logger.getLogger(RoleBean.class);
 	private final static String ENCRYPTER_ERROR = "Password encrypter error!";
+
 	public static String encypted(String password, String salt) {
 		try {
 			byte[] initialBytes;
 			initialBytes = (password + salt).getBytes("utf-8");
-			MessageDigest algorithm = MessageDigest
-					.getInstance("SHA");
+			MessageDigest algorithm = MessageDigest.getInstance("SHA");
 			algorithm.reset();
 			algorithm.update(initialBytes);
 			byte[] hashBytes = algorithm.digest();

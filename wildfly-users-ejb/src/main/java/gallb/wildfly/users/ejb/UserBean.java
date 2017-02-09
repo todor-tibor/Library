@@ -49,6 +49,10 @@ public class UserBean implements IUser {
 			throw new EjbException("Can't find user with specifiel id: <" + id + ">", e);
 		}
 	}
+	
+	public User getByName(String userName){
+		return (User) oEntityManager.createNamedQuery("User.findByName").setParameter("user_name", userName).getSingleResult();
+	}
 
 	@Override
 	public void store(User user) {
