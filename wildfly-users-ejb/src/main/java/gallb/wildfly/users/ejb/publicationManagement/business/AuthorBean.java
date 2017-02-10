@@ -39,11 +39,7 @@ public class AuthorBean implements IAuthor {
 	@Override
 	public List<Author> search(String p_searchTxt) throws EjbException {
 		try {
-<<<<<<< Upstream, based on origin/master
-			return oEntityManager.createNamedQuery("Author.searchByName").setParameter("name", "%" + p_searchTxt + "%")
-=======
-			return oEntityManager.createNamedQuery("Author.searchByName",Author.class).setParameter("name", p_searchTxt)
->>>>>>> 46606da named query hasznalata
+			return oEntityManager.createNamedQuery("Author.searchByName",Author.class).setParameter("name", "%" + p_searchTxt + "%")
 					.getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);

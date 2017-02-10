@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -33,7 +31,7 @@ public class PublicationMB implements Serializable {
 	 */
 	private Logger oLogger = Logger.getLogger(PublicationMB.class);
 	private static final long serialVersionUID = -4702598250751689454L;
-	
+
 	@Inject
 	private IPublication oPublicationBean;
 
@@ -45,47 +43,6 @@ public class PublicationMB implements Serializable {
 																	// publications.
 	private Publication currentPublication = null;// Currently selected
 													// publication.
-
-	/**
-	 * Sets faces context error message.
-	 * 
-	 * @param message
-	 */
-	public void error(String message) {
-		oLogger.info("**********************Error CALLED***************************");
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", message));
-	}
-
-	/**
-	 * Sets faces context info message.
-	 * 
-	 * @param message
-	 */
-	public void info(String message) {
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", message));
-	}
-
-	/**
-	 * Sets faces context warning message.
-	 * 
-	 * @param message
-	 */
-	public void warn(String message) {
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning!", message));
-	}
-
-	/**
-	 * Sets faces context fatal error message.
-	 * 
-	 * @param message
-	 */
-	public void fatal(String message) {
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_FATAL, "Fatal!", message));
-	}
 
 	public List<Publication> getPublicationList() {
 		return publicationList;
@@ -111,7 +68,7 @@ public class PublicationMB implements Serializable {
 			oLogger.info("--getAllPublications()--publications queried");
 			publicationList = oPublicationBean.getAll();
 		} catch (LibraryException e) {
-			this.error("Server internal error.");
+			MessageService.error("Server internal error.");
 		}
 		return publicationList;
 	}
@@ -131,10 +88,10 @@ public class PublicationMB implements Serializable {
 			try {
 				publicationList = oPublicationBean.search(p_searchTxt);
 			} catch (LibraryException e) {
-				this.error(e.getMessage());
+				MessageService.error(e.getMessage());
 			}
 		} else {
-			this.error("Keyword too short. Min. 3 characters req.");
+			MessageService.error("Keyword too short. Min. 3 characters req.");
 		}
 		return publicationList;
 	}
@@ -143,9 +100,9 @@ public class PublicationMB implements Serializable {
 		try {
 			oPublicationBean.store(p_value);
 			publicationList.add(p_value);
-			this.info("Succesfully added: " + p_value);
+			MessageService.info("Succesfully added: " + p_value);
 		} catch (LibraryException e) {
-			this.error(e.getMessage());
+			MessageService.error(e.getMessage());
 		}
 	}
 
@@ -163,13 +120,13 @@ public class PublicationMB implements Serializable {
 				oPublicationBean.update(currentPublication);
 				publicationList = oPublicationBean.getAll();
 				oLogger.info("**********************update succesfull************************************");
-				this.info("Update succesfull.");
+				MessageService.info("Update succesfull.");
 			} catch (LibraryException e) {
 				oLogger.error(e);
-				this.error(e.getMessage());
+				MessageService.error(e.getMessage());
 			}
 		} else {
-			this.error("New name too short.");
+			MessageService.error("New name too short.");
 		}
 	}
 
@@ -179,15 +136,15 @@ public class PublicationMB implements Serializable {
 	public void remove() {
 		oLogger.info("--remove publication by Id ManagedBean--p_id: " + currentPublication.getTitle());
 		if (currentPublication == null) {
-			this.error("Empty field");
+			MessageService.error("Empty field");
 		} else {
 			try {
 				oPublicationBean.remove(currentPublication.getUuid());
 				publicationList = oPublicationBean.getAll();
-				this.info("Delete succesfull.");
+				MessageService.info("Delete succesfull.");
 			} catch (LibraryException e) {
 				oLogger.error(e);
-				this.error(e.getMessage());
+				MessageService.error(e.getMessage());
 			}
 		}
 	}
