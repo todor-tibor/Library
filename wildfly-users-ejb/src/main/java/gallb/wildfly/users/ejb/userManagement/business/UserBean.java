@@ -108,10 +108,14 @@ public class UserBean implements IUser {
 	 */
 	public User getByName(String userName) {
 <<<<<<< Upstream, based on origin/master
+<<<<<<< Upstream, based on origin/master
 		return oEntityManager.createNamedQuery("User.findByName", User.class).setParameter("user_name", userName)
 =======
 		return (User) oEntityManager.createNamedQuery("User.findByName").setParameter("user_name", userName)
 >>>>>>> 618cd00 minor fixes for password hashing, added uuid validation on service layer
+=======
+		return oEntityManager.createNamedQuery("User.findByName", User.class).setParameter("user_name", userName)
+>>>>>>> d96eccd pull request observation fixed
 				.getSingleResult();
 	}
 }
