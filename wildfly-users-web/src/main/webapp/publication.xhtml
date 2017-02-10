@@ -1,0 +1,78 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<p:messages id="messages" showDetail="true" autoUpdate="true"
+		closable="true" />
+</h:head>
+
+<h:body>
+<h:panelGrid columns="3" cellpadding="10">
+		<p:panel header="Publication management">
+			<h:form id="publication_actions_form">
+
+				<p:inputText id="publication_searchTextBox" binding="#{srch}" />
+				<p:commandButton value="Search" update="publicationDT"
+					action="#{publicationBean.search(srch.value)}">
+					<f:param name="p_value" value="#{srch.value}" />
+				</p:commandButton>
+
+				<p:dataTable id="publicationDT" var="publication" value="#{publicationBean.publicationList}"
+					selectionMode="single" selection="#{publicationBean.currentPublication}"
+					rowKey="#{publication.uuid}">
+					<f:facet name="header">
+            			Publications
+        			</f:facet>
+					<f:facet name="header">
+        			</f:facet>
+					<p:column headerText="Publicationname">
+						<h:outputText value="#{publication.title}" />
+					</p:column>
+					<f:facet name="footer">
+						<p:commandButton process="publicationDT" icon="ui-icon-search"
+							value="Details" update="first"
+							oncomplete="PF('roleDialog').show()" />
+							
+						<p:commandButton process="publicationDT" icon="fa-remove"
+							value="Delete" action="#{publicationBean.remove()}" update="publicationDT"/>
+
+						<p:dialog id="first" modal="true" showEffect="fade"
+							hideEffect="fade" widgetVar="roleDialog"
+							header="#{publicationBean.currentPublication.title}" width="300"
+							height="300">
+							<p:messages id="messages" showDetail="true" autoUpdate="true"
+								closable="true" />
+							<p:inputText id="publication_renameTextBox" binding="#{renamepublication}" />
+							<p:commandButton value="Rename" update=""
+								action="#{publicationBean.update(renamepublication.value)}">
+								<f:param name="p_newTxt" value="#{renamepublication.value}" />
+							</p:commandButton>
+							<p:dataList id="displayRoles"
+								value="#{publicationBean.currentPublication}" var="role" width="250">
+								<h:outputText value="#{role}" />
+							</p:dataList>
+						</p:dialog>
+
+
+					</f:facet>
+				</p:dataTable>
+
+
+				<p:commandButton value="List all publications" update="publicationDT"
+					icon="ui-icon-search" action="#{publicationBean.getAll}">
+				</p:commandButton>
+	
+				<p:separator />
+				<p:inputText id="addPublicationTxtBox" binding="#{newName}" />
+				<p:commandButton value="Add" update="publicationDT"
+					icon="fa-publication-plu" action="#{publicationBean.store(newName.value)}">
+					<f:param name="p_value" value="#{newName.value}" />
+				</p:commandButton>
+				
+			</h:form>
+	</p:panel>
+	</h:panelGrid>
+</h:body>
+</html>
