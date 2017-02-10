@@ -41,47 +41,6 @@ public class PublisherManagedBean implements Serializable {
 	 */
 	private Publisher currentPublisher = null;
 
-	/**
-	 * Sets faces context error message.
-	 * 
-	 * @param message
-	 */
-	public void error(String message) {
-		oLogger.info("**********************Error CALLED***************************");
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", message));
-	}
-
-	/**
-	 * Sets faces context info message.
-	 * 
-	 * @param message
-	 */
-	public void info(String message) {
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", message));
-	}
-
-	/**
-	 * Sets faces context warning message.
-	 * 
-	 * @param message
-	 */
-	public void warn(String message) {
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning!", message));
-	}
-
-	/**
-	 * Sets faces context fatal error message.
-	 * 
-	 * @param message
-	 */
-	public void fatal(String message) {
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_FATAL, "Fatal!", message));
-	}
-
 	public List<Publisher> getPublishersList() {
 		return publishersList;
 	}
@@ -104,7 +63,7 @@ public class PublisherManagedBean implements Serializable {
 		try {
 			publishersList = oPublisherBean.getAll();
 		} catch (LibraryException e) {
-			this.error("Server internal error.");
+			MessageService.error("Server internal error.");
 		}
 		return publishersList;
 	}
@@ -123,10 +82,10 @@ public class PublisherManagedBean implements Serializable {
 			try {
 				publishersList = oPublisherBean.search(p_searchTxt);
 			} catch (LibraryException e) {
-				this.error(e.getMessage());
+				MessageService.error(e.getMessage());
 			}
 		} else {
-			this.error("Keyword too short. Min. 3 characters req.");
+			MessageService.error("Keyword too short. Min. 3 characters req.");
 		}
 		return publishersList;
 	}
@@ -141,19 +100,19 @@ public class PublisherManagedBean implements Serializable {
 
 	public void store(String p_value) {
 		if (p_value.isEmpty()) {
-			this.error("Empty field");
+			MessageService.error("Empty field");
 		}
 		if (p_value == "") {
-			this.error("Empty field");
+			MessageService.error("Empty field");
 		}
 		try {
 			Publisher tmpPublisher = new Publisher();
 			tmpPublisher.setName(p_value);
 			oPublisherBean.store(tmpPublisher);
 			publishersList.add(tmpPublisher);
-			this.info("Succesfully added: " + p_value);
+			MessageService.info("Succesfully added: " + p_value);
 		} catch (LibraryException e) {
-			this.error(e.getMessage());
+			MessageService.error(e.getMessage());
 		}
 	}
 
@@ -170,13 +129,13 @@ public class PublisherManagedBean implements Serializable {
 				currentPublisher.setName(p_newTxt);
 				oPublisherBean.update(currentPublisher);
 				publishersList = oPublisherBean.getAll();
-				this.info("Update succesfull.");
+				MessageService.info("Update succesfull.");
 			} catch (LibraryException e) {
 				oLogger.error(e);
-				this.error(e.getMessage());
+				MessageService.error(e.getMessage());
 			}
 		} else {
-			this.error("New name too short.");
+			MessageService.error("New name too short.");
 		}
 	}
 
@@ -185,15 +144,15 @@ public class PublisherManagedBean implements Serializable {
 	 */
 	public void remove() {
 		if (currentPublisher == null) {
-			this.error("Empty field");
+			MessageService.error("Empty field");
 		} else {
 			try {
 				oPublisherBean.remove(currentPublisher.getUuid());
 				publishersList = oPublisherBean.getAll();
-				this.info("Delete succesfull.");
+				MessageService.info("Delete succesfull.");
 			} catch (LibraryException e) {
 				oLogger.error(e);
-				this.error(e.getMessage());
+				MessageService.error(e.getMessage());
 			}
 		}
 	}
