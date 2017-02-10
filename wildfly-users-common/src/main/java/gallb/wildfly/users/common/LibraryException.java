@@ -1,6 +1,6 @@
 package gallb.wildfly.users.common;
 
-public class LibraryException  extends Exception{
+public class LibraryException extends Exception {
 
 	/**
 	 * 
