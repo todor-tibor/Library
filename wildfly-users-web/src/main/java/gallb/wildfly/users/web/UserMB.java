@@ -64,6 +64,7 @@ public class UserMB implements Serializable {
 	 */
 	public List<User> getAll() {
 		oLogger.info("--getAllUsers()--");
+		userList.clear();
 		try {
 			oLogger.info("--getAllUsers()--users queried");
 			userList = oUserBean.getAll();
@@ -83,6 +84,7 @@ public class UserMB implements Serializable {
 	public List<User> search(String p_searchTxt) {
 		oLogger.info("--search user--" + p_searchTxt);
 		if (p_searchTxt.length() >= 3) {
+			userList.clear();
 			try {
 				userList = oUserBean.search(p_searchTxt);
 			} catch (LibraryException e) {
@@ -157,7 +159,7 @@ public class UserMB implements Serializable {
 		} else {
 			try {
 				oUserBean.remove(currentUser.getUuid());
-				userList = oUserBean.getAll();
+				userList.remove(currentUser);
 				MessageService.info("Delete succesfull.");
 			} catch (LibraryException e) {
 				oLogger.error(e);

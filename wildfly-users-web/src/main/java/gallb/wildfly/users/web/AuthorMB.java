@@ -63,6 +63,7 @@ public class AuthorMB implements Serializable {
 	 */
 	public List<Author> getAll() {
 		oLogger.info("--getAllAuthors()--");
+		authorList.clear();
 		try {
 			oLogger.info("--getAllAuthors()--authors queried");
 			authorList = oAuthorBean.getAll();
@@ -82,6 +83,7 @@ public class AuthorMB implements Serializable {
 	public List<Author> search(String p_searchTxt) {
 		oLogger.info("--search author--" + p_searchTxt);
 		if (p_searchTxt.length() >= 3) {
+			authorList.clear();
 			try {
 				authorList = oAuthorBean.search(p_searchTxt);
 			} catch (LibraryException e) {
