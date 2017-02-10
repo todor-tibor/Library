@@ -103,6 +103,10 @@ public class UserBean implements IUser {
 	 */
 	public User getByUserName(String userName) throws EjbException {
 
+<<<<<<< Upstream, based on origin/PublicationWEB
+=======
+		oLogger.info("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"+ userName);
+>>>>>>> b4fa023 not good
 		try {
 			if (oEntityManager != null) {
 				User u = oEntityManager.createNamedQuery("User.findByName", User.class)
@@ -111,7 +115,7 @@ public class UserBean implements IUser {
 			}
 			return null;
 		} catch (PersistenceException e) {
-			oLogger.error(e);
+			oLogger.error(e+"++++++++++++++++++++++++");
 			throw new EjbException(e);
 		}
 	}
