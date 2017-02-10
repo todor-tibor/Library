@@ -6,9 +6,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 import org.jboss.logging.Logger;
 
@@ -100,7 +97,7 @@ public class UserBean implements IUser {
 	 * @param userName
 	 *            - the user name of the user for which to search
 	 * @return - a User object
-	 * @throws EjbException 
+	 * @throws EjbException
 	 */
 	public User getByUserName(String userName) throws EjbException {
 		try {

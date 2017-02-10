@@ -6,9 +6,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 import org.jboss.logging.Logger;
 
@@ -36,8 +33,9 @@ public class RoleBean implements IRole {
 
 	@Override
 	public Role getById(String id) throws EjbException {
-		try{
-		return oEntityManager.createNamedQuery("Role.findById", Role.class).setParameter("uuid", id).getSingleResult();
+		try {
+			return oEntityManager.createNamedQuery("Role.findById", Role.class).setParameter("uuid", id)
+					.getSingleResult();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
@@ -85,8 +83,8 @@ public class RoleBean implements IRole {
 	@Override
 	public List<Role> search(String p_searchTxt) throws EjbException {
 		try {
-			return oEntityManager.createNamedQuery("Role.search", Role.class)
-					.setParameter("role", p_searchTxt).getResultList();
+			return oEntityManager.createNamedQuery("Role.search", Role.class).setParameter("role", p_searchTxt)
+					.getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);

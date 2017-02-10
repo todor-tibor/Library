@@ -13,10 +13,9 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "roles")
-@NamedQueries({
-@NamedQuery(name = "Role.findAll", query = "SELECT r FROM Role r"),
-@NamedQuery(name="Role.findById", query="SELECT r FROM Role r WHERE r.uuid= :uuid"),
-@NamedQuery(name="Role.search", query="SELECT  r FROM Role r WHERE r.role like :role")})
+@NamedQueries({ @NamedQuery(name = "Role.findAll", query = "SELECT r FROM Role r"),
+		@NamedQuery(name = "Role.findById", query = "SELECT r FROM Role r WHERE r.uuid= :uuid"),
+		@NamedQuery(name = "Role.search", query = "SELECT  r FROM Role r WHERE r.role like :role") })
 public class Role extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 

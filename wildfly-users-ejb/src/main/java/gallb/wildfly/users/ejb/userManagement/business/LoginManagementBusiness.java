@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import gallb.wildfly.users.ejb.exception.EjbException;
 import gallb.wildfly.users.ejb.util.PasswordEncrypter;
 import model.Role;
-import model.RoleType;
 import model.User;
 
 /**
