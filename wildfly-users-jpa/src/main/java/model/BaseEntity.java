@@ -11,15 +11,17 @@ import javax.persistence.PrePersist;
  * 
  * @author sipost
  * @author gallb
+ * @author kiska
  */
 @MappedSuperclass
 public abstract class BaseEntity implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3333408811149331428L;
 
 	@Id
+	/**
+	 * @param uuid
+	 *            - A unique identification string for the object
+	 */
 	private String uuid;
 
 	public String getUuid() {
@@ -36,6 +38,9 @@ public abstract class BaseEntity implements Serializable {
 		ensureUuid();
 	}
 
+	/**
+	 * Generate a random and unique value for the {@code uuid}
+	 */
 	private void ensureUuid() {
 		if (this.uuid == null) {
 			setUuid(UUID.randomUUID().toString());

@@ -19,6 +19,10 @@ import javax.persistence.Table;
 public class Role extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * @param role
+	 *            - The name of the role
+	 */
 	private String role;
 
 	public Role() {

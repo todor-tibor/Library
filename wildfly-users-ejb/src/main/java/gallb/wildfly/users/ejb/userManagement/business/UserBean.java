@@ -17,6 +17,7 @@ import model.User;
 /**
  * @author kiska
  *
+ *         Invokes the CRUD methods for a user
  */
 @Stateless
 public class UserBean implements IUser {
@@ -95,7 +96,7 @@ public class UserBean implements IUser {
 	 * Returns the user of {@param userName}
 	 * 
 	 * @param userName
-	 *            - the user name of the user for which to search
+	 *            - the user name of the user for which to search for
 	 * @return - a User object
 	 * @throws EjbException
 	 */

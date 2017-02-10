@@ -10,7 +10,9 @@ import model.Role;
 import model.User;
 
 /**
- * @author kiska Implements a simple authentication process of a user.
+ * @author kiska
+ * 
+ *         Implements a simple authentication process of a user.
  */
 public class LoginManagementBusiness {
 	@Inject

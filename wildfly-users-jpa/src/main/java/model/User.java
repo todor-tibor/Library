@@ -29,19 +29,40 @@ public class User extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Column(name = "loyalty_index")
+	/**
+	 * @param loyaltyIndex
+	 *            - The loyalty index of a user used to check eligibility for
+	 *            book borrowing. It's maximum value is 10, minimum 0.
+	 */
 	private int loyaltyIndex;
 
+	/**
+	 * @param password
+	 *            - The password of the user
+	 */
 	private String password;
 
 	@Column(name = "user_name")
+	/**
+	 * @param userName
+	 *            - The user name of the user
+	 */
 	private String userName;
 
 	// bi-directional many-to-one association to Borrow
 	@OneToMany(mappedBy = "user")
+	/**
+	 * @param borrows
+	 *            - List of already borrowed publications for a given user
+	 */
 	private List<Borrow> borrows;
 
 	@ManyToMany
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "uuid"))
+	/**
+	 * @param roles
+	 *            - The roles the user has
+	 */
 	private List<Role> roles;
 
 	public User() {
