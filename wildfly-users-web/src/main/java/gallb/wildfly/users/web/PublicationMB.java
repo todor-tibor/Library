@@ -33,7 +33,7 @@ public class PublicationMB implements Serializable {
 	 */
 	private Logger oLogger = Logger.getLogger(PublicationMB.class);
 	private static final long serialVersionUID = -4702598250751689454L;
-
+	
 	@Inject
 	private IPublication oPublicationBean;
 
