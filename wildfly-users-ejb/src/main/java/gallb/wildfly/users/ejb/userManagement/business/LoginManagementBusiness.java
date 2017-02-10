@@ -4,8 +4,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import gallb.wildfly.users.common.IUser;
+import gallb.wildfly.users.common.LibraryException;
+import gallb.wildfly.users.common.PasswordEncrypter;
 import gallb.wildfly.users.ejb.exception.EjbException;
-import gallb.wildfly.users.ejb.util.PasswordEncrypter;
 import model.Role;
 import model.User;
 
@@ -16,7 +18,7 @@ import model.User;
  */
 public class LoginManagementBusiness {
 	@Inject
-	private UserBean userBean;
+	private IUser userBean;
 	/**
 	 * Error message for the case when passwords don't match.
 	 */
@@ -33,11 +35,14 @@ public class LoginManagementBusiness {
 	 *            - the hashed password that the user typed in
 	 * @return - the roles (type) of the user if login was not successful,
 	 *         otherwise throws an error
-	 * @throws EjbException
+	 * @throws LibraryException 
 	 */
-	public List<Role> authentication(String userName, String password) throws EjbException {
+	public List<Role> authentication(String userName, String password) throws LibraryException {
+		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^    "  + userName);
 		User user = userBean.getByUserName(userName);
+		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^    "  + userName+ "------------------");
 		if (PasswordEncrypter.encypted(password, " ").equals(user.getPassword())) {
+			System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^    passwirds match" );
 			return user.getRoles();
 		}
 		throw new EjbException(PASSWORD_MISMATCH);

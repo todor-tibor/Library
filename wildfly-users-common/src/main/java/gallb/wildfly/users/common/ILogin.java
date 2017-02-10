@@ -3,6 +3,7 @@ package gallb.wildfly.users.common;
 import java.util.List;
 
 import model.BaseEntity;
+import model.Role;
 
 /**
  * 
@@ -11,7 +12,7 @@ import model.BaseEntity;
  *         The login interface to which the client has access. Defines the login
  *         process.
  */
-public interface ILogin<X extends BaseEntity> {
+public interface ILogin{
 	/**
 	 * Does a validation on the input data. If these are correct, tries to
 	 * authenticate the user.
@@ -23,5 +24,5 @@ public interface ILogin<X extends BaseEntity> {
 	 * @return - the roles of the user
 	 * @throws LibraryException
 	 */
-	public List<X> login(String userName, String password) throws LibraryException;
+	public List<Role> login(String userName, String password) throws LibraryException;
 }

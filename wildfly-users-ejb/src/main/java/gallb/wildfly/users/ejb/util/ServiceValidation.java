@@ -11,12 +11,10 @@ public class ServiceValidation {
 	 * STRING_PATTERN - the restriction for a correct user name (.*[a-z]) - has
 	 * only letters {3} - is at least 3 characters long
 	 */
-	private static final String STRING_PATTERN = "(.*[a-z]){3}";
+	private static final String STRING_PATTERN = "{3,}";
 	/**
 	 * PASSWORD_PATTERN - the restriction for a correct password (?=.*[0-9]) -
-	 * must have at least one number, (?=.*[a-z]) - one lowercase letter
-	 * (?=.*[A-Z]) - one uppercase letter (?=.*[@#$%^&+=]) - one special symbol
-	 * (?=\\S+$) - can't have any whitespaces .{5,} - the length should be at
+	 * must have at least one number, (?=.*[a-z]) - one lowercase letter	 * 
 	 * least 5 characters
 	 */
 	private static final String PASSWORD_PATTERN = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{5,}";
