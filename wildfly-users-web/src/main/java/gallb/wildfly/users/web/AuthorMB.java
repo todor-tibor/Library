@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -42,48 +40,6 @@ public class AuthorMB implements Serializable {
 														// authors.
 	private Author currentAuthor = null;// Currently selected author.
 
-	/**
-	 * Sets faces context error message.
-	 * 
-	 * @param message
-	 */
-	public void error(String message) {
-		oLogger.info("**********************Error CALLED***************************");
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", message));
-	}
-
-	/**
-	 * Sets faces context info message.
-	 * 
-	 * @param message
-	 */
-	public void info(String message) {
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", message));
-	}
-
-	/**
-	 * Sets faces context warning message.
-	 * 
-	 * @param message
-	 */
-	public void warn(String message) {
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning!", message));
-	}
-
-	/**
-	 * Sets faces context fatal error message.
-	 * 
-	 * @param message
-	 */
-	public void fatal(String message) {
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_FATAL, "Fatal!", message));
-	}
-
-	
 	/*
 	 * getters and setters for private variables
 	 * 
@@ -112,7 +68,7 @@ public class AuthorMB implements Serializable {
 			oLogger.info("--getAllAuthors()--authors queried");
 			authorList = oAuthorBean.getAll();
 		} catch (LibraryException e) {
-			this.error(e.getMessage());
+			MessageService.error(e.getMessage());
 		}
 		return authorList;
 	}
@@ -131,10 +87,10 @@ public class AuthorMB implements Serializable {
 			try {
 				authorList = oAuthorBean.search(p_searchTxt);
 			} catch (LibraryException e) {
-				this.error(e.getMessage());
+				MessageService.error(e.getMessage());
 			}
 		} else {
-			this.error("Keyword too short. Min. 3 characters req.");
+			MessageService.error("Keyword too short. Min. 3 characters req.");
 		}
 		return authorList;
 	}
@@ -150,19 +106,19 @@ public class AuthorMB implements Serializable {
 		oLogger.info("--store author--");
 		oLogger.info("--store param: " + p_value);
 		if (p_value.isEmpty()) {
-			this.error("Empty field");
+			MessageService.error("Empty field");
 		}
 		if (p_value == "") {
-			this.error("Empty field");
+			MessageService.error("Empty field");
 		}
 		try {
 			Author tmpAuthor = new Author();
 			tmpAuthor.setName(p_value);
 			oAuthorBean.store(tmpAuthor);
 			authorList.add(tmpAuthor);
-			this.info("Succesfully added: " + p_value);
+			MessageService.info("Succesfully added: " + p_value);
 		} catch (LibraryException e) {
-			this.error(e.getMessage());
+			MessageService.error(e.getMessage());
 		}
 	}
 
@@ -180,13 +136,13 @@ public class AuthorMB implements Serializable {
 				oAuthorBean.update(currentAuthor);
 				authorList = oAuthorBean.getAll();
 				oLogger.info("**********************update succesfull************************************");
-				this.info("Update succesfull.");
+				MessageService.info("Update succesfull.");
 			} catch (LibraryException e) {
 				oLogger.error(e);
-				this.error(e.getMessage());
+				MessageService.error(e.getMessage());
 			}
 		} else {
-			this.error("New name too short.");
+			MessageService.error("New name too short.");
 		}
 	}
 
@@ -196,15 +152,15 @@ public class AuthorMB implements Serializable {
 	public void remove() {
 		oLogger.info("--remove author by Id ManagedBean--p_id: " + currentAuthor.getName());
 		if (currentAuthor == null) {
-			this.error("Empty field");
+			MessageService.error("Empty field");
 		} else {
 			try {
 				oAuthorBean.remove(currentAuthor.getUuid());
 				authorList = oAuthorBean.getAll();
-				this.info("Delete succesfull.");
+				MessageService.info("Delete succesfull.");
 			} catch (LibraryException e) {
 				oLogger.error(e);
-				this.error(e.getMessage());
+				MessageService.error(e.getMessage());
 			}
 		}
 	}
