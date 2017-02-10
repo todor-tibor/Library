@@ -19,12 +19,17 @@ import model.User;
  * 
  *         Implements a simple authentication process of a user.
  */
+<<<<<<< Upstream, based on origin/PublicationWEB
 @Stateless
 @LocalBean
 @Remote(ILoginBusiness.class)
 public class LoginManagementBusiness implements ILoginBusiness {
 
 	@EJB
+=======
+public class LoginManagementBusiness {
+	@Inject
+>>>>>>> b4fa023 not good
 	private IUser userBean;
 	/**
 	 * Error message for the case when passwords don't match.
@@ -42,15 +47,28 @@ public class LoginManagementBusiness implements ILoginBusiness {
 	 *            - the hashed password that the user typed in
 	 * @return - the roles (type) of the user if login was not successful,
 	 *         otherwise throws an error
+<<<<<<< Upstream, based on origin/PublicationWEB
 	 * @throws LibraryException
+=======
+	 * @throws LibraryException 
+>>>>>>> b4fa023 not good
 	 */
 	public List<Role> authentication(String userName, String password) throws LibraryException {
+<<<<<<< Upstream, based on origin/PublicationWEB
 
 		if (userBean != null) {
 			User user = userBean.getByUserName(userName);
 			if (PasswordEncrypter.encypted(password, " ").equals(user.getPassword())) { //
 				return user.getRoles();
 			}
+=======
+		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^    "  + userName);
+		User user = userBean.getByUserName(userName);
+		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^    "  + userName+ "------------------");
+		if (PasswordEncrypter.encypted(password, " ").equals(user.getPassword())) {
+			System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^    passwirds match" );
+			return user.getRoles();
+>>>>>>> b4fa023 not good
 		}
 		throw new EjbException(PASSWORD_MISMATCH);
 	}
