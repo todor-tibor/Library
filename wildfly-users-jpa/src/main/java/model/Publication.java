@@ -46,8 +46,6 @@ public abstract class Publication extends BaseEntity {
 
 	private String title;
 
-	// private String type;
-
 	// bi-directional many-to-one association to Borrow
 	@OneToMany(mappedBy = "publication")
 	private List<Borrow> borrows;
@@ -121,5 +119,7 @@ public abstract class Publication extends BaseEntity {
 	public void setPublisher(Publisher publisher) {
 		this.publisher = publisher;
 	}
+	
+	
 
 }

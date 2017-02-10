@@ -6,10 +6,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 import org.jboss.logging.Logger;
 
@@ -44,12 +40,7 @@ public class PublicationBean implements IPublication {
 	@Override
 	public List<Publication> search(String p_searchTxt) throws EjbException {
 		try {
-			CriteriaBuilder cb = oEntityManager.getCriteriaBuilder();
-			CriteriaQuery<Publication> criteria = cb.createQuery(Publication.class);
-			Root<Publication> member = criteria.from(Publication.class);
-
-			criteria.select(member).where(cb.like(member.get("title"), "%" + p_searchTxt + "%"));
-			return oEntityManager.createQuery(criteria).getResultList();
+			return oEntityManager.createNamedQuery("Publication.searchByName",Publication.class).setParameter("title","%"+ p_searchTxt+"%").getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
@@ -59,7 +50,7 @@ public class PublicationBean implements IPublication {
 	@Override
 	public Publication getById(String p_id) throws EjbException {
 		try {
-			return oEntityManager.find(Publication.class, p_id);
+			return oEntityManager.createNamedQuery("Publication.getById",Publication.class).setParameter("uuid",p_id).getSingleResult();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
