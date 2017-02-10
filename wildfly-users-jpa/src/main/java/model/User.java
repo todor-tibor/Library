@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -22,82 +21,80 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "users")
 @NamedQueries({ @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
-		@NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.userName = :user_name") })
+                @NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.userName = :user_name"),
+                @NamedQuery(name="User.searchByUserName", query="SELECT u FROM User u where u.userName like :user_name"),
+		@NamedQuery(name="User.findById", query="SELECT u FROM User u WHERE u.uuid= :uuid")})
 
 public class User extends BaseEntity {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Column(name = "loyalty_index")
-	private int loyaltyIndex;
+    @Column(name = "loyalty_index") private int loyaltyIndex;
 
-	private String password;
+    private String password;
 
-	@Column(name = "user_name")
-	private String userName;
+    @Column(name = "user_name") private String userName;
 
-	// bi-directional many-to-one association to Borrow
-	@OneToMany(mappedBy = "user")
-	private List<Borrow> borrows;
+    // bi-directional many-to-one association to Borrow
+    @OneToMany(mappedBy = "user") private List<Borrow> borrows;
 
-	@ManyToMany(fetch=FetchType.EAGER)
-	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "uuid"))
-	private List<Role> roles;
+    @ManyToMany @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "uuid"),
+                    inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "uuid")) private List<Role> roles;
 
-	public User() {
-	}
+    public User() {
+    }
 
-	public int getLoyaltyIndex() {
-		return this.loyaltyIndex;
-	}
+    public int getLoyaltyIndex() {
+        return this.loyaltyIndex;
+    }
 
-	public void setLoyaltyIndex(int loyaltyIndex) {
-		this.loyaltyIndex = loyaltyIndex;
-	}
+    public void setLoyaltyIndex(int loyaltyIndex) {
+        this.loyaltyIndex = loyaltyIndex;
+    }
 
-	public String getPassword() {
-		return this.password;
-	}
+    public String getPassword() {
+        return this.password;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public String getUserName() {
-		return this.userName;
-	}
+    public String getUserName() {
+        return this.userName;
+    }
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
-	public List<Borrow> getBorrows() {
-		return this.borrows;
-	}
+    public List<Borrow> getBorrows() {
+        return this.borrows;
+    }
 
-	public void setBorrows(List<Borrow> borrows) {
-		this.borrows = borrows;
-	}
+    public void setBorrows(List<Borrow> borrows) {
+        this.borrows = borrows;
+    }
 
-	public Borrow addBorrow(Borrow borrow) {
-		getBorrows().add(borrow);
-		borrow.setUser(this);
+    public Borrow addBorrow(Borrow borrow) {
+        getBorrows().add(borrow);
+        borrow.setUser(this);
 
-		return borrow;
-	}
+        return borrow;
+    }
 
-	public Borrow removeBorrow(Borrow borrow) {
-		getBorrows().remove(borrow);
-		borrow.setUser(null);
+    public Borrow removeBorrow(Borrow borrow) {
+        getBorrows().remove(borrow);
+        borrow.setUser(null);
 
-		return borrow;
-	}
+        return borrow;
+    }
 
-	public List<Role> getRoles() {
-		return this.roles;
-	}
+    public List<Role> getRoles() {
+        return this.roles;
+    }
 
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
-	}
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
 
 }

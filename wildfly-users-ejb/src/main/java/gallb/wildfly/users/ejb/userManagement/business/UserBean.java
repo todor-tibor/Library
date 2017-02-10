@@ -40,12 +40,7 @@ public class UserBean implements IUser {
 
 	@Override
 	public User getById(String id) throws EjbException {
-		try {
-			return oEntityManager.find(User.class, id);
-		} catch (PersistenceException e) {
-			oLogger.error(e);
-			throw new EjbException(e);
-		}
+		return oEntityManager.createNamedQuery("User.findById", User.class).getSingleResult();
 	}
 
 	@Override
@@ -85,18 +80,9 @@ public class UserBean implements IUser {
 	}
 
 	@Override
-	public List<User> search(String name) throws EjbException {
-		try {
-			CriteriaBuilder cb = oEntityManager.getCriteriaBuilder();
-			CriteriaQuery<User> criteria = cb.createQuery(User.class);
-			Root<User> member = criteria.from(User.class);
-
-			criteria.select(member).where(cb.like(member.get("userName"), "%" + name + "%"));
-			return oEntityManager.createQuery(criteria).getResultList();
-		} catch (PersistenceException e) {
-			oLogger.error(e);
-			throw new EjbException(e);
-		}
+	public List<User> search(String userName) throws EjbException {
+		return oEntityManager.createNamedQuery("User.searchByUserName", User.class)
+				.setParameter("user_name", "%" + userName + "%").getResultList();
 	}
 
 	/**
@@ -106,16 +92,8 @@ public class UserBean implements IUser {
 	 *            - the user name of the user for which to search
 	 * @return - a User object
 	 */
-	public User getByName(String userName) {
-<<<<<<< Upstream, based on origin/master
-<<<<<<< Upstream, based on origin/master
+	public User getByUserName(String userName) {
 		return oEntityManager.createNamedQuery("User.findByName", User.class).setParameter("user_name", userName)
-=======
-		return (User) oEntityManager.createNamedQuery("User.findByName").setParameter("user_name", userName)
->>>>>>> 618cd00 minor fixes for password hashing, added uuid validation on service layer
-=======
-		return oEntityManager.createNamedQuery("User.findByName", User.class).setParameter("user_name", userName)
->>>>>>> d96eccd pull request observation fixed
 				.getSingleResult();
 	}
 }

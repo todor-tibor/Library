@@ -36,12 +36,7 @@ public class RoleBean implements IRole {
 
 	@Override
 	public Role getById(String id) throws EjbException {
-		try {
-			return oEntityManager.find(Role.class, id);
-		} catch (PersistenceException e) {
-			oLogger.error(e);
-			throw new EjbException(e);
-		}
+		return oEntityManager.createNamedQuery("Role.findById", Role.class).getSingleResult();
 	}
 
 	@Override

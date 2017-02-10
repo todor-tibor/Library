@@ -35,7 +35,7 @@ public class LoginManagementBusiness {
 	 * @throws EjbException
 	 */
 	public List<Role> authentication(String userName, String password) throws EjbException {
-		User user = userBean.getByName(userName);
+		User user = userBean.getByUserName(userName);
 		if (PasswordEncrypter.encypted(password, " ").equals(user.getPassword())) {
 			return user.getRoles();
 		}
