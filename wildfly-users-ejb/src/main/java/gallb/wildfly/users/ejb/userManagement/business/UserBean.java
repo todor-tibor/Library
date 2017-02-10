@@ -27,11 +27,10 @@ public class UserBean implements IUser {
 	private EntityManager oEntityManager;
 	private Logger oLogger = Logger.getLogger(UserBean.class);
 
-	
 	@Override
 	public List<User> getAll() throws EjbException {
 		try {
-			return oEntityManager.createNamedQuery("User.findAll",User.class).getResultList();
+			return oEntityManager.createNamedQuery("User.findAll", User.class).getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
@@ -40,7 +39,12 @@ public class UserBean implements IUser {
 
 	@Override
 	public User getById(String id) throws EjbException {
-		return oEntityManager.createNamedQuery("User.findById", User.class).getSingleResult();
+		try {
+			return oEntityManager.createNamedQuery("User.findById", User.class).getSingleResult();
+		} catch (PersistenceException e) {
+			oLogger.error(e);
+			throw new EjbException(e);
+		}
 	}
 
 	@Override
@@ -81,8 +85,13 @@ public class UserBean implements IUser {
 
 	@Override
 	public List<User> search(String userName) throws EjbException {
-		return oEntityManager.createNamedQuery("User.searchByUserName", User.class)
-				.setParameter("user_name", "%" + userName + "%").getResultList();
+		try {
+			return oEntityManager.createNamedQuery("User.searchByUserName", User.class)
+					.setParameter("user_name", "%" + userName + "%").getResultList();
+		} catch (PersistenceException e) {
+			oLogger.error(e);
+			throw new EjbException(e);
+		}
 	}
 
 	/**
@@ -91,9 +100,15 @@ public class UserBean implements IUser {
 	 * @param userName
 	 *            - the user name of the user for which to search
 	 * @return - a User object
+	 * @throws EjbException 
 	 */
-	public User getByUserName(String userName) {
-		return oEntityManager.createNamedQuery("User.findByName", User.class).setParameter("user_name", userName)
-				.getSingleResult();
+	public User getByUserName(String userName) throws EjbException {
+		try {
+			return oEntityManager.createNamedQuery("User.findByName", User.class).setParameter("user_name", userName)
+					.getSingleResult();
+		} catch (PersistenceException e) {
+			oLogger.error(e);
+			throw new EjbException(e);
+		}
 	}
 }

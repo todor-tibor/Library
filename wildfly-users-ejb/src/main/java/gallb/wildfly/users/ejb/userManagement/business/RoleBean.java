@@ -36,7 +36,12 @@ public class RoleBean implements IRole {
 
 	@Override
 	public Role getById(String id) throws EjbException {
-		return oEntityManager.createNamedQuery("Role.findById", Role.class).getSingleResult();
+		try{
+		return oEntityManager.createNamedQuery("Role.findById", Role.class).setParameter("uuid", id).getSingleResult();
+		} catch (PersistenceException e) {
+			oLogger.error(e);
+			throw new EjbException(e);
+		}
 	}
 
 	@Override
@@ -80,11 +85,8 @@ public class RoleBean implements IRole {
 	@Override
 	public List<Role> search(String p_searchTxt) throws EjbException {
 		try {
-			CriteriaBuilder cb = oEntityManager.getCriteriaBuilder();
-			CriteriaQuery<Role> criteria = cb.createQuery(Role.class);
-			Root<Role> member = criteria.from(Role.class);
-			criteria.select(member).where(cb.like(member.get("role"), "%" + p_searchTxt + "%"));
-			return oEntityManager.createQuery(criteria).getResultList();
+			return oEntityManager.createNamedQuery("Role.search", Role.class)
+					.setParameter("role", p_searchTxt).getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);

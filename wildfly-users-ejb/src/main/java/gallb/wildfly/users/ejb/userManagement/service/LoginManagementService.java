@@ -13,7 +13,7 @@ import model.RoleType;
  *Implements the basics of user login. 
  *Validates the given the input data.
  */
-public class LoginManagementService implements ILogin{
+public class LoginManagementService implements ILogin<Role>{
 	/**
 	 * Error message for incorrect data
 	 */
