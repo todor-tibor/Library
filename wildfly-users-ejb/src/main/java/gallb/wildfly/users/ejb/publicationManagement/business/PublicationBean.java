@@ -34,15 +34,7 @@ public class PublicationBean implements IPublication {
 	@Override
 	public List<Publication> getAll() throws EjbException {
 		try {
-			oEntityManager.clear();
-			CriteriaBuilder builder = oEntityManager.getCriteriaBuilder();
-			CriteriaQuery<Publication> pubs = builder.createQuery(Publication.class);
-
-			Root<Publication> pub = pubs.from(Publication.class);
-			pubs.select(pub);
-
-			TypedQuery<Publication> pubQuery = oEntityManager.createQuery(pubs);
-			return pubQuery.getResultList();
+			return oEntityManager.createNamedQuery("Publication.findAll",Publication.class).getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
@@ -56,7 +48,7 @@ public class PublicationBean implements IPublication {
 			CriteriaQuery<Publication> criteria = cb.createQuery(Publication.class);
 			Root<Publication> member = criteria.from(Publication.class);
 
-			criteria.select(member).where(cb.like(member.get("username"), "%" + p_searchTxt + "%"));
+			criteria.select(member).where(cb.like(member.get("title"), "%" + p_searchTxt + "%"));
 			return oEntityManager.createQuery(criteria).getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);

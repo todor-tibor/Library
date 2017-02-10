@@ -26,22 +26,24 @@ public class AuthorBean implements IAuthor {
 	private EntityManager oEntityManager;
 	private Logger oLogger = Logger.getLogger(Author.class);
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Author> getAll() throws EjbException {
 		try {
-			return oEntityManager.createNamedQuery("Author.findAll").getResultList();
+			return oEntityManager.createNamedQuery("Author.findAll",Author.class).getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Author> search(String p_searchTxt) throws EjbException {
 		try {
+<<<<<<< Upstream, based on origin/master
 			return oEntityManager.createNamedQuery("Author.searchByName").setParameter("name", "%" + p_searchTxt + "%")
+=======
+			return oEntityManager.createNamedQuery("Author.searchByName",Author.class).setParameter("name", p_searchTxt)
+>>>>>>> 46606da named query hasznalata
 					.getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
@@ -52,7 +54,7 @@ public class AuthorBean implements IAuthor {
 	@Override
 	public Author getById(String p_id) throws EjbException {
 		try {
-			return (Author) oEntityManager.createNamedQuery("Author.getById").setParameter("uuid", p_id)
+			return (Author) oEntityManager.createNamedQuery("Author.getById",Author.class).setParameter("uuid", p_id)
 					.getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
