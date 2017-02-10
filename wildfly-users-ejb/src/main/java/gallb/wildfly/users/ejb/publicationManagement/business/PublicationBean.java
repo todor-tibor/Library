@@ -2,6 +2,7 @@ package gallb.wildfly.users.ejb.publicationManagement.business;
 
 import java.util.List;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
@@ -22,6 +23,8 @@ import model.Publication;
  * @author sipost
  *
  */
+
+@Stateless
 public class PublicationBean implements IPublication {
 
 	@PersistenceContext(unitName = "WildflyUsers")
