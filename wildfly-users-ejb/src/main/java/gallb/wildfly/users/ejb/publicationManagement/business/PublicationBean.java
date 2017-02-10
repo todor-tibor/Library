@@ -12,10 +12,11 @@ import javax.persistence.criteria.Root;
 
 import org.jboss.logging.Logger;
 
+import gallb.wildfly.users.common.IPublication;
 import gallb.wildfly.users.ejb.exception.EjbException;
 import model.Publication;
 
-public class PublicationBean {
+public class PublicationBean implements IPublication {
 
 	@PersistenceContext(unitName = "WildflyUsers")
 	private EntityManager oEntityManager;
