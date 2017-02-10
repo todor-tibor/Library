@@ -107,7 +107,7 @@ public class UserBean implements IUser {
 	 * @return - a User object
 	 */
 	public User getByName(String userName) {
-		return (User) oEntityManager.createNamedQuery("User.findByName").setParameter("user_name", userName)
+		return oEntityManager.createNamedQuery("User.findByName", User.class).setParameter("user_name", userName)
 				.getSingleResult();
 	}
 }
