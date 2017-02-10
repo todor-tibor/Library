@@ -7,11 +7,12 @@ import javax.inject.Inject;
 import gallb.wildfly.users.ejb.exception.EjbException;
 import gallb.wildfly.users.ejb.util.PasswordEncrypter;
 import model.Role;
-import model.RoleType;
 import model.User;
 
 /**
- * @author kiska Implements a simple authentication process of a user.
+ * @author kiska
+ * 
+ *         Implements a simple authentication process of a user.
  */
 public class LoginManagementBusiness {
 	@Inject
@@ -35,7 +36,7 @@ public class LoginManagementBusiness {
 	 * @throws EjbException
 	 */
 	public List<Role> authentication(String userName, String password) throws EjbException {
-		User user = userBean.getByName(userName);
+		User user = userBean.getByUserName(userName);
 		if (PasswordEncrypter.encypted(password, " ").equals(user.getPassword())) {
 			return user.getRoles();
 		}

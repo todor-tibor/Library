@@ -6,9 +6,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 import org.jboss.logging.Logger;
 
@@ -20,6 +17,7 @@ import model.User;
 /**
  * @author kiska
  *
+ *         Invokes the CRUD methods for a user
  */
 @Stateless
 public class UserBean implements IUser {
@@ -27,11 +25,10 @@ public class UserBean implements IUser {
 	private EntityManager oEntityManager;
 	private Logger oLogger = Logger.getLogger(UserBean.class);
 
-	
 	@Override
 	public List<User> getAll() throws EjbException {
 		try {
-			return oEntityManager.createNamedQuery("User.findAll",User.class).getResultList();
+			return oEntityManager.createNamedQuery("User.findAll", User.class).getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
@@ -41,7 +38,7 @@ public class UserBean implements IUser {
 	@Override
 	public User getById(String id) throws EjbException {
 		try {
-			return oEntityManager.find(User.class, id);
+			return oEntityManager.createNamedQuery("User.findById", User.class).getSingleResult();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
@@ -85,14 +82,10 @@ public class UserBean implements IUser {
 	}
 
 	@Override
-	public List<User> search(String name) throws EjbException {
+	public List<User> search(String userName) throws EjbException {
 		try {
-			CriteriaBuilder cb = oEntityManager.getCriteriaBuilder();
-			CriteriaQuery<User> criteria = cb.createQuery(User.class);
-			Root<User> member = criteria.from(User.class);
-
-			criteria.select(member).where(cb.like(member.get("userName"), "%" + name + "%"));
-			return oEntityManager.createQuery(criteria).getResultList();
+			return oEntityManager.createNamedQuery("User.searchByUserName", User.class)
+					.setParameter("user_name", "%" + userName + "%").getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
@@ -103,11 +96,17 @@ public class UserBean implements IUser {
 	 * Returns the user of {@param userName}
 	 * 
 	 * @param userName
-	 *            - the user name of the user for which to search
+	 *            - the user name of the user for which to search for
 	 * @return - a User object
+	 * @throws EjbException
 	 */
-	public User getByName(String userName) {
-		return oEntityManager.createNamedQuery("User.findByName", User.class).setParameter("user_name", userName)
-				.getSingleResult();
+	public User getByUserName(String userName) throws EjbException {
+		try {
+			return oEntityManager.createNamedQuery("User.findByName", User.class).setParameter("user_name", userName)
+					.getSingleResult();
+		} catch (PersistenceException e) {
+			oLogger.error(e);
+			throw new EjbException(e);
+		}
 	}
 }

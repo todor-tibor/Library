@@ -7,13 +7,12 @@ import gallb.wildfly.users.ejb.exception.EjbException;
 import gallb.wildfly.users.ejb.userManagement.business.LoginManagementBusiness;
 import gallb.wildfly.users.ejb.util.ServiceValidation;
 import model.Role;
-import model.RoleType;
 /**
  * @author kiska
  *Implements the basics of user login. 
  *Validates the given the input data.
  */
-public class LoginManagementService implements ILogin{
+public class LoginManagementService implements ILogin<Role>{
 	/**
 	 * Error message for incorrect data
 	 */

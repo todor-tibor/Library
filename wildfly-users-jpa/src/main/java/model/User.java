@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -22,25 +21,48 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "users")
 @NamedQueries({ @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
-		@NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.userName = :user_name") })
+		@NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.userName = :user_name"),
+		@NamedQuery(name = "User.searchByUserName", query = "SELECT u FROM User u where u.userName like :user_name"),
+		@NamedQuery(name = "User.findById", query = "SELECT u FROM User u WHERE u.uuid= :uuid") })
 
 public class User extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Column(name = "loyalty_index")
+	/**
+	 * @param loyaltyIndex
+	 *            - The loyalty index of a user used to check eligibility for
+	 *            book borrowing. It's maximum value is 10, minimum 0.
+	 */
 	private int loyaltyIndex;
 
+	/**
+	 * @param password
+	 *            - The password of the user
+	 */
 	private String password;
 
 	@Column(name = "user_name")
+	/**
+	 * @param userName
+	 *            - The user name of the user
+	 */
 	private String userName;
 
 	// bi-directional many-to-one association to Borrow
 	@OneToMany(mappedBy = "user")
+	/**
+	 * @param borrows
+	 *            - List of already borrowed publications for a given user
+	 */
 	private List<Borrow> borrows;
 
-	@ManyToMany(fetch=FetchType.EAGER)
+	@ManyToMany
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "uuid"))
+	/**
+	 * @param roles
+	 *            - The roles the user has
+	 */
 	private List<Role> roles;
 
 	public User() {
