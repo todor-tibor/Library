@@ -11,6 +11,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -26,6 +28,9 @@ import javax.persistence.TemporalType;
 @Table(name = "publications")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
+@NamedQueries({ @NamedQuery(name = "Publication.findAll", query = "SELECT a FROM Publication a"),
+	@NamedQuery(name = "Publication.searchByName", query = "SELECT a FROM Publication a WHERE a.title like :title"),
+	@NamedQuery(name = "Publication.getById", query = "SELECT a FROM Publication a WHERE a.uuid = :uuid") })
 public abstract class Publication extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
@@ -40,8 +45,6 @@ public abstract class Publication extends BaseEntity {
 	private Date publicationDate;
 
 	private String title;
-
-	// private String type;
 
 	// bi-directional many-to-one association to Borrow
 	@OneToMany(mappedBy = "publication")
@@ -116,5 +119,7 @@ public abstract class Publication extends BaseEntity {
 	public void setPublisher(Publisher publisher) {
 		this.publisher = publisher;
 	}
+	
+	
 
 }

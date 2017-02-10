@@ -9,27 +9,28 @@ import javax.persistence.PersistenceException;
 
 import org.jboss.logging.Logger;
 
-import gallb.wildfly.users.common.IAuthor;
+import gallb.wildfly.users.common.IPublication;
 import gallb.wildfly.users.ejb.exception.EjbException;
-import model.Author;
+import model.Publication;
 
 /**
- * crud operations from author Entity
+ * CRUD operations from Publication Entity
  * 
  * @author sipost
  *
  */
+
 @Stateless
-public class AuthorBean implements IAuthor {
+public class PublicationBean implements IPublication {
 
 	@PersistenceContext(unitName = "WildflyUsers")
 	private EntityManager oEntityManager;
-	private Logger oLogger = Logger.getLogger(Author.class);
+	private Logger oLogger = Logger.getLogger(Publication.class);
 
 	@Override
-	public List<Author> getAll() throws EjbException {
+	public List<Publication> getAll() throws EjbException {
 		try {
-			return oEntityManager.createNamedQuery("Author.findAll",Author.class).getResultList();
+			return oEntityManager.createNamedQuery("Publication.findAll",Publication.class).getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
@@ -37,10 +38,9 @@ public class AuthorBean implements IAuthor {
 	}
 
 	@Override
-	public List<Author> search(String p_searchTxt) throws EjbException {
+	public List<Publication> search(String p_searchTxt) throws EjbException {
 		try {
-			return oEntityManager.createNamedQuery("Author.searchByName",Author.class).setParameter("name", "%" + p_searchTxt + "%")
-					.getResultList();
+			return oEntityManager.createNamedQuery("Publication.searchByName",Publication.class).setParameter("title","%"+ p_searchTxt+"%").getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
@@ -48,10 +48,9 @@ public class AuthorBean implements IAuthor {
 	}
 
 	@Override
-	public Author getById(String p_id) throws EjbException {
+	public Publication getById(String p_id) throws EjbException {
 		try {
-			return (Author) oEntityManager.createNamedQuery("Author.getById",Author.class).setParameter("uuid", p_id)
-					.getResultList();
+			return oEntityManager.createNamedQuery("Publication.getById",Publication.class).setParameter("uuid",p_id).getSingleResult();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
@@ -59,7 +58,7 @@ public class AuthorBean implements IAuthor {
 	}
 
 	@Override
-	public void store(Author p_value) throws EjbException {
+	public void store(Publication p_value) throws EjbException {
 		try {
 			oEntityManager.persist(p_value);
 			oEntityManager.flush();
@@ -70,9 +69,9 @@ public class AuthorBean implements IAuthor {
 	}
 
 	@Override
-	public void update(Author p_user) throws EjbException {
+	public void update(Publication p_user) throws EjbException {
 		try {
-			Author r = oEntityManager.find(Author.class, p_user.getUuid());
+			Publication r = oEntityManager.find(Publication.class, p_user.getUuid());
 			if (r != null) {
 				oEntityManager.merge(p_user);
 				oEntityManager.flush();
@@ -86,7 +85,7 @@ public class AuthorBean implements IAuthor {
 	@Override
 	public void remove(String p_id) throws EjbException {
 		try {
-			Author r = oEntityManager.find(Author.class, p_id);
+			Publication r = oEntityManager.find(Publication.class, p_id);
 			oEntityManager.remove(r);
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
