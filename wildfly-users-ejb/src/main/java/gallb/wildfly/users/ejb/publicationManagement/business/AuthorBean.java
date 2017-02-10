@@ -2,6 +2,7 @@ package gallb.wildfly.users.ejb.publicationManagement.business;
 
 import java.util.List;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
@@ -12,6 +13,13 @@ import gallb.wildfly.users.common.IAuthor;
 import gallb.wildfly.users.ejb.exception.EjbException;
 import model.Author;
 
+/**
+ * crud operations from author Entity
+ * 
+ * @author sipost
+ *
+ */
+@Stateless
 public class AuthorBean implements IAuthor {
 
 	@PersistenceContext(unitName = "WildflyUsers")
@@ -33,7 +41,7 @@ public class AuthorBean implements IAuthor {
 	@Override
 	public List<Author> search(String p_searchTxt) throws EjbException {
 		try {
-			return oEntityManager.createNamedQuery("Author.searchByName").setParameter("name", p_searchTxt)
+			return oEntityManager.createNamedQuery("Author.searchByName").setParameter("name", "%" + p_searchTxt + "%")
 					.getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
