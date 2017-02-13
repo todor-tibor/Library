@@ -2,6 +2,8 @@ package gallb.wildfly.users.web;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
@@ -10,9 +12,15 @@ import javax.inject.Named;
 
 import org.jboss.logging.Logger;
 
+import gallb.wildfly.users.PublicationType;
 import gallb.wildfly.users.common.IPublication;
 import gallb.wildfly.users.common.LibraryException;
+import model.Author;
+import model.Book;
+import model.Magazine;
+import model.Newspaper;
 import model.Publication;
+import model.Publisher;
 
 /**
  * 
@@ -34,10 +42,18 @@ public class PublicationMB implements Serializable {
 
 	@Inject
 	private IPublication oPublicationBean;
+	private Author currentAuthor;
+	private Publisher currentPublisher;
+	private String type;
+	
 
 	/**
 	 * 
 	 */
+	
+	public List<PublicationType> getAllType(){
+		return new ArrayList<>(Arrays.asList(PublicationType.values()));
+	}
 	private List<Publication> publicationList = new ArrayList<>();// Currently
 																	// displayed
 																	// publications.
@@ -96,6 +112,36 @@ public class PublicationMB implements Serializable {
 		return publicationList;
 	}
 
+	public void store(String p_title, String p_nrOfCopies) {
+		oLogger.info("--------------publisher: " + currentPublisher + "   nrOfCopies:  "+ p_nrOfCopies +" type:  "+type);
+		Publication p_value;
+		try{
+		switch (type) {
+		case "Book":
+			p_value=new Book();
+			((Book)p_value).addAuthor(currentAuthor);
+			break;
+		case "Magazine":
+			p_value=new Magazine();
+			((Magazine)p_value).addAuthor(currentAuthor);
+			break;
+		default:
+			p_value=new Newspaper();
+			break;
+		}
+			p_value.setTitle(p_title);
+			p_value.setNrOfCopys(Integer.parseInt(p_nrOfCopies));
+			p_value.setOnStock(Integer.parseInt(p_nrOfCopies));
+			p_value.setPublisher(currentPublisher);
+			p_value.setPublicationDate(new Date());
+			oPublicationBean.store(p_value);
+			publicationList.add(p_value);
+			MessageService.info("Succesfully added: " + p_value);
+		} catch (LibraryException e) {
+			MessageService.error(e.getMessage());
+		}
+	}
+
 	public void store(Publication p_value) {// store newspaper, magazine or book
 		try {
 			oPublicationBean.store(p_value);
@@ -148,4 +194,30 @@ public class PublicationMB implements Serializable {
 			}
 		}
 	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		oLogger.info("-----------------type changed"+type);
+		this.type = type;
+	}
+
+	public Publisher getCurrentPublisher() {
+		return currentPublisher;
+	}
+
+	public void setCurrentPublisher(Publisher currentPublisher) {
+		this.currentPublisher = currentPublisher;
+	}
+
+	public Author getCurrentAuthor() {
+		return currentAuthor;
+	}
+
+	public void setCurrentAuthor(Author currentAuthor) {
+		this.currentAuthor = currentAuthor;
+	}
+	
 }
