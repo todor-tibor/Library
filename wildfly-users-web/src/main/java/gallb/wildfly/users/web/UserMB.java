@@ -99,27 +99,33 @@ public class UserMB implements Serializable {
 	/**
 	 * Stores new user with username.
 	 * 
-	 * @param p_value
-	 *            - username
+	 * @param p_name - username, p_pass - password, p_idx - loyalty index
+	 *         
 	 */
 
-	public void store(String p_value) {
+	public void store(String p_name, String p_pass, int p_idx) {
 		oLogger.info("--store user--");
-		oLogger.info("--store param: " + p_value);
-		if (p_value.isEmpty()) {
+		oLogger.info("--store param: " + p_name);
+		if (p_name.isEmpty()) {
 			MessageService.error("Empty field");
+			return;
 		}
-		if (p_value == "") {
+		if (p_name == "") {
 			MessageService.error("Empty field");
+		return;
+		}
+		if ((p_idx > 10)  || (p_idx < 0)) {
+			MessageService.error("Loyalty index must be an integer beteen 0..10");
+			return;
 		}
 		try {
 			User tmpUser = new User();
-			tmpUser.setUserName(p_value);
-			tmpUser.setLoyaltyIndex(10);
-			tmpUser.setPassword("password");
+			tmpUser.setUserName(p_name);
+			tmpUser.setLoyaltyIndex(p_idx);
+			tmpUser.setPassword(p_pass);
 			oUserBean.store(tmpUser);
 			userList.add(tmpUser);
-			MessageService.info("Succesfully added: " + p_value);
+			MessageService.info("Succesfully added: " + p_name);
 		} catch (LibraryException e) {
 			MessageService.error(e.getMessage());
 		}
