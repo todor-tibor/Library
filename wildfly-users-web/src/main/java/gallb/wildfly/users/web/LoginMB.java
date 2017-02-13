@@ -26,11 +26,7 @@ import model.User;
 @SessionScoped
 public class LoginMB implements Serializable {
 
-<<<<<<< Upstream, based on origin/PublicationWEB
 	private Logger oLogger = Logger.getLogger(LoginMB.class);
-=======
-	private Logger oLogger = Logger.getLogger(ManagedBean.class);
->>>>>>> 36dea37 renamed loginMB
 	private static final long serialVersionUID = -4702598250751689454L;
 
 	@Inject
