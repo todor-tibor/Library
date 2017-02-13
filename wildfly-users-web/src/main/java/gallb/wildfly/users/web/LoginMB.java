@@ -26,7 +26,7 @@ import model.User;
 @SessionScoped
 public class LoginMB implements Serializable {
 
-	private Logger oLogger = Logger.getLogger(ManagedBean.class);
+	private Logger oLogger = Logger.getLogger(LoginMB.class);
 	private static final long serialVersionUID = -4702598250751689454L;
 
 	@Inject
