@@ -84,7 +84,7 @@ public class PublicationMB implements Serializable {
 	public List<Publication> search(String p_searchTxt) {
 		oLogger.info("--search publication--" + p_searchTxt);
 		if (p_searchTxt.length() >= 3) {
-			publicationList = new ArrayList<>();
+			publicationList.clear();
 			try {
 				publicationList = oPublicationBean.search(p_searchTxt);
 			} catch (LibraryException e) {

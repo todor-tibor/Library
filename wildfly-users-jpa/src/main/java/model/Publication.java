@@ -1,12 +1,15 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
@@ -47,8 +50,8 @@ public abstract class Publication extends BaseEntity {
 	private String title;
 
 	// bi-directional many-to-one association to Borrow
-	@OneToMany(mappedBy = "publication")
-	private List<Borrow> borrows;
+	@OneToMany(mappedBy = "publication",fetch=FetchType.EAGER)
+	private Set<Borrow> borrows;
 
 	// bi-directional many-to-one association to Publisher
 	@ManyToOne
@@ -91,10 +94,11 @@ public abstract class Publication extends BaseEntity {
 	}
 
 	public List<Borrow> getBorrows() {
-		return this.borrows;
+		return new ArrayList<>(this.borrows);
+		//(List<Borrow>)this.borrows.toArray();
 	}
 
-	public void setBorrows(List<Borrow> borrows) {
+	public void setBorrows(Set<Borrow> borrows) {
 		this.borrows = borrows;
 	}
 
