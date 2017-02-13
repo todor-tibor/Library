@@ -16,7 +16,7 @@ drop table if exists `borrows`;
 drop table if exists `publications`;
 drop table if exists `publishers`;
 CREATE TABLE `publishers` (
-  `uuid`  int NOT NULL,
+  `uuid`  varchar(80) NOT NULL,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -27,7 +27,7 @@ CREATE TABLE `publications` (
   `title` varchar(45) NOT NULL,
   `publication_date` date NOT NULL,
   `type` enum('Book','Newspaper','Magazine') NOT NULL,
-  `publisher_id` int NOT NULL,
+  `publisher_id` varchar(80) NOT NULL,
   `nr_of_copys` int(11) NOT NULL,
   `on_stock` int(11) NOT NULL,
   PRIMARY KEY (`uuid`),

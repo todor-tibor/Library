@@ -8,8 +8,8 @@ import model.BaseEntity;
  * 
  * @author kiska
  *
- *The login interface to which the client has access.
- *Defines the login process.
+ *         The login interface to which the client has access. Defines the login
+ *         process.
  */
 public interface ILogin<X extends BaseEntity> {
 	/**
