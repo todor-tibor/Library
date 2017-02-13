@@ -22,9 +22,9 @@ import model.Publisher;
  */
 @Named("publisherbean")
 @SessionScoped
-public class PublisherManagedBean implements Serializable {
+public class PublisherMB implements Serializable {
 
-	private Logger oLogger = Logger.getLogger(PublisherManagedBean.class);
+	private Logger oLogger = Logger.getLogger(PublisherMB.class);
 	private static final long serialVersionUID = -4702598250751689454L;
 
 	@Inject
@@ -57,7 +57,7 @@ public class PublisherManagedBean implements Serializable {
 	 * @return - a publisher list if database is not empty
 	 */
 	public List<Publisher> getAll() {
-		publishersList = new ArrayList<>();
+		publishersList.clear();;
 		try {
 			publishersList = oPublisherBean.getAll();
 		} catch (LibraryException e) {
@@ -76,7 +76,7 @@ public class PublisherManagedBean implements Serializable {
 	 */
 	public List<Publisher> search(String p_searchTxt) {
 		if (p_searchTxt.length() >= 3) {
-			publishersList = new ArrayList<>();
+			publishersList.clear();
 			try {
 				publishersList = oPublisherBean.search(p_searchTxt);
 			} catch (LibraryException e) {
