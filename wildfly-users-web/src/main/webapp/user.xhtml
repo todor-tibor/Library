@@ -51,8 +51,15 @@
 							</p:commandButton>
 							<p:dataList id="displayRoles"
 								value="#{userbean.currentUser.roles}" var="role" width="250">
+								  <f:facet name="header">
+							            Roles
+							      </f:facet>
 								<h:outputText value="#{role.role}" />
 							</p:dataList>
+							<br>
+							</br>
+							<h:outputText value="Loyalty index: " />
+							<h:outputText value="#{userbean.currentUser.loyaltyIndex}" />
 						</p:dialog>
 
 
@@ -63,14 +70,32 @@
 				<p:commandButton value="List all users" update="userDT"
 					icon="ui-icon-search" action="#{userbean.getAll}">
 				</p:commandButton>
-	
-				<p:separator />
-				<p:inputText id="addUserTxtBox" binding="#{newName}" />
-				<p:commandButton value="Add" update="userDT"
-					icon="fa-user-plu" action="#{userbean.store(newName.value)}">
-					<f:param name="p_value" value="#{newName.value}" />
+				<p:commandButton value="Add new user" update="userDT"
+					icon="ui-icon-user" action="#{userbean.getAll}" 
+					oncomplete="PF('userDetailDialog').show()">
 				</p:commandButton>
-				
+	
+				<p:dialog id="addUserDialog" modal="true" showEffect="fade"
+					hideEffect="fade" widgetVar="userDetailDialog" header="Add new user"
+					width="330" height="300">
+					<p:messages id="messages" showDetail="true" autoUpdate="true"
+						closable="true" />
+					<h:panelGrid columns="2" cellpadding="5">
+						<p:outputLabel value="Username" />
+						<p:inputText id="addUserTxtBox" binding="#{newName}" />
+						<p:outputLabel value="Password" />
+						<p:inputText id="addPassTxtBox" binding="#{newPass}" />
+						<p:outputLabel value="Loyalty index" />
+						<p:inputText id="addLoyaltyIdx" binding="#{newLtyIdx}" />
+						<p:commandButton value="Add" update="userDT" icon="fa-user-plu"
+							action="#{userbean.store(newName.value, newPass.value, newLtyIdx.value)}">
+							<f:param name="p_name" value="#{newName.value}" />
+							<f:param name="p_pass" value="#{newPass.value}" />
+							<f:param name="p_idx" value="#{newLtyIdx.value}" />
+						</p:commandButton>
+					</h:panelGrid>
+				</p:dialog>
+
 			</h:form>
 	</p:panel>
 	</h:panelGrid>
