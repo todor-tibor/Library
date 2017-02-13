@@ -2,7 +2,10 @@ package gallb.wildfly.users.ejb.userManagement.business;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import javax.ejb.EJB;
+import javax.ejb.LocalBean;
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
 
 import gallb.wildfly.users.common.IUser;
 import gallb.wildfly.users.common.LibraryException;
@@ -16,8 +19,12 @@ import model.User;
  * 
  *         Implements a simple authentication process of a user.
  */
-public class LoginManagementBusiness {
-	@Inject
+@Stateless
+@LocalBean
+@Remote(ILoginBusiness.class)
+public class LoginManagementBusiness implements ILoginBusiness {
+
+	@EJB
 	private IUser userBean;
 	/**
 	 * Error message for the case when passwords don't match.
@@ -35,15 +42,15 @@ public class LoginManagementBusiness {
 	 *            - the hashed password that the user typed in
 	 * @return - the roles (type) of the user if login was not successful,
 	 *         otherwise throws an error
-	 * @throws LibraryException 
+	 * @throws LibraryException
 	 */
 	public List<Role> authentication(String userName, String password) throws LibraryException {
-		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^    "  + userName);
-		User user = userBean.getByUserName(userName);
-		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^    "  + userName+ "------------------");
-		if (PasswordEncrypter.encypted(password, " ").equals(user.getPassword())) {
-			System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^    passwirds match" );
-			return user.getRoles();
+
+		if (userBean != null) {
+			User user = userBean.getByUserName(userName);
+			if (PasswordEncrypter.encypted(password, " ").equals(user.getPassword())) { //
+				return user.getRoles();
+			}
 		}
 		throw new EjbException(PASSWORD_MISMATCH);
 	}

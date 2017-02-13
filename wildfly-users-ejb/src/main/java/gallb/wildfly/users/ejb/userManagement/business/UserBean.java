@@ -94,7 +94,7 @@ public class UserBean implements IUser {
 	}
 
 	/**
-	 * Returns the user of {@param userName}
+	 * Returns the user of {@code userName}
 	 * 
 	 * @param userName
 	 *            - the user name of the user for which to search for
@@ -103,12 +103,15 @@ public class UserBean implements IUser {
 	 */
 	public User getByUserName(String userName) throws EjbException {
 
-		oLogger.info("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"+ userName);
 		try {
-			return oEntityManager.createNamedQuery("User.findByName", User.class).setParameter("user_name", userName)
-					.getSingleResult();
+			if (oEntityManager != null) {
+				User u = oEntityManager.createNamedQuery("User.findByName", User.class)
+						.setParameter("user_name", userName).getSingleResult();
+				return u;
+			}
+			return null;
 		} catch (PersistenceException e) {
-			oLogger.error(e+"++++++++++++++++++++++++");
+			oLogger.error(e);
 			throw new EjbException(e);
 		}
 	}
