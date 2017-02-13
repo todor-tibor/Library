@@ -24,7 +24,7 @@ import model.User;
 @Named("loginbean")
 
 @SessionScoped
-public class LoginManagedBean implements Serializable {
+public class LoginMB implements Serializable {
 
 	private Logger oLogger = Logger.getLogger(ManagedBean.class);
 	private static final long serialVersionUID = -4702598250751689454L;
