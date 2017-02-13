@@ -103,10 +103,6 @@ public class UserBean implements IUser {
 	 */
 	public User getByUserName(String userName) throws EjbException {
 
-<<<<<<< Upstream, based on origin/PublicationWEB
-=======
-		oLogger.info("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"+ userName);
->>>>>>> b4fa023 not good
 		try {
 <<<<<<< Upstream, based on origin/PublicationWEB
 				User u = oEntityManager.createNamedQuery("User.findByName", User.class)
@@ -121,7 +117,7 @@ public class UserBean implements IUser {
 			return null;
 >>>>>>> 94576bb login working with username and password validation
 		} catch (PersistenceException e) {
-			oLogger.error(e+"++++++++++++++++++++++++");
+			oLogger.error(e);
 			throw new EjbException(e);
 		}
 	}

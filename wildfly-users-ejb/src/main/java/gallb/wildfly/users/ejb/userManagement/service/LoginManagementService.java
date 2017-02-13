@@ -31,23 +31,11 @@ public class LoginManagementService implements ILogin {
 	private ILoginBusiness loginBusniess;
 
 	public List<Role> login(String userName, String password) throws LibraryException {
-<<<<<<< Upstream, based on origin/PublicationWEB
 		if (ServiceValidation.checkString(userName)) {
 			if (ServiceValidation.checkPassword(password)) {
 				return loginBusniess.authentication(userName, password);
 			}
 		}
 		throw new EjbException(INPUT_DATA_VALIDATION_EXCEPTION);
-=======
-		System.out.println("/////********---------------------     " );
-		//if (ServiceValidation.checkString(userName)) {
-			System.out.println("/////********---------------------     " + userName);
-			//if (ServiceValidation.checkPassword(password)) {
-				System.out.println("/////********---------------------     " + password);
-				return new LoginManagementBusiness().authentication(userName, password);
-			//}
-		//}
-	//	throw new EjbException(INPUT_DATA_VALIDATION_EXCEPTION);
->>>>>>> b4fa023 not good
 	}
 }
