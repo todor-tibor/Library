@@ -14,23 +14,13 @@ public class ServiceValidation {
 	 * STRING_PATTERN - the restriction for a correct user name [a-zA-Z]+ - has
 	 * only letters
 	 */
-<<<<<<< Upstream, based on origin/PublicationWEB
 	private static final String STRING_PATTERN = "[a-zA-Z]+";
-=======
-	private static final String STRING_PATTERN = "{3,}";
->>>>>>> b4fa023 not good
 	/**
-<<<<<<< Upstream, based on origin/PublicationWEB
 	 * PASSWORD_PATTERN - the restriction for a correct password ((?=.*\\d) -
 	 * must have at least one number, (?=.*[a-z]) - one lowercase letter ,
 	 * (?=.*[A-Z]) - one uppercase letter, (?=.*[@#.$%]) - one of these symbols,
 	 * it's length is* minimum 6 characters, but can't be longer than 20
 	 * character
-=======
-	 * PASSWORD_PATTERN - the restriction for a correct password (?=.*[0-9]) -
-	 * must have at least one number, (?=.*[a-z]) - one lowercase letter	 * 
-	 * least 5 characters
->>>>>>> b4fa023 not good
 	 */
 	private static final String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#.$%]).{6,20})";
 	/**
