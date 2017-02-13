@@ -40,6 +40,9 @@ public class PublisherMB implements Serializable {
 	private Publisher currentPublisher = null;
 
 	public List<Publisher> getPublishersList() {
+		if(publishersList.isEmpty()){
+			getAll();
+		}
 		return publishersList;
 	}
 

@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
@@ -37,5 +38,12 @@ public class Book extends Publication {
 
 	public void setAuthors(List<Author> authors) {
 		this.authors = authors;
+	}
+	
+	public void addAuthor(Author p_author){
+		if(authors==null){
+			authors=new ArrayList<>();
+		}
+		authors.add(p_author);
 	}
 }
