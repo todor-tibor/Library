@@ -38,6 +38,7 @@ public class PublicationMB implements Serializable {
 	@Inject
 	private IPublication oPublicationBean;
 <<<<<<< Upstream, based on origin/master
+<<<<<<< Upstream, based on origin/master
 
 	/*
 	 * variables to select publication type, authors or publisher for update and
@@ -47,6 +48,9 @@ public class PublicationMB implements Serializable {
 =======
 	private List<Author> authors,currentAuthors;
 >>>>>>> 837b979 Admin felulat a PublicationManagement-hez
+=======
+	private List<Author> authors, currentAuthors;
+>>>>>>> 6c7703f apro valtoztatasok
 	private Publisher currentPublisher;
 	private String type;
 
@@ -54,12 +58,15 @@ public class PublicationMB implements Serializable {
 	 * Currently displayed publications.
 	 */
 <<<<<<< Upstream, based on origin/master
+<<<<<<< Upstream, based on origin/master
 	private List<Publication> publicationList = new ArrayList<>();
 =======
 
 	public List<PublicationType> getAllType() {
 		return new ArrayList<>(Arrays.asList(PublicationType.values()));
 	}
+=======
+>>>>>>> 6c7703f apro valtoztatasok
 
 	private List<Publication> publicationList = new ArrayList<>();// Currently
 																	// displayed
@@ -234,9 +241,9 @@ public class PublicationMB implements Serializable {
 		if ((currentPublication != null) && currentPublication.getTitle() != null
 				&& currentPublication.getPublisher() != null) {
 			if (authors != null && !authors.isEmpty()) {
-				if (currentPublication.getClass().getSimpleName().equals("Book"))
+				if ("Book".equals(currentPublication.getClass().getSimpleName()))
 					((Book) currentPublication).setAuthors(authors);
-				if (currentPublication.getClass().getSimpleName().equals("Magazine"))
+				if ("Magazine".equals(currentPublication.getClass().getSimpleName()))
 					((Magazine) currentPublication).setAuthors(authors);
 			}
 >>>>>>> 837b979 Admin felulat a PublicationManagement-hez
@@ -316,19 +323,17 @@ public class PublicationMB implements Serializable {
 		}
 
 		oLogger.info("-------has authors-----: " + currentPublication.getClass().getSimpleName());
-		if (currentPublication.getClass().getSimpleName().equals("Newspaper")) {
+		if ("Newspaper".equals(currentPublication.getClass().getSimpleName())) {
 			return false;
 		} else
 			return true;
 	}
 
 	public List<Author> getAuthors() {
-		//if (authors == null) {
-			if (currentPublication.getClass().getSimpleName().equals("Book"))
-				authors = ((Book) currentPublication).getAuthors();
-			if (currentPublication.getClass().getSimpleName().equals("Magazine"))
-				authors = ((Magazine) currentPublication).getAuthors();
-		//}
+		if ("Book".equals(currentPublication.getClass().getSimpleName()))
+			authors = ((Book) currentPublication).getAuthors();
+		if ("Magazine".equals(currentPublication.getClass().getSimpleName()))
+			authors = ((Magazine) currentPublication).getAuthors();
 		return authors;
 	}
 
