@@ -10,6 +10,11 @@
 		<p:panel id="panel1">
 
 			<p:panel>
+
+				<f:metadata>
+					<f:viewAction action="#{amibeanunk.isAdmin()}" />
+				</f:metadata>
+
 				<h2>
 					<h:outputText id="wel" value="#{msg['welcome.jsf']}" />
 				</h2>
@@ -155,7 +160,5 @@ function reloadIframe(e) {
 	  document.getElementById('myIframe').contentDocument.location.reload(true);
 	}
 </script>
-
-
 
 </html>

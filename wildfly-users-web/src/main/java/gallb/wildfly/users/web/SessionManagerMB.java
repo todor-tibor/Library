@@ -27,8 +27,27 @@ public class SessionManagerMB implements Serializable{
 	
 	@Inject LocaleManager localeManager;
 	
+	private String loggedInRole = "adminasdsad";
 	
 	private String localeCode;
+
+	public String isAdmin() {
+		
+		if ("admin".equals(loggedInRole)) {
+			return "";
+		} else {
+			return "userPanel";
+		}
+	}
+	
+	public String getLoggedInRole() {
+		return loggedInRole;
+	}
+
+
+	public void setLoggedInRole(String loggedInRole) {
+		this.loggedInRole = loggedInRole;
+	}
 
 	private static Map<String,Object> countries;
 	static{
