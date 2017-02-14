@@ -110,11 +110,14 @@ public class PublicationMB implements Serializable {
 	public void store(String p_title, String p_nrOfCopies) {
 		if(p_title.isEmpty() || p_nrOfCopies.isEmpty()){
 			MessageService.warn("All field is requered");
+			return;
 		}
+		int nrOfCopies;
 		try{
-			int nrOfCopies=Integer.parseInt(p_nrOfCopies);
+			nrOfCopies=Integer.parseInt(p_nrOfCopies);
 		}catch (NumberFormatException e) {
 			MessageService.warn("number of copies is not a valid Number");
+			return;
 		}
 		oLogger.info("-------------nrOfCopies:  " + p_nrOfCopies + " type:  " + type);
 		Publication p_value;
@@ -141,8 +144,8 @@ public class PublicationMB implements Serializable {
 				break;
 			}
 			p_value.setTitle(p_title);
-			p_value.setNrOfCopys(Integer.parseInt(p_nrOfCopies));
-			p_value.setOnStock(Integer.parseInt(p_nrOfCopies));
+			p_value.setNrOfCopys(nrOfCopies);
+			p_value.setOnStock(nrOfCopies);
 			p_value.setPublisher(currentPublisher);
 			p_value.setPublicationDate(new Date());
 			oPublicationBean.store(p_value);
