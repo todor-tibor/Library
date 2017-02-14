@@ -13,6 +13,8 @@ import org.jboss.logging.Logger;
 import gallb.wildfly.users.common.ILogin;
 import gallb.wildfly.users.common.IUser;
 import gallb.wildfly.users.common.LibraryException;
+import model.Role;
+import model.RoleType;
 import model.User;
 
 /**
@@ -41,6 +43,7 @@ public class LoginMB implements Serializable {
 	private User currentUser = null;// Currently selected user.
 	private String password;
 	private String user_name;
+	private List<Role> roles;
 
 	public List<User> getUserList() {
 		return userList;
@@ -78,21 +81,30 @@ public class LoginMB implements Serializable {
 	 *            username.
 	 * @return List of user objects found.
 	 */
-	public User search() {
+	public String search() {
 		oLogger.info("--search user--" + this.getUser_name());
 		if (this.getUser_name().length() >= 3) {
 			try {
 				System.out.println("/*/*-/*-/ " + this.getUser_name() + "    " + this.getPassword());
-				oLoginBean.login(this.getUser_name(), this.getPassword());
+				roles = oLoginBean.login(this.getUser_name(), this.getPassword());
 				System.out.println("///**********-----------    success    -*-*-*-*-*-");
+				for (Role r : roles) {
+					switch (r.getRole()) {
+					case "LIBRARIAN":
+						return "index";
+					case "READER":
+						return "publication";
+					default:
+						return "login";
+					}
+				}
 			} catch (LibraryException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				return "login";
 			}
-		} else {
-			// this.error("Keyword too short. Min. 3 characters req.");
 		}
-		return currentUser;
+		return "login";
 	}
 
 	public String getPassword() {
