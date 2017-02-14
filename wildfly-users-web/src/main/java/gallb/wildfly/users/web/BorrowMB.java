@@ -49,6 +49,22 @@ public class BorrowMB implements Serializable {
 		this.borrow = borrow;
 	}
 
+	public User getCurrentUser() {
+		return currentUser;
+	}
+
+	public void setCurrentUser(User curentUser) {
+		this.currentUser = curentUser;
+	}
+	
+	public Publication getCurrentPublication() {
+		return currentPublication;
+	}
+
+	public void setCurrentPublication(Publication curentPublication) {
+		this.currentPublication = curentPublication;
+	}
+
 	/**
 	 * @return
 	 */
@@ -71,8 +87,8 @@ public class BorrowMB implements Serializable {
 		p_Borrow = new Borrow();
 		if ((currentPublication == null) && (currentUser == null) && (dateFrom == null) && (dateUntil == null)) {
 			MessageService.warn("All field is requered");
-			
-		}else{
+
+		} else {
 			p_Borrow.setUser(currentUser);
 			p_Borrow.setPublication(currentPublication);
 			p_Borrow.setBorrowFrom(dateFrom);

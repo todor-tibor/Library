@@ -35,12 +35,13 @@
 					<f:facet name="footer">
 						<p:commandButton process="borrowDT" icon="fa-remove"
 							value="Delete" action="#{borrowBean.remove()}" update="borrowDT" />
-						<p:commandButton icon="fa-remove" value="Borrowing"
-							update="addDialog" oncomplete="PF('addDialog').show()" />
+
 					</f:facet>
 
 
 				</p:dataTable>
+
+
 				<p:dialog id="addDialog" modal="true" showEffect="fade"
 					hideEffect="fade" widgetVar="addDialog" header="Add new borrow"
 					width="500" height="500">
@@ -48,14 +49,46 @@
 						closable="true" />
 					<h:panelGrid columns="2" cellpadding="4">
 						<h:outputLabel value="User" />
-						<p:dataTable id="User"></p:dataTable>
-					
-					</h:panelGrid>	
+						<p:dataTable id="User" var="user" value="#{userbean.all}"
+							selectionMode="single" selection="#{borrowBean.currentUser}"
+							rowKey="#{user.uuid}">
+							<p:column>
+								<h:outputText value="#{user.userName}" />
+							</p:column>
+						</p:dataTable>
+						<h:outputLabel value="Publication" />
+						<p:dataTable id="Publication" var="publication"
+							value="#{publicationBean.all}" selectionMode="single"
+							selection="#{borrowBean.currentPublication}"
+							rowKey="#{publication.uuid}">
+							<p:column>
+								<h:outputText value="#{publication.title}" />
+							</p:column>
+						</p:dataTable>
+						<p:outputLabel value="Date From" />
+						<p:inputText binding="dateFrom" />
+						<p:outputLabel value="Date Until" />
+						<p:inputText binding="dateUntil" />
+					</h:panelGrid>
+					<p:commandButton value="Add" update="borrow_actions_form"
+						icon="fa-user-plu"
+						action="#{borrowBean.store(dateFrom.value,dateUntil.value)}">
+						<f:param name="dateFrom" value="#{dateFrom.value}" />
+						<f:param name="dateUntil" value="#{dateUntil.value}" />
+
+					</p:commandButton>
 
 				</p:dialog>
+
+
 				<p:commandButton value="List all borrows" icon="ui-icon-search"
 					update="borrowDT" action="#{borrowBean.getAll}">
 				</p:commandButton>
+				<p:commandButton icon="fa-remove" value="Borrowing"
+					update="addDialog" oncomplete="PF('addDialog').show()" />
+
+
+
 			</h:form>
 		</p:panel>
 	</h:panelGrid>
