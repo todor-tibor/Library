@@ -3,6 +3,9 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
+	<f:metadata>
+		<f:viewAction action="#{loginbean.isAdmin()}" />
+	</f:metadata>
 	<title>.msg Library</title>
 </h:head>
 <h:body>
@@ -11,9 +14,7 @@
 
 			<p:panel>
 
-				<f:metadata>
-					<f:viewAction action="#{amibeanunk.isAdmin()}" />
-				</f:metadata>
+
 
 				<h2>
 					<h:outputText id="wel" value="#{msg['welcome.jsf']}" />
@@ -93,8 +94,8 @@
 								update="userDT" icon="ui-icon-search"
 								action="#{userbean.getAll}">
 							</p:commandButton>
-							<p:commandButton value="#{userMan['addUser.button']}" update="userDT"
-								icon="ui-icon-user" action="#{userbean.getAll}"
+							<p:commandButton value="#{userMan['addUser.button']}"
+								update="userDT" icon="ui-icon-user" action="#{userbean.getAll}"
 								oncomplete="PF('userDetailDialog').show()">
 							</p:commandButton>
 
