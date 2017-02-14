@@ -1,33 +1,30 @@
 /**
  * 
  */
-package gallb.wildfly.users.ejb.util;
+package gallb.wildfly.users.common;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import org.jboss.logging.Logger;
-
-import gallb.wildfly.users.ejb.exception.EjbException;
-import gallb.wildfly.users.ejb.userManagement.business.RoleBean;
 
 /**
  * @author kiska
  *
  */
 public class PasswordEncrypter {
-	private static Logger oLogger = Logger.getLogger(RoleBean.class);
 	private final static String ENCRYPTER_ERROR = "password.error.message";
 
 	/**
 	 * 
-	 * @param password - the raw password
-	 * @param salt - a random data used for hashing
-	 * @return - the hashed password generated from the raw password and salt value
+	 * @param password
+	 *            - the raw password
+	 * @param salt
+	 *            - a random data used for hashing
+	 * @return - the hashed password generated from the raw password and salt
+	 *         value
 	 * @throws EjbException
 	 */
-	public static String encypted(String password, String salt) throws EjbException {
+	public static String encypted(String password, String salt) throws LibraryException {
 		try {
 			byte[] initialBytes;
 			initialBytes = (password + salt).getBytes("utf-8");
@@ -37,11 +34,9 @@ public class PasswordEncrypter {
 			byte[] hashBytes = algorithm.digest();
 			return new String(hashBytes);
 		} catch (UnsupportedEncodingException e) {
-			oLogger.error(e);
-			throw new EjbException(ENCRYPTER_ERROR, e);
+			throw new LibraryException(ENCRYPTER_ERROR, e);
 		} catch (NoSuchAlgorithmException e) {
-			oLogger.error(e);
-			throw new EjbException(ENCRYPTER_ERROR, e);
+			throw new LibraryException(ENCRYPTER_ERROR, e);
 		}
 	}
 }

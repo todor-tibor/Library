@@ -1,5 +1,8 @@
 package gallb.wildfly.users.ejb.util;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /***
  * 
  * @author kiska
@@ -8,18 +11,18 @@ package gallb.wildfly.users.ejb.util;
  */
 public class ServiceValidation {
 	/**
-	 * STRING_PATTERN - the restriction for a correct user name (.*[a-z]) - has
-	 * only letters {3} - is at least 3 characters long
+	 * STRING_PATTERN - the restriction for a correct user name [a-zA-Z]+ - has
+	 * only letters
 	 */
-	private static final String STRING_PATTERN = "(.*[a-z]){3}";
+	private static final String STRING_PATTERN = "[a-zA-Z]+";
 	/**
-	 * PASSWORD_PATTERN - the restriction for a correct password (?=.*[0-9]) -
-	 * must have at least one number, (?=.*[a-z]) - one lowercase letter
-	 * (?=.*[A-Z]) - one uppercase letter (?=.*[@#$%^&+=]) - one special symbol
-	 * (?=\\S+$) - can't have any whitespaces .{5,} - the length should be at
-	 * least 5 characters
+	 * PASSWORD_PATTERN - the restriction for a correct password ((?=.*\\d) -
+	 * must have at least one number, (?=.*[a-z]) - one lowercase letter ,
+	 * (?=.*[A-Z]) - one uppercase letter, (?=.*[@#.$%]) - one of these symbols,
+	 * it's length is* minimum 6 characters, but can't be longer than 20
+	 * character
 	 */
-	private static final String PASSWORD_PATTERN = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{5,}";
+	private static final String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#.$%]).{6,20})";
 	/**
 	 * UUID_PATTERN - the restriction for a correct uuid (?=.*[0-9]) - must have
 	 * at least one number, (?=.*[a-z]) - one lowercase letter (?=.*[@#$%^&+=])
@@ -39,7 +42,9 @@ public class ServiceValidation {
 	 *         otherwise returns false
 	 */
 	public static boolean checkString(String inputString) {
-		return STRING_PATTERN.matches(inputString);
+		Pattern pattern = Pattern.compile(STRING_PATTERN);
+		Matcher matcher = pattern.matcher(inputString);
+		return matcher.matches();
 	}
 
 	/**
@@ -52,7 +57,9 @@ public class ServiceValidation {
 	 *         returns false
 	 */
 	public static boolean checkPassword(String password) {
-		return PASSWORD_PATTERN.matches(password);
+		Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
+		Matcher matcher = pattern.matcher(password);
+		return matcher.matches();
 	}
 
 	/**
@@ -63,6 +70,8 @@ public class ServiceValidation {
 	 * @return - true if the two id match, false otherwise
 	 */
 	public static boolean checkUuid(String uuid) {
-		return UUID_PATTERN.matches(uuid);
+		Pattern pattern = Pattern.compile(UUID_PATTERN);
+		Matcher matcher = pattern.matcher(uuid);
+		return matcher.matches();
 	}
 }

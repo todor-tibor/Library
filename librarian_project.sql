@@ -118,11 +118,11 @@ INSERT INTO `library2`.`publishers` (`uuid`, `name`) VALUES ('2', 'Corvin');
 INSERT INTO `library2`.`publishers` (`uuid`, `name`) VALUES ('3', 'Scientia');
 
 
-INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`) VALUES ('1', 'Kis Katalin', '10', 'almafa');
-INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`) VALUES ('2', 'Gall Barna', '0', 'almafa');
-INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`) VALUES ('3', 'Sipos Terez', '10', 'almafa');
-INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`) VALUES ('4', 'Szilard Nagy', '5', 'almafa');
-INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`) VALUES ('5', 'Admin', '10', 'almafa');
+INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`) VALUES ('1', 'Kis Katalin', '10', '�IpýÊde£"(h—ÙÄrcz?');
+INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`) VALUES ('2', 'Gall Barna', '0', '�IpýÊde£"(h—ÙÄrcz?');
+INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`) VALUES ('3', 'Sipos Terez', '10', '�IpýÊde£"(h—ÙÄrcz?');
+INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`) VALUES ('4', 'Szilard Nagy', '5', '�IpýÊde£"(h—ÙÄrcz?');
+INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`) VALUES ('5', 'Admin', '10', '�IpýÊde£"(h—ÙÄrcz?');
 
 INSERT INTO `library2`.`roles` (`uuid`, `role`) VALUES ('1', 'LIBRARIAN');
 INSERT INTO `library2`.`roles` (`uuid`, `role`) VALUES ('2', 'READER');

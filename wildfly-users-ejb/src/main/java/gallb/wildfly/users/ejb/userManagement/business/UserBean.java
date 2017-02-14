@@ -10,8 +10,9 @@ import javax.persistence.PersistenceException;
 import org.jboss.logging.Logger;
 
 import gallb.wildfly.users.common.IUser;
+import gallb.wildfly.users.common.LibraryException;
+import gallb.wildfly.users.common.PasswordEncrypter;
 import gallb.wildfly.users.ejb.exception.EjbException;
-import gallb.wildfly.users.ejb.util.PasswordEncrypter;
 import model.User;
 
 /**
@@ -46,7 +47,7 @@ public class UserBean implements IUser {
 	}
 
 	@Override
-	public void store(User user) throws EjbException {
+	public void store(User user) throws LibraryException {
 		try {
 			user.setPassword(PasswordEncrypter.encypted(user.getPassword(), " "));
 			oEntityManager.persist(user);
@@ -93,7 +94,7 @@ public class UserBean implements IUser {
 	}
 
 	/**
-	 * Returns the user of {@param userName}
+	 * Returns the user of {@code userName}
 	 * 
 	 * @param userName
 	 *            - the user name of the user for which to search for
@@ -101,9 +102,14 @@ public class UserBean implements IUser {
 	 * @throws EjbException
 	 */
 	public User getByUserName(String userName) throws EjbException {
+
 		try {
-			return oEntityManager.createNamedQuery("User.findByName", User.class).setParameter("user_name", userName)
-					.getSingleResult();
+			if (oEntityManager != null) {
+				User u = oEntityManager.createNamedQuery("User.findByName", User.class)
+						.setParameter("user_name", userName).getSingleResult();
+				return u;
+			}
+			return null;
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
