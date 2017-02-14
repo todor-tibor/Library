@@ -11,12 +11,17 @@
 </h:head>
 
 <h:body>
+<<<<<<< Upstream, based on origin/PublicationWEB
 	<h:panelGrid columns="3" cellpadding="10">
 		<p:panel header="Publication management">
+=======
+<h:panelGrid columns="3" cellpadding="10">
+		<p:panel header="#{msg['publication.button']}">
+>>>>>>> 5abc42d added EN and HU property files for users, publications, authors, publishers
 			<h:form id="publication_actions_form">
 
 				<p:inputText id="publication_searchTextBox" binding="#{srch}" />
-				<p:commandButton value="Search" update="publicationDT"
+				<p:commandButton value="#{msg['search.button']}" update="publicationDT"
 					action="#{publicationBean.search(srch.value)}">
 					<f:param name="p_value" value="#{srch.value}" />
 				</p:commandButton>
@@ -29,11 +34,16 @@
 					<p:ajax event="rowSelect" listener="#{publicationBean.isSelected}"
 						update="publicationDT" />
 					<f:facet name="header">
-            			Publications
+            			#{pubMan['publications.text']}
         			</f:facet>
 					<f:facet name="header">
+<<<<<<< Upstream, based on origin/PublicationWEB
 					</f:facet>
 					<p:column headerText="Title">
+=======
+        			</f:facet>
+					<p:column headerText="#{pubMan['publication.name']}">
+>>>>>>> 5abc42d added EN and HU property files for users, publications, authors, publishers
 						<h:outputText value="#{publication.title}" />
 					</p:column>
 					<p:column headerText="Publisher">
@@ -50,11 +60,18 @@
 					</p:column>
 					<f:facet name="footer">
 						<p:commandButton process="publicationDT" icon="ui-icon-search"
+<<<<<<< Upstream, based on origin/PublicationWEB
 							value="Details" update="first"
 							oncomplete="PF('publicationDialog').show()"
 							disabled="#{publicationBean.currentPublication == null}" />
 
+=======
+							value="#{msg['details.button']}" update="first"
+							oncomplete="PF('roleDialog').show()" />
+							
+>>>>>>> 5abc42d added EN and HU property files for users, publications, authors, publishers
 						<p:commandButton process="publicationDT" icon="fa-remove"
+<<<<<<< Upstream, based on origin/PublicationWEB
 							value="Delete" action="#{publicationBean.remove()}"
 							update="publicationDT"
 							disabled="#{publicationBean.currentPublication == null}" />
@@ -63,6 +80,9 @@
 							value="Update Publicatoion" update="updateDialog"
 							oncomplete="PF('updateDialog').show()"
 							disabled="#{publicationBean.currentPublication == null}" />
+=======
+							value="#{msg['delete.button']}" action="#{publicationBean.remove()}" update="publicationDT"/>
+>>>>>>> 5abc42d added EN and HU property files for users, publications, authors, publishers
 
 						<p:dialog id="first" modal="true" showEffect="fade"
 							hideEffect="fade" widgetVar="publicationDialog"
@@ -70,6 +90,7 @@
 							height="500">
 							<p:messages id="messages" showDetail="true" autoUpdate="true"
 								closable="true" />
+<<<<<<< Upstream, based on origin/PublicationWEB
 							<br />
 							<h:panelGrid columns="2" cellpadding="5">
 								<h:outputText value="Title: " />
@@ -101,6 +122,17 @@
 									<h:outputText value="#{borrows.borrowUntil}" />
 								</p:column>
 							</p:dataTable>
+=======
+							<p:inputText id="publication_renameTextBox" binding="#{renamepublication}" />
+							<p:commandButton value="#{msg['rename.button']}" update=""
+								action="#{publicationBean.update(renamepublication.value)}">
+								<f:param name="p_newTxt" value="#{renamepublication.value}" />
+							</p:commandButton>
+							<p:dataList id="displayRoles"
+								value="#{publicationBean.currentPublication}" var="role" width="250">
+								<h:outputText value="#{role}" />
+							</p:dataList>
+>>>>>>> 5abc42d added EN and HU property files for users, publications, authors, publishers
 						</p:dialog>
 
 						<p:dialog id="updateDialog" modal="true" showEffect="fade"
@@ -148,10 +180,18 @@
 					</f:facet>
 
 				</p:dataTable>
+<<<<<<< Upstream, based on origin/PublicationWEB
 				<p:commandButton value="List all publications"
 					update="publicationDT" icon="ui-icon-search"
 					action="#{publicationBean.getAll()}">
+=======
+
+
+				<p:commandButton value="#{pubMan['listPublications.button']}" update="publicationDT"
+					icon="ui-icon-search" action="#{publicationBean.getAll}">
+>>>>>>> 5abc42d added EN and HU property files for users, publications, authors, publishers
 				</p:commandButton>
+<<<<<<< Upstream, based on origin/PublicationWEB
 				<p:commandButton icon="fa-remove" value="AddNewspaper"
 					update="addDialog" oncomplete="PF('addDialog').show()"
 					action="#{publicationBean.setType('Newspaper')}" />
@@ -202,6 +242,16 @@
 					</p:commandButton>
 				</p:dialog>
 
+=======
+	
+				<p:separator />
+				<p:inputText id="addPublicationTxtBox" binding="#{newName}" />
+				<p:commandButton value="#{msg['add.label']}" update="publicationDT"
+					icon="fa-publication-plu" action="#{publicationBean.store(newName.value)}">
+					<f:param name="p_value" value="#{newName.value}" />
+				</p:commandButton>
+				
+>>>>>>> 5abc42d added EN and HU property files for users, publications, authors, publishers
 			</h:form>
 		</p:panel>
 	</h:panelGrid>
