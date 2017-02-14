@@ -2,7 +2,6 @@ package gallb.wildfly.users.web;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +11,6 @@ import javax.inject.Named;
 
 import org.jboss.logging.Logger;
 
-import gallb.wildfly.users.PublicationType;
 import gallb.wildfly.users.common.IPublication;
 import gallb.wildfly.users.common.LibraryException;
 import model.Author;
@@ -42,17 +40,13 @@ public class PublicationMB implements Serializable {
 
 	@Inject
 	private IPublication oPublicationBean;
-	private List<Author> authors,currentAuthors;
+	private List<Author> authors, currentAuthors;
 	private Publisher currentPublisher;
 	private String type;
 
 	/**
 	 * 
 	 */
-
-	public List<PublicationType> getAllType() {
-		return new ArrayList<>(Arrays.asList(PublicationType.values()));
-	}
 
 	private List<Publication> publicationList = new ArrayList<>();// Currently
 																	// displayed
@@ -152,9 +146,9 @@ public class PublicationMB implements Serializable {
 		if ((currentPublication != null) && currentPublication.getTitle() != null
 				&& currentPublication.getPublisher() != null) {
 			if (authors != null && !authors.isEmpty()) {
-				if (currentPublication.getClass().getSimpleName().equals("Book"))
+				if ("Book".equals(currentPublication.getClass().getSimpleName()))
 					((Book) currentPublication).setAuthors(authors);
-				if (currentPublication.getClass().getSimpleName().equals("Magazine"))
+				if ("Magazine".equals(currentPublication.getClass().getSimpleName()))
 					((Magazine) currentPublication).setAuthors(authors);
 			}
 			try {
@@ -217,19 +211,17 @@ public class PublicationMB implements Serializable {
 		}
 
 		oLogger.info("-------has authors-----: " + currentPublication.getClass().getSimpleName());
-		if (currentPublication.getClass().getSimpleName().equals("Newspaper")) {
+		if ("Newspaper".equals(currentPublication.getClass().getSimpleName())) {
 			return false;
 		} else
 			return true;
 	}
 
 	public List<Author> getAuthors() {
-		//if (authors == null) {
-			if (currentPublication.getClass().getSimpleName().equals("Book"))
-				authors = ((Book) currentPublication).getAuthors();
-			if (currentPublication.getClass().getSimpleName().equals("Magazine"))
-				authors = ((Magazine) currentPublication).getAuthors();
-		//}
+		if ("Book".equals(currentPublication.getClass().getSimpleName()))
+			authors = ((Book) currentPublication).getAuthors();
+		if ("Magazine".equals(currentPublication.getClass().getSimpleName()))
+			authors = ((Magazine) currentPublication).getAuthors();
 		return authors;
 	}
 
