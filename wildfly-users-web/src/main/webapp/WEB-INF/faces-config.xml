@@ -24,6 +24,10 @@
 	   <resource-bundle>
 		<base-name>gallb.wildfly.users.web.publishMan</base-name>
 		<var>publishMan</var>
+		</resource-bundle>
+		<resource-bundle>
+		<base-name>gallb.wildfly.users.web.roleMan</base-name>
+		<var>roleMan</var>
 	   </resource-bundle>
      </application>
 </faces-config>
