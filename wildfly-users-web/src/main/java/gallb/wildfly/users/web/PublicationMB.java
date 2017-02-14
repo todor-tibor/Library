@@ -42,18 +42,18 @@ public class PublicationMB implements Serializable {
 
 	@Inject
 	private IPublication oPublicationBean;
-	private Author currentAuthor;
+	private List<Author> authors,currentAuthors;
 	private Publisher currentPublisher;
 	private String type;
-	
 
 	/**
 	 * 
 	 */
-	
-	public List<PublicationType> getAllType(){
+
+	public List<PublicationType> getAllType() {
 		return new ArrayList<>(Arrays.asList(PublicationType.values()));
 	}
+
 	private List<Publication> publicationList = new ArrayList<>();// Currently
 																	// displayed
 																	// publications.
@@ -113,22 +113,22 @@ public class PublicationMB implements Serializable {
 	}
 
 	public void store(String p_title, String p_nrOfCopies) {
-		oLogger.info("--------------publisher: " + currentPublisher + "   nrOfCopies:  "+ p_nrOfCopies +" type:  "+type);
+		oLogger.info("-------------nrOfCopies:  " + p_nrOfCopies + " type:  " + type);
 		Publication p_value;
-		try{
-		switch (type) {
-		case "Book":
-			p_value=new Book();
-			((Book)p_value).addAuthor(currentAuthor);
-			break;
-		case "Magazine":
-			p_value=new Magazine();
-			((Magazine)p_value).addAuthor(currentAuthor);
-			break;
-		default:
-			p_value=new Newspaper();
-			break;
-		}
+		try {
+			switch (type) {
+			case "Book":
+				p_value = new Book();
+				((Book) p_value).setAuthors(currentAuthors);
+				break;
+			case "Magazine":
+				p_value = new Magazine();
+				((Magazine) p_value).setAuthors(currentAuthors);
+				break;
+			default:
+				p_value = new Newspaper();
+				break;
+			}
 			p_value.setTitle(p_title);
 			p_value.setNrOfCopys(Integer.parseInt(p_nrOfCopies));
 			p_value.setOnStock(Integer.parseInt(p_nrOfCopies));
@@ -158,11 +158,16 @@ public class PublicationMB implements Serializable {
 	 * @param p_newTxt
 	 *            - new publicationname.
 	 */
-	public void update(String p_newTxt) {
-		oLogger.info("--update publication ManagedBean--id:" + currentPublication.getTitle() + "new name: " + p_newTxt);
-		if ((currentPublication != null) && (p_newTxt.length() >= 3)) {
+	public void update() {
+		if ((currentPublication != null) && currentPublication.getTitle() != null
+				&& currentPublication.getPublisher() != null) {
+			if (authors != null && !authors.isEmpty()) {
+				if (currentPublication.getClass().getSimpleName().equals("Book"))
+					((Book) currentPublication).setAuthors(authors);
+				if (currentPublication.getClass().getSimpleName().equals("Magazine"))
+					((Magazine) currentPublication).setAuthors(authors);
+			}
 			try {
-				currentPublication.setTitle(p_newTxt);
 				oPublicationBean.update(currentPublication);
 				publicationList = oPublicationBean.getAll();
 				oLogger.info("**********************update succesfull************************************");
@@ -172,7 +177,7 @@ public class PublicationMB implements Serializable {
 				MessageService.error(e.getMessage());
 			}
 		} else {
-			MessageService.error("New name too short.");
+			MessageService.error("Invalid data.");
 		}
 	}
 
@@ -196,12 +201,58 @@ public class PublicationMB implements Serializable {
 	}
 
 	public String getType() {
+		oLogger.info("get type--------:" + type);
 		return type;
 	}
 
 	public void setType(String type) {
-		oLogger.info("-----------------type changed"+type);
+		oLogger.info("-----------------type changed" + type);
 		this.type = type;
+	}
+
+	public Boolean isSelected() {
+		oLogger.info("-------------------is selected: " + currentPublication);
+		if (currentPublication == null) {
+			oLogger.error("-------------+++++++++++++No selected publication");
+			return false;
+		} else
+			return true;
+	}
+
+	public Boolean hasAuthor() {
+		oLogger.info("-------------------has authors: " + currentPublication);
+		if (currentPublication == null) {
+			oLogger.error("-------------+++++++++++++No selected publication");
+			return false;
+		}
+
+		oLogger.info("-------has authors-----: " + currentPublication.getClass().getSimpleName());
+		if (currentPublication.getClass().getSimpleName().equals("Newspaper")) {
+			return false;
+		} else
+			return true;
+	}
+
+	public List<Author> getAuthors() {
+		//if (authors == null) {
+			if (currentPublication.getClass().getSimpleName().equals("Book"))
+				authors = ((Book) currentPublication).getAuthors();
+			if (currentPublication.getClass().getSimpleName().equals("Magazine"))
+				authors = ((Magazine) currentPublication).getAuthors();
+		//}
+		return authors;
+	}
+
+	public void setAuthors(List<Author> authors) {
+		this.authors = authors;
+	}
+
+	public List<Author> getCurrentAuthors() {
+		return currentAuthors;
+	}
+
+	public void setCurrentAuthors(List<Author> currentAuthors) {
+		this.currentAuthors = currentAuthors;
 	}
 
 	public Publisher getCurrentPublisher() {
@@ -211,13 +262,4 @@ public class PublicationMB implements Serializable {
 	public void setCurrentPublisher(Publisher currentPublisher) {
 		this.currentPublisher = currentPublisher;
 	}
-
-	public Author getCurrentAuthor() {
-		return currentAuthor;
-	}
-
-	public void setCurrentAuthor(Author currentAuthor) {
-		this.currentAuthor = currentAuthor;
-	}
-	
 }

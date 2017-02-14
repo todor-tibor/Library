@@ -45,8 +45,6 @@ public class AuthorMB implements Serializable {
 	 * 
 	 */
 	public List<Author> getAuthorList() {
-		if(authorList.isEmpty())
-			getAll();
 		return authorList;
 	}
 
