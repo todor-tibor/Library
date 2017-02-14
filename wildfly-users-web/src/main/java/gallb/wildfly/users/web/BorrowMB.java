@@ -1,6 +1,7 @@
 package gallb.wildfly.users.web;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,8 @@ import org.jboss.logging.Logger;
 import gallb.wildfly.users.common.IBorrow;
 import gallb.wildfly.users.common.LibraryException;
 import model.Borrow;
+import model.Publication;
+import model.User;
 
 @Named("borrowBean")
 
@@ -29,6 +32,8 @@ public class BorrowMB implements Serializable {
 	private IBorrow oBorrowBean;
 
 	private List<Borrow> borrows = new ArrayList<>();
+	private User currentUser;
+	private Publication currentPublication;
 
 	private Borrow borrow = null;
 
@@ -58,6 +63,28 @@ public class BorrowMB implements Serializable {
 			MessageService.error("Server internal error.");
 		}
 		return borrows;
+	}
+
+	public void store(Date dateFrom, Date dateUntil) {
+
+		Borrow p_Borrow;
+		p_Borrow = new Borrow();
+		if ((currentPublication == null) && (currentUser == null) && (dateFrom == null) && (dateUntil == null)) {
+			MessageService.warn("All field is requered");
+			
+		}else{
+			p_Borrow.setUser(currentUser);
+			p_Borrow.setPublication(currentPublication);
+			p_Borrow.setBorrowFrom(dateFrom);
+			p_Borrow.setBorrowUntil(dateUntil);
+			try {
+				oBorrowBean.store(p_Borrow);
+				borrows.add(p_Borrow);
+			} catch (LibraryException e) {
+				MessageService.error(e.getMessage());
+			}
+			MessageService.info("Succesfully added: " + p_Borrow);
+		}
 	}
 
 	public void remove() {
