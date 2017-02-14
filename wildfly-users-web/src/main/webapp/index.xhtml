@@ -7,148 +7,126 @@
 </h:head>
 <h:body>
 	<h:form>
-	<p:panel id="panel1">
-		<p:layout fullPage="true">
-			
-			<p:layoutUnit id="headUnit" position="north" size="100" resizable="false"
-				collapsible="false">
-				<p:panel id="headPanel">
-				<input type="button" value="#{msg['user.button']}" onClick="newSite('0')" />
+		<p:panel id="panel1">
+
+			<p:panel>
+				<input type="button" value="#{msg['user.button']}"
+					onClick="newSite('0')" />
 				<input type="button" value="#{msg['author.button']}"
 					onClick="newSite('1')" />
 				<input type="button" value="#{msg['publisher.button']}"
 					onClick="newSite('2')" />
 				<input type="button" value="#{msg['publication.button']}"
 					onClick="newSite('3')" />
-				
-				
+
+
 				<h2>
 					<h:outputText id="wel" value="#{msg['welcome.jsf']}" />
 				</h2>
-				
-				<p:commandButton value="German" 
-					action="#{amibeanunk.germanNow()}" update="headPanel">
-					
-				</p:commandButton>
-				
-				<p:commandButton value="English" 
-					action="#{amibeanunk.englishNow()}" update="headPanel">
-				</p:commandButton>
-				
-				<button onclick="reloadIframe(event)">Click me</button>
-				
-								
-								<p:panel header="User management">
-			<h:form id="actions_form">
-			
-				<h2>
-					<h:outputText id="wel" value="#{msg['welcome.jsf']}"  />
-				</h2>
-				<p:commandButton value="update_welcome" update="wel" action="#{userbean.getCurrentLang()}" />
 
-				<p:inputText id="searchTextBox" binding="#{srch}" />
-				<p:commandButton value="Search" update="userDT"
-					action="#{userbean.search(srch.value)}">
-					<f:param name="p_value" value="#{srch.value}" />
+				<p:commandButton value="#{msg['lang.hungarian']}" action="#{amibeanunk.hungarianNow()}"
+					update="panel1">
+
 				</p:commandButton>
 
-				<p:dataTable id="userDT" var="user" value="#{userbean.userList}"
-					selectionMode="single" selection="#{userbean.currentUser}"
-					rowKey="#{user.uuid}">
-					<f:facet name="header">
-            			Users
+				<p:commandButton value="#{msg['lang.english']}" action="#{amibeanunk.englishNow()}"
+					update="panel1">
+				</p:commandButton>			
+
+			</p:panel>
+
+			<p:panel header="#{msg['user.button']}">
+							<h:form id="actions_form">														
+
+								<p:inputText id="searchTextBox" binding="#{srch}" />
+								<p:commandButton value="#{msg['search.button']}" update="userDT"
+									action="#{userbean.search(srch.value)}">
+									<f:param name="p_value" value="#{srch.value}" />
+								</p:commandButton>
+
+								<p:dataTable id="userDT" var="user" value="#{userbean.userList}"
+									selectionMode="single" selection="#{userbean.currentUser}"
+									rowKey="#{user.uuid}">
+									<f:facet name="header">
+            			#{msg['users.text']}
         			</f:facet>
-					<f:facet name="header">
-        			</f:facet>
-					<p:column headerText="Username">
-						<h:outputText value="#{user.userName}" />
-					</p:column>
-					<f:facet name="footer">
-						<p:commandButton process="userDT" icon="ui-icon-search"
-							value="Details" update="first"
-							oncomplete="PF('roleDialog').show()" />
-							
-						<p:commandButton process="userDT" icon="fa-remove"
-							value="Delete" action="#{userbean.remove()}" update="userDT"/>
+									<f:facet name="header">
+									</f:facet>
+									<p:column headerText="#{msg['user.header']}">
+										<h:outputText value="#{user.userName}" />
+									</p:column>
+									<f:facet name="footer">
+										<p:commandButton process="userDT" icon="ui-icon-search"
+											value="#{msg['details.button']}" update="first"
+											oncomplete="PF('roleDialog').show()" />
 
-						<p:dialog id="first" modal="true" showEffect="fade"
-							hideEffect="fade" widgetVar="roleDialog"
-							header="#{userbean.currentUser.userName}" width="300"
-							height="300">
-							<p:messages id="messages" showDetail="true" autoUpdate="true"
-								closable="true" />
-							<p:inputText id="renameTextBox" binding="#{renameuser}" />
-							<p:commandButton value="Rename" update=""
-								action="#{userbean.update(renameuser.value)}">
-								<f:param name="p_newTxt" value="#{renameuser.value}" />
-							</p:commandButton>
-							<p:dataList id="displayRoles"
-								value="#{userbean.currentUser.roles}" var="role" width="250">
-								  <f:facet name="header">
-							            Roles
+										<p:commandButton process="userDT" icon="fa-remove"
+											value="#{msg['delete.button']}" action="#{userbean.remove()}" update="userDT" />
+
+										<p:dialog id="first" modal="true" showEffect="fade"
+											hideEffect="fade" widgetVar="roleDialog"
+											header="#{userbean.currentUser.userName}" width="300"
+											height="300">
+											<p:messages id="messages" showDetail="true" autoUpdate="true"
+												closable="true" />
+											<p:inputText id="renameTextBox" binding="#{renameuser}" />
+											<p:commandButton value="#{msg['rename.button']}" update=""
+												action="#{userbean.update(renameuser.value)}">
+												<f:param name="p_newTxt" value="#{renameuser.value}" />
+											</p:commandButton>
+											<p:dataList id="displayRoles"
+												value="#{userbean.currentUser.roles}" var="role" width="250">
+												<f:facet name="header">
+							           #{msg['roles.text']}
 							      </f:facet>
-								<h:outputText value="#{role.role}" />
-							</p:dataList>
-							<br>
-							</br>
-							<h:outputText value="Loyalty index: " />
-							<h:outputText value="#{userbean.currentUser.loyaltyIndex}" />
-						</p:dialog>
+												<h:outputText value="#{role.role}" />
+											</p:dataList>
+											<br> </br>
+											<h:outputText value="#{msg['loyalty.label']} : " />
+											<h:outputText value="#{userbean.currentUser.loyaltyIndex}" />
+										</p:dialog>
 
 
-					</f:facet>
-				</p:dataTable>
+									</f:facet>
+								</p:dataTable>
 
 
-				<p:commandButton value="List all users" update="userDT"
-					icon="ui-icon-search" action="#{userbean.getAll}">
-				</p:commandButton>
-				<p:commandButton value="Add new user" update="userDT"
-					icon="ui-icon-user" action="#{userbean.getAll}" 
-					oncomplete="PF('userDetailDialog').show()">
-				</p:commandButton>
-	
-				<p:dialog id="addUserDialog" modal="true" showEffect="fade"
-					hideEffect="fade" widgetVar="userDetailDialog" header="Add new user"
-					width="330" height="300">
-					<p:messages id="messages" showDetail="true" autoUpdate="true"
-						closable="true" />
-					<h:panelGrid columns="2" cellpadding="5">
-						<p:outputLabel value="Username" />
-						<p:inputText id="addUserTxtBox" binding="#{newName}" />
-						<p:outputLabel value="Password" />
-						<p:inputText id="addPassTxtBox" binding="#{newPass}" />
-						<p:outputLabel value="Loyalty index" />
-						<p:inputText id="addLoyaltyIdx" binding="#{newLtyIdx}" />
-						<p:commandButton value="Add" update="userDT" icon="fa-user-plu"
-							action="#{userbean.store(newName.value, newPass.value, newLtyIdx.value)}">
-							<f:param name="p_name" value="#{newName.value}" />
-							<f:param name="p_pass" value="#{newPass.value}" />
-							<f:param name="p_idx" value="#{newLtyIdx.value}" />
-						</p:commandButton>
-					</h:panelGrid>
-				</p:dialog>
+								<p:commandButton value="#{msg['listUsers.button']}" update="userDT"
+									icon="ui-icon-search" action="#{userbean.getAll}">
+								</p:commandButton>
+								<p:commandButton value="#{msg['addUser.button']}" update="userDT"
+									icon="ui-icon-user" action="#{userbean.getAll}"
+									oncomplete="PF('userDetailDialog').show()">
+								</p:commandButton>
 
-			</h:form>
-	</p:panel>
-				
-				</p:panel>		
-				
+								<p:dialog id="addUserDialog" modal="true" showEffect="fade"
+									hideEffect="fade" widgetVar="userDetailDialog"
+									header="#{msg['addUser.button']}" width="330" height="300">
+									<p:messages id="messages" showDetail="true" autoUpdate="true"
+										closable="true" />
+									<h:panelGrid columns="2" cellpadding="5">
+										<p:outputLabel value="#{msg['user.header']}" />
+										<p:inputText id="addUserTxtBox" binding="#{newName}" />
+										<p:outputLabel value="#{msg['password.label']}" />
+										<p:inputText id="addPassTxtBox" binding="#{newPass}" />
+										<p:outputLabel value="#{msg['loyalty.label']}" />
+										<p:inputText id="addLoyaltyIdx" binding="#{newLtyIdx}" />
+										<p:commandButton value="#{msg['add.label']}" update="userDT"
+											icon="fa-user-plu"
+											action="#{userbean.store(newName.value, newPass.value, newLtyIdx.value)}">
+											<f:param name="p_name" value="#{newName.value}" />
+											<f:param name="p_pass" value="#{newPass.value}" />
+											<f:param name="p_idx" value="#{newLtyIdx.value}" />
+										</p:commandButton>
+									</h:panelGrid>
+								</p:dialog>
 
-			</p:layoutUnit>
-			
+							</h:form>
+						</p:panel>
 
-			<p:layoutUnit position="south" size="100" resizable="false"
-				collapsible="false">
-				<p:outputLabel value=".msg" />
-			</p:layoutUnit>
 
-			<p:layoutUnit id="centerIFrame" position="center">
-				<iframe id="myIframe" src="user.xhtml" width="100%" height="100%"
-					frameborder="0"> </iframe>
-			</p:layoutUnit>
-			<p:separator></p:separator>
-		</p:layout>
+
+
 		</p:panel>
 	</h:form>
 </h:body>
