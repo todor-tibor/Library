@@ -10,16 +10,6 @@
 		<p:panel id="panel1">
 
 			<p:panel>
-				<input type="button" value="#{msg['user.button']}"
-					onClick="newSite('0')" />
-				<input type="button" value="#{msg['author.button']}"
-					onClick="newSite('1')" />
-				<input type="button" value="#{msg['publisher.button']}"
-					onClick="newSite('2')" />
-				<input type="button" value="#{msg['publication.button']}"
-					onClick="newSite('3')" />
-
-
 				<h2>
 					<h:outputText id="wel" value="#{msg['welcome.jsf']}" />
 				</h2>
@@ -34,98 +24,120 @@
 				</p:commandButton>			
 
 			</p:panel>
+			
+			<p:tabView dynamic="true" cache="true">
+				<p:tab title="#{msg['user.button']}">
+					<p:panel header="#{msg['user.button']}">
+						<h:form id="actions_form">
 
-			<p:panel header="#{msg['user.button']}">
-							<h:form id="actions_form">														
+							<p:inputText id="searchTextBox" binding="#{srch}" />
+							<p:commandButton value="#{msg['search.button']}" update="userDT"
+								action="#{userbean.search(srch.value)}">
+								<f:param name="p_value" value="#{srch.value}" />
+							</p:commandButton>
 
-								<p:inputText id="searchTextBox" binding="#{srch}" />
-								<p:commandButton value="#{msg['search.button']}" update="userDT"
-									action="#{userbean.search(srch.value)}">
-									<f:param name="p_value" value="#{srch.value}" />
-								</p:commandButton>
-
-								<p:dataTable id="userDT" var="user" value="#{userbean.userList}"
-									selectionMode="single" selection="#{userbean.currentUser}"
-									rowKey="#{user.uuid}">
-									<f:facet name="header">
+							<p:dataTable id="userDT" var="user" value="#{userbean.userList}"
+								selectionMode="single" selection="#{userbean.currentUser}"
+								rowKey="#{user.uuid}">
+								<f:facet name="header">
             			#{msg['users.text']}
         			</f:facet>
-									<f:facet name="header">
-									</f:facet>
-									<p:column headerText="#{msg['user.header']}">
-										<h:outputText value="#{user.userName}" />
-									</p:column>
-									<f:facet name="footer">
-										<p:commandButton process="userDT" icon="ui-icon-search"
-											value="#{msg['details.button']}" update="first"
-											oncomplete="PF('roleDialog').show()" />
+								<f:facet name="header">
+								</f:facet>
+								<p:column headerText="#{msg['user.header']}">
+									<h:outputText value="#{user.userName}" />
+								</p:column>
+								<f:facet name="footer">
+									<p:commandButton process="userDT" icon="ui-icon-search"
+										value="#{msg['details.button']}" update="first"
+										oncomplete="PF('roleDialog').show()" />
 
-										<p:commandButton process="userDT" icon="fa-remove"
-											value="#{msg['delete.button']}" action="#{userbean.remove()}" update="userDT" />
+									<p:commandButton process="userDT" icon="fa-remove"
+										value="#{msg['delete.button']}" action="#{userbean.remove()}"
+										update="userDT" />
 
-										<p:dialog id="first" modal="true" showEffect="fade"
-											hideEffect="fade" widgetVar="roleDialog"
-											header="#{userbean.currentUser.userName}" width="300"
-											height="300">
-											<p:messages id="messages" showDetail="true" autoUpdate="true"
-												closable="true" />
-											<p:inputText id="renameTextBox" binding="#{renameuser}" />
-											<p:commandButton value="#{msg['rename.button']}" update=""
-												action="#{userbean.update(renameuser.value)}">
-												<f:param name="p_newTxt" value="#{renameuser.value}" />
-											</p:commandButton>
-											<p:dataList id="displayRoles"
-												value="#{userbean.currentUser.roles}" var="role" width="250">
-												<f:facet name="header">
+									<p:dialog id="first" modal="true" showEffect="fade"
+										hideEffect="fade" widgetVar="roleDialog"
+										header="#{userbean.currentUser.userName}" width="300"
+										height="300">
+										<p:messages id="messages" showDetail="true" autoUpdate="true"
+											closable="true" />
+										<p:inputText id="renameTextBox" binding="#{renameuser}" />
+										<p:commandButton value="#{msg['rename.button']}" update=""
+											action="#{userbean.update(renameuser.value)}">
+											<f:param name="p_newTxt" value="#{renameuser.value}" />
+										</p:commandButton>
+										<p:dataList id="displayRoles"
+											value="#{userbean.currentUser.roles}" var="role" width="250">
+											<f:facet name="header">
 							           #{msg['roles.text']}
 							      </f:facet>
-												<h:outputText value="#{role.role}" />
-											</p:dataList>
-											<br> </br>
-											<h:outputText value="#{msg['loyalty.label']} : " />
-											<h:outputText value="#{userbean.currentUser.loyaltyIndex}" />
-										</p:dialog>
+											<h:outputText value="#{role.role}" />
+										</p:dataList>
+										<br> </br>
+										<h:outputText value="#{msg['loyalty.label']} : " />
+										<h:outputText value="#{userbean.currentUser.loyaltyIndex}" />
+									</p:dialog>
 
 
-									</f:facet>
-								</p:dataTable>
+								</f:facet>
+							</p:dataTable>
 
 
-								<p:commandButton value="#{msg['listUsers.button']}" update="userDT"
-									icon="ui-icon-search" action="#{userbean.getAll}">
-								</p:commandButton>
-								<p:commandButton value="#{msg['addUser.button']}" update="userDT"
-									icon="ui-icon-user" action="#{userbean.getAll}"
-									oncomplete="PF('userDetailDialog').show()">
-								</p:commandButton>
+							<p:commandButton value="#{msg['listUsers.button']}"
+								update="userDT" icon="ui-icon-search"
+								action="#{userbean.getAll}">
+							</p:commandButton>
+							<p:commandButton value="#{msg['addUser.button']}" update="userDT"
+								icon="ui-icon-user" action="#{userbean.getAll}"
+								oncomplete="PF('userDetailDialog').show()">
+							</p:commandButton>
 
-								<p:dialog id="addUserDialog" modal="true" showEffect="fade"
-									hideEffect="fade" widgetVar="userDetailDialog"
-									header="#{msg['addUser.button']}" width="330" height="300">
-									<p:messages id="messages" showDetail="true" autoUpdate="true"
-										closable="true" />
-									<h:panelGrid columns="2" cellpadding="5">
-										<p:outputLabel value="#{msg['user.header']}" />
-										<p:inputText id="addUserTxtBox" binding="#{newName}" />
-										<p:outputLabel value="#{msg['password.label']}" />
-										<p:inputText id="addPassTxtBox" binding="#{newPass}" />
-										<p:outputLabel value="#{msg['loyalty.label']}" />
-										<p:inputText id="addLoyaltyIdx" binding="#{newLtyIdx}" />
-										<p:commandButton value="#{msg['add.label']}" update="userDT"
-											icon="fa-user-plu"
-											action="#{userbean.store(newName.value, newPass.value, newLtyIdx.value)}">
-											<f:param name="p_name" value="#{newName.value}" />
-											<f:param name="p_pass" value="#{newPass.value}" />
-											<f:param name="p_idx" value="#{newLtyIdx.value}" />
-										</p:commandButton>
-									</h:panelGrid>
-								</p:dialog>
+							<p:dialog id="addUserDialog" modal="true" showEffect="fade"
+								hideEffect="fade" widgetVar="userDetailDialog"
+								header="#{msg['addUser.button']}" width="330" height="300">
+								<p:messages id="messages" showDetail="true" autoUpdate="true"
+									closable="true" />
+								<h:panelGrid columns="2" cellpadding="5">
+									<p:outputLabel value="#{msg['user.header']}" />
+									<p:inputText id="addUserTxtBox" binding="#{newName}" />
+									<p:outputLabel value="#{msg['password.label']}" />
+									<p:inputText id="addPassTxtBox" binding="#{newPass}" />
+									<p:outputLabel value="#{msg['loyalty.label']}" />
+									<p:inputText id="addLoyaltyIdx" binding="#{newLtyIdx}" />
+									<p:commandButton value="#{msg['add.label']}" update="userDT"
+										icon="fa-user-plu"
+										action="#{userbean.store(newName.value, newPass.value, newLtyIdx.value)}">
+										<f:param name="p_name" value="#{newName.value}" />
+										<f:param name="p_pass" value="#{newPass.value}" />
+										<f:param name="p_idx" value="#{newLtyIdx.value}" />
+									</p:commandButton>
+								</h:panelGrid>
+							</p:dialog>
 
-							</h:form>
-						</p:panel>
-						<p:panel>
-							valami
-						</p:panel>
+						</h:form>
+					</p:panel>
+
+				</p:tab>
+				<p:tab title="#{msg['author.button']}">
+					<p:panel>
+							"#{msg['add.label']}"
+					</p:panel>
+				</p:tab>
+				<p:tab title="#{msg['publisher.button']}">
+					<p:panel>
+							"#{msg['add.label']}"
+					</p:panel>
+				</p:tab>
+				<p:tab title="#{msg['publication.button']}">
+					<p:panel>
+							"#{msg['add.label']}"
+					</p:panel>
+				</p:tab>
+			</p:tabView>
+
+		</p:panel>
+								
 	</h:form>
 </h:body>
 
