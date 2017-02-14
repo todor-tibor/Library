@@ -73,7 +73,7 @@ public class PublicationMB implements Serializable {
 	 */
 	public List<Publication> getAll() {
 		oLogger.info("--getAllPublications()--");
-		publicationList = new ArrayList<>();
+		publicationList.clear();
 		try {
 			oLogger.info("--getAllPublications()--publications queried");
 			publicationList = oPublicationBean.getAll();
