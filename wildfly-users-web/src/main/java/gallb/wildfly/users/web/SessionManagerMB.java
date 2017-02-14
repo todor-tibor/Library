@@ -83,4 +83,12 @@ public class SessionManagerMB implements Serializable{
 		localeManager.setUserLocale(tmpLoc);
 		System.out.println("After: " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
 	}
+	
+	public void hungarianNow() {
+		System.out.println("Before: " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
+		Locale tmpLoc = new Locale("hu", "HU");
+		FacesContext.getCurrentInstance().getViewRoot().setLocale(tmpLoc);
+		localeManager.setUserLocale(tmpLoc);
+		System.out.println("After: " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
+	}
 }
