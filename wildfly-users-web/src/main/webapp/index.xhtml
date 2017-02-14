@@ -9,7 +9,7 @@
 	<h:form>
 		<p:panel id="panel1">
 
-			<p:panel>
+			<p:panel align=right"">
 				<input type="button" value="#{userMan['user.button']}"
 					onClick="newSite('0')" />
 				<input type="button" value="#{msg['author.button']}"
@@ -35,7 +35,7 @@
 
 			</p:panel>
 
-			<p:panel header="#{userMan['user.button']}">
+			<p:panel header="#{userMan['user.button']}" align="left">
 				<h:form id="actions_form">
 
 					<p:inputText id="searchTextBox" binding="#{srch}" />

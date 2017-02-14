@@ -9,16 +9,39 @@
 </h:head>
 
 <h:body>
-	<h:panelGrid columns="3" cellpadding="10">
-		<p:panel header="Login">
-			<h:form id="actions_form">
 
+	<p:panel id="mainPanel" style="position: absolute; left:50px; top:0px;">
+		<p:panel header="#{msg['login.text']}"
+			style="position: relative; left:0px; top:0px;">
+			<h:form id="actions_form">
+				<p:outputLabel value="#{msg['username.text']}" />
+				<br />
 				<p:inputText id="loginTextBox" value="#{loginbean.user_name}" />
+				<br />
+				<p:outputLabel value="#{msg['password.text']}" />
+				<br />
 				<p:inputText id="loginPassword" value="#{loginbean.password}"></p:inputText>
-				<p:commandButton value="Login" action="#{loginbean.search()}">
+				<br />
+				<p:commandButton value="#{msg['login.text']}"
+					action="#{loginbean.search()}">
 				</p:commandButton>
 			</h:form>
 		</p:panel>
-	</h:panelGrid>
+
+		<p:panel style="position: relative; left:650px; top:-200px;">
+			<h:outputText id="wel" value="#{msg['language.text']}" />
+
+
+			<p:commandButton value="#{msg['lang.hungarian']}"
+				action="#{amibeanunk.hungarianNow()}" update="mainPanel">
+
+			</p:commandButton>
+
+			<p:commandButton value="#{msg['lang.english']}"
+				action="#{amibeanunk.englishNow()}" update="mainPanel">
+			</p:commandButton>
+		</p:panel>
+	</p:panel>
+
 </h:body>
 </html>
