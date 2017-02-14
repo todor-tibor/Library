@@ -6,8 +6,12 @@ package gallb.wildfly.users.web;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -27,6 +31,7 @@ import model.User;
 @Named("userbean")
 
 @SessionScoped
+//@ViewScoped
 public class UserMB implements Serializable {
 
 	/**
@@ -38,9 +43,18 @@ public class UserMB implements Serializable {
 	@Inject
 	private IUser oUserBean;
 
+	@Inject LocaleManager localeManager;
+	
 	/**
 	 * 
 	 */
+	
+	@PostConstruct
+	private void init(){
+		FacesContext.getCurrentInstance().getViewRoot().setLocale(localeManager.getUserLocale());
+		System.out.println("-*-*-*-*-*-*-* " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
+	}
+	
 	private List<User> userList = new ArrayList<>();// Currently displayed
 													// users.
 	private User currentUser = null;// Currently selected user.
@@ -172,5 +186,12 @@ public class UserMB implements Serializable {
 				MessageService.error(e.getMessage());
 			}
 		}
+	}
+	
+	public void getCurrentLang() {
+		
+		FacesContext.getCurrentInstance().getViewRoot().setLocale(localeManager.getUserLocale());
+		System.out.println("-*-*-*-*-*-*-* " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
+
 	}
 }
