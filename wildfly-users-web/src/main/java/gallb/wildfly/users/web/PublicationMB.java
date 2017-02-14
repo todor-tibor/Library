@@ -195,6 +195,7 @@ public class PublicationMB implements Serializable {
 	}
 >>>>>>> 837b979 Admin felulat a PublicationManagement-hez
 
+<<<<<<< Upstream, based on origin/master
 		try {
 			oPublicationBean.store(publication);
 			publicationList.add(publication);
@@ -205,6 +206,8 @@ public class PublicationMB implements Serializable {
 		}
 	}
 
+=======
+>>>>>>> 7d79056 Reader szamara elkeszult az egyszerusitett felulet
 	/**
 	 * Update currently selected publication. Use currentPublication,and
 	 * currently selected authors
