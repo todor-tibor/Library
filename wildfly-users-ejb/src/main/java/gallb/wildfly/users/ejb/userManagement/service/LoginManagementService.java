@@ -2,13 +2,8 @@ package gallb.wildfly.users.ejb.userManagement.service;
 
 import java.util.List;
 
-<<<<<<< Upstream, based on origin/PublicationWEB
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-=======
-import javax.ejb.Stateless;
-import javax.inject.Inject;
->>>>>>> b4fa023 not good
 
 import gallb.wildfly.users.common.ILogin;
 import gallb.wildfly.users.common.LibraryException;
