@@ -142,16 +142,6 @@ public class PublicationMB implements Serializable {
 		}
 	}
 
-	public void store(Publication p_value) {// store newspaper, magazine or book
-		try {
-			oPublicationBean.store(p_value);
-			publicationList.add(p_value);
-			MessageService.info("Succesfully added: " + p_value);
-		} catch (LibraryException e) {
-			MessageService.error(e.getMessage());
-		}
-	}
-
 	/**
 	 * Renames currently selected publication.
 	 * 
