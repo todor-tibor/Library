@@ -5,23 +5,24 @@ package gallb.wildfly.users.ejb.publicationManagement.business;
 
 import java.util.List;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 
 import org.jboss.logging.Logger;
 
+import gallb.wildfly.users.common.IBorrow;
 import gallb.wildfly.users.common.IEntity;
-import gallb.wildfly.users.common.LibraryException;
 import gallb.wildfly.users.ejb.exception.EjbException;
-import model.Author;
 import model.Borrow;
 
 /**
  * @author nagys
  *
  */
-public class BorrowManager implements IEntity<Borrow> {
+@Stateless
+public class BorrowManager implements IBorrow {
 
 	@PersistenceContext(unitName = "WildflyUsers")
 	private EntityManager oEntityManager;

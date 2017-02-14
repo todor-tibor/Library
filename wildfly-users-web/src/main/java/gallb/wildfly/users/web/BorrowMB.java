@@ -47,16 +47,33 @@ public class BorrowMB implements Serializable {
 	/**
 	 * @return
 	 */
-	public List<Borrow> getALl() {
+	public List<Borrow> getAll() {
 		oLogger.info("--getAllBorrows()--");
+		borrows.clear();
 		try {
 			oLogger.info("--getAllBorrows()--borrows queried");
 			borrows = oBorrowBean.getAll();
 		} catch (LibraryException e) {
-			
+
 			MessageService.error("Server internal error.");
 		}
 		return borrows;
+	}
+
+	public void remove() {
+		oLogger.info("--remove publication by Id ManagedBean--p_id:" + borrow.getUuid());
+		if (borrow == null) {
+			MessageService.error("Empty field");
+		} else {
+			try {
+				oBorrowBean.remove(borrow.getUuid());
+				getAll();
+			} catch (LibraryException e) {
+				oLogger.error(e);
+				MessageService.error(e.getMessage());
+			}
+
+		}
 	}
 
 }

@@ -12,9 +12,34 @@
 		<p:panel header="Borrow management">
 			<h:form id="borrow_actions_form">
 
-				<p:commandButton value="List all borrows"
-					update="borrowDT" icon="ui-icon-search"
-					action="#{borrowBean.getAll}">
+				<p:dataTable id="borrowDT" var="borrow"
+					value="#{borrowBean.borrowsList}" selectionMode="single"
+					selection="#{borrowBean.currentBorrow}" rowKey="#{borrow.uuid}">
+					<f:facet name="header">
+						Borrows
+					</f:facet>
+					<f:facet name="header">
+					</f:facet>
+					<p:column headerText="Username">
+						<h:outputText value="#{borrow.user.userName}" />
+					</p:column>
+					<p:column headerText="Publication">
+						<h:outputText value="#{borrow.publication.title}" />
+					</p:column>
+					<p:column headerText="Borrow from">
+						<h:outputText value="#{borrow.borrowFrom}" />
+					</p:column>
+					<p:column headerText="Borrow until">
+						<h:outputText value="#{borrow.borrowUntil}" />
+					</p:column>
+					<f:facet name="footer">
+						<p:commandButton process="borrowDT" icon="fa-remove"
+							value="Delete" action="#{borrowBean.remove()}" update="borrowDT"/>
+					</f:facet>
+
+				</p:dataTable>
+				<p:commandButton value="List all borrows" icon="ui-icon-search"
+					update="borrowDT" action="#{borrowBean.getAll}">
 				</p:commandButton>
 			</h:form>
 		</p:panel>
