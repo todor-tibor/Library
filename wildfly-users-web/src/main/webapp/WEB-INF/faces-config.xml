@@ -3,6 +3,32 @@
     xsi:schemaLocation="
       http://xmlns.jcp.org/xml/ns/javaee
       http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+	  <application>
 
+	   <resource-bundle>
+		<base-name>gallb.wildfly.users.web.welcome</base-name>
+		<var>msg</var>
+	   </resource-bundle>
+	   <resource-bundle>
+		<base-name>gallb.wildfly.users.web.userMan</base-name>
+		<var>userMan</var>
+	   </resource-bundle>
+	   <resource-bundle>
+		<base-name>gallb.wildfly.users.web.authorMan</base-name>
+		<var>authorMan</var>
+	   </resource-bundle>
+	   <resource-bundle>
+		<base-name>gallb.wildfly.users.web.pubMan</base-name>
+		<var>pubMan</var>
+	   </resource-bundle>
+	   <resource-bundle>
+		<base-name>gallb.wildfly.users.web.publishMan</base-name>
+		<var>publishMan</var>
+		</resource-bundle>
+		<resource-bundle>
+		<base-name>gallb.wildfly.users.web.roleMan</base-name>
+		<var>roleMan</var>
+	   </resource-bundle>
+     </application>
 </faces-config>
 

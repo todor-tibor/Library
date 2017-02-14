@@ -10,11 +10,11 @@
 
 <h:body>
 <h:panelGrid columns="3" cellpadding="10">
-		<p:panel header="Publication management">
+		<p:panel header="#{msg['publication.button']}">
 			<h:form id="publication_actions_form">
 
 				<p:inputText id="publication_searchTextBox" binding="#{srch}" />
-				<p:commandButton value="Search" update="publicationDT"
+				<p:commandButton value="#{msg['search.button']}" update="publicationDT"
 					action="#{publicationBean.search(srch.value)}">
 					<f:param name="p_value" value="#{srch.value}" />
 				</p:commandButton>
@@ -23,20 +23,20 @@
 					selectionMode="single" selection="#{publicationBean.currentPublication}"
 					rowKey="#{publication.uuid}">
 					<f:facet name="header">
-            			Publications
+            			#{pubMan['publications.text']}
         			</f:facet>
 					<f:facet name="header">
         			</f:facet>
-					<p:column headerText="Publicationname">
+					<p:column headerText="#{pubMan['publication.name']}">
 						<h:outputText value="#{publication.title}" />
 					</p:column>
 					<f:facet name="footer">
 						<p:commandButton process="publicationDT" icon="ui-icon-search"
-							value="Details" update="first"
+							value="#{msg['details.button']}" update="first"
 							oncomplete="PF('roleDialog').show()" />
 							
 						<p:commandButton process="publicationDT" icon="fa-remove"
-							value="Delete" action="#{publicationBean.remove()}" update="publicationDT"/>
+							value="#{msg['delete.button']}" action="#{publicationBean.remove()}" update="publicationDT"/>
 
 						<p:dialog id="first" modal="true" showEffect="fade"
 							hideEffect="fade" widgetVar="roleDialog"
@@ -45,7 +45,7 @@
 							<p:messages id="messages" showDetail="true" autoUpdate="true"
 								closable="true" />
 							<p:inputText id="publication_renameTextBox" binding="#{renamepublication}" />
-							<p:commandButton value="Rename" update=""
+							<p:commandButton value="#{msg['rename.button']}" update=""
 								action="#{publicationBean.update(renamepublication.value)}">
 								<f:param name="p_newTxt" value="#{renamepublication.value}" />
 							</p:commandButton>
@@ -60,13 +60,13 @@
 				</p:dataTable>
 
 
-				<p:commandButton value="List all publications" update="publicationDT"
+				<p:commandButton value="#{pubMan['listPublications.button']}" update="publicationDT"
 					icon="ui-icon-search" action="#{publicationBean.getAll}">
 				</p:commandButton>
 	
 				<p:separator />
 				<p:inputText id="addPublicationTxtBox" binding="#{newName}" />
-				<p:commandButton value="Add" update="publicationDT"
+				<p:commandButton value="#{msg['add.label']}" update="publicationDT"
 					icon="fa-publication-plu" action="#{publicationBean.store(newName.value)}">
 					<f:param name="p_value" value="#{newName.value}" />
 				</p:commandButton>

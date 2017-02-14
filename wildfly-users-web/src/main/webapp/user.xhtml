@@ -12,6 +12,11 @@
 <h:panelGrid columns="3" cellpadding="10">
 		<p:panel header="User management">
 			<h:form id="actions_form">
+			
+				<h2>
+					<h:outputText id="wel" value="#{msg['welcome.jsf']}"  />
+				</h2>
+				<p:commandButton value="update_welcome" update="wel" action="#{userbean.getCurrentLang()}" />
 
 				<p:inputText id="searchTextBox" binding="#{srch}" />
 				<p:commandButton value="Search" update="userDT"
