@@ -1,6 +1,5 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
@@ -28,7 +27,7 @@ public class Magazine extends Publication {
 	private static final long serialVersionUID = -7358930538078727479L;
 
 	// uni-directional many-to-many association to Author
-	@ManyToMany(fetch=FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "publication_authors", joinColumns = @JoinColumn(name = "publication_id", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "uuid"))
 	private List<Author> authors;
 
@@ -38,12 +37,5 @@ public class Magazine extends Publication {
 
 	public void setAuthors(List<Author> authors) {
 		this.authors = authors;
-	}
-	
-	public void addAuthor(Author p_author){
-		if(authors==null){
-			authors=new ArrayList<>();
-		}
-		authors.add(p_author);
 	}
 }
