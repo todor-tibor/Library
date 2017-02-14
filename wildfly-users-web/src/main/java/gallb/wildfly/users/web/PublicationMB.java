@@ -40,31 +40,24 @@ public class PublicationMB implements Serializable {
 
 	@Inject
 	private IPublication oPublicationBean;
+
+	/*
+	 * variables to select publication type, authors or publisher for update and
+	 * insert
+	 */
 	private List<Author> authors, currentAuthors;
 	private Publisher currentPublisher;
 	private String type;
 
-	/**
-	 * 
+	/*
+	 * Currently displayed publications.
 	 */
+	private List<Publication> publicationList = new ArrayList<>();
 
-	private List<Publication> publicationList = new ArrayList<>();// Currently
-																	// displayed
-																	// publications.
-	private Publication currentPublication = null;// Currently selected
-													// publication.
-
-	public List<Publication> getPublicationList() {
-		return publicationList;
-	}
-
-	public Publication getCurrentPublication() {
-		return currentPublication;
-	}
-
-	public void setCurrentPublication(Publication currentPublication) {
-		this.currentPublication = currentPublication;
-	}
+	/*
+	 * Currently selected publication.
+	 */
+	private Publication currentPublication = null;
 
 	/**
 	 * Requests all publication objects and stores them in publicationList.
@@ -84,11 +77,10 @@ public class PublicationMB implements Serializable {
 	}
 
 	/**
-	 * Search for publication by publicationname and stores them in
-	 * publicationList.
+	 * Search for publication by title and stores them in publicationList.
 	 * 
 	 * @param p_searchTxt
-	 *            publicationname.
+	 *            publication title.
 	 * @return List of publication objects found.
 	 */
 	public List<Publication> search(String p_searchTxt) {
@@ -106,17 +98,42 @@ public class PublicationMB implements Serializable {
 		return publicationList;
 	}
 
+	/**
+	 * Insert new Book, Magazine or Newspaper Use currentAuthors and
+	 * currentPublisher
+	 * 
+	 * @param p_title-new
+	 *            title
+	 * @param p_nrOfCopies-number
+	 *            of copies left, and copies on stock
+	 */
 	public void store(String p_title, String p_nrOfCopies) {
+		if(p_title.isEmpty() || p_nrOfCopies.isEmpty()){
+			MessageService.warn("All field is requered");
+		}
+		try{
+			int nrOfCopies=Integer.parseInt(p_nrOfCopies);
+		}catch (NumberFormatException e) {
+			MessageService.warn("number of copies is not a valid Number");
+		}
 		oLogger.info("-------------nrOfCopies:  " + p_nrOfCopies + " type:  " + type);
 		Publication p_value;
 		try {
 			switch (type) {
 			case "Book":
 				p_value = new Book();
+				if(currentAuthors==null){
+					MessageService.warn("All field is requered");
+					return;
+				}
 				((Book) p_value).setAuthors(currentAuthors);
 				break;
 			case "Magazine":
 				p_value = new Magazine();
+				if(currentAuthors==null){
+					MessageService.warn("All field is requered");
+					return;
+				}
 				((Magazine) p_value).setAuthors(currentAuthors);
 				break;
 			default:
@@ -137,20 +154,26 @@ public class PublicationMB implements Serializable {
 	}
 
 	/**
-	 * Renames currently selected publication.
-	 * 
-	 * @param p_newTxt
-	 *            - new publicationname.
+	 * Update currently selected publication. Use currentPublication,and
+	 * currently selected authors
 	 */
 	public void update() {
 		if ((currentPublication != null) && currentPublication.getTitle() != null
 				&& currentPublication.getPublisher() != null) {
-			if (authors != null && !authors.isEmpty()) {
-				if ("Book".equals(currentPublication.getClass().getSimpleName()))
+			if ("Book".equals(currentPublication.getClass().getSimpleName()))
+				if (authors != null && !authors.isEmpty()) {
 					((Book) currentPublication).setAuthors(authors);
-				if ("Magazine".equals(currentPublication.getClass().getSimpleName()))
+				} else {
+					MessageService.warn("All field is requered");
+					return;
+				}
+			if ("Magazine".equals(currentPublication.getClass().getSimpleName()))
+				if (authors != null && !authors.isEmpty()) {
 					((Magazine) currentPublication).setAuthors(authors);
-			}
+				} else {
+					MessageService.warn("All field is requered");
+					return;
+				}
 			try {
 				oPublicationBean.update(currentPublication);
 				publicationList = oPublicationBean.getAll();
@@ -161,7 +184,7 @@ public class PublicationMB implements Serializable {
 				MessageService.error(e.getMessage());
 			}
 		} else {
-			MessageService.error("Invalid data.");
+			MessageService.warn("All field is requered");
 		}
 	}
 
@@ -194,6 +217,11 @@ public class PublicationMB implements Serializable {
 		this.type = type;
 	}
 
+	/**
+	 * Check if have selected publication
+	 * 
+	 * @return
+	 */
 	public Boolean isSelected() {
 		oLogger.info("-------------------is selected: " + currentPublication);
 		if (currentPublication == null) {
@@ -203,6 +231,12 @@ public class PublicationMB implements Serializable {
 			return true;
 	}
 
+	/**
+	 * Check if the Publication selected have property authors (only the
+	 * Newspaper can't have)
+	 * 
+	 * @return true if have
+	 */
 	public Boolean hasAuthor() {
 		oLogger.info("-------------------has authors: " + currentPublication);
 		if (currentPublication == null) {
@@ -243,5 +277,17 @@ public class PublicationMB implements Serializable {
 
 	public void setCurrentPublisher(Publisher currentPublisher) {
 		this.currentPublisher = currentPublisher;
+	}
+
+	public List<Publication> getPublicationList() {
+		return publicationList;
+	}
+
+	public Publication getCurrentPublication() {
+		return currentPublication;
+	}
+
+	public void setCurrentPublication(Publication currentPublication) {
+		this.currentPublication = currentPublication;
 	}
 }
