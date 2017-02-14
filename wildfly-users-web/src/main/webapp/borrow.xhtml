@@ -34,10 +34,25 @@
 					</p:column>
 					<f:facet name="footer">
 						<p:commandButton process="borrowDT" icon="fa-remove"
-							value="Delete" action="#{borrowBean.remove()}" update="borrowDT"/>
+							value="Delete" action="#{borrowBean.remove()}" update="borrowDT" />
+						<p:commandButton icon="fa-remove" value="Borrowing"
+							update="addDialog" oncomplete="PF('addDialog').show()" />
 					</f:facet>
 
+
 				</p:dataTable>
+				<p:dialog id="addDialog" modal="true" showEffect="fade"
+					hideEffect="fade" widgetVar="addDialog" header="Add new borrow"
+					width="500" height="500">
+					<p:messages id="messages4" showDetail="true" autoUpdate="true"
+						closable="true" />
+					<h:panelGrid columns="2" cellpadding="4">
+						<h:outputLabel value="User" />
+						<p:dataTable id="User"></p:dataTable>
+					
+					</h:panelGrid>	
+
+				</p:dialog>
 				<p:commandButton value="List all borrows" icon="ui-icon-search"
 					update="borrowDT" action="#{borrowBean.getAll}">
 				</p:commandButton>
