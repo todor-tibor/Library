@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -32,7 +33,6 @@ public class AuthorMB implements Serializable {
 
 	@Inject
 	private IAuthor oAuthorBean;
-
 	/**
 	 * 
 	 */
@@ -45,6 +45,8 @@ public class AuthorMB implements Serializable {
 	 * 
 	 */
 	public List<Author> getAuthorList() {
+		System.out.println("After authorMb: " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
+		
 		return authorList;
 	}
 
