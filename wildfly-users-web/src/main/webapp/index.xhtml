@@ -9,7 +9,7 @@
 	<title>.msg Library</title>
 </h:head>
 <h:body>
-	<h:form>
+	<h:form id="form">
 		<p:panel id="panel1">
 
 			<p:panel>
@@ -18,12 +18,12 @@
 				</h2>
 
 				<p:commandButton value="#{msg['lang.hungarian']}"
-					action="#{amibeanunk.hungarianNow()}" update="panel1">
+					action="#{amibeanunk.hungarianNow()}" update="@form">
 
 				</p:commandButton>
 
 				<p:commandButton value="#{msg['lang.english']}"
-					action="#{amibeanunk.englishNow()}" update="panel1">
+					action="#{amibeanunk.englishNow()}" update="@form">
 				</p:commandButton>
 
 			</p:panel>
@@ -143,18 +143,5 @@
 
 	</h:form>
 </h:body>
-
-<script type="text/javascript">
-	function newSite(par) {
-		var sites = [ 'user.xhtml', 'author.xhtml', 'publisher.xhtml',
-				'publication.xhtml' ]
-		document.getElementById('myIframe').src = sites[par];
-	}
-	function reloadIframe(e) {
-		e.preventDefault();
-		document.getElementById('myIframe').contentDocument.location
-				.reload(true);
-	}
-</script>
 
 </html>

@@ -85,7 +85,7 @@ public class LoginMB implements Serializable {
 			
 			if (roles.contains(tmp)) {
 				setCurrentRole("READER");
-				return "publication";
+				return "publication_user";
 			} else {
 				setCurrentRole("INVALID");
 				return "login";

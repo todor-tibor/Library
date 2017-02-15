@@ -39,7 +39,7 @@ public class UserBean implements IUser {
 	@Override
 	public User getById(String id) throws EjbException {
 		try {
-			return oEntityManager.createNamedQuery("User.findById", User.class).getSingleResult();
+			return oEntityManager.createNamedQuery("User.findById", User.class).setParameter("uuid", id).getSingleResult();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
