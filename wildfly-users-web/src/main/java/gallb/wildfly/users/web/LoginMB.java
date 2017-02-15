@@ -44,93 +44,7 @@ public class LoginMB implements Serializable {
 	private String password;
 	private String user_name;
 	private List<Role> roles;
-<<<<<<< HEAD
-	private String currentRole;
 
-	public List<User> getUserList() {
-		return userList;
-	}
-
-	public User getCurrentUser() {
-		return currentUser;
-	}
-
-	public void setCurrentUser(User currentUser) {
-		this.currentUser = currentUser;
-	}
-
-	public String getCurrentRole() {
-		return currentRole;
-	}
-
-	public void setCurrentRole(String currentRole) {
-		this.currentRole = currentRole;
-	}
-
-	public String isAdmin(){
-		if (currentRole.equals(RoleType.LIBRARIAN.name())){
-			return "index";
-		}
-		else return "";
-	}
-	private String checkRole() {
-		Role tmp = new Role();
-		tmp.setRole("LIBRARIAN");
-
-		if (roles.contains(tmp)) {
-			setCurrentRole("LIBRARIAN");
-			return "index";
-		} else {
-			tmp.setRole("READER");
-			
-			if (roles.contains(tmp)) {
-				setCurrentRole("READER");
-				return "publication";
-			} else {
-				setCurrentRole("INVALID");
-				return "login";
-			}
-		}
-	}
-
-	/**
-	 * Requests all user objects and stores them in userList.
-	 * 
-	 * @return List of all users from persistency.
-	 */
-	public List<User> getAll() {
-		oLogger.info("--getAllUsers()--");
-		userList = new ArrayList<>();
-		try {
-			oLogger.info("--getAllUsers()--users queried");
-			userList = oUserBean.getAll();
-		} catch (LibraryException e) {
-			// this.error("Server internal error.");
-		}
-		return userList;
-	}
-
-	/**
-	 * Search for user by username and stores them in userList.
-	 * 
-	 * @param p_searchTxt
-	 *            username.
-	 * @return List of user objects found.
-	 */
-	public String search() {
-		oLogger.info("--search user--" + this.getUser_name());
-		if (this.getUser_name().length() >= 3) {
-			try {
-				System.out.println("/*/*-/*-/ " + this.getUser_name() + "    " + this.getPassword());
-				roles = oLoginBean.login(this.getUser_name(), this.getPassword());
-				System.out.println("///**********-----------    success    -*-*-*-*-*-");
-				return checkRole();
-				/*
-				 * for (Role r : roles) { switch (r.getRole()) { case
-				 * "LIBRARIAN": return "index"; case "READER": return
-				 * "publication_user"; default: return "login"; } }
-				 */
-=======
 
 	public List<User> getUserList() {
 		return userList;
@@ -185,7 +99,7 @@ public class LoginMB implements Serializable {
 						return "login";
 					}
 				}
->>>>>>> branch 'workingLogin' of https://github.com/todor-tibor/Library.git
+
 			} catch (LibraryException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

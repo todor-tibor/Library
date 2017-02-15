@@ -19,10 +19,7 @@ import model.User;
  * 
  *         Implements a simple authentication process of a user.
  */
-<<<<<<< HEAD
 
-=======
->>>>>>> branch 'workingLogin' of https://github.com/todor-tibor/Library.git
 @Stateless
 @LocalBean
 @Remote(ILoginBusiness.class)
@@ -46,28 +43,16 @@ public class LoginManagementBusiness implements ILoginBusiness {
 	 *            - the hashed password that the user typed in
 	 * @return - the roles (type) of the user if login was not successful,
 	 *         otherwise throws an error
-<<<<<<< HEAD
-	 * @throws LibraryException 
-
-=======
 	 * @throws LibraryException
->>>>>>> branch 'workingLogin' of https://github.com/todor-tibor/Library.git
+	 * 
 	 */
 	public List<Role> authentication(String userName, String password) throws LibraryException {
-<<<<<<< HEAD
-		if (userBean != null) {
-			User user = userBean.getByUserName(userName);
-			if (PasswordEncrypter.encypted(password, " ").equals(user.getPassword())) { //
-				return user.getRoles();
-			}
-=======
 
 		if (userBean != null) {
 			User user = userBean.getByUserName(userName);
 			if (PasswordEncrypter.encypted(password, " ").equals(user.getPassword())) { //
 				return user.getRoles();
 			}
->>>>>>> branch 'workingLogin' of https://github.com/todor-tibor/Library.git
 		}
 		throw new EjbException(PASSWORD_MISMATCH);
 	}

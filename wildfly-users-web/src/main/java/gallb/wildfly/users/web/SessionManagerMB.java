@@ -25,34 +25,12 @@ public class SessionManagerMB implements Serializable{
 	@Inject
 	private UserMB userMB;
 	
-	@Inject LocaleManager localeManager;
+	@Inject 
+	LocaleManager localeManager;
 	
-<<<<<<< HEAD
-	private String loggedInRole = "adminasdsad";
-	
+
 	private String localeCode;
 
-	public String isAdmin() {
-		
-		if ("admin".equals(loggedInRole)) {
-			return "";
-		} else {
-			return "userPanel";
-		}
-	}
-	
-	public String getLoggedInRole() {
-		return loggedInRole;
-	}
-
-
-	public void setLoggedInRole(String loggedInRole) {
-		this.loggedInRole = loggedInRole;
-	}
-=======
-	
-	private String localeCode;
->>>>>>> branch 'workingLogin' of https://github.com/todor-tibor/Library.git
 
 	private static Map<String,Object> countries;
 	static{
