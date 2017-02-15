@@ -41,12 +41,19 @@
 
 				</p:dataTable>
 
-
+				<p:commandButton value="List all borrows" icon="ui-icon-search"
+					update="borrowDT" action="#{borrowBean.getAll}">
+				</p:commandButton>
+				<p:commandButton icon="fa-remove" value="Borrowing"
+					update="addDialog" oncomplete="PF('addDialog').show()" >
+				</p:commandButton>
+				
 				<p:dialog id="addDialog" modal="true" showEffect="fade"
 					hideEffect="fade" widgetVar="addDialog" header="Add new borrow"
 					width="500" height="500">
 					<p:messages id="messages4" showDetail="true" autoUpdate="true"
 						closable="true" />
+					
 					<h:panelGrid columns="2" cellpadding="4">
 						<h:outputLabel value="User" />
 						<p:dataTable id="User" var="user" value="#{userbean.all}"
@@ -65,27 +72,18 @@
 								<h:outputText value="#{publication.title}" />
 							</p:column>
 						</p:dataTable>
-						<p:outputLabel value="Date From" />
-						<p:inputText binding="dateFrom" />
-						<p:outputLabel value="Date Until" />
-						<p:inputText binding="dateUntil" />
+						
+						<p:outputLabel value="Date From" />						
+						<p:calendar id="calendar1" value="#{borrowBean.date1}" mode="inline" />
+						<p:outputLabel value="Date Until" />						
+						<p:calendar id="calendar2" value="#{borrowBean.date2}" mode="inline" />
+						<p:commandButton value="Add" update="borrow_actions_form"
+							icon="fa-user-plu" action="#{borrowBean.store()}">
+						</p:commandButton>
 					</h:panelGrid>
-					<p:commandButton value="Add" update="borrow_actions_form"
-						icon="fa-user-plu"
-						action="#{borrowBean.store(dateFrom.value,dateUntil.value)}">
-						<f:param name="dateFrom" value="#{dateFrom.value}" />
-						<f:param name="dateUntil" value="#{dateUntil.value}" />
-
-					</p:commandButton>
-
+				
 				</p:dialog>
 
-
-				<p:commandButton value="List all borrows" icon="ui-icon-search"
-					update="borrowDT" action="#{borrowBean.getAll}">
-				</p:commandButton>
-				<p:commandButton icon="fa-remove" value="Borrowing"
-					update="addDialog" oncomplete="PF('addDialog').show()" />
 
 
 

@@ -1,8 +1,10 @@
 package gallb.wildfly.users.web;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
@@ -32,10 +34,28 @@ public class BorrowMB implements Serializable {
 	private IBorrow oBorrowBean;
 
 	private List<Borrow> borrows = new ArrayList<>();
-	private User currentUser;
-	private Publication currentPublication;
+	private User currentUser = null;
+	private Publication currentPublication = null;
 
 	private Borrow borrow = null;
+	private Date date1 = new Date();
+	private Date date2 = null;
+
+	public Date getDate1() {
+		return date1;
+	}
+
+	public void setDate1(Date date1) {
+		this.date1 = date1;
+	}
+
+	public Date getDate2() {
+		return date2;
+	}
+
+	public void setDate2(Date date2) {
+		this.date2 = date2;
+	}
 
 	public List<Borrow> getBorrowsList() {
 		return borrows;
@@ -56,7 +76,7 @@ public class BorrowMB implements Serializable {
 	public void setCurrentUser(User curentUser) {
 		this.currentUser = curentUser;
 	}
-	
+
 	public Publication getCurrentPublication() {
 		return currentPublication;
 	}
@@ -81,30 +101,30 @@ public class BorrowMB implements Serializable {
 		return borrows;
 	}
 
-	public void store(Date dateFrom, Date dateUntil) {
+	public void store() {
 
 		Borrow p_Borrow;
 		p_Borrow = new Borrow();
-		if ((currentPublication == null) && (currentUser == null) && (dateFrom == null) && (dateUntil == null)) {
+		if ((currentPublication == null) || (currentUser == null) || (date2 == null)) {
 			MessageService.warn("All field is requered");
 
 		} else {
 			p_Borrow.setUser(currentUser);
 			p_Borrow.setPublication(currentPublication);
-			p_Borrow.setBorrowFrom(dateFrom);
-			p_Borrow.setBorrowUntil(dateUntil);
+			p_Borrow.setBorrowFrom(date1);
+			p_Borrow.setBorrowUntil(date2);
 			try {
 				oBorrowBean.store(p_Borrow);
 				borrows.add(p_Borrow);
+				MessageService.info("Succesfully added: " + p_Borrow);
 			} catch (LibraryException e) {
 				MessageService.error(e.getMessage());
 			}
-			MessageService.info("Succesfully added: " + p_Borrow);
 		}
 	}
 
 	public void remove() {
-		oLogger.info("--remove publication by Id ManagedBean--p_id:" + borrow.getUuid());
+		oLogger.info("--remove borrow by Id ManagedBean--p_id:" + borrow.getUuid());
 		if (borrow == null) {
 			MessageService.error("Empty field");
 		} else {
