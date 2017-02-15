@@ -20,7 +20,11 @@ public class ServiceValidation {
 	 * must have at least one number, (?=.*[a-z]) - one lowercase letter ,
 	 * (?=.*[A-Z]) - one uppercase letter, (?=.*[@#.$%]) - one of these symbols,
 	 * it's length is* minimum 6 characters, but can't be longer than 20
+<<<<<<< HEAD
 	 * character
+=======
+	 * character
+>>>>>>> branch 'workingLogin' of https://github.com/todor-tibor/Library.git
 	 */
 	private static final String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#.$%]).{6,20})";
 	/**

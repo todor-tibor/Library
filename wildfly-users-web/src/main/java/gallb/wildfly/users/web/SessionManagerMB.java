@@ -27,6 +27,7 @@ public class SessionManagerMB implements Serializable{
 	
 	@Inject LocaleManager localeManager;
 	
+<<<<<<< HEAD
 	private String loggedInRole = "adminasdsad";
 	
 	private String localeCode;
@@ -48,6 +49,10 @@ public class SessionManagerMB implements Serializable{
 	public void setLoggedInRole(String loggedInRole) {
 		this.loggedInRole = loggedInRole;
 	}
+=======
+	
+	private String localeCode;
+>>>>>>> branch 'workingLogin' of https://github.com/todor-tibor/Library.git
 
 	private static Map<String,Object> countries;
 	static{

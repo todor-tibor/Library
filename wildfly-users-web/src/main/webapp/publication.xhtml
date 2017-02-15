@@ -11,7 +11,11 @@
 </h:head>
 
 <h:body>
+<<<<<<< HEAD
 	<h:panelGrid columns="3" cellpadding="10">
+=======
+<h:panelGrid columns="3" cellpadding="10">
+>>>>>>> branch 'workingLogin' of https://github.com/todor-tibor/Library.git
 		<p:panel header="#{msg['publication.button']}">
 			<h:form id="publication_actions_form">
 
@@ -32,8 +36,13 @@
             			#{pubMan['publications.text']}
         			</f:facet>
 					<f:facet name="header">
+<<<<<<< HEAD
 					</f:facet>
 					<p:column headerText="#{pubMan['publication.title']}">
+=======
+        			</f:facet>
+					<p:column headerText="#{pubMan['publication.name']}">
+>>>>>>> branch 'workingLogin' of https://github.com/todor-tibor/Library.git
 						<h:outputText value="#{publication.title}" />
 					</p:column>
 					<p:column headerText="#{pubMan['publication.publisher']}">
@@ -51,10 +60,16 @@
 					<f:facet name="footer">
 						<p:commandButton process="publicationDT" icon="ui-icon-search"
 							value="#{msg['details.button']}" update="first"
+<<<<<<< HEAD
 							oncomplete="PF('publicationDialog').show()"
 							disabled="#{publicationBean.currentPublication == null}" />
 
+=======
+							oncomplete="PF('roleDialog').show()" />
+							
+>>>>>>> branch 'workingLogin' of https://github.com/todor-tibor/Library.git
 						<p:commandButton process="publicationDT" icon="fa-remove"
+<<<<<<< HEAD
 							value="#{msg['delete.button']}" action="#{publicationBean.remove()}"
 							update="publicationDT"
 							disabled="#{publicationBean.currentPublication == null}" />
@@ -63,6 +78,9 @@
 							value="#{pubMan['publication.update']}" update="updateDialog"
 							oncomplete="PF('updateDialog').show()"
 							disabled="#{publicationBean.currentPublication == null}" />
+=======
+							value="#{msg['delete.button']}" action="#{publicationBean.remove()}" update="publicationDT"/>
+>>>>>>> branch 'workingLogin' of https://github.com/todor-tibor/Library.git
 
 						<p:dialog id="first" modal="true" showEffect="fade"
 							hideEffect="fade" widgetVar="publicationDialog"
@@ -70,6 +88,7 @@
 							height="500">
 							<p:messages id="messages" showDetail="true" autoUpdate="true"
 								closable="true" />
+<<<<<<< HEAD
 							<br />
 							<h:panelGrid columns="2" cellpadding="5">
 								<h:outputText value="#{pubMan['publication.title']}: " />
@@ -101,6 +120,17 @@
 									<h:outputText value="#{borrows.borrowUntil}" />
 								</p:column>
 							</p:dataTable>
+=======
+							<p:inputText id="publication_renameTextBox" binding="#{renamepublication}" />
+							<p:commandButton value="#{msg['rename.button']}" update=""
+								action="#{publicationBean.update(renamepublication.value)}">
+								<f:param name="p_newTxt" value="#{renamepublication.value}" />
+							</p:commandButton>
+							<p:dataList id="displayRoles"
+								value="#{publicationBean.currentPublication}" var="role" width="250">
+								<h:outputText value="#{role}" />
+							</p:dataList>
+>>>>>>> branch 'workingLogin' of https://github.com/todor-tibor/Library.git
 						</p:dialog>
 
 						<p:dialog id="updateDialog" modal="true" showEffect="fade"
@@ -148,10 +178,18 @@
 					</f:facet>
 
 				</p:dataTable>
+<<<<<<< HEAD
 				<p:commandButton value="#{pubMan['listPublications.button']}"
 					update="publicationDT" icon="ui-icon-search"
 					action="#{publicationBean.getAll()}">
+=======
+
+
+				<p:commandButton value="#{pubMan['listPublications.button']}" update="publicationDT"
+					icon="ui-icon-search" action="#{publicationBean.getAll}">
+>>>>>>> branch 'workingLogin' of https://github.com/todor-tibor/Library.git
 				</p:commandButton>
+<<<<<<< HEAD
 				<p:commandButton icon="fa-remove" value="#{pubMan['add.newspaper']}"
 					update="addDialog" oncomplete="PF('addDialog').show()"
 					action="#{publicationBean.setType('Newspaper')}" />
@@ -202,6 +240,16 @@
 					</p:commandButton>
 				</p:dialog>
 
+=======
+	
+				<p:separator />
+				<p:inputText id="addPublicationTxtBox" binding="#{newName}" />
+				<p:commandButton value="#{msg['add.label']}" update="publicationDT"
+					icon="fa-publication-plu" action="#{publicationBean.store(newName.value)}">
+					<f:param name="p_value" value="#{newName.value}" />
+				</p:commandButton>
+				
+>>>>>>> branch 'workingLogin' of https://github.com/todor-tibor/Library.git
 			</h:form>
 		</p:panel>
 		
