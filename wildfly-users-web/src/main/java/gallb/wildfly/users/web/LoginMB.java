@@ -24,7 +24,6 @@ import model.User;
  * 
  */
 @Named("loginbean")
-
 @SessionScoped
 public class LoginMB implements Serializable {
 

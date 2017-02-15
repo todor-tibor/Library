@@ -4,48 +4,48 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-	<p:messages id="messages" showDetail="true" autoUpdate="true"
+	<p:messages id="messages_author" showDetail="true" autoUpdate="true"
 		closable="true" />
 </h:head>
 
 <h:body>
 <h:panelGrid columns="3" cellpadding="10">
-		<p:panel header="Author management">
+		<p:panel header="#{msg['author.button']}">
 			<h:form id="author_actions_form">
 
-				<p:inputText id="author_searchTextBox" binding="#{srch}" />
-				<p:commandButton value="Search" update="authorDT"
-					action="#{authorBean.search(srch.value)}">
-					<f:param name="p_value" value="#{srch.value}" />
+				<p:inputText id="author_searchTextBox" binding="#{srch_author}" />
+				<p:commandButton value="#{msg['search.button']}" update="authorDT"
+					action="#{authorBean.search(srch_author.value)}">
+					<f:param name="p_value" value="#{srch_author.value}" />
 				</p:commandButton>
 
 				<p:dataTable id="authorDT" var="author" value="#{authorBean.authorList}"
 					selectionMode="single" selection="#{authorBean.currentAuthor}"
 					rowKey="#{author.uuid}"  autoUpdate="true">
 					<f:facet name="header">
-            			Authors
+            			#{authorMan['authors.text']}
         			</f:facet>
 					<f:facet name="header">
         			</f:facet>
-					<p:column headerText="Name">
+					<p:column headerText="#{authorMan['authors.name']}">
 						<h:outputText value="#{author.name}" />
 					</p:column>
 					<f:facet name="footer">
 						<p:commandButton process="authorDT" icon="ui-icon-search"
-							value="Details" update="author_dialog"
+							value="#{msg['details.button']}" update="author_dialog"
 							oncomplete="PF('roleDialog').show()" />
 							
 						<p:commandButton process="authorDT" icon="fa-remove"
-							value="Delete" action="#{authorBean.remove()}" update="authorDT"/>
+							value="#{msg['delete.button']}" action="#{authorBean.remove()}" update="authorDT"/>
 
 						<p:dialog id="author_dialog" modal="true" showEffect="fade"
 							hideEffect="fade" widgetVar="roleDialog"
 							header="#{authorBean.currentAuthor.name}" width="300"
 							height="300">
-							<p:messages id="messages" showDetail="true" autoUpdate="true"
+							<p:messages id="messages_author" showDetail="true" autoUpdate="true"
 								closable="true" />
 							<p:inputText id="renameTextBox" binding="#{renameauthor}" />
-							<p:commandButton value="Rename" update=""
+							<p:commandButton value="#{msg['rename.button']}" update=""
 								action="#{authorBean.update(renameauthor.value)}">
 								<f:param name="p_newTxt" value="#{renameauthor.value}" />
 							</p:commandButton>
@@ -56,13 +56,13 @@
 				</p:dataTable>
 
 
-				<p:commandButton value="List all authors" update="authorDT"
+				<p:commandButton value="#{authorMan['listAuthors.button']}" update="authorDT"
 					icon="ui-icon-search" action="#{authorBean.getAll}">
 				</p:commandButton>
 	
 				<p:separator />
 				<p:inputText id="addAuthorTxtBox" binding="#{newName}" />
-				<p:commandButton value="Add" update="authorDT"
+				<p:commandButton value="#{msg['add.label']}" update="authorDT"
 					icon="fa-author-plu" action="#{authorBean.store(newName.value)}">
 					<f:param name="p_value" value="#{newName.value}" />
 				</p:commandButton>
