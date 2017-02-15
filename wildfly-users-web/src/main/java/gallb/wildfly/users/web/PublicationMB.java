@@ -32,9 +32,6 @@ import model.Publisher;
 @SessionScoped
 public class PublicationMB implements Serializable {
 
-	/**
-	 * 
-	 */
 	private Logger oLogger = Logger.getLogger(PublicationMB.class);
 	private static final long serialVersionUID = -4702598250751689454L;
 
@@ -65,15 +62,14 @@ public class PublicationMB implements Serializable {
 	 * @return List of all publications from persistency.
 	 */
 	public List<Publication> getAll() {
-		oLogger.info("--getAllPublications()--");
-		publicationList.clear();
+		this.publicationList.clear();
 		try {
-			oLogger.info("--getAllPublications()--publications queried");
-			publicationList = oPublicationBean.getAll();
+			this.publicationList = oPublicationBean.getAll();
 		} catch (LibraryException e) {
-			MessageService.error("Server internal error.");
+			oLogger.error(e.getMessage());
+			MessageService.error(e.getMessage());
 		}
-		return publicationList;
+		return this.publicationList;
 	}
 
 	/**
@@ -84,18 +80,21 @@ public class PublicationMB implements Serializable {
 	 * @return List of publication objects found.
 	 */
 	public List<Publication> search(String p_searchTxt) {
-		oLogger.info("--search publication--" + p_searchTxt);
 		if (p_searchTxt.length() >= 3) {
-			publicationList.clear();
+			this.publicationList.clear();
 			try {
-				publicationList = oPublicationBean.search(p_searchTxt);
+				this.publicationList = oPublicationBean.search(p_searchTxt);
+				if (this.publicationList.isEmpty()) {
+					MessageService.warn("No entity found");
+				}
 			} catch (LibraryException e) {
+				oLogger.error(e.getMessage());
 				MessageService.error(e.getMessage());
 			}
 		} else {
 			MessageService.error("Keyword too short. Min. 3 characters req.");
 		}
-		return publicationList;
+		return this.publicationList;
 	}
 
 	/**
@@ -107,51 +106,52 @@ public class PublicationMB implements Serializable {
 	 * @param p_nrOfCopies-number
 	 *            of copies left, and copies on stock
 	 */
-	public void store(String p_title, String p_nrOfCopies) {
-		if(p_title.isEmpty() || p_nrOfCopies.isEmpty()){
-			MessageService.warn("All field is requered");
+	public void store(String pTitle, String pNrOfCopies) {
+		if (pTitle.isEmpty() || pNrOfCopies.isEmpty()) {
+			MessageService.warn("All field is required");
 			return;
 		}
 		int nrOfCopies;
-		try{
-			nrOfCopies=Integer.parseInt(p_nrOfCopies);
-		}catch (NumberFormatException e) {
-			MessageService.warn("number of copies is not a valid Number");
+		try {
+			nrOfCopies = Integer.parseInt(pNrOfCopies);
+		} catch (NumberFormatException e) {
+			MessageService.warn("Number of copies is not a valid Number");
 			return;
 		}
-		oLogger.info("-------------nrOfCopies:  " + p_nrOfCopies + " type:  " + type);
-		Publication p_value;
-		try {
-			switch (type) {
-			case "Book":
-				p_value = new Book();
-				if(currentAuthors==null){
-					MessageService.warn("All field is requered");
-					return;
-				}
-				((Book) p_value).setAuthors(currentAuthors);
-				break;
-			case "Magazine":
-				p_value = new Magazine();
-				if(currentAuthors==null){
-					MessageService.warn("All field is requered");
-					return;
-				}
-				((Magazine) p_value).setAuthors(currentAuthors);
-				break;
-			default:
-				p_value = new Newspaper();
-				break;
+		Publication publication;
+		switch (this.type) {
+		case "Book":
+			publication = new Book();
+			if (this.currentAuthors == null) {
+				MessageService.warn("All field is required");
+				return;
 			}
-			p_value.setTitle(p_title);
-			p_value.setNrOfCopys(nrOfCopies);
-			p_value.setOnStock(nrOfCopies);
-			p_value.setPublisher(currentPublisher);
-			p_value.setPublicationDate(new Date());
-			oPublicationBean.store(p_value);
-			publicationList.add(p_value);
-			MessageService.info("Succesfully added: " + p_value);
+			((Book) publication).setAuthors(this.currentAuthors);
+			break;
+		case "Magazine":
+			publication = new Magazine();
+			if (this.currentAuthors == null) {
+				MessageService.warn("All field is required");
+				return;
+			}
+			((Magazine) publication).setAuthors(this.currentAuthors);
+			break;
+		default:
+			publication = new Newspaper();
+			break;
+		}
+		publication.setTitle(pTitle);
+		publication.setNrOfCopys(nrOfCopies);
+		publication.setOnStock(nrOfCopies);
+		publication.setPublisher(this.currentPublisher);
+		publication.setPublicationDate(new Date());
+
+		try {
+			oPublicationBean.store(publication);
+			publicationList.add(publication);
+			MessageService.info("Succesfully added: " + publication);
 		} catch (LibraryException e) {
+			oLogger.error(e.getMessage());
 			MessageService.error(e.getMessage());
 		}
 	}
@@ -161,33 +161,33 @@ public class PublicationMB implements Serializable {
 	 * currently selected authors
 	 */
 	public void update() {
-		if ((currentPublication != null) && currentPublication.getTitle() != null
-				&& currentPublication.getPublisher() != null) {
-			if ("Book".equals(currentPublication.getClass().getSimpleName()))
+		if ((this.currentPublication != null) && this.currentPublication.getTitle() != null
+				&& this.currentPublication.getPublisher() != null) {
+			if (currentPublication instanceof Book)
 				if (authors != null && !authors.isEmpty()) {
-					((Book) currentPublication).setAuthors(authors);
+					((Book) this.currentPublication).setAuthors(this.authors);
 				} else {
 					MessageService.warn("All field is requered");
 					return;
 				}
 			if ("Magazine".equals(currentPublication.getClass().getSimpleName()))
-				if (authors != null && !authors.isEmpty()) {
-					((Magazine) currentPublication).setAuthors(authors);
+				if (this.authors != null && !this.authors.isEmpty()) {
+					((Magazine) this.currentPublication).setAuthors(this.authors);
 				} else {
 					MessageService.warn("All field is requered");
 					return;
 				}
 			try {
-				oPublicationBean.update(currentPublication);
-				publicationList = oPublicationBean.getAll();
-				oLogger.info("**********************update succesfull************************************");
+				oPublicationBean.update(this.currentPublication);
+				this.publicationList = oPublicationBean.getAll();
+				oLogger.info("---update succesfull---");
 				MessageService.info("Update succesfull.");
 			} catch (LibraryException e) {
 				oLogger.error(e);
 				MessageService.error(e.getMessage());
 			}
 		} else {
-			MessageService.warn("All field is requered");
+			MessageService.warn("All field is required");
 		}
 	}
 
@@ -195,12 +195,11 @@ public class PublicationMB implements Serializable {
 	 * Deletes currently selected publication from persistency.
 	 */
 	public void remove() {
-		oLogger.info("--remove publication by Id ManagedBean--p_id: " + currentPublication.getTitle());
-		if (currentPublication == null) {
+		if (this.currentPublication == null) {
 			MessageService.error("Empty field");
 		} else {
 			try {
-				oPublicationBean.remove(currentPublication.getUuid());
+				oPublicationBean.remove(this.currentPublication.getUuid());
 				publicationList = oPublicationBean.getAll();
 				MessageService.info("Delete succesfull.");
 			} catch (LibraryException e) {
@@ -211,12 +210,10 @@ public class PublicationMB implements Serializable {
 	}
 
 	public String getType() {
-		oLogger.info("get type--------:" + type);
-		return type;
+		return this.type;
 	}
 
 	public void setType(String type) {
-		oLogger.info("-----------------type changed" + type);
 		this.type = type;
 	}
 
@@ -226,12 +223,11 @@ public class PublicationMB implements Serializable {
 	 * @return
 	 */
 	public Boolean isSelected() {
-		oLogger.info("-------------------is selected: " + currentPublication);
-		if (currentPublication == null) {
-			oLogger.error("-------------+++++++++++++No selected publication");
+		if (this.currentPublication == null) {
 			return false;
-		} else
+		} else {
 			return true;
+		}
 	}
 
 	/**
@@ -241,33 +237,41 @@ public class PublicationMB implements Serializable {
 	 * @return true if have
 	 */
 	public Boolean hasAuthor() {
-		oLogger.info("-------------------has authors: " + currentPublication);
-		if (currentPublication == null) {
-			oLogger.error("-------------+++++++++++++No selected publication");
+		if (this.currentPublication == null) {
 			return false;
 		}
-
-		oLogger.info("-------has authors-----: " + currentPublication.getClass().getSimpleName());
-		if ("Newspaper".equals(currentPublication.getClass().getSimpleName())) {
+		if (currentPublication instanceof Newspaper) {
 			return false;
-		} else
+		} else {
 			return true;
+		}
 	}
 
+	/**
+	 * Return the authors of the current publication
+	 * 
+	 * @return List<Authors>
+	 */
 	public List<Author> getAuthors() {
-		if ("Book".equals(currentPublication.getClass().getSimpleName()))
-			authors = ((Book) currentPublication).getAuthors();
-		if ("Magazine".equals(currentPublication.getClass().getSimpleName()))
-			authors = ((Magazine) currentPublication).getAuthors();
-		return authors;
+		authors.clear();
+		if (currentPublication instanceof Book) {
+			this.authors = ((Book) this.currentPublication).getAuthors();
+		}
+		if (currentPublication instanceof Magazine) {
+			this.authors = ((Magazine) this.currentPublication).getAuthors();
+		}
+		return this.authors;
 	}
 
+	/**
+	 * Getters and setters for private variables
+	 */
 	public void setAuthors(List<Author> authors) {
 		this.authors = authors;
 	}
 
 	public List<Author> getCurrentAuthors() {
-		return currentAuthors;
+		return this.currentAuthors;
 	}
 
 	public void setCurrentAuthors(List<Author> currentAuthors) {
@@ -275,7 +279,7 @@ public class PublicationMB implements Serializable {
 	}
 
 	public Publisher getCurrentPublisher() {
-		return currentPublisher;
+		return this.currentPublisher;
 	}
 
 	public void setCurrentPublisher(Publisher currentPublisher) {
@@ -283,11 +287,11 @@ public class PublicationMB implements Serializable {
 	}
 
 	public List<Publication> getPublicationList() {
-		return publicationList;
+		return this.publicationList;
 	}
 
 	public Publication getCurrentPublication() {
-		return currentPublication;
+		return this.currentPublication;
 	}
 
 	public void setCurrentPublication(Publication currentPublication) {
