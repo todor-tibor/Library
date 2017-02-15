@@ -45,6 +45,7 @@ public class LoginMB implements Serializable {
 	private String password;
 	private String user_name;
 	private List<Role> roles;
+<<<<<<< Upstream, based on origin/PublicationWEB
 	private String currentRole;
 
 	public List<User> getUserList() {
@@ -130,6 +131,64 @@ public class LoginMB implements Serializable {
 				 * "LIBRARIAN": return "index"; case "READER": return
 				 * "publication_user"; default: return "login"; } }
 				 */
+=======
+
+
+	public List<User> getUserList() {
+		return userList;
+	}
+
+	public User getCurrentUser() {
+		return currentUser;
+	}
+
+	public void setCurrentUser(User currentUser) {
+		this.currentUser = currentUser;
+	}
+
+	/**
+	 * Requests all user objects and stores them in userList.
+	 * 
+	 * @return List of all users from persistency.
+	 */
+	public List<User> getAll() {
+		oLogger.info("--getAllUsers()--");
+		userList = new ArrayList<>();
+		try {
+			oLogger.info("--getAllUsers()--users queried");
+			userList = oUserBean.getAll();
+		} catch (LibraryException e) {
+			// this.error("Server internal error.");
+		}
+		return userList;
+	}
+
+	/**
+	 * Search for user by username and stores them in userList.
+	 * 
+	 * @param p_searchTxt
+	 *            username.
+	 * @return List of user objects found.
+	 */
+	public String search() {
+		oLogger.info("--search user--" + this.getUser_name());
+		if (this.getUser_name().length() >= 3) {
+			try {
+				System.out.println("/*/*-/*-/ " + this.getUser_name() + "    " + this.getPassword());
+				roles = oLoginBean.login(this.getUser_name(), this.getPassword());
+				System.out.println("///**********-----------    success    -*-*-*-*-*-");
+				for (Role r : roles) {
+					switch (r.getRole()) {
+					case "LIBRARIAN":
+						return "index";
+					case "READER":
+						return "publication";
+					default:
+						return "login";
+					}
+				}
+
+>>>>>>> 4e2fab0 login restriction if not admin
 			} catch (LibraryException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

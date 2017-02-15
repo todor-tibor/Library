@@ -11,7 +11,9 @@
 </h:head>
 
 <h:body>
-	<h:panelGrid columns="3" cellpadding="10">
+
+<h:panelGrid columns="3" cellpadding="10">
+
 		<p:panel header="#{msg['publication.button']}">
 			<h:form id="publication_actions_form">
 
@@ -32,8 +34,9 @@
             			#{pubMan['publications.text']}
         			</f:facet>
 					<f:facet name="header">
-					</f:facet>
-					<p:column headerText="#{pubMan['publication.title']}">
+        			</f:facet>
+					<p:column headerText="#{pubMan['publication.name']}">
+
 						<h:outputText value="#{publication.title}" />
 					</p:column>
 					<p:column headerText="#{pubMan['publication.publisher']}">
@@ -51,18 +54,13 @@
 					<f:facet name="footer">
 						<p:commandButton process="publicationDT" icon="ui-icon-search"
 							value="#{msg['details.button']}" update="first"
-							oncomplete="PF('publicationDialog').show()"
-							disabled="#{publicationBean.currentPublication == null}" />
 
+							oncomplete="PF('roleDialog').show()" />
+							
 						<p:commandButton process="publicationDT" icon="fa-remove"
-							value="#{msg['delete.button']}" action="#{publicationBean.remove()}"
-							update="publicationDT"
-							disabled="#{publicationBean.currentPublication == null}" />
 
-						<p:commandButton process="publicationDT" icon="fa-remove"
-							value="#{pubMan['publication.update']}" update="updateDialog"
-							oncomplete="PF('updateDialog').show()"
-							disabled="#{publicationBean.currentPublication == null}" />
+							value="#{msg['delete.button']}" action="#{publicationBean.remove()}" update="publicationDT"/>
+
 
 						<p:dialog id="first" modal="true" showEffect="fade"
 							hideEffect="fade" widgetVar="publicationDialog"
@@ -70,37 +68,17 @@
 							height="500">
 							<p:messages id="messages" showDetail="true" autoUpdate="true"
 								closable="true" />
-							<br />
-							<h:panelGrid columns="2" cellpadding="5">
-								<h:outputText value="#{pubMan['publication.title']}: " />
-								<h:outputText
-									value="#{publicationBean.currentPublication.title}" />
-								<h:outputText value="#{pubMan['publication.publisher']}: " />
-								<h:outputText
-									value="#{publicationBean.currentPublication.publisher.name}" />
-								<h:outputText value="#{pubMan['publication.nrOfCopies']}: " />
-								<h:outputText
-									value="#{publicationBean.currentPublication.nrOfCopys}" />
-								<h:outputText value="#{pubMan['publication.onStock']}: " />
-								<h:outputText
-									value="#{publicationBean.currentPublication.onStock}" />
 
-							</h:panelGrid>
-							<br />
-							<h:outputText value="#{pubMan['publication.borrows']}" />
-							<p:dataTable id="Borrows" var="borrows"
-								value="#{publicationBean.currentPublication.borrows}"
-								rowKey="#{borrows.uuid}">
-								<p:column headerText="#{pubMan['publication.borrowBy']}">
-									<h:outputText value="#{borrows.user.userName}" />
-								</p:column>
-								<p:column headerText="#{pubMan['publication.from']}">
-									<h:outputText value="#{borrows.borrowFrom}" />
-								</p:column>
-								<p:column headerText="#{pubMan['publication.until']}">
-									<h:outputText value="#{borrows.borrowUntil}" />
-								</p:column>
-							</p:dataTable>
+							<p:inputText id="publication_renameTextBox" binding="#{renamepublication}" />
+							<p:commandButton value="#{msg['rename.button']}" update=""
+								action="#{publicationBean.update(renamepublication.value)}">
+								<f:param name="p_newTxt" value="#{renamepublication.value}" />
+							</p:commandButton>
+							<p:dataList id="displayRoles"
+								value="#{publicationBean.currentPublication}" var="role" width="250">
+								<h:outputText value="#{role}" />
+							</p:dataList>
+
 						</p:dialog>
 
 						<p:dialog id="updateDialog" modal="true" showEffect="fade"
@@ -148,60 +126,22 @@
 					</f:facet>
 
 				</p:dataTable>
-				<p:commandButton value="#{pubMan['listPublications.button']}"
-					update="publicationDT" icon="ui-icon-search"
-					action="#{publicationBean.getAll()}">
+
+
+
+				<p:commandButton value="#{pubMan['listPublications.button']}" update="publicationDT"
+					icon="ui-icon-search" action="#{publicationBean.getAll}">
+
 				</p:commandButton>
-				<p:commandButton icon="fa-remove" value="#{pubMan['add.newspaper']}"
-					update="addDialog" oncomplete="PF('addDialog').show()"
-					action="#{publicationBean.setType('Newspaper')}" />
-				<p:commandButton icon="fa-remove" value="#{pubMan['add.magazine']}"
-					update="addDialog" action="#{publicationBean.setType('Magazine')}"
-					oncomplete="PF('addDialog').show()" />
-				<p:commandButton icon="fa-remove" value="#{pubMan['add.book']}" update="addDialog"
-					oncomplete="PF('addDialog').show()"
-					action="#{publicationBean.setType('Book')}" />
 
-				<p:dialog id="addDialog" modal="true" showEffect="fade"
-					hideEffect="fade" widgetVar="addDialog"
-					header="#{pubMan['add.newPublication']}" width="500" height="500">
-					<p:messages id="messages4" showDetail="true" autoUpdate="true"
-						closable="true" />
-					<h:panelGrid columns="2" cellpadding="5">
-						<p:outputLabel value="#{pubMan['publication.title']}" />
-						<p:inputText binding="#{title}" />
-						<p:outputLabel value="#{pubMan['publication.nrOfCopies']}" />
-						<p:inputText binding="#{nrOfCopies}" />
-						<p:outputLabel value="#{pubMan['publication.publisher']}" />
-						<p:dataTable id="publisherDT26" var="publisher"
-							value="#{publisherbean.all}" selectionMode="single"
-							selection="#{publicationBean.currentPublisher}"
-							rowKey="#{publisher.uuid}">
-							<p:column>
-								<h:outputText value="#{publisher.name}" />
-							</p:column>
-						</p:dataTable>
-						<c:if test="${publicationBean.getType() != 'Newspaper'}">
-							<p:outputLabel value="#{pubMan['publication.authors']}" />
-							<p:dataTable id="authorsDT26" var="author"
-								value="#{authorBean.all}" selectionMode="multiple"
-								selection="#{publicationBean.currentAuthors}"
-								rowKey="#{author.uuid}">
-								<p:column>
-									<h:outputText value="#{author.name}" />
-								</p:column>
-							</p:dataTable>
-						</c:if>
-
-					</h:panelGrid>
-					<p:commandButton value="#{msg['add.label']}" update="publication_actions_form"
-						icon="fa-user-plu"
-						action="#{publicationBean.store(title.value, nrOfCopies.value)}">
-						<f:param name="p_title" value="#{title.value}" />
-						<f:param name="p_nrOfCopies" value="#{nrOfCopies.value}" />
-					</p:commandButton>
-				</p:dialog>
-
+	
+				<p:separator />
+				<p:inputText id="addPublicationTxtBox" binding="#{newName}" />
+				<p:commandButton value="#{msg['add.label']}" update="publicationDT"
+					icon="fa-publication-plu" action="#{publicationBean.store(newName.value)}">
+					<f:param name="p_value" value="#{newName.value}" />
+				</p:commandButton>
+				
 			</h:form>
 		</p:panel>
 		
