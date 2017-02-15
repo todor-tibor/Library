@@ -4,19 +4,19 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-	<p:messages id="messages" showDetail="true" autoUpdate="true"
+	<p:messages id="messages_publisher" showDetail="true" autoUpdate="true"
 		closable="true" />
 </h:head>
 
 <h:body>
 	<h:panelGrid columns="3" cellpadding="10">
 		<p:panel header="#{msg['publisher.button']}">
-			<h:form id="actions_form">
+			<h:form id="publisher_actions_form">
 
-				<p:inputText id="searchTextBox" binding="#{srch}" />
+				<p:inputText id="publisher_searchTextBox" binding="#{srch_publisher}" />
 				<p:commandButton value="#{msg['search.button']}" update="publisherDT"
-					action="#{publisherbean.search(srch.value)}">
-					<f:param name="p_value" value="#{srch.value}" />
+					action="#{publisherbean.search(srch_publisher.value)}">
+					<f:param name="p_value" value="#{srch_publisher.value}" />
 				</p:commandButton>
 
 				<p:dataTable id="publisherDT" var="publisher"
@@ -44,7 +44,7 @@
 							hideEffect="fade" widgetVar="publisherDialog"
 							header="#{publisherbean.currentPublisher.name}" width="300"
 							height="300">
-							<p:messages id="messages" showDetail="true" autoUpdate="true"
+							<p:messages id="messages_publisher1111" showDetail="true" autoUpdate="true"
 								closable="true" />
 							<p:inputText id="renameTextBox" binding="#{renamepublisher}" />
 							<p:commandButton value="#{msg['rename.button']}" update=""

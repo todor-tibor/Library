@@ -55,6 +55,10 @@ public class UserMB implements Serializable {
 		System.out.println("-*-*-*-*-*-*-* " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
 	}
 	
+	public void change(){
+		oLogger.info("-----tab changed");
+	}
+	
 	private List<User> userList = new ArrayList<>();// Currently displayed
 													// users.
 	private User currentUser = null;// Currently selected user.

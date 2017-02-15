@@ -4,7 +4,7 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-	<p:messages id="messages" showDetail="true" autoUpdate="true"
+	<p:messages id="messages_author" showDetail="true" autoUpdate="true"
 		closable="true" />
 </h:head>
 
@@ -13,10 +13,10 @@
 		<p:panel header="#{msg['author.button']}">
 			<h:form id="author_actions_form">
 
-				<p:inputText id="author_searchTextBox" binding="#{srch}" />
+				<p:inputText id="author_searchTextBox" binding="#{srch_author}" />
 				<p:commandButton value="#{msg['search.button']}" update="authorDT"
-					action="#{authorBean.search(srch.value)}">
-					<f:param name="p_value" value="#{srch.value}" />
+					action="#{authorBean.search(srch_author.value)}">
+					<f:param name="p_value" value="#{srch_author.value}" />
 				</p:commandButton>
 
 				<p:dataTable id="authorDT" var="author" value="#{authorBean.authorList}"
@@ -42,7 +42,7 @@
 							hideEffect="fade" widgetVar="roleDialog"
 							header="#{authorBean.currentAuthor.name}" width="300"
 							height="300">
-							<p:messages id="messages" showDetail="true" autoUpdate="true"
+							<p:messages id="messages_author" showDetail="true" autoUpdate="true"
 								closable="true" />
 							<p:inputText id="renameTextBox" binding="#{renameauthor}" />
 							<p:commandButton value="#{msg['rename.button']}" update=""
