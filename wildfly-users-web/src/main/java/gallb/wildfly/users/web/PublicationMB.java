@@ -2,6 +2,7 @@ package gallb.wildfly.users.web;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
@@ -12,7 +13,12 @@ import org.jboss.logging.Logger;
 
 import gallb.wildfly.users.common.IPublication;
 import gallb.wildfly.users.common.LibraryException;
+import model.Author;
+import model.Book;
+import model.Magazine;
+import model.Newspaper;
 import model.Publication;
+import model.Publisher;
 
 /**
  * 
@@ -26,35 +32,29 @@ import model.Publication;
 @SessionScoped
 public class PublicationMB implements Serializable {
 
-	/**
-	 * 
-	 */
 	private Logger oLogger = Logger.getLogger(PublicationMB.class);
 	private static final long serialVersionUID = -4702598250751689454L;
 
 	@Inject
 	private IPublication oPublicationBean;
 
-	/**
-	 * 
+	/*
+	 * variables to select publication type, authors or publisher for update and
+	 * insert
 	 */
-	private List<Publication> publicationList = new ArrayList<>();// Currently
-																	// displayed
-																	// publications.
-	private Publication currentPublication = null;// Currently selected
-													// publication.
+	private List<Author> authors, currentAuthors;
+	private Publisher currentPublisher;
+	private String type;
 
-	public List<Publication> getPublicationList() {
-		return publicationList;
-	}
+	/*
+	 * Currently displayed publications.
+	 */
+	private List<Publication> publicationList = new ArrayList<>();
 
-	public Publication getCurrentPublication() {
-		return currentPublication;
-	}
-
-	public void setCurrentPublication(Publication currentPublication) {
-		this.currentPublication = currentPublication;
-	}
+	/*
+	 * Currently selected publication.
+	 */
+	private Publication currentPublication = null;
 
 	/**
 	 * Requests all publication objects and stores them in publicationList.
@@ -62,71 +62,132 @@ public class PublicationMB implements Serializable {
 	 * @return List of all publications from persistency.
 	 */
 	public List<Publication> getAll() {
-		oLogger.info("--getAllPublications()--");
-		publicationList = new ArrayList<>();
+		this.publicationList.clear();
 		try {
-			oLogger.info("--getAllPublications()--publications queried");
-			publicationList = oPublicationBean.getAll();
+			this.publicationList = oPublicationBean.getAll();
 		} catch (LibraryException e) {
-			MessageService.error("Server internal error.");
+			oLogger.error(e.getMessage());
+			MessageService.error(e.getMessage());
 		}
-		return publicationList;
+		return this.publicationList;
 	}
 
 	/**
-	 * Search for publication by publicationname and stores them in
-	 * publicationList.
+	 * Search for publication by title and stores them in publicationList.
 	 * 
 	 * @param p_searchTxt
-	 *            publicationname.
+	 *            publication title.
 	 * @return List of publication objects found.
 	 */
 	public List<Publication> search(String p_searchTxt) {
-		oLogger.info("--search publication--" + p_searchTxt);
 		if (p_searchTxt.length() >= 3) {
-			publicationList = new ArrayList<>();
+			this.publicationList.clear();
 			try {
-				publicationList = oPublicationBean.search(p_searchTxt);
+				this.publicationList = oPublicationBean.search(p_searchTxt);
+				if (this.publicationList.isEmpty()) {
+					MessageService.warn("No entity found");
+				}
 			} catch (LibraryException e) {
+				oLogger.error(e.getMessage());
 				MessageService.error(e.getMessage());
 			}
 		} else {
 			MessageService.error("Keyword too short. Min. 3 characters req.");
 		}
-		return publicationList;
+		return this.publicationList;
 	}
 
-	public void store(Publication p_value) {// store newspaper, magazine or book
+	/**
+	 * Insert new Book, Magazine or Newspaper Use currentAuthors and
+	 * currentPublisher
+	 * 
+	 * @param p_title-new
+	 *            title
+	 * @param p_nrOfCopies-number
+	 *            of copies left, and copies on stock
+	 */
+	public void store(String pTitle, String pNrOfCopies) {
+		if (pTitle.isEmpty() || pNrOfCopies.isEmpty()) {
+			MessageService.warn("All field is required");
+			return;
+		}
+		int nrOfCopies;
 		try {
-			oPublicationBean.store(p_value);
-			publicationList.add(p_value);
-			MessageService.info("Succesfully added: " + p_value);
+			nrOfCopies = Integer.parseInt(pNrOfCopies);
+		} catch (NumberFormatException e) {
+			MessageService.warn("Number of copies is not a valid Number");
+			return;
+		}
+		Publication publication;
+		switch (this.type) {
+		case "Book":
+			publication = new Book();
+			if (this.currentAuthors == null) {
+				MessageService.warn("All field is required");
+				return;
+			}
+			((Book) publication).setAuthors(this.currentAuthors);
+			break;
+		case "Magazine":
+			publication = new Magazine();
+			if (this.currentAuthors == null) {
+				MessageService.warn("All field is required");
+				return;
+			}
+			((Magazine) publication).setAuthors(this.currentAuthors);
+			break;
+		default:
+			publication = new Newspaper();
+			break;
+		}
+		publication.setTitle(pTitle);
+		publication.setNrOfCopys(nrOfCopies);
+		publication.setOnStock(nrOfCopies);
+		publication.setPublisher(this.currentPublisher);
+		publication.setPublicationDate(new Date());
+
+		try {
+			oPublicationBean.store(publication);
+			publicationList.add(publication);
+			MessageService.info("Succesfully added: " + publication);
 		} catch (LibraryException e) {
+			oLogger.error(e.getMessage());
 			MessageService.error(e.getMessage());
 		}
 	}
 
 	/**
-	 * Renames currently selected publication.
-	 * 
-	 * @param p_newTxt
-	 *            - new publicationname.
+	 * Update currently selected publication. Use currentPublication,and
+	 * currently selected authors
 	 */
-	public void update(String p_newTxt) {
-		oLogger.info("--update publication ManagedBean--id:" + currentPublication.getTitle() + "new name: " + p_newTxt);
-		if ((currentPublication != null) && (p_newTxt.length() >= 3)) {
+	public void update() {
+		if ((this.currentPublication != null) && this.currentPublication.getTitle() != null
+				&& this.currentPublication.getPublisher() != null) {
+			if (currentPublication instanceof Book)
+				if (authors != null && !authors.isEmpty()) {
+					((Book) this.currentPublication).setAuthors(this.authors);
+				} else {
+					MessageService.warn("All field is requered");
+					return;
+				}
+			if ("Magazine".equals(currentPublication.getClass().getSimpleName()))
+				if (this.authors != null && !this.authors.isEmpty()) {
+					((Magazine) this.currentPublication).setAuthors(this.authors);
+				} else {
+					MessageService.warn("All field is requered");
+					return;
+				}
 			try {
-				currentPublication.setTitle(p_newTxt);
-				oPublicationBean.update(currentPublication);
-				publicationList = oPublicationBean.getAll();
-				oLogger.info("**********************update succesfull************************************");
+				oPublicationBean.update(this.currentPublication);
+				this.publicationList = oPublicationBean.getAll();
+				oLogger.info("---update succesfull---");
 				MessageService.info("Update succesfull.");
 			} catch (LibraryException e) {
 				oLogger.error(e);
 				MessageService.error(e.getMessage());
 			}
 		} else {
-			MessageService.error("New name too short.");
+			MessageService.warn("All field is required");
 		}
 	}
 
@@ -134,12 +195,11 @@ public class PublicationMB implements Serializable {
 	 * Deletes currently selected publication from persistency.
 	 */
 	public void remove() {
-		oLogger.info("--remove publication by Id ManagedBean--p_id: " + currentPublication.getTitle());
-		if (currentPublication == null) {
+		if (this.currentPublication == null) {
 			MessageService.error("Empty field");
 		} else {
 			try {
-				oPublicationBean.remove(currentPublication.getUuid());
+				oPublicationBean.remove(this.currentPublication.getUuid());
 				publicationList = oPublicationBean.getAll();
 				MessageService.info("Delete succesfull.");
 			} catch (LibraryException e) {
@@ -147,5 +207,94 @@ public class PublicationMB implements Serializable {
 				MessageService.error(e.getMessage());
 			}
 		}
+	}
+
+	public String getType() {
+		return this.type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	/**
+	 * Check if have selected publication
+	 * 
+	 * @return
+	 */
+	public Boolean isSelected() {
+		if (this.currentPublication == null) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	/**
+	 * Check if the Publication selected have property authors (only the
+	 * Newspaper can't have)
+	 * 
+	 * @return true if have
+	 */
+	public Boolean hasAuthor() {
+		if (this.currentPublication == null) {
+			return false;
+		}
+		if (currentPublication instanceof Newspaper) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	/**
+	 * Return the authors of the current publication
+	 * 
+	 * @return List<Authors>
+	 */
+	public List<Author> getAuthors() {
+		authors.clear();
+		if (currentPublication instanceof Book) {
+			this.authors = ((Book) this.currentPublication).getAuthors();
+		}
+		if (currentPublication instanceof Magazine) {
+			this.authors = ((Magazine) this.currentPublication).getAuthors();
+		}
+		return this.authors;
+	}
+
+	/**
+	 * Getters and setters for private variables
+	 */
+	public void setAuthors(List<Author> authors) {
+		this.authors = authors;
+	}
+
+	public List<Author> getCurrentAuthors() {
+		return this.currentAuthors;
+	}
+
+	public void setCurrentAuthors(List<Author> currentAuthors) {
+		this.currentAuthors = currentAuthors;
+	}
+
+	public Publisher getCurrentPublisher() {
+		return this.currentPublisher;
+	}
+
+	public void setCurrentPublisher(Publisher currentPublisher) {
+		this.currentPublisher = currentPublisher;
+	}
+
+	public List<Publication> getPublicationList() {
+		return this.publicationList;
+	}
+
+	public Publication getCurrentPublication() {
+		return this.currentPublication;
+	}
+
+	public void setCurrentPublication(Publication currentPublication) {
+		this.currentPublication = currentPublication;
 	}
 }

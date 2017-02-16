@@ -1,0 +1,60 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:head>
+	<p:messages id="messages" showDetail="true" autoUpdate="true"
+		closable="true" />
+</h:head>
+
+<h:body>
+	<h:panelGrid columns="3" cellpadding="10">
+		<p:panel header="Publication management">
+			<h:form id="publication_actions_form">
+
+				<p:inputText id="publication_searchTextBox" binding="#{srch}" />
+				<p:commandButton value="Search" update="publicationDT"
+					action="#{publicationBean.search(srch.value)}">
+					<f:param name="p_value" value="#{srch.value}" />
+				</p:commandButton>
+
+				<p:dataTable id="publicationDT" var="publication"
+					value="#{publicationBean.publicationList}" selectionMode="single"
+					selection="#{publicationBean.currentPublication}"
+					rowKey="#{publication.uuid}">
+					<f:facet name="header">
+            			Publications
+        			</f:facet>
+					<f:facet name="header">
+					</f:facet>
+					<p:column headerText="Title">
+						<h:outputText value="#{publication.title}" />
+					</p:column>
+					<p:column headerText="Publisher">
+						<h:outputText value="#{publication.publisher.name}" />
+					</p:column>
+					<p:column headerText="On stock">
+						<h:outputText value="#{publication.onStock}" />
+					</p:column>
+					<p:column headerText="Author">
+						<h:outputText value="#{publication.authors}"
+							rendered="#{publication['class'].simpleName eq 'Book'}" />
+						<h:outputText value="#{publication.authors}"
+							rendered="#{publication['class'].simpleName eq 'Magazine'}" />
+					</p:column>
+
+				</p:dataTable>
+				<p:commandButton value="List all publications"
+					update="publicationDT" icon="ui-icon-search"
+					action="#{publicationBean.getAll()}">
+				</p:commandButton>
+
+
+			</h:form>
+		</p:panel>
+	</h:panelGrid>
+</h:body>
+</html>
