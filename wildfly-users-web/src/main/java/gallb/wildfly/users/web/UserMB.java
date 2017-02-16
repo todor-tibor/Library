@@ -168,11 +168,6 @@ public class UserMB implements Serializable {
 			MessageService.warn("New name too short.");
 			return;
 		}
-		if (currentRoles.isEmpty()) {
-			MessageService.warn("Please select role");
-			return;
-		}
-		currentUser.setRoles(currentRoles);
 		currentUser.setUserName(p_newTxt);
 		try {
 			oUserBean.update(currentUser);
