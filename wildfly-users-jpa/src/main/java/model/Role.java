@@ -36,25 +36,4 @@ public class Role extends BaseEntity {
 		this.role = role;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((role == null) ? 0 : role.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {		
-		Role other = (Role) obj;
-		if (role == null) {
-			if (other.role != null)
-				return false;
-		} else if (!role.equals(other.role))
-			return false;
-		return true;
-	}
-	
-	
-
 }

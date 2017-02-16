@@ -20,6 +20,7 @@ import model.Author;
  * @author sipost
  */
 @Named("authorBean")
+
 @SessionScoped
 public class AuthorMB implements Serializable {
 
@@ -31,6 +32,7 @@ public class AuthorMB implements Serializable {
 
 	@Inject
 	private IAuthor oAuthorBean;
+
 	/**
 	 * 
 	 */
