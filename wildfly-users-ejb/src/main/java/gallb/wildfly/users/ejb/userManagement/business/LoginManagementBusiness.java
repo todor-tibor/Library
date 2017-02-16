@@ -19,6 +19,7 @@ import model.User;
  * 
  *         Implements a simple authentication process of a user.
  */
+
 @Stateless
 @LocalBean
 @Remote(ILoginBusiness.class)
@@ -43,6 +44,7 @@ public class LoginManagementBusiness implements ILoginBusiness {
 	 * @return - the roles (type) of the user if login was not successful,
 	 *         otherwise throws an error
 	 * @throws LibraryException
+	 * 
 	 */
 	public List<Role> authentication(String userName, String password) throws LibraryException {
 

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
@@ -32,12 +33,12 @@ public class Borrow extends BaseEntity {
 	private Date borrowUntil;
 
 	//bi-directional many-to-one association to Publication
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="publication_id")
 	private Publication publication;
 
 	//bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="user_id")
 	private User user;
 

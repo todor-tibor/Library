@@ -6,8 +6,12 @@ package gallb.wildfly.users.web;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -15,6 +19,7 @@ import org.jboss.logging.Logger;
 
 import gallb.wildfly.users.common.IUser;
 import gallb.wildfly.users.common.LibraryException;
+import model.Role;
 import model.User;
 
 /**
@@ -27,6 +32,7 @@ import model.User;
 @Named("userbean")
 
 @SessionScoped
+// @ViewScoped
 public class UserMB implements Serializable {
 
 	/**
@@ -38,12 +44,29 @@ public class UserMB implements Serializable {
 	@Inject
 	private IUser oUserBean;
 
+	@Inject
+	LocaleManager localeManager;
+
 	/**
 	 * 
 	 */
+
+	@PostConstruct
+	private void init() {
+		FacesContext.getCurrentInstance().getViewRoot().setLocale(localeManager.getUserLocale());
+		System.out
+				.println("-*-*-*-*-*-*-* " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
+	}
+
+	public void change() {
+		oLogger.info("-----tab changed");
+	}
+
 	private List<User> userList = new ArrayList<>();// Currently displayed
 													// users.
 	private User currentUser = null;// Currently selected user.
+
+	private List<Role> currentRoles = new ArrayList<>();
 
 	public List<User> getUserList() {
 		return userList;
@@ -99,30 +122,33 @@ public class UserMB implements Serializable {
 	/**
 	 * Stores new user with username.
 	 * 
-	 * @param p_name - username, p_pass - password, p_idx - loyalty index
-	 *         
+	 * @param p_name
+	 *            - username, p_pass - password, p_idx - loyalty index
+	 * 
 	 */
 
 	public void store(String p_name, String p_pass, int p_idx) {
 		oLogger.info("--store user--");
 		oLogger.info("--store param: " + p_name);
-		if (p_name.isEmpty()) {
-			MessageService.error("Empty field");
+		if (p_name.isEmpty() || "".equals(p_name)) {
+			MessageService.warn("Empty field");
 			return;
 		}
-		if (p_name == "") {
-			MessageService.error("Empty field");
-		return;
-		}
-		if ((p_idx > 10)  || (p_idx < 0)) {
-			MessageService.error("Loyalty index must be an integer beteen 0..10");
+		if ((p_idx > 10) || (p_idx < 0)) {
+			MessageService.warn("Loyalty index must be an integer beteen 0..10");
 			return;
 		}
+		if (currentRoles.isEmpty()) {
+			MessageService.warn("Please select role");
+			return;
+		}
+
+		User tmpUser = new User();
+		tmpUser.setUserName(p_name);
+		tmpUser.setLoyaltyIndex(p_idx);
+		tmpUser.setPassword(p_pass);
+		tmpUser.setRoles(currentRoles);
 		try {
-			User tmpUser = new User();
-			tmpUser.setUserName(p_name);
-			tmpUser.setLoyaltyIndex(p_idx);
-			tmpUser.setPassword(p_pass);
 			oUserBean.store(tmpUser);
 			userList.add(tmpUser);
 			MessageService.info("Succesfully added: " + p_name);
@@ -138,21 +164,21 @@ public class UserMB implements Serializable {
 	 *            - new username.
 	 */
 	public void update(String p_newTxt) {
-		oLogger.info("--update user ManagedBean--id:" + currentUser.getUserName() + "new name: " + p_newTxt);
-		if ((currentUser != null) && (p_newTxt.length() >= 3)) {
-			try {
-				currentUser.setUserName(p_newTxt);
-				oUserBean.update(currentUser);
-				userList = oUserBean.getAll();
-				oLogger.info("**********************update succesfull************************************");
-				MessageService.info("Update succesfull.");
-			} catch (LibraryException e) {
-				oLogger.error(e);
-				MessageService.error(e.getMessage());
-			}
-		} else {
-			MessageService.error("New name too short.");
+		if ((currentUser == null) || (p_newTxt.length() <= 3)) {
+			MessageService.warn("New name too short.");
+			return;
 		}
+		currentUser.setUserName(p_newTxt);
+		try {
+			oUserBean.update(currentUser);
+			userList = oUserBean.getAll();
+			oLogger.info("----update succesfull----");
+			MessageService.info("Update succesfull.");
+		} catch (LibraryException e) {
+			oLogger.error(e);
+			MessageService.error(e.getMessage());
+		}
+
 	}
 
 	/**
@@ -172,5 +198,25 @@ public class UserMB implements Serializable {
 				MessageService.error(e.getMessage());
 			}
 		}
+	}
+
+	public void getCurrentLang() {
+
+		FacesContext.getCurrentInstance().getViewRoot().setLocale(localeManager.getUserLocale());
+		System.out
+				.println("-*-*-*-*-*-*-* " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
+
+	}
+
+	public List<Role> getCurrentRoles() {
+		currentRoles.clear();
+		if (currentUser != null) {
+			currentRoles = currentUser.getRoles();
+		}
+		return currentRoles;
+	}
+
+	public void setCurrentRoles(List<Role> currentRoles) {
+		this.currentRoles = currentRoles;
 	}
 }

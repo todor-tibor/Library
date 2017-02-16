@@ -57,9 +57,11 @@ public class PublisherMB implements Serializable {
 	 * @return - a publisher list if database is not empty
 	 */
 	public List<Publisher> getAll() {
-		publishersList.clear();;
+		publishersList.clear();
+		;
 		try {
 			publishersList = oPublisherBean.getAll();
+			oLogger.info("+++++++++++++++++return all publisher");
 		} catch (LibraryException e) {
 			MessageService.error("Server internal error.");
 		}
