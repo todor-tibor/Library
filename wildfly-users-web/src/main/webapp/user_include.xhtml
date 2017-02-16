@@ -79,22 +79,27 @@
 
 				<p:dialog id="addUserDialog" modal="true" showEffect="fade"
 					hideEffect="fade" widgetVar="userDetailDialog"
-					header="#{msg['addUser.button']}" width="330" height="300">
+					header="#{userMan['addUser.button']}" width="500" height="300">
 					<p:messages id="messages" showDetail="true" autoUpdate="true"
 						closable="true" />
 					<h:panelGrid columns="2" cellpadding="5">
-						<p:outputLabel value="#{userMan['user.header']}" />
-						<p:inputText id="addUserTxtBox" binding="#{newName}" />
-						<p:outputLabel value="#{userMan['password.label']}" />
-						<p:inputText id="addPassTxtBox" binding="#{newPass}" />
-						<p:outputLabel value="#{userMan['loyalty.label']}" />
-						<p:inputText id="addLoyaltyIdx" binding="#{newLtyIdx}" />
+						<p:column>
+							<p:outputLabel value="#{userMan['user.header']}" /> <br /><br />
+							<p:outputLabel value="#{userMan['password.label']}" /> <br /><br />
+							<p:outputLabel value="#{userMan['loyalty.label']}" /> <br />
+						</p:column>
+						<p:column>
+							<p:inputText id="addUserTxtBox1" binding="#{newName1}" /> <br />
+							<p:inputText id="addPassTxtBox1" binding="#{newPass1}" /> <br />
+							<p:inputText id="addLoyaltyIdx1" binding="#{newLtyIdx1}" /> <br />
+						</p:column>
+
 						<p:commandButton value="#{msg['add.label']}" update="userDT"
 							icon="fa-user-plu"
-							action="#{userbean.store(newName.value, newPass.value, newLtyIdx.value)}">
-							<f:param name="p_name" value="#{newName.value}" />
-							<f:param name="p_pass" value="#{newPass.value}" />
-							<f:param name="p_idx" value="#{newLtyIdx.value}" />
+							action="#{userbean.store(newName1.value, newPass1.value, newLtyIdx1.value)}">
+							<f:param name="p_name" value="#{newName1.value}" />
+							<f:param name="p_pass" value="#{newPass1.value}" />
+							<f:param name="p_idx" value="#{newLtyIdx1.value}" />
 						</p:commandButton>
 					</h:panelGrid>
 				</p:dialog>
