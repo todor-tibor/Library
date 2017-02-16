@@ -37,43 +37,19 @@ public class PublicationMB implements Serializable {
 
 	@Inject
 	private IPublication oPublicationBean;
-<<<<<<< Upstream, based on origin/master
-<<<<<<< Upstream, based on origin/master
 
 	/*
 	 * variables to select publication type, authors or publisher for update and
 	 * insert
 	 */
 	private List<Author> authors, currentAuthors;
-=======
-	private List<Author> authors,currentAuthors;
->>>>>>> 837b979 Admin felulat a PublicationManagement-hez
-=======
-	private List<Author> authors, currentAuthors;
->>>>>>> 6c7703f apro valtoztatasok
 	private Publisher currentPublisher;
 	private String type;
 
 	/*
 	 * Currently displayed publications.
 	 */
-<<<<<<< Upstream, based on origin/master
-<<<<<<< Upstream, based on origin/master
 	private List<Publication> publicationList = new ArrayList<>();
-=======
-
-	public List<PublicationType> getAllType() {
-		return new ArrayList<>(Arrays.asList(PublicationType.values()));
-	}
-=======
->>>>>>> 6c7703f apro valtoztatasok
-
-	private List<Publication> publicationList = new ArrayList<>();// Currently
-																	// displayed
-																	// publications.
-	private Publication currentPublication = null;// Currently selected
-													// publication.
->>>>>>> 837b979 Admin felulat a PublicationManagement-hez
 
 	/*
 	 * Currently selected publication.
@@ -121,7 +97,6 @@ public class PublicationMB implements Serializable {
 		return this.publicationList;
 	}
 
-<<<<<<< Upstream, based on origin/master
 	/**
 	 * Insert new Book, Magazine or Newspaper Use currentAuthors and
 	 * currentPublisher
@@ -170,39 +145,7 @@ public class PublicationMB implements Serializable {
 		publication.setOnStock(nrOfCopies);
 		publication.setPublisher(this.currentPublisher);
 		publication.setPublicationDate(new Date());
-=======
-	public void store(String p_title, String p_nrOfCopies) {
-		oLogger.info("-------------nrOfCopies:  " + p_nrOfCopies + " type:  " + type);
-		Publication p_value;
-		try {
-			switch (type) {
-			case "Book":
-				p_value = new Book();
-				((Book) p_value).setAuthors(currentAuthors);
-				break;
-			case "Magazine":
-				p_value = new Magazine();
-				((Magazine) p_value).setAuthors(currentAuthors);
-				break;
-			default:
-				p_value = new Newspaper();
-				break;
-			}
-			p_value.setTitle(p_title);
-			p_value.setNrOfCopys(Integer.parseInt(p_nrOfCopies));
-			p_value.setOnStock(Integer.parseInt(p_nrOfCopies));
-			p_value.setPublisher(currentPublisher);
-			p_value.setPublicationDate(new Date());
-			oPublicationBean.store(p_value);
-			publicationList.add(p_value);
-			MessageService.info("Succesfully added: " + p_value);
-		} catch (LibraryException e) {
-			MessageService.error(e.getMessage());
-		}
-	}
->>>>>>> 837b979 Admin felulat a PublicationManagement-hez
 
-<<<<<<< Upstream, based on origin/master
 		try {
 			oPublicationBean.store(publication);
 			publicationList.add(publication);
@@ -213,14 +156,11 @@ public class PublicationMB implements Serializable {
 		}
 	}
 
-=======
->>>>>>> 7d79056 Reader szamara elkeszult az egyszerusitett felulet
 	/**
 	 * Update currently selected publication. Use currentPublication,and
 	 * currently selected authors
 	 */
 	public void update() {
-<<<<<<< Upstream, based on origin/master
 		if ((this.currentPublication != null) && this.currentPublication.getTitle() != null
 				&& this.currentPublication.getPublisher() != null) {
 			if (currentPublication instanceof Book)
@@ -237,37 +177,17 @@ public class PublicationMB implements Serializable {
 					MessageService.warn("All field is requered");
 					return;
 				}
-=======
-		if ((currentPublication != null) && currentPublication.getTitle() != null
-				&& currentPublication.getPublisher() != null) {
-			if (authors != null && !authors.isEmpty()) {
-				if ("Book".equals(currentPublication.getClass().getSimpleName()))
-					((Book) currentPublication).setAuthors(authors);
-				if ("Magazine".equals(currentPublication.getClass().getSimpleName()))
-					((Magazine) currentPublication).setAuthors(authors);
-			}
->>>>>>> 837b979 Admin felulat a PublicationManagement-hez
 			try {
-<<<<<<< Upstream, based on origin/master
 				oPublicationBean.update(this.currentPublication);
 				this.publicationList = oPublicationBean.getAll();
 				oLogger.info("---update succesfull---");
-=======
-				oPublicationBean.update(currentPublication);
-				publicationList = oPublicationBean.getAll();
-				oLogger.info("**********************update succesfull************************************");
->>>>>>> 837b979 Admin felulat a PublicationManagement-hez
 				MessageService.info("Update succesfull.");
 			} catch (LibraryException e) {
 				oLogger.error(e);
 				MessageService.error(e.getMessage());
 			}
 		} else {
-<<<<<<< Upstream, based on origin/master
 			MessageService.warn("All field is required");
-=======
-			MessageService.error("Invalid data.");
->>>>>>> 837b979 Admin felulat a PublicationManagement-hez
 		}
 	}
 
@@ -290,63 +210,11 @@ public class PublicationMB implements Serializable {
 	}
 
 	public String getType() {
-<<<<<<< Upstream, based on origin/master
 		return this.type;
-=======
-		oLogger.info("get type--------:" + type);
-		return type;
->>>>>>> 837b979 Admin felulat a PublicationManagement-hez
 	}
 
 	public void setType(String type) {
-<<<<<<< Upstream, based on origin/master
-=======
-		oLogger.info("-----------------type changed" + type);
->>>>>>> 837b979 Admin felulat a PublicationManagement-hez
 		this.type = type;
-	}
-
-	public Boolean isSelected() {
-		oLogger.info("-------------------is selected: " + currentPublication);
-		if (currentPublication == null) {
-			oLogger.error("-------------+++++++++++++No selected publication");
-			return false;
-		} else
-			return true;
-	}
-
-	public Boolean hasAuthor() {
-		oLogger.info("-------------------has authors: " + currentPublication);
-		if (currentPublication == null) {
-			oLogger.error("-------------+++++++++++++No selected publication");
-			return false;
-		}
-
-		oLogger.info("-------has authors-----: " + currentPublication.getClass().getSimpleName());
-		if ("Newspaper".equals(currentPublication.getClass().getSimpleName())) {
-			return false;
-		} else
-			return true;
-	}
-
-	public List<Author> getAuthors() {
-		if ("Book".equals(currentPublication.getClass().getSimpleName()))
-			authors = ((Book) currentPublication).getAuthors();
-		if ("Magazine".equals(currentPublication.getClass().getSimpleName()))
-			authors = ((Magazine) currentPublication).getAuthors();
-		return authors;
-	}
-
-	public void setAuthors(List<Author> authors) {
-		this.authors = authors;
-	}
-
-	public List<Author> getCurrentAuthors() {
-		return currentAuthors;
-	}
-
-	public void setCurrentAuthors(List<Author> currentAuthors) {
-		this.currentAuthors = currentAuthors;
 	}
 
 	/**
@@ -417,7 +285,6 @@ public class PublicationMB implements Serializable {
 	public void setCurrentPublisher(Publisher currentPublisher) {
 		this.currentPublisher = currentPublisher;
 	}
-<<<<<<< Upstream, based on origin/master
 
 	public List<Publication> getPublicationList() {
 		return this.publicationList;
@@ -430,6 +297,4 @@ public class PublicationMB implements Serializable {
 	public void setCurrentPublication(Publication currentPublication) {
 		this.currentPublication = currentPublication;
 	}
-=======
->>>>>>> 837b979 Admin felulat a PublicationManagement-hez
 }
