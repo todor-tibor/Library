@@ -84,16 +84,33 @@
 						closable="true" />
 					<h:panelGrid columns="2" cellpadding="5">
 						<p:column>
-							<p:outputLabel value="#{userMan['user.header']}" /> <br /><br />
-							<p:outputLabel value="#{userMan['password.label']}" /> <br /><br />
-							<p:outputLabel value="#{userMan['loyalty.label']}" /> <br />
+							<p:outputLabel value="#{userMan['user.header']}" />
+							<br />
+							<br />
+							<p:outputLabel value="#{userMan['password.label']}" />
+							<br />
+							<br />
+							<p:outputLabel value="#{userMan['loyalty.label']}" />
+							<br />
+							<p:outputLabel value="#{roleMan['role.text']}" />
+							<br />
 						</p:column>
 						<p:column>
-							<p:inputText id="addUserTxtBox1" binding="#{newName1}" /> <br />
-							<p:inputText id="addPassTxtBox1" binding="#{newPass1}" /> <br />
-							<p:inputText id="addLoyaltyIdx1" binding="#{newLtyIdx1}" /> <br />
-						</p:column>
+							<p:inputText id="addUserTxtBox1" binding="#{newName1}" />
+							<br />
+							<p:inputText id="addPassTxtBox1" binding="#{newPass1}" />
+							<br />
+							<p:inputText id="addLoyaltyIdx1" binding="#{newLtyIdx1}" />
+							<br />
+							<p:dataTable id="add_roleDT" var="addRole"
+								value="#{rolebean.all}" selectionMode="multiple"
+								selection="#{userbean.currentRoles}" rowKey="#{addRole.uuid}">
+								<p:column>
+									<h:outputText value="#{addRole.role}" />
+								</p:column>
+							</p:dataTable>
 
+						</p:column>
 						<p:commandButton value="#{msg['add.label']}" update="userDT"
 							icon="fa-user-plu"
 							action="#{userbean.store(newName1.value, newPass1.value, newLtyIdx1.value)}">
