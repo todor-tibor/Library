@@ -9,10 +9,10 @@ import javax.persistence.PersistenceException;
 
 import org.jboss.logging.Logger;
 
-import gallb.wildfly.users.common.IUserService;
+import com.edu.library.util.EjbException;
+
 import gallb.wildfly.users.common.LibraryException;
 import gallb.wildfly.users.common.PasswordEncrypter;
-import gallb.wildfly.users.ejb.exception.EjbException;
 import model.User;
 
 /**
@@ -21,12 +21,11 @@ import model.User;
  *         Invokes the CRUD methods for a user
  */
 @Stateless
-public class UserBean implements IUserService {
+public class UserBean {
 	@PersistenceContext(unitName = "WildflyUsers")
 	private EntityManager oEntityManager;
 	private Logger oLogger = Logger.getLogger(UserBean.class);
 
-	@Override
 	public List<User> getAll() throws EjbException {
 		try {
 			return oEntityManager.createNamedQuery("User.findAll", User.class).getResultList();
@@ -36,17 +35,16 @@ public class UserBean implements IUserService {
 		}
 	}
 
-	@Override
 	public User getById(String id) throws EjbException {
 		try {
-			return oEntityManager.createNamedQuery("User.findById", User.class).setParameter("uuid", id).getSingleResult();
+			return oEntityManager.createNamedQuery("User.findById", User.class).setParameter("uuid", id)
+					.getSingleResult();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
 		}
 	}
 
-	@Override
 	public void store(User user) throws LibraryException {
 		try {
 			user.setPassword(PasswordEncrypter.encypted(user.getPassword(), " "));
@@ -58,7 +56,6 @@ public class UserBean implements IUserService {
 		}
 	}
 
-	@Override
 	public void remove(String id) throws EjbException {
 		try {
 			oEntityManager.clear();
@@ -71,7 +68,6 @@ public class UserBean implements IUserService {
 		}
 	}
 
-	@Override
 	public void update(User user) throws EjbException {
 		try {
 			oEntityManager.merge(user);
@@ -82,7 +78,6 @@ public class UserBean implements IUserService {
 		}
 	}
 
-	@Override
 	public List<User> search(String userName) throws EjbException {
 		try {
 			return oEntityManager.createNamedQuery("User.searchByUserName", User.class)
@@ -104,9 +99,9 @@ public class UserBean implements IUserService {
 	public User getByUserName(String userName) throws EjbException {
 
 		try {
-				User u = oEntityManager.createNamedQuery("User.findByName", User.class)
-						.setParameter("user_name", userName).getSingleResult();
-				return u;
+			User u = oEntityManager.createNamedQuery("User.findByName", User.class).setParameter("user_name", userName)
+					.getSingleResult();
+			return u;
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);

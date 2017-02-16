@@ -6,11 +6,11 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import com.edu.library.business.userManagement.LoginManagementBusiness;
+import com.edu.library.util.EjbException;
 import com.edu.library.util.ServiceValidation;
 
 import gallb.wildfly.users.common.ILoginService;
 import gallb.wildfly.users.common.LibraryException;
-import gallb.wildfly.users.ejb.exception.EjbException;
 import model.Role;
 
 /**

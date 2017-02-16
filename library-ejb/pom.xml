@@ -3,10 +3,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>gallb</groupId>
-		<artifactId>wildfly-users</artifactId>
+		<artifactId>library</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>wildfly-users-ejb</artifactId>
+	<artifactId>library-ejb</artifactId>
 	<packaging>ejb</packaging>
 
 	<build>
@@ -29,12 +29,12 @@
 		</dependency>
 		<dependency>
 			<groupId>gallb</groupId>
-			<artifactId>wildfly-users-common</artifactId>
+			<artifactId>library-common</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>gallb</groupId>
-			<artifactId>wildfly-users-jpa</artifactId>
+			<artifactId>library-jpa</artifactId>
 		</dependency>
 
 		<dependency>

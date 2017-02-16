@@ -9,29 +9,28 @@ import javax.persistence.PersistenceException;
 
 import org.jboss.logging.Logger;
 
+import com.edu.library.util.EjbException;
+
 import gallb.wildfly.users.common.IRoleService;
-import gallb.wildfly.users.ejb.exception.EjbException;
 import model.Role;
 
 @Stateless
-public class RoleBean implements IRoleService {
+public class RoleBean {
 
 	@PersistenceContext(unitName = "WildflyUsers")
 	private EntityManager oEntityManager;
 	private static Logger oLogger = Logger.getLogger(RoleBean.class);
 
-	@SuppressWarnings("unchecked")
-	@Override
 	public List<Role> getAll() throws EjbException {
 		try {
-			return oEntityManager.createNamedQuery("Role.findAll").getResultList();
+			return oEntityManager.createNamedQuery("Role.findAll",Role.class).getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
 		}
 	}
 
-	@Override
+	
 	public Role getById(String id) throws EjbException {
 		try {
 			return oEntityManager.createNamedQuery("Role.findById", Role.class).setParameter("uuid", id)
@@ -42,7 +41,7 @@ public class RoleBean implements IRoleService {
 		}
 	}
 
-	@Override
+	
 	public void store(Role role) throws EjbException {
 		try {
 			oEntityManager.persist(role);
@@ -53,7 +52,7 @@ public class RoleBean implements IRoleService {
 		}
 	}
 
-	@Override
+	
 	public void remove(String id) throws EjbException {
 		try {
 			Role r = oEntityManager.find(Role.class, id);
@@ -66,7 +65,7 @@ public class RoleBean implements IRoleService {
 
 	}
 
-	@Override
+	
 	public void update(Role role) throws EjbException {
 		try {
 			Role r = oEntityManager.find(Role.class, role.getUuid());
@@ -80,7 +79,7 @@ public class RoleBean implements IRoleService {
 		}
 	}
 
-	@Override
+	
 	public List<Role> search(String p_searchTxt) throws EjbException {
 		try {
 			return oEntityManager.createNamedQuery("Role.search", Role.class).setParameter("role", p_searchTxt)

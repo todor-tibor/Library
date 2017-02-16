@@ -3,10 +3,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>gallb</groupId>
-		<artifactId>wildfly-users</artifactId>
+		<artifactId>library</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>wildfly-users-web</artifactId>
+	<artifactId>library-web</artifactId>
 	<packaging>war</packaging>
 	<properties>
 		<failOnMissingWebXml>false</failOnMissingWebXml>
@@ -35,7 +35,7 @@
 		
 		<dependency>
 			<groupId>gallb</groupId>
-			<artifactId>wildfly-users-common</artifactId>
+			<artifactId>library-common</artifactId>
 			<scope>provided</scope>
 		</dependency>
 

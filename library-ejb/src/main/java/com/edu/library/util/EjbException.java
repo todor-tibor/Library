@@ -1,4 +1,4 @@
-package gallb.wildfly.users.ejb.exception;
+package com.edu.library.util;
 
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.NonUniqueResultException;

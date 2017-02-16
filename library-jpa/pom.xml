@@ -2,10 +2,10 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>gallb</groupId>
-    <artifactId>wildfly-users</artifactId>
+    <artifactId>library</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>wildfly-users-jpa</artifactId>
+  <artifactId>library-jpa</artifactId>
   
   <dependencies>
 		<dependency>

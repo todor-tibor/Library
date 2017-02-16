@@ -1,4 +1,4 @@
-package gallb.wildfly.users.ejb.publicationManagement.business;
+package com.edu.library.data.publicationManagement;
 
 import java.util.List;
 
@@ -9,41 +9,37 @@ import javax.persistence.PersistenceException;
 
 import org.jboss.logging.Logger;
 
-import gallb.wildfly.users.common.IPublisherService;
-import gallb.wildfly.users.ejb.exception.EjbException;
+import com.edu.library.util.EjbException;
+
 import model.Publisher;
 
 /**
  * crud operations from publisher Entity
+ * 
  * @author nagys
  *
  */
 
 @Stateless
-public class PublisherManager implements IPublisherService {
+public class PublisherManager {
 	@PersistenceContext(unitName = "WildflyUsers")
-
 	private EntityManager oEntityManager;
 	private Logger oLogger = Logger.getLogger(Publisher.class);
 
-	
-	@Override
 	public List<Publisher> getAll() throws EjbException {
 		try {
-			return oEntityManager.createNamedQuery("Publisher.findAll",Publisher.class).getResultList();
+			return oEntityManager.createNamedQuery("Publisher.findAll", Publisher.class).getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
 		}
 	}
 
-	
-	@Override
 	public List<Publisher> search(String p_searchTxt) throws EjbException {
 		try {
 
-			return oEntityManager.createNamedQuery("Publisher.findByName",Publisher.class).setParameter("name", "%" + p_searchTxt + "%")
-					.getResultList();
+			return oEntityManager.createNamedQuery("Publisher.findByName", Publisher.class)
+					.setParameter("name", "%" + p_searchTxt + "%").getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
@@ -51,10 +47,9 @@ public class PublisherManager implements IPublisherService {
 		}
 	}
 
-	@Override
 	public Publisher getById(String p_id) throws EjbException {
 		try {
-			return  oEntityManager.createNamedQuery("Publisher.findById",Publisher.class).setParameter("uuid", p_id)
+			return oEntityManager.createNamedQuery("Publisher.findById", Publisher.class).setParameter("uuid", p_id)
 					.getSingleResult();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
@@ -63,7 +58,6 @@ public class PublisherManager implements IPublisherService {
 
 	}
 
-	@Override
 	public void store(Publisher p_value) throws EjbException {
 		try {
 			oEntityManager.persist(p_value);
@@ -75,7 +69,6 @@ public class PublisherManager implements IPublisherService {
 
 	}
 
-	@Override
 	public void update(Publisher p_user) throws EjbException {
 		try {
 			Publisher publisher = getById(p_user.getUuid());
@@ -91,7 +84,6 @@ public class PublisherManager implements IPublisherService {
 
 	}
 
-	@Override
 	public void remove(String p_id) throws EjbException {
 		try {
 			Publisher publisher = getById(p_id);

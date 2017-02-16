@@ -9,8 +9,8 @@ import javax.persistence.PersistenceException;
 
 import org.jboss.logging.Logger;
 
-import gallb.wildfly.users.common.IAuthorService;
-import gallb.wildfly.users.ejb.exception.EjbException;
+import com.edu.library.util.EjbException;
+
 import model.Author;
 
 /**
@@ -20,13 +20,13 @@ import model.Author;
  *
  */
 @Stateless
-public class AuthorBean implements IAuthorService {
+public class AuthorBean {
 
 	@PersistenceContext(unitName = "WildflyUsers")
 	private EntityManager oEntityManager;
 	private Logger oLogger = Logger.getLogger(Author.class);
 
-	@Override
+	
 	public List<Author> getAll() throws EjbException {
 		try {
 			return oEntityManager.createNamedQuery("Author.findAll",Author.class).getResultList();
@@ -36,7 +36,7 @@ public class AuthorBean implements IAuthorService {
 		}
 	}
 
-	@Override
+	
 	public List<Author> search(String p_searchTxt) throws EjbException {
 		try {
 			return oEntityManager.createNamedQuery("Author.searchByName",Author.class).setParameter("name", "%" + p_searchTxt + "%")
@@ -47,7 +47,7 @@ public class AuthorBean implements IAuthorService {
 		}
 	}
 
-	@Override
+	
 	public Author getById(String p_id) throws EjbException {
 		try {
 			return (Author) oEntityManager.createNamedQuery("Author.getById",Author.class).setParameter("uuid", p_id)
@@ -58,7 +58,7 @@ public class AuthorBean implements IAuthorService {
 		}
 	}
 
-	@Override
+	
 	public void store(Author p_value) throws EjbException {
 		try {
 			oEntityManager.persist(p_value);
@@ -69,7 +69,7 @@ public class AuthorBean implements IAuthorService {
 		}
 	}
 
-	@Override
+	
 	public void update(Author p_user) throws EjbException {
 		try {
 			Author r = oEntityManager.find(Author.class, p_user.getUuid());
@@ -83,7 +83,7 @@ public class AuthorBean implements IAuthorService {
 		}
 	}
 
-	@Override
+	
 	public void remove(String p_id) throws EjbException {
 		try {
 			Author r = oEntityManager.find(Author.class, p_id);

@@ -2,52 +2,46 @@ package com.edu.library.access.publicationManagement;
 
 import java.util.List;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import com.edu.library.business.userManagement.LoginManagementBusiness;
-import com.edu.library.util.EjbException;
-import com.edu.library.util.ServiceValidation;
-
-import gallb.wildfly.users.common.ILoginService;
-import gallb.wildfly.users.common.IPublicationService;
+import gallb.wildfly.users.common.IAuthorService;
 import gallb.wildfly.users.common.LibraryException;
+import model.Author;
 import model.Publication;
-import model.Role;
 
 /**
  * @author kiska Implements the basics of user login. Validates the given the
  *         input data.
  */
 @Stateless
-public class PublicationManagementFacade implements IPublicationService {
+public class AuthorManagementFacade implements IAuthorService {
 
 	@Override
-	public List<Publication> getAll() throws LibraryException {
+	public List<Author> getAll() throws LibraryException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Publication> search(String p_searchTxt) throws LibraryException {
+	public List<Author> search(String p_searchTxt) throws LibraryException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Publication getById(String p_id) throws LibraryException {
+	public Author getById(String p_id) throws LibraryException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void store(Publication p_value) throws LibraryException {
+	public void store(Author p_value) throws LibraryException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void update(Publication p_user) throws LibraryException {
+	public void update(Author p_user) throws LibraryException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -57,5 +51,7 @@ public class PublicationManagementFacade implements IPublicationService {
 		// TODO Auto-generated method stub
 		
 	}
+
+	
 	
 }

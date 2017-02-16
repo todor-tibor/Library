@@ -4,13 +4,13 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
-import javax.ejb.Remote;
 import javax.ejb.Stateless;
+
+import com.edu.library.util.EjbException;
 
 import gallb.wildfly.users.common.IUserService;
 import gallb.wildfly.users.common.LibraryException;
 import gallb.wildfly.users.common.PasswordEncrypter;
-import gallb.wildfly.users.ejb.exception.EjbException;
 import model.Role;
 import model.User;
 
@@ -22,7 +22,6 @@ import model.User;
 
 @Stateless
 @LocalBean
-@Remote(LoginManagementBusiness.class)
 public class LoginManagementBusiness {
 
 	@EJB
@@ -43,8 +42,8 @@ public class LoginManagementBusiness {
 	 *            - the hashed password that the user typed in
 	 * @return - the roles (type) of the user if login was not successful,
 	 *         otherwise throws an error
-	 * @throws LibraryException 
-
+	 * @throws LibraryException
+	 * 
 	 */
 	public List<Role> authentication(String userName, String password) throws LibraryException {
 		if (userBean != null) {

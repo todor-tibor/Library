@@ -10,9 +10,9 @@ import javax.ejb.Stateless;
  *         Implements a simple authentication process of a user.
  */
 
-@Stateless
+/*@Stateless
 @LocalBean
-@Remote(PublicationManagementBusiness.class)
+@Remote(PublicationManagementBusiness.class)*/
 public class PublicationManagementBusiness {
 
 	

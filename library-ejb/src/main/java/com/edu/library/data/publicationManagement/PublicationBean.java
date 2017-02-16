@@ -1,4 +1,4 @@
-package gallb.wildfly.users.ejb.publicationManagement.business;
+package com.edu.library.data.publicationManagement;
 
 import java.util.List;
 
@@ -9,8 +9,8 @@ import javax.persistence.PersistenceException;
 
 import org.jboss.logging.Logger;
 
-import gallb.wildfly.users.common.IPublicationService;
-import gallb.wildfly.users.ejb.exception.EjbException;
+import com.edu.library.util.EjbException;
+
 import model.Publication;
 
 /**
@@ -21,13 +21,13 @@ import model.Publication;
  */
 
 @Stateless
-public class PublicationBean implements IPublicationService {
+public class PublicationBean{
 
 	@PersistenceContext(unitName = "WildflyUsers")
 	private EntityManager oEntityManager;
 	private Logger oLogger = Logger.getLogger(Publication.class);
 
-	@Override
+	
 	public List<Publication> getAll() throws EjbException {
 		try {
 			return oEntityManager.createNamedQuery("Publication.findAll",Publication.class).getResultList();
@@ -37,7 +37,7 @@ public class PublicationBean implements IPublicationService {
 		}
 	}
 
-	@Override
+	
 	public List<Publication> search(String p_searchTxt) throws EjbException {
 		try {
 			return oEntityManager.createNamedQuery("Publication.searchByName",Publication.class).setParameter("title","%"+ p_searchTxt+"%").getResultList();
@@ -47,7 +47,7 @@ public class PublicationBean implements IPublicationService {
 		}
 	}
 
-	@Override
+	
 	public Publication getById(String p_id) throws EjbException {
 		try {
 			return oEntityManager.createNamedQuery("Publication.getById",Publication.class).setParameter("uuid",p_id).getSingleResult();
@@ -57,7 +57,7 @@ public class PublicationBean implements IPublicationService {
 		}
 	}
 
-	@Override
+	
 	public void store(Publication p_value) throws EjbException {
 		try {
 			oEntityManager.persist(p_value);
@@ -68,7 +68,7 @@ public class PublicationBean implements IPublicationService {
 		}
 	}
 
-	@Override
+	
 	public void update(Publication p_user) throws EjbException {
 		try {
 			Publication r = oEntityManager.find(Publication.class, p_user.getUuid());
@@ -82,7 +82,7 @@ public class PublicationBean implements IPublicationService {
 		}
 	}
 
-	@Override
+	
 	public void remove(String p_id) throws EjbException {
 		try {
 			Publication r = oEntityManager.find(Publication.class, p_id);

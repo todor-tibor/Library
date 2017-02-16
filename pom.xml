@@ -2,16 +2,16 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>gallb</groupId>
-	<artifactId>wildfly-users</artifactId>
+	<artifactId>library</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>wildfly-users-common</module>
-		<module>wildfly-users-jpa</module>
-		<module>wildfly-users-ejb</module>
-		<module>wildfly-users-web</module>
-		<module>wildfly-users-ear</module>
+		<module>library-common</module>
+		<module>library-jpa</module>
+		<module>library-ejb</module>
+		<module>library-web</module>
+		<module>library-ear</module>
 	</modules>
 
 	<properties>
@@ -82,33 +82,33 @@
 		<!-- Internal dependencies -->
 		<dependency>
 				<groupId>gallb</groupId>
-				<artifactId>wildfly-users-jpa</artifactId>
+				<artifactId>library-jpa</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>
 				<groupId>gallb</groupId>
-				<artifactId>wildfly-users-common</artifactId>
+				<artifactId>library-common</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
 				<groupId>gallb</groupId>
-				<artifactId>wildfly-users-ejb</artifactId>
+				<artifactId>library-ejb</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 				<type>ejb</type>
 			</dependency>
 
 			<dependency>
 				<groupId>gallb</groupId>
-				<artifactId>wildfly-users-ear</artifactId>
+				<artifactId>library-ear</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 				<type>ear</type>
 			</dependency>
 
 			<dependency>
 				<groupId>gallb</groupId>
-				<artifactId>wildfly-users-web</artifactId>
+				<artifactId>library-web</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 				<type>war</type>
 			</dependency>

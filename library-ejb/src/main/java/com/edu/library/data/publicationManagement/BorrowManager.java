@@ -1,7 +1,7 @@
 /**
  * 
  */
-package gallb.wildfly.users.ejb.publicationManagement.business;
+package com.edu.library.data.publicationManagement;
 
 import java.util.Date;
 import java.util.List;
@@ -13,9 +13,8 @@ import javax.persistence.PersistenceException;
 
 import org.jboss.logging.Logger;
 
-import gallb.wildfly.users.common.IBorrowService;
-import gallb.wildfly.users.common.IService;
-import gallb.wildfly.users.ejb.exception.EjbException;
+import com.edu.library.util.EjbException;
+
 import model.Borrow;
 import model.Publication;
 import model.User;
@@ -25,13 +24,12 @@ import model.User;
  *
  */
 @Stateless
-public class BorrowManager implements IBorrowService {
+public class BorrowManager {
 
 	@PersistenceContext(unitName = "WildflyUsers")
 	private EntityManager oEntityManager;
 	private Logger oLogger = Logger.getLogger(Borrow.class);
 
-	@Override
 	public List<Borrow> getAll() throws EjbException {
 		try {
 			return oEntityManager.createNamedQuery("Borrow.findAll", Borrow.class).getResultList();
@@ -42,13 +40,11 @@ public class BorrowManager implements IBorrowService {
 
 	}
 
-	@Override
 	public List<Borrow> search(String p_searchTxt) throws EjbException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public Borrow getById(String p_id) throws EjbException {
 		try {
 			return oEntityManager.createNamedQuery("Borrow.findById", Borrow.class).setParameter("uuid", p_id)
@@ -59,18 +55,17 @@ public class BorrowManager implements IBorrowService {
 		}
 	}
 
-	@Override
 	public void store(Borrow p_value) throws EjbException {
 		try {
 			if (p_value.getUser().getLoyaltyIndex() > 0) {
 				if (p_value.getPublication().getOnStock() > 0) {
 					oEntityManager.persist(p_value);
 					Publication tempPublication = p_value.getPublication();
-					tempPublication.setOnStock(tempPublication.getOnStock() -1);
+					tempPublication.setOnStock(tempPublication.getOnStock() - 1);
 					oEntityManager.merge(tempPublication);
 					oEntityManager.flush();
-					
-				}else{
+
+				} else {
 					oLogger.info("Publication not on stock");
 					throw new EjbException("Publication not on stock");
 				}
@@ -86,7 +81,6 @@ public class BorrowManager implements IBorrowService {
 
 	}
 
-	@Override
 	public void update(Borrow p_user) throws EjbException {
 		try {
 			Borrow borrow = getById(p_user.getUuid());
@@ -101,7 +95,6 @@ public class BorrowManager implements IBorrowService {
 
 	}
 
-	@Override
 	public void remove(String p_id) throws EjbException {
 		oLogger.info("***********************************delete borrow called");
 		try {

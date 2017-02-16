@@ -3,31 +3,31 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>gallb</groupId>
-		<artifactId>wildfly-users</artifactId>
+		<artifactId>library</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>wildfly-users-ear</artifactId>
+	<artifactId>library-ear</artifactId>
 	<packaging>ear</packaging>
 
 	<dependencies>
 		<dependency>
 			<groupId>gallb</groupId>
-			<artifactId>wildfly-users-jpa</artifactId>
+			<artifactId>library-jpa</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>gallb</groupId>
-			<artifactId>wildfly-users-ejb</artifactId>
+			<artifactId>library-ejb</artifactId>
 			<type>ejb</type>
 		</dependency>
 		<dependency>
 			<groupId>gallb</groupId>
-			<artifactId>wildfly-users-common</artifactId>
+			<artifactId>library-common</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>gallb</groupId>
-			<artifactId>wildfly-users-web</artifactId>
+			<artifactId>library-web</artifactId>
 			<type>war</type>
 		</dependency>
 	</dependencies>
