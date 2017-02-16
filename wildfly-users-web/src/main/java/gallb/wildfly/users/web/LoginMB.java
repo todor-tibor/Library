@@ -7,12 +7,15 @@ import java.util.List;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.Cache;
 
 import org.jboss.logging.Logger;
 
 import gallb.wildfly.users.common.ILogin;
 import gallb.wildfly.users.common.IUser;
 import gallb.wildfly.users.common.LibraryException;
+import model.Role;
+import model.RoleType;
 import model.User;
 
 /**
@@ -22,7 +25,6 @@ import model.User;
  * 
  */
 @Named("loginbean")
-
 @SessionScoped
 public class LoginMB implements Serializable {
 
@@ -41,6 +43,8 @@ public class LoginMB implements Serializable {
 	private User currentUser = null;// Currently selected user.
 	private String password;
 	private String user_name;
+	private List<Role> roles;
+	private String currentRole;
 
 	public List<User> getUserList() {
 		return userList;
@@ -52,6 +56,41 @@ public class LoginMB implements Serializable {
 
 	public void setCurrentUser(User currentUser) {
 		this.currentUser = currentUser;
+	}
+
+	public String getCurrentRole() {
+		return currentRole;
+	}
+
+	public void setCurrentRole(String currentRole) {
+		this.currentRole = currentRole;
+	}
+
+	public String isAdmin() {
+		if (RoleType.LIBRARIAN.name().equals(currentRole)) {
+			return "index";
+		} else
+			return "";
+	}
+
+	private String checkRole() {
+		Role tmp = new Role();
+		tmp.setRole("LIBRARIAN");
+
+		if (roles.contains(tmp)) {
+			setCurrentRole("LIBRARIAN");
+			return "index";
+		} else {
+			tmp.setRole("READER");
+
+			if (roles.contains(tmp)) {
+				setCurrentRole("READER");
+				return "publication_user";
+			} else {
+				setCurrentRole("INVALID");
+				return "login";
+			}
+		}
 	}
 
 	/**
@@ -78,21 +117,28 @@ public class LoginMB implements Serializable {
 	 *            username.
 	 * @return List of user objects found.
 	 */
-	public User search() {
+	public String search() {
 		oLogger.info("--search user--" + this.getUser_name());
 		if (this.getUser_name().length() >= 3) {
 			try {
 				System.out.println("/*/*-/*-/ " + this.getUser_name() + "    " + this.getPassword());
-				oLoginBean.login(this.getUser_name(), this.getPassword());
+				roles = oLoginBean.login(this.getUser_name(), this.getPassword());
 				System.out.println("///**********-----------    success    -*-*-*-*-*-");
+				return checkRole();
 			} catch (LibraryException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				oLogger.error(e.getMessage());
+				MessageService.error(e.getMessage());
+
 			}
-		} else {
-			// this.error("Keyword too short. Min. 3 characters req.");
 		}
-		return currentUser;
+
+		return "";
+		/*
+		 * for (Role r : roles) { switch (r.getRole()) { case "LIBRARIAN":
+		 * return "index"; case "READER": return "publication_user"; default:
+		 * return "login"; } }
+		 */
+
 	}
 
 	public String getPassword() {

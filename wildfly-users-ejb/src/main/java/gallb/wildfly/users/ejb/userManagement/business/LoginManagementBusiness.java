@@ -19,6 +19,7 @@ import model.User;
  * 
  *         Implements a simple authentication process of a user.
  */
+
 @Stateless
 @LocalBean
 @Remote(ILoginBusiness.class)
@@ -42,10 +43,10 @@ public class LoginManagementBusiness implements ILoginBusiness {
 	 *            - the hashed password that the user typed in
 	 * @return - the roles (type) of the user if login was not successful,
 	 *         otherwise throws an error
-	 * @throws LibraryException
+	 * @throws LibraryException 
+
 	 */
 	public List<Role> authentication(String userName, String password) throws LibraryException {
-
 		if (userBean != null) {
 			User user = userBean.getByUserName(userName);
 			if (PasswordEncrypter.encypted(password, " ").equals(user.getPassword())) { //

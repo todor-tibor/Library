@@ -6,19 +6,19 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 <h:head>
-	<p:messages id="messages" showDetail="true" autoUpdate="true"
+	<p:messages id="messagesPub1" showDetail="true" autoUpdate="true"
 		closable="true" />
 </h:head>
 
 <h:body>
-	<h:panelGrid columns="3" cellpadding="10">
-		<p:panel header="Publication management">
+	<h:panelGrid>
+		<p:panel header="#{msg['publication.button']}">
 			<h:form id="publication_actions_form">
 
-				<p:inputText id="publication_searchTextBox" binding="#{srch}" />
-				<p:commandButton value="Search" update="publicationDT"
-					action="#{publicationBean.search(srch.value)}">
-					<f:param name="p_value" value="#{srch.value}" />
+				<p:inputText id="publication_searchTextBox" binding="#{srch_publication}" />
+				<p:commandButton value="#{msg['search.button']}" update="publicationDT"
+					action="#{publicationBean.search(srch_publication.value)}">
+					<f:param name="p_value" value="#{srch_publication.value}" />
 				</p:commandButton>
 
 				<p:dataTable id="publicationDT" var="publication"
@@ -29,20 +29,20 @@
 					<p:ajax event="rowSelect" listener="#{publicationBean.isSelected}"
 						update="publicationDT" />
 					<f:facet name="header">
-            			Publications
+            			#{pubMan['publications.text']}
         			</f:facet>
 					<f:facet name="header">
 					</f:facet>
-					<p:column headerText="Title">
+					<p:column headerText="#{pubMan['publication.name']}">
 						<h:outputText value="#{publication.title}" />
 					</p:column>
-					<p:column headerText="Publisher">
+					<p:column headerText="#{pubMan['publication.publisher']}">
 						<h:outputText value="#{publication.publisher.name}" />
 					</p:column>
-					<p:column headerText="On stock">
+					<p:column headerText="#{pubMan['publication.onStock']}">
 						<h:outputText value="#{publication.onStock}" />
 					</p:column>
-					<p:column headerText="Author">
+					<p:column headerText="#{pubMan['publication.authors']}">
 						<h:outputText value="#{publication.authors}"
 							rendered="#{publication['class'].simpleName eq 'Book'}" />
 						<h:outputText value="#{publication.authors}"
@@ -50,17 +50,17 @@
 					</p:column>
 					<f:facet name="footer">
 						<p:commandButton process="publicationDT" icon="ui-icon-search"
-							value="Details" update="first"
+							value="#{msg['details.button']}" update="first"
 							oncomplete="PF('publicationDialog').show()"
 							disabled="#{publicationBean.currentPublication == null}" />
 
 						<p:commandButton process="publicationDT" icon="fa-remove"
-							value="Delete" action="#{publicationBean.remove()}"
+							value="#{msg['delete.button']}" action="#{publicationBean.remove()}"
 							update="publicationDT"
 							disabled="#{publicationBean.currentPublication == null}" />
 
 						<p:commandButton process="publicationDT" icon="fa-remove"
-							value="Update Publicatoion" update="updateDialog"
+							value="#{pubMan['publication.update']}" update="updateDialog"
 							oncomplete="PF('updateDialog').show()"
 							disabled="#{publicationBean.currentPublication == null}" />
 
@@ -72,32 +72,32 @@
 								closable="true" />
 							<br />
 							<h:panelGrid columns="2" cellpadding="5">
-								<h:outputText value="Title: " />
+								<h:outputText value="#{pubMan['publication.title']} " />
 								<h:outputText
 									value="#{publicationBean.currentPublication.title}" />
-								<h:outputText value="Publisher: " />
+								<h:outputText value="#{pubMan['publication.publisher']} " />
 								<h:outputText
 									value="#{publicationBean.currentPublication.publisher.name}" />
-								<h:outputText value="Number of copies: " />
+								<h:outputText value="#{pubMan['publication.nrOfCopies']}" />
 								<h:outputText
 									value="#{publicationBean.currentPublication.nrOfCopys}" />
-								<h:outputText value="On stock: " />
+								<h:outputText value="#{pubMan['publication.onStock']} " />
 								<h:outputText
 									value="#{publicationBean.currentPublication.onStock}" />
 
 							</h:panelGrid>
 							<br />
-							<h:outputText value="Borrows" />
+							<h:outputText value="#{pubMan['publication.borrows']}" />
 							<p:dataTable id="Borrows" var="borrows"
 								value="#{publicationBean.currentPublication.borrows}"
 								rowKey="#{borrows.uuid}">
-								<p:column headerText="BorrowedBy">
+								<p:column headerText="#{pubMan['publication.borrowBy']}">
 									<h:outputText value="#{borrows.user.userName}" />
 								</p:column>
-								<p:column headerText="From">
+								<p:column headerText="#{pubMan['publication.from']}">
 									<h:outputText value="#{borrows.borrowFrom}" />
 								</p:column>
-								<p:column headerText="Until">
+								<p:column headerText="#{pubMan['publication.until']}">
 									<h:outputText value="#{borrows.borrowUntil}" />
 								</p:column>
 							</p:dataTable>
@@ -105,16 +105,16 @@
 
 						<p:dialog id="updateDialog" modal="true" showEffect="fade"
 							hideEffect="fade" widgetVar="updateDialog"
-							header="update Publication" width="500" height="500">
+							header="#{pubMan['publication.update']}" width="500" height="500">
 							<p:messages id="messages6" showDetail="true" autoUpdate="true"
 								closable="true" />
 							<h:panelGrid columns="2" cellpadding="5">
 
 								<c:if test="${ publicationBean.isSelected() }">
-									<p:outputLabel value="Title" />
+									<p:outputLabel value="#{publicationBean.currentPublication.title}" />
 									<p:inputText
 										value="#{publicationBean.currentPublication.title}" />
-									<p:outputLabel value="Publisher" />
+									<p:outputLabel value="#{pubMan['publication.publisher']} "/>
 									<p:dataTable id="publisherDT12355" var="publisher"
 										value="#{publisherbean.all}" selectionMode="single"
 										selection="#{publicationBean.currentPublication.publisher}"
@@ -126,7 +126,7 @@
 								</c:if>
 
 								<c:if test="${ publicationBean.hasAuthor() }">
-									<p:outputLabel value="Authors" />
+									<p:outputLabel value="#{pubMan['publication.authors']} " />
 									<p:dataTable id="authorsDT299" var="author"
 										value="#{authorBean.all}" selectionMode="multiple"
 										selection="#{publicationBean.authors}" rowKey="#{author.uuid}">
@@ -148,31 +148,31 @@
 					</f:facet>
 
 				</p:dataTable>
-				<p:commandButton value="List all publications"
+				<p:commandButton value="#{pubMan['listPublications.button']}"
 					update="publicationDT" icon="ui-icon-search"
 					action="#{publicationBean.getAll()}">
 				</p:commandButton>
-				<p:commandButton icon="fa-remove" value="AddNewspaper"
+				<p:commandButton icon="fa-remove" value="#{pubMan['add.newspaper']}"
 					update="addDialog" oncomplete="PF('addDialog').show()"
 					action="#{publicationBean.setType('Newspaper')}" />
-				<p:commandButton icon="fa-remove" value="AddMagazine"
+				<p:commandButton icon="fa-remove" value="#{pubMan['add.magazine']}"
 					update="addDialog" action="#{publicationBean.setType('Magazine')}"
 					oncomplete="PF('addDialog').show()" />
-				<p:commandButton icon="fa-remove" value="AddBook" update="addDialog"
+				<p:commandButton icon="fa-remove" value="#{pubMan['add.book']}" update="addDialog"
 					oncomplete="PF('addDialog').show()"
 					action="#{publicationBean.setType('Book')}" />
 
 				<p:dialog id="addDialog" modal="true" showEffect="fade"
 					hideEffect="fade" widgetVar="addDialog"
-					header="Add new Publication" width="500" height="500">
+					header="#{pubMan['add.newPublication']}" width="500" height="500">
 					<p:messages id="messages4" showDetail="true" autoUpdate="true"
 						closable="true" />
 					<h:panelGrid columns="2" cellpadding="5">
-						<p:outputLabel value="Title" />
+						<p:outputLabel value="#{publicationBean.currentPublication.title}" />
 						<p:inputText binding="#{title}" />
-						<p:outputLabel value="Nr of Copies" />
+						<p:outputLabel value="#{pubMan['publication.nrOfCopies']}"  />
 						<p:inputText binding="#{nrOfCopies}" />
-						<p:outputLabel value="Publisher" />
+						<p:outputLabel value="#{pubMan['publication.publisher']} "/>
 						<p:dataTable id="publisherDT26" var="publisher"
 							value="#{publisherbean.all}" selectionMode="single"
 							selection="#{publicationBean.currentPublisher}"
@@ -182,7 +182,7 @@
 							</p:column>
 						</p:dataTable>
 						<c:if test="${publicationBean.getType() != 'Newspaper'}">
-							<p:outputLabel value="Authors" />
+							<p:outputLabel value="#{pubMan['publication.authors']} " />
 							<p:dataTable id="authorsDT26" var="author"
 								value="#{authorBean.all}" selectionMode="multiple"
 								selection="#{publicationBean.currentAuthors}"
@@ -194,7 +194,7 @@
 						</c:if>
 
 					</h:panelGrid>
-					<p:commandButton value="Add" update="publication_actions_form"
+					<p:commandButton value="#{msg['add.label']}" update="publication_actions_form"
 						icon="fa-user-plu"
 						action="#{publicationBean.store(title.value, nrOfCopies.value)}">
 						<f:param name="pTitle" value="#{title.value}" />

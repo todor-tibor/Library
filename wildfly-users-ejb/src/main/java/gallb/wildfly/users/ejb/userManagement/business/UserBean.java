@@ -39,7 +39,7 @@ public class UserBean implements IUser {
 	@Override
 	public User getById(String id) throws EjbException {
 		try {
-			return oEntityManager.createNamedQuery("User.findById", User.class).getSingleResult();
+			return oEntityManager.createNamedQuery("User.findById", User.class).setParameter("uuid", id).getSingleResult();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
@@ -104,12 +104,9 @@ public class UserBean implements IUser {
 	public User getByUserName(String userName) throws EjbException {
 
 		try {
-			if (oEntityManager != null) {
 				User u = oEntityManager.createNamedQuery("User.findByName", User.class)
 						.setParameter("user_name", userName).getSingleResult();
 				return u;
-			}
-			return null;
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
