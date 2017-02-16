@@ -19,6 +19,11 @@ import model.Borrow;
 import model.Publication;
 import model.User;
 
+/**
+ * @author nagys, gallb
+ *
+ */
+
 @Named("borrowBean")
 
 @SessionScoped

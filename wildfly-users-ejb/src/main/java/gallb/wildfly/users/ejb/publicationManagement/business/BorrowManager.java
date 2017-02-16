@@ -21,7 +21,7 @@ import model.Publication;
 import model.User;
 
 /**
- * @author nagys
+ * @author nagys, gallb
  *
  */
 @Stateless
