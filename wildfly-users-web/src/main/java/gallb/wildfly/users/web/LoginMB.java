@@ -7,6 +7,7 @@ import java.util.List;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.Cache;
 
 import org.jboss.logging.Logger;
 
@@ -26,7 +27,6 @@ import model.User;
 @Named("loginbean")
 @SessionScoped
 public class LoginMB implements Serializable {
-
 
 	private Logger oLogger = Logger.getLogger(LoginMB.class);
 	private static final long serialVersionUID = -4702598250751689454L;
@@ -66,12 +66,13 @@ public class LoginMB implements Serializable {
 		this.currentRole = currentRole;
 	}
 
-	public String isAdmin(){
-		if (currentRole.equals(RoleType.LIBRARIAN.name())){
+	public String isAdmin() {
+		if (RoleType.LIBRARIAN.name().equals(currentRole)) {
 			return "index";
-		}
-		else return "";
+		} else
+			return "";
 	}
+
 	private String checkRole() {
 		Role tmp = new Role();
 		tmp.setRole("LIBRARIAN");
@@ -81,7 +82,7 @@ public class LoginMB implements Serializable {
 			return "index";
 		} else {
 			tmp.setRole("READER");
-			
+
 			if (roles.contains(tmp)) {
 				setCurrentRole("READER");
 				return "publication_user";
@@ -124,11 +125,19 @@ public class LoginMB implements Serializable {
 				roles = oLoginBean.login(this.getUser_name(), this.getPassword());
 				System.out.println("///**********-----------    success    -*-*-*-*-*-");
 				return checkRole();
-				/*
-				 * for (Role r : roles) { switch (r.getRole()) { case
-				 * "LIBRARIAN": return "index"; case "READER": return
-				 * "publication_user"; default: return "login"; } }
-				 */
+			} catch (LibraryException e) {
+				oLogger.error(e.getMessage());
+				MessageService.error(e.getMessage());
+
+			}
+		}
+
+		return "";
+		/*
+		 * for (Role r : roles) { switch (r.getRole()) { case "LIBRARIAN":
+		 * return "index"; case "READER": return "publication_user"; default:
+		 * return "login"; } }
+		 */
 
 	}
 
