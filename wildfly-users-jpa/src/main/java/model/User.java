@@ -1,6 +1,9 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -64,7 +67,7 @@ public class User extends BaseEntity {
 	 * @param roles
 	 *            - The roles the user has
 	 */
-	private List<Role> roles;
+	private Set<Role> roles;
 
 	public User() {
 	}
@@ -116,11 +119,11 @@ public class User extends BaseEntity {
 	}
 
 	public List<Role> getRoles() {
-		return this.roles;
+		return new ArrayList<Role>(this.roles);
 	}
 
 	public void setRoles(List<Role> roles) {
-		this.roles = roles;
+		this.roles = new HashSet<Role>(roles);
 	}
 
 }
