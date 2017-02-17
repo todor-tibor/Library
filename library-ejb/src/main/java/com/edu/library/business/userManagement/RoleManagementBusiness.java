@@ -33,12 +33,7 @@ public class RoleManagementBusiness {
 	}
 
 	public void store(Role p_value) {
-		try {
-			dataAcces.getByName(p_value.getRole());
-			new BusinessException(ErrorMessages.ERROR_CONSTRAINT_VIOLATION);
-		} catch (TechnicalException e) {
-			dataAcces.store(p_value);
-		}
+		dataAcces.store(p_value);
 	}
 
 	public void update(Role p_user) {
