@@ -15,9 +15,9 @@ import org.jboss.logging.Logger;
 
 import com.edu.library.util.EjbException;
 
-import model.Borrow;
-import model.Publication;
-import model.User;
+import edu.com.library.model.Borrow;
+import edu.com.library.model.Publication;
+import edu.com.library.model.User;
 
 /**
  * @author nagys, gallb

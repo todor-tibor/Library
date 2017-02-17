@@ -9,10 +9,10 @@ import javax.persistence.PersistenceException;
 
 import org.jboss.logging.Logger;
 
+import com.edu.library.IRoleService;
 import com.edu.library.util.EjbException;
 
-import gallb.wildfly.users.common.IRoleService;
-import model.Role;
+import edu.com.library.model.Role;
 
 @Stateless
 public class RoleBean {

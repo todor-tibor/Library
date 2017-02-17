@@ -4,9 +4,10 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 
-import gallb.wildfly.users.common.IUserService;
-import gallb.wildfly.users.common.LibraryException;
-import model.User;
+import com.edu.library.IUserService;
+import com.edu.library.LibraryException;
+
+import edu.com.library.model.User;
 
 /**
  * @author kiska Implements the basics of user login. Validates the given the

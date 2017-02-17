@@ -11,7 +11,7 @@ import org.jboss.logging.Logger;
 
 import com.edu.library.util.EjbException;
 
-import model.Publication;
+import edu.com.library.model.Publication;
 
 /**
  * CRUD operations from Publication Entity

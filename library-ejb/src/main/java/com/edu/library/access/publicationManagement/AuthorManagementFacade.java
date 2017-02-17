@@ -4,10 +4,11 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 
-import gallb.wildfly.users.common.IAuthorService;
-import gallb.wildfly.users.common.LibraryException;
-import model.Author;
-import model.Publication;
+import com.edu.library.IAuthorService;
+import com.edu.library.LibraryException;
+
+import edu.com.library.model.Author;
+import edu.com.library.model.Publication;
 
 /**
  * @author kiska Implements the basics of user login. Validates the given the

@@ -9,11 +9,11 @@ import javax.persistence.PersistenceException;
 
 import org.jboss.logging.Logger;
 
+import com.edu.library.LibraryException;
+import com.edu.library.PasswordEncrypter;
 import com.edu.library.util.EjbException;
 
-import gallb.wildfly.users.common.LibraryException;
-import gallb.wildfly.users.common.PasswordEncrypter;
-import model.User;
+import edu.com.library.model.User;
 
 /**
  * @author kiska

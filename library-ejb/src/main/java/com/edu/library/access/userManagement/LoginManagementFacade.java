@@ -5,13 +5,13 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import com.edu.library.ILoginService;
+import com.edu.library.LibraryException;
 import com.edu.library.business.userManagement.LoginManagementBusiness;
 import com.edu.library.util.EjbException;
 import com.edu.library.util.ServiceValidation;
 
-import gallb.wildfly.users.common.ILoginService;
-import gallb.wildfly.users.common.LibraryException;
-import model.Role;
+import edu.com.library.model.Role;
 
 /**
  * @author kiska Implements the basics of user login. Validates the given the

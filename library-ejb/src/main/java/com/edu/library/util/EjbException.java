@@ -7,7 +7,7 @@ import javax.persistence.RollbackException;
 
 import org.jboss.logging.Logger;
 
-import gallb.wildfly.users.common.LibraryException;
+import com.edu.library.LibraryException;
 
 public class EjbException extends LibraryException {
 

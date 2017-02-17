@@ -6,13 +6,13 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
+import com.edu.library.IUserService;
+import com.edu.library.LibraryException;
+import com.edu.library.PasswordEncrypter;
 import com.edu.library.util.EjbException;
 
-import gallb.wildfly.users.common.IUserService;
-import gallb.wildfly.users.common.LibraryException;
-import gallb.wildfly.users.common.PasswordEncrypter;
-import model.Role;
-import model.User;
+import edu.com.library.model.Role;
+import edu.com.library.model.User;
 
 /**
  * @author kiska
