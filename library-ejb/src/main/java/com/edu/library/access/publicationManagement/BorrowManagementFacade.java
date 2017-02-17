@@ -2,11 +2,15 @@ package com.edu.library.access.publicationManagement;
 
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import com.edu.library.IBorrowService;
 import com.edu.library.LibraryException;
+import com.edu.library.business.publicationManagement.BorrowManagementBusiness;
+import com.edu.library.business.publicationManagement.PublicationManagementBusiness;
 import com.edu.library.model.Borrow;
+import com.edu.library.util.ServiceValidation;
 
 /**
  * @author gallb
@@ -16,6 +20,9 @@ import com.edu.library.model.Borrow;
 @Stateless
 public class BorrowManagementFacade implements IBorrowService {
 
+	@EJB
+	private BorrowManagementBusiness borrowBusiness;
+	
 	@Override
 	public List<Borrow> getAll() throws LibraryException {
 		return null;
@@ -47,8 +54,8 @@ public class BorrowManagementFacade implements IBorrowService {
 
 	@Override
 	public void remove(String p_id) throws LibraryException {
-		// TODO Auto-generated method stub
-		
+		ServiceValidation.checkUuid(p_id);
+		borrowBusiness.remove(p_id);
 	}
 	
 }
