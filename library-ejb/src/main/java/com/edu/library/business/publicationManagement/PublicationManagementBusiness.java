@@ -6,7 +6,6 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
-import com.edu.library.LibraryException;
 import com.edu.library.business.exception.BusinessException;
 import com.edu.library.business.exception.ErrorMessages;
 import com.edu.library.data.publicationManagement.PublicationBean;
@@ -30,15 +29,15 @@ public class PublicationManagementBusiness {
 		return dataAcces.getAll();
 	}
 
-	public List<Publication> search(String p_searchTxt) throws LibraryException {
+	public List<Publication> search(String p_searchTxt)  {
 		return dataAcces.search(p_searchTxt);
 	}
 
-	public Publication getById(String p_id) throws LibraryException {
+	public Publication getById(String p_id)  {
 		return dataAcces.getById(p_id);
 	}
 
-	public void store(Publication p_value) throws LibraryException {
+	public void store(Publication p_value)  {
 		Publication pub = dataAcces.getByName(p_value.getTitle());
 		if (pub == null) {
 			dataAcces.store(p_value);
@@ -47,7 +46,7 @@ public class PublicationManagementBusiness {
 		}
 	}
 
-	public void update(Publication p_user) throws LibraryException {
+	public void update(Publication p_user)  {
 		dataAcces.getById(p_user.getUuid());
 		dataAcces.update(p_user);
 	}

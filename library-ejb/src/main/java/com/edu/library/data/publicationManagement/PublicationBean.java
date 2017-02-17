@@ -10,8 +10,8 @@ import javax.persistence.PersistenceException;
 
 import org.jboss.logging.Logger;
 
+import com.edu.library.data.exception.TechnicalException;
 import com.edu.library.model.Publication;
-import com.edu.library.util.EjbException;
 
 /**
  * CRUD operations from Publication Entity
@@ -28,72 +28,72 @@ public class PublicationBean {
 	private EntityManager oEntityManager;
 	private Logger oLogger = Logger.getLogger(Publication.class);
 
-	public List<Publication> getAll() throws EjbException {
+	public List<Publication> getAll()  {
 		try {
 			return oEntityManager.createNamedQuery("Publication.findAll", Publication.class).getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 
-	public List<Publication> search(String p_searchTxt) throws EjbException {
+	public List<Publication> search(String p_searchTxt)  {
 		try {
 			return oEntityManager.createNamedQuery("Publication.searchByName", Publication.class)
 					.setParameter("title", "%" + p_searchTxt + "%").getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 
-	public Publication getByName(String p_searchTxt) throws EjbException {
+	public Publication getByName(String p_searchTxt)  {
 		try {
 			return oEntityManager.createNamedQuery("Publication.getByName", Publication.class)
 					.setParameter("title",p_searchTxt).getSingleResult();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 
-	public Publication getById(String p_id) throws EjbException {
+	public Publication getById(String p_id)  {
 		try {
 			return oEntityManager.createNamedQuery("Publication.getById", Publication.class).setParameter("uuid", p_id)
 					.getSingleResult();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 
-	public void store(Publication p_value) throws EjbException {
+	public void store(Publication p_value)  {
 		try {
 			oEntityManager.persist(p_value);
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 
-	public void update(Publication p_user) throws EjbException {
+	public void update(Publication p_user)  {
 		try {
 			oEntityManager.merge(p_user);
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 
-	public void remove(Publication pub) throws EjbException {
+	public void remove(Publication pub)  {
 		try {
 			oEntityManager.remove(pub);
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 

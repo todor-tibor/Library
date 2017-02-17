@@ -9,9 +9,8 @@ import javax.persistence.PersistenceException;
 
 import org.jboss.logging.Logger;
 
-import com.edu.library.IRoleService;
+import com.edu.library.data.exception.TechnicalException;
 import com.edu.library.model.Role;
-import com.edu.library.util.EjbException;
 
 @Stateless
 public class RoleBean {
@@ -20,81 +19,73 @@ public class RoleBean {
 	private EntityManager oEntityManager;
 	private static Logger oLogger = Logger.getLogger(RoleBean.class);
 
-	public List<Role> getAll() throws EjbException {
+	public List<Role> getAll() {
 		try {
-			return oEntityManager.createNamedQuery("Role.findAll",Role.class).getResultList();
+			return oEntityManager.createNamedQuery("Role.findAll", Role.class).getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 
-	
-	public Role getById(String id) throws EjbException {
+	public Role getById(String id) {
 		try {
 			return oEntityManager.createNamedQuery("Role.findById", Role.class).setParameter("uuid", id)
 					.getSingleResult();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 
-	
-	public void store(Role role) throws EjbException {
+	public void store(Role role) {
 		try {
 			oEntityManager.persist(role);
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 
-	
-	public void remove(Role role) throws EjbException {
+	public void remove(Role role) {
 		try {
 			oEntityManager.remove(role);
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 
 	}
 
-	
-	public void update(Role role) throws EjbException {
+	public void update(Role role) {
 		try {
-			Role r = oEntityManager.find(Role.class, role.getUuid());
-			if (r != null) {
-				oEntityManager.merge(role);
-				oEntityManager.flush();
-			}
+			oEntityManager.merge(role);
+			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 
-	
-	public List<Role> search(String p_searchTxt) throws EjbException {
+	public List<Role> search(String p_searchTxt) {
 		try {
-			return oEntityManager.createNamedQuery("Role.search", Role.class).setParameter("role", "%"+p_searchTxt +"%")
-					.getResultList();
+			return oEntityManager.createNamedQuery("Role.search", Role.class)
+					.setParameter("role", "%" + p_searchTxt + "%").getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
-	
-	public Role getByName(String p_searchTxt) throws EjbException {
+
+	public Role getByName(String p_searchTxt) {
 		try {
 			return oEntityManager.createNamedQuery("Role.getByName", Role.class).setParameter("role", p_searchTxt)
 					.getSingleResult();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 

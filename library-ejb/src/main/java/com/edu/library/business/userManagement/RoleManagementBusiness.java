@@ -24,17 +24,14 @@ public class RoleManagementBusiness {
 	}
 
 	public List<Role> search(String p_searchTxt) {
-		ServiceValidation.checkString(p_searchTxt);
 		return dataAcces.search(p_searchTxt);
 	}
 
 	public Role getById(String p_id) {
-		ServiceValidation.checkUuid(p_id);
 		return dataAcces.getById(p_id);
 	}
 
 	public void store(Role p_value) {
-		ServiceValidation.checkNotNull(p_value);
 		Role r = dataAcces.getByName(p_value.getRole());
 		if (r == null) {
 			dataAcces.store(p_value);
@@ -44,12 +41,10 @@ public class RoleManagementBusiness {
 	}
 
 	public void update(Role p_user) {
-		ServiceValidation.checkNotNull(p_user);
 		dataAcces.update(p_user);
 	}
 
 	public void remove(String p_id) {
-		ServiceValidation.checkUuid(p_id);
 		Role r = dataAcces.getById(p_id);
 		ServiceValidation.checkNotNull(r);
 		dataAcces.remove(r);
