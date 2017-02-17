@@ -17,7 +17,7 @@ public class ServiceValidation {
 	 * STRING_PATTERN - the restriction for a correct user name [a-zA-Z]+ - has
 	 * only letters
 	 */
-	private static final String STRING_PATTERN = "[a-zA-Z]+.{3,}";
+	private static final String STRING_PATTERN = "[a-z]+.{3,}";
 	/**
 	 * PASSWORD_PATTERN - the restriction for a correct password ((?=.*\\d) -
 	 * must have at least one number, (?=.*[a-z]) - one lowercase letter ,
