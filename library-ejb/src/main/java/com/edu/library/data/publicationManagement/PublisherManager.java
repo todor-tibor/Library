@@ -28,7 +28,7 @@ public class PublisherManager {
 	private EntityManager oEntityManager;
 	private Logger oLogger = Logger.getLogger(Publisher.class);
 
-	public List<Publisher> getAll() throws TechnicalException {
+	public List<Publisher> getAll() {
 		try {
 			return oEntityManager.createNamedQuery("Publisher.findAll", Publisher.class).getResultList();
 		} catch (PersistenceException e) {
@@ -37,7 +37,7 @@ public class PublisherManager {
 		}
 	}
 
-	public List<Publisher> search(String p_searchTxt) throws TechnicalException {
+	public List<Publisher> search(String p_searchTxt) {
 		try {
 
 			return oEntityManager.createNamedQuery("Publisher.findByName", Publisher.class)
@@ -49,7 +49,7 @@ public class PublisherManager {
 		}
 	}
 
-	public Publisher getById(String p_id) throws TechnicalException {
+	public Publisher getById(String p_id) {
 		try {
 			return oEntityManager.createNamedQuery("Publisher.findById", Publisher.class).setParameter("uuid", p_id)
 					.getSingleResult();
@@ -60,7 +60,7 @@ public class PublisherManager {
 
 	}
 
-	public void store(Publisher p_value) throws TechnicalException {
+	public void store(Publisher p_value) {
 		try {
 			oEntityManager.persist(p_value);
 			oEntityManager.flush();
@@ -71,7 +71,7 @@ public class PublisherManager {
 
 	}
 
-	public void update(Publisher p_user) throws TechnicalException {
+	public void update(Publisher p_user) {
 		try {
 			Publisher publisher = getById(p_user.getUuid());
 			if (publisher != null) {
@@ -86,7 +86,7 @@ public class PublisherManager {
 
 	}
 
-	public void remove(Publisher publisher) throws TechnicalException {
+	public void remove(Publisher publisher) {
 		try {
 			oEntityManager.remove(publisher);
 			oEntityManager.flush();
@@ -98,7 +98,7 @@ public class PublisherManager {
 
 	}
 	
-	public Publisher getByName(String p_searchTxt) throws TechnicalException {
+	public Publisher getByName(String p_searchTxt) {
 		try {
 			return oEntityManager.createNamedQuery("Publisher.getByName", Publisher.class)
 					.setParameter("name",p_searchTxt).getSingleResult();
