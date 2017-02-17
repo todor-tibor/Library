@@ -23,7 +23,7 @@ import com.edu.library.util.EjbException;
  *
  */
 @Stateless
-public class BorrowManager {
+public class BorrowDAO {
 
 	@PersistenceContext(unitName = "WildflyUsers")
 	private EntityManager oEntityManager;
@@ -94,28 +94,13 @@ public class BorrowManager {
 
 	}
 
-	public void remove(String p_id) throws EjbException {
-		oLogger.info("***********************************delete borrow called");
+	public void remove(Borrow p_borrow) throws EjbException {
+		oLogger.info("delete borrow called on entity: " + p_borrow.toString());
 		try {
-			Borrow borrow = getById(p_id);
-			Date tmpDate = new Date();
-			oLogger.info(tmpDate.toString());
-			if (borrow.getBorrowUntil().before(tmpDate)) {
-				oLogger.info("***********************************decrease loyalty");
-				User tmpUser = borrow.getUser();
-				tmpUser.setLoyaltyIndex(tmpUser.getLoyaltyIndex() - 1);
-				oEntityManager.merge(tmpUser);
-			}
-			Publication tempPublication = borrow.getPublication();
-			tempPublication.setOnStock(tempPublication.getOnStock() + 1);
-			oEntityManager.merge(tempPublication);
-			oEntityManager.remove(borrow);
-			oEntityManager.flush();
+			oEntityManager.refresh(p_borrow);
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
 		}
-
 	}
-
 }

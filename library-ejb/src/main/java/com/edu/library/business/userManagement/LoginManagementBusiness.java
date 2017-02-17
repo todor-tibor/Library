@@ -14,7 +14,6 @@ import com.edu.library.business.exception.ErrorMessages;
 import com.edu.library.model.BaseEntity;
 import com.edu.library.model.Role;
 import com.edu.library.model.User;
-import com.edu.library.util.EjbException;
 import com.edu.library.util.ServiceValidation;
 
 /**
@@ -28,12 +27,11 @@ import com.edu.library.util.ServiceValidation;
 public class LoginManagementBusiness {
 
 	@EJB
-	private IUserService userBean;
+	private IUserService userAccess;
+
 	/**
 	 * Error message for the case when passwords don't match.
 	 */
-	private static final String PASSWORD_MISMATCH = "loginManagementBusiness.authentication.passwordMismatch";
-
 	/**
 	 * Checks whether the provided password is the same as the stored hashed
 	 * password of the user. If the passwords match, the role of the user is
@@ -49,10 +47,11 @@ public class LoginManagementBusiness {
 	 * 
 	 */
 	public List<Role> authentication(String userName, String password) throws LibraryException {
-		ServiceValidation.checkNotNull((BaseEntity) userBean);
-			User user = userBean.getByUserName(userName);
-			if (PasswordEncrypter.encypted(password, " ").equals(user.getPassword())) { //
-				return user.getRoles();
-			}throw new BusinessException(ErrorMessages.ERROR_PASSWORD);		
+		ServiceValidation.checkNotNull((BaseEntity) userAccess);
+		User user = userAccess.getByUserName(userName);
+		if (PasswordEncrypter.encypted(password, " ").equals(user.getPassword())) { //
+			return user.getRoles();
+		}
+		throw new BusinessException(ErrorMessages.ERROR_PASSWORD);
 	}
 }
