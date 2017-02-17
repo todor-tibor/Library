@@ -17,9 +17,11 @@ import com.edu.library.business.exception.BusinessException;
 import com.edu.library.business.exception.ErrorMessages;
 import com.edu.library.data.publicationManagement.BorrowDAO;
 import com.edu.library.data.publicationManagement.PublicationBean;
+import com.edu.library.data.userManagement.UserDao;
 import com.edu.library.model.Borrow;
 import com.edu.library.model.Publication;
 import com.edu.library.model.User;
+import com.edu.library.util.ServiceValidation;
 
 /**
  * @author gallb
@@ -34,28 +36,45 @@ public class BorrowManagementBusiness {
 	
 	@EJB
 	private BorrowDAO borrowDAO;
-
-	public List<Publication> getAll() {
+	@EJB
+	private UserDao userDAO;
+	@EJB
+	private PublicationBean pubDAO;
+	
+	
+	/*
+	 *  @return List containing all entities.
+	 */
+	public List<Borrow> getAll() {
+		return borrowDAO.getAll();
+	}
+	public List<Borrow> search(String p_searchTxt) throws LibraryException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public List<Publication> search(String p_searchTxt) throws LibraryException {
+	public Borrow getById(String p_entity) throws LibraryException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Publication getById(String p_id) throws LibraryException {
-		// TODO Auto-generated method stub
-		return null;
+	public void store(Borrow p_entity) throws LibraryException {
+		if (userDAO.getById(p_entity.getUser().getUuid()).getLoyaltyIndex() > 0) {
+			Publication tmpPub = pubDAO.getById(p_entity.getPublication().getUuid());
+			if (tmpPub.getOnStock() > 0) {
+				tmpPub.setOnStock(tmpPub.getOnStock() - 1);
+				borrowDAO.store(p_entity);
+			} else {
+				oLogger.info("Not on stock.");
+				throw new BusinessException(ErrorMessages.ERROR_STOCK);
+			}
+		} else {
+			oLogger.info("Trust index too low");
+			throw new BusinessException(ErrorMessages.ERROR_LOYALTY);
+		}
 	}
 
-	public void store(Publication p_value) throws LibraryException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void update(Publication p_user) throws LibraryException {
+	public void update(Borrow p_entity) throws LibraryException {
 		// TODO Auto-generated method stub
 
 	}
@@ -68,19 +87,23 @@ public class BorrowManagementBusiness {
 	 */
 	public void remove(String p_id) {
 		Borrow tmpBorrow = borrowDAO.getById(p_id);
+		ServiceValidation.checkNotNull(tmpBorrow);
+		
 		Date tmpDate = new Date();
 		//verify if user is late
 		if (tmpBorrow.getBorrowUntil().before(tmpDate)) {
 			oLogger.info("Return late decrease loyalty index.");
-			//TO DO DECREASE LOYALTY INDEX, WHEN USER IS READY
+			//decrease loyalty index
 			User tmpUser = tmpBorrow.getUser();
 			tmpUser.setLoyaltyIndex(tmpUser.getLoyaltyIndex() - 1);
-			// user DAO call update
+			userDAO.update(tmpUser);
 		}
 		
-		//TO DO DECREASE LOYALTY INDEX, WHEN USER IS READY
+		borrowDAO.remove(tmpBorrow);
+		
+		//increase stock
 		Publication tmpPub = tmpBorrow.getPublication();
 		tmpPub.setOnStock(tmpPub.getOnStock() + 1);
-		// publication DAO call update
+		pubDAO.update(tmpPub);	
 	}
 }

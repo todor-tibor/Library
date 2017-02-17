@@ -13,6 +13,7 @@ import javax.persistence.PersistenceException;
 
 import org.jboss.logging.Logger;
 
+import com.edu.library.data.exception.TechnicalException;
 import com.edu.library.model.Borrow;
 import com.edu.library.model.Publication;
 import com.edu.library.model.User;
@@ -55,7 +56,7 @@ public class BorrowDAO {
 	}
 
 	public void store(Borrow p_value) throws EjbException {
-		try {
+		/*try {
 			if (p_value.getUser().getLoyaltyIndex() > 0) {
 				if (p_value.getPublication().getOnStock() > 0) {
 					oEntityManager.persist(p_value);
@@ -76,8 +77,14 @@ public class BorrowDAO {
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
+		} */
+		try {
+			oEntityManager.persist(p_value);
+			oEntityManager.flush();
+		} catch (PersistenceException e) {
+			oLogger.error(e);
+			throw new TechnicalException(e);
 		}
-
 	}
 
 	public void update(Borrow p_user) throws EjbException {
@@ -97,10 +104,11 @@ public class BorrowDAO {
 	public void remove(Borrow p_borrow) throws EjbException {
 		oLogger.info("delete borrow called on entity: " + p_borrow.toString());
 		try {
-			oEntityManager.refresh(p_borrow);
+			oEntityManager.remove(p_borrow);
+			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 }

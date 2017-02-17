@@ -18,6 +18,7 @@ import com.edu.library.LibraryException;
 import com.edu.library.model.Borrow;
 import com.edu.library.model.Publication;
 import com.edu.library.model.User;
+import com.edu.library.util.ExceptionHandler;
 
 /**
  * @author nagys, gallb
@@ -99,9 +100,9 @@ public class BorrowMB implements Serializable {
 		try {
 			oLogger.info("--getAllBorrows()--borrows queried");
 			borrows = oBorrowBean.getAll();
-		} catch (LibraryException e) {
-
-			MessageService.error("Server internal error.");
+		} catch (Exception e) {
+			oLogger.error(e);
+			new ExceptionHandler(e);
 		}
 		return borrows;
 	}
@@ -129,19 +130,17 @@ public class BorrowMB implements Serializable {
 	}
 
 	public void remove() {
-		oLogger.info("--remove borrow by Id ManagedBean--p_id:" + borrow.getUuid());
+		oLogger.info("remove borrow by Id ManagedBean--p_id:" + borrow.getUuid());
 		if (borrow == null) {
 			MessageService.error("Empty field");
 		} else {
 			try {
 				oBorrowBean.remove(borrow.getUuid());
 				getAll();
-			} catch (LibraryException e) {
+			} catch (Exception e) {
 				oLogger.error(e);
-				MessageService.error(e.getMessage());
+				new ExceptionHandler(e);
 			}
-
 		}
 	}
-
 }
