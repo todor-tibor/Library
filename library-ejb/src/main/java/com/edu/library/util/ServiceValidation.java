@@ -3,6 +3,8 @@ package com.edu.library.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.edu.library.model.BaseEntity;
+
 /***
  * 
  * @author kiska
@@ -14,7 +16,7 @@ public class ServiceValidation {
 	 * STRING_PATTERN - the restriction for a correct user name [a-zA-Z]+ - has
 	 * only letters
 	 */
-	private static final String STRING_PATTERN = "[a-zA-Z]+";
+	private static final String STRING_PATTERN = "[a-zA-Z]+.{3,}";
 	/**
 	 * PASSWORD_PATTERN - the restriction for a correct password ((?=.*\\d) -
 	 * must have at least one number, (?=.*[a-z]) - one lowercase letter ,
@@ -73,5 +75,19 @@ public class ServiceValidation {
 		Pattern pattern = Pattern.compile(UUID_PATTERN);
 		Matcher matcher = pattern.matcher(uuid);
 		return matcher.matches();
+	}
+
+	public static boolean checkNotNull(BaseEntity entity) {
+		if (entity != null) {
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean checkIfNumberInRange(int number, int minRange, int maxRange){
+		if (number <= maxRange && number > minRange){
+			return true;
+		}
+		return false;
 	}
 }
