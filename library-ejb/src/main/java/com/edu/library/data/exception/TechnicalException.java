@@ -7,7 +7,9 @@ import javax.persistence.RollbackException;
 
 import org.jboss.logging.Logger;
 
-public class TechnicalException extends RuntimeException {
+import com.edu.library.LibraryException;
+
+public class TechnicalException extends LibraryException {
 
 	private static final long serialVersionUID = 5633917663462543264L;
 	private static Logger oLogger = Logger.getLogger(TechnicalException.class);

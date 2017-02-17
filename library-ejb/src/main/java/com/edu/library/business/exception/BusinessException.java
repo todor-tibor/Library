@@ -1,6 +1,8 @@
 package com.edu.library.business.exception;
 
-public class BusinessException extends RuntimeException {
+import com.edu.library.LibraryException;
+
+public class BusinessException extends LibraryException {
 
 	private static final long serialVersionUID = 5633917663462543264L;
 
