@@ -42,6 +42,7 @@ public class PublisherManagementFacade implements IPublisherService {
 	@Override
 	public void store(Publisher p_value){
 		ServiceValidation.checkNotNull(p_value);
+		ServiceValidation.checkString(p_value.getName());
 		publisherBusiness.store(p_value);
 
 	}
@@ -49,7 +50,7 @@ public class PublisherManagementFacade implements IPublisherService {
 	@Override
 	public void update(Publisher p_user){
 		ServiceValidation.checkNotNull(p_user);
-		
+		ServiceValidation.checkString(p_user.getName());
 		publisherBusiness.update(p_user);
 
 	}

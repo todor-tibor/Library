@@ -34,16 +34,12 @@ public class PublisherManagementBusiness {
 	}
 
 	public void store(Publisher p_value) {
-		if (!p_value.getName().isEmpty()) {
-			publisherManager.store(p_value);
-		} else {
-			throw new BusinessException("************************************************************************************hello");
-		}
+
+		publisherManager.store(p_value);
 
 	}
 
 	public void update(Publisher p_value) {
-		publisherManager.getById(p_value.getUuid());
 		publisherManager.update(p_value);
 	}
 

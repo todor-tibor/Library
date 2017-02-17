@@ -13,6 +13,7 @@ import org.jboss.logging.Logger;
 import com.edu.library.IPublisherService;
 import com.edu.library.LibraryException;
 import com.edu.library.model.Publisher;
+import com.edu.library.util.ExceptionHandler;
 
 /**
  * Publisher manager. Invokes the CRUD methods of the server
@@ -62,8 +63,8 @@ public class PublisherMB implements Serializable {
 		try {
 			publishersList = oPublisherBean.getAll();
 			oLogger.info("+++++++++++++++++return all publisher");
-		} catch (LibraryException e) {
-			MessageService.error("Server internal error.");
+		} catch (Exception e) {
+			new ExceptionHandler(e);
 		}
 		return publishersList;
 	}
@@ -81,8 +82,8 @@ public class PublisherMB implements Serializable {
 			publishersList.clear();
 			try {
 				publishersList = oPublisherBean.search(p_searchTxt);
-			} catch (LibraryException e) {
-				MessageService.error(e.getMessage());
+			} catch (Exception e) {
+				new ExceptionHandler(e);
 			}
 		} else {
 			MessageService.error("Keyword too short. Min. 3 characters req.");
@@ -111,8 +112,8 @@ public class PublisherMB implements Serializable {
 			oPublisherBean.store(tmpPublisher);
 			publishersList.add(tmpPublisher);
 			MessageService.info("Succesfully added: " + p_value);
-		} catch (LibraryException e) {
-			MessageService.error(e.getMessage());
+		} catch (Exception e) {
+			new ExceptionHandler(e);
 		}
 	}
 
@@ -130,9 +131,9 @@ public class PublisherMB implements Serializable {
 				oPublisherBean.update(currentPublisher);
 				publishersList = oPublisherBean.getAll();
 				MessageService.info("Update succesfull.");
-			} catch (LibraryException e) {
-				oLogger.error(e);
-				MessageService.error(e.getMessage());
+			} catch (Exception e) {
+				new ExceptionHandler(e);
+
 			}
 		} else {
 			MessageService.error("New name too short.");
@@ -150,9 +151,8 @@ public class PublisherMB implements Serializable {
 				oPublisherBean.remove(currentPublisher.getUuid());
 				publishersList = oPublisherBean.getAll();
 				MessageService.info("Delete succesfull.");
-			} catch (LibraryException e) {
-				oLogger.error(e);
-				MessageService.error(e.getMessage());
+			} catch (Exception e) {
+				new ExceptionHandler(e);
 			}
 		}
 	}
