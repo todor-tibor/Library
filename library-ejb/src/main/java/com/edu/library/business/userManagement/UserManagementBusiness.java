@@ -28,15 +28,15 @@ public class UserManagementBusiness {
 		return dataAcces.getAll();
 	}
 
-	public List<User> search(String userName) throws LibraryException {
+	public List<User> search(String userName) {
 		return dataAcces.search(userName);
 	}
 
-	public User getById(String userId) throws LibraryException {
+	public User getById(String userId) {
 		return dataAcces.getById(userId);
 	}
 
-	public void store(User user) throws LibraryException {
+	public void store(User user) {
 		if (dataAcces.getByUserName(user.getUserName()).getUserName().isEmpty()) {
 			dataAcces.store(user);
 		} else {
@@ -44,7 +44,7 @@ public class UserManagementBusiness {
 		}
 	}
 
-	public void update(User user) throws LibraryException {
+	public void update(User user) {
 		dataAcces.update(user);
 	}
 

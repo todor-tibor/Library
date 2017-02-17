@@ -39,6 +39,7 @@ public class UserManagementFacade implements IUserService {
 	@Override
 	public void store(User user) {
 		ServiceValidation.checkNotNull(user);
+		ServiceValidation.checkNotEmpty(user.getRoles());
 		userManagementBusiness.store(user);
 
 	}
@@ -46,6 +47,7 @@ public class UserManagementFacade implements IUserService {
 	@Override
 	public void update(User user) {
 		ServiceValidation.checkNotNull(user);
+		ServiceValidation.checkNotEmpty(user.getRoles());
 		userManagementBusiness.update(user);
 	}
 
