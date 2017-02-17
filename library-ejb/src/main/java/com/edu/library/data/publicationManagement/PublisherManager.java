@@ -2,6 +2,7 @@ package com.edu.library.data.publicationManagement;
 
 import java.util.List;
 
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,6 +21,7 @@ import com.edu.library.util.EjbException;
  */
 
 @Stateless
+@LocalBean
 public class PublisherManager {
 	@PersistenceContext(unitName = "WildflyUsers")
 	private EntityManager oEntityManager;
