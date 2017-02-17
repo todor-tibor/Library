@@ -28,34 +28,39 @@ public class PublicationManagementFacade implements IPublicationService {
 	}
 
 	@Override
-	public List<Publication> search(String p_searchTxt)  {
+	public List<Publication> search(String p_searchTxt) {
 		ServiceValidation.checkString(p_searchTxt);
 		return publicationBusiness.search(p_searchTxt);
 	}
 
 	@Override
-	public Publication getById(String p_id)  {
+	public Publication getById(String p_id) {
 		ServiceValidation.checkUuid(p_id);
 		return publicationBusiness.getById(p_id);
 	}
 
 	@Override
-	public void store(Publication p_value)  {
+	public void store(Publication p_value) {
 		ServiceValidation.checkNotNull(p_value);
+		ServiceValidation.checkIfNumberInRange(p_value.getNrOfCopys(), 1, Integer.MAX_VALUE);
+		ServiceValidation.checkIfNumberInRange(p_value.getOnStock(), 1, p_value.getNrOfCopys());
 		authorCheck(p_value);
-		publicationBusiness.store(p_value);
 
+		publicationBusiness.store(p_value);
 	}
 
 	@Override
-	public void update(Publication p_user)  {
+	public void update(Publication p_user) {
 		ServiceValidation.checkNotNull(p_user);
 		authorCheck(p_user);
+		ServiceValidation.checkIfNumberInRange(p_user.getNrOfCopys(), 1, Integer.MAX_VALUE);
+		ServiceValidation.checkIfNumberInRange(p_user.getOnStock(), 1, p_user.getNrOfCopys());
+
 		publicationBusiness.update(p_user);
 	}
 
 	@Override
-	public void remove(String p_id)  {
+	public void remove(String p_id) {
 		ServiceValidation.checkUuid(p_id);
 		publicationBusiness.remove(p_id);
 

@@ -18,9 +18,8 @@ import com.edu.library.model.Publication;
  *         Implements a simple authentication process of a user.
  */
 
-
 @Stateless
-@LocalBean 
+@LocalBean
 public class PublicationManagementBusiness {
 
 	@EJB
@@ -39,13 +38,17 @@ public class PublicationManagementBusiness {
 	}
 
 	public void store(Publication p_value) throws LibraryException {
-		dataAcces.store(p_value);
-
+		Publication pub = dataAcces.getByName(p_value.getTitle());
+		if (pub == null) {
+			dataAcces.store(p_value);
+		} else {
+			throw new BusinessException(ErrorMessages.ERROR_CONSTRAINT_VIOLATION);
+		}
 	}
 
 	public void update(Publication p_user) throws LibraryException {
+		dataAcces.getById(p_user.getUuid());
 		dataAcces.update(p_user);
-
 	}
 
 	public void remove(String p_id) {
