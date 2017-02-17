@@ -23,32 +23,32 @@ public class PublicationManagementFacade implements IPublicationService {
 	
 	@Override
 	public List<Publication> getAll() throws LibraryException {
-		// TODO Auto-generated method stub
-		return null;
+		return publicationBusiness.getAll();
 	}
 
 	@Override
 	public List<Publication> search(String p_searchTxt) throws LibraryException {
-		// TODO Auto-generated method stub
-		return null;
+		ServiceValidation.checkString(p_searchTxt);
+		return publicationBusiness.search(p_searchTxt);
 	}
 
 	@Override
 	public Publication getById(String p_id) throws LibraryException {
-		// TODO Auto-generated method stub
-		return null;
+		ServiceValidation.checkUuid(p_id);
+		return publicationBusiness.getById(p_id);
 	}
 
 	@Override
 	public void store(Publication p_value) throws LibraryException {
-		// TODO Auto-generated method stub
+		ServiceValidation.checkNotNull(p_value);
+		publicationBusiness.store(p_value);
 		
 	}
 
 	@Override
 	public void update(Publication p_user) throws LibraryException {
-		// TODO Auto-generated method stub
-		
+		ServiceValidation.checkNotNull(p_user);
+		publicationBusiness.update(p_user);
 	}
 
 	@Override

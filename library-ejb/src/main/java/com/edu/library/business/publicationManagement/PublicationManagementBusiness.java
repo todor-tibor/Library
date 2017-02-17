@@ -29,27 +29,24 @@ public class PublicationManagementBusiness {
 	private PublicationBean dataAcces;
 
 	public List<Publication> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return dataAcces.getAll();
 	}
 
 	public List<Publication> search(String p_searchTxt) throws LibraryException {
-		// TODO Auto-generated method stub
-		return null;
+		return dataAcces.search(p_searchTxt);
 	}
 
 	public Publication getById(String p_id) throws LibraryException {
-		// TODO Auto-generated method stub
-		return null;
+		return dataAcces.getById(p_id);
 	}
 
 	public void store(Publication p_value) throws LibraryException {
-		// TODO Auto-generated method stub
+		dataAcces.store(p_value);
 
 	}
 
 	public void update(Publication p_user) throws LibraryException {
-		// TODO Auto-generated method stub
+		dataAcces.update(p_user);
 
 	}
 
