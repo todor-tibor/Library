@@ -14,10 +14,9 @@ import org.jboss.logging.Logger;
 import com.edu.library.ILoginService;
 import com.edu.library.IUserService;
 import com.edu.library.LibraryException;
-
-import edu.com.library.model.Role;
-import edu.com.library.model.RoleType;
-import edu.com.library.model.User;
+import com.edu.library.model.Role;
+import com.edu.library.model.RoleType;
+import com.edu.library.model.User;
 
 /**
  * @author kiska

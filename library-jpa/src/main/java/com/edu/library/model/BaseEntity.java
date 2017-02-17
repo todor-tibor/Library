@@ -1,4 +1,4 @@
-package edu.com.library.model;
+package com.edu.library.model;
 
 import java.io.Serializable;
 import java.util.UUID;

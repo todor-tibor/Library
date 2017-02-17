@@ -9,11 +9,10 @@ import com.edu.library.ILoginService;
 import com.edu.library.IPublicationService;
 import com.edu.library.LibraryException;
 import com.edu.library.business.userManagement.LoginManagementBusiness;
+import com.edu.library.model.Publication;
+import com.edu.library.model.Role;
 import com.edu.library.util.EjbException;
 import com.edu.library.util.ServiceValidation;
-
-import edu.com.library.model.Publication;
-import edu.com.library.model.Role;
 
 /**
  * @author kiska Implements the basics of user login. Validates the given the

@@ -1,6 +1,6 @@
 package com.edu.library;
 
-import edu.com.library.model.Publication;
+import com.edu.library.model.Publication;
 
 /**
  * 

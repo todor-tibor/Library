@@ -6,8 +6,7 @@ import javax.ejb.Stateless;
 
 import com.edu.library.IRoleService;
 import com.edu.library.LibraryException;
-
-import edu.com.library.model.Role;
+import com.edu.library.model.Role;
 
 /**
  * @author kiska Implements the basics of user login. Validates the given the

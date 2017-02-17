@@ -13,11 +13,10 @@ import javax.persistence.PersistenceException;
 
 import org.jboss.logging.Logger;
 
+import com.edu.library.model.Borrow;
+import com.edu.library.model.Publication;
+import com.edu.library.model.User;
 import com.edu.library.util.EjbException;
-
-import edu.com.library.model.Borrow;
-import edu.com.library.model.Publication;
-import edu.com.library.model.User;
 
 /**
  * @author nagys, gallb

@@ -11,9 +11,8 @@ import org.jboss.logging.Logger;
 
 import com.edu.library.LibraryException;
 import com.edu.library.PasswordEncrypter;
+import com.edu.library.model.User;
 import com.edu.library.util.EjbException;
-
-import edu.com.library.model.User;
 
 /**
  * @author kiska

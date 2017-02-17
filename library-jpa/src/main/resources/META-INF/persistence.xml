@@ -5,14 +5,14 @@
 	<persistence-unit name="WildflyUsers"
 		transaction-type="JTA">
 		<jta-data-source>java:jboss/datasources/WildflyUsers</jta-data-source>
-		<class>edu.com.library.model.Author</class>
-		<class>edu.com.library.model.Borrow</class>
-		<class>edu.com.library.model.Publication</class>
-		<class>edu.com.library.model.Publisher</class>
-		<class>edu.com.library.model.Role</class>
-		<class>edu.com.library.model.User</class>
-		<class>edu.com.library.model.Book</class>
-		<class>edu.com.library.model.Magazine</class>
-		<class>edu.com.library.model.Newspaper</class>
+		<class>com.edu.library.model.Author</class>
+		<class>com.edu.library.model.Borrow</class>
+		<class>com.edu.library.model.Publication</class>
+		<class>com.edu.library.model.Publisher</class>
+		<class>com.edu.library.model.Role</class>
+		<class>com.edu.library.model.User</class>
+		<class>com.edu.library.model.Book</class>
+		<class>com.edu.library.model.Magazine</class>
+		<class>com.edu.library.model.Newspaper</class>
 	</persistence-unit>
 </persistence>

@@ -6,8 +6,7 @@ import javax.ejb.Stateless;
 
 import com.edu.library.IBorrowService;
 import com.edu.library.LibraryException;
-
-import edu.com.library.model.Borrow;
+import com.edu.library.model.Borrow;
 
 /**
  * @author kiska Implements the basics of user login. Validates the given the

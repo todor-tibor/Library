@@ -1,6 +1,6 @@
 package com.edu.library;
 
-import edu.com.library.model.Publisher;
+import com.edu.library.model.Publisher;
 
 /**
  * IPublisher interface extends the IEntity interface which define the crud
