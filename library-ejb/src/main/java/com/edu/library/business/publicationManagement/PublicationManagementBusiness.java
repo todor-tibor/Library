@@ -42,9 +42,11 @@ public class PublicationManagementBusiness {
 		try {
 			dataAcces.getByName(p_value.getTitle());
 			throw new BusinessException(ErrorMessages.ERROR_CONSTRAINT_VIOLATION);
-		} catch (TechnicalException e) {
-			dataAcces.store(p_value);
+		} catch (Exception e) {			
+			System.out.println("minden rendben, be kellene szurni");
 		}
+		System.out.println("minden rendben, be kellene szurni1111111111");
+		dataAcces.store(p_value);
 	}
 
 	public void update(Publication p_user)  {

@@ -32,13 +32,7 @@ public class AuthorManagementBusiness {
 	}
 
 	public void store(Author p_value) {
-		try {
-			dataAcces.getByname(p_value.getName());
-			throw new BusinessException(ErrorMessages.ERROR_CONSTRAINT_VIOLATION);
-		} catch (TechnicalException e) {
-			dataAcces.store(p_value);
-		}
-
+		dataAcces.store(p_value);
 	}
 
 	public void update(Author p_user) {
