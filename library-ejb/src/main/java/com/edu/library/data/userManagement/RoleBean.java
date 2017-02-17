@@ -52,10 +52,9 @@ public class RoleBean {
 	}
 
 	
-	public void remove(String id) throws EjbException {
+	public void remove(Role role) throws EjbException {
 		try {
-			Role r = oEntityManager.find(Role.class, id);
-			oEntityManager.remove(r);
+			oEntityManager.remove(role);
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
@@ -81,8 +80,18 @@ public class RoleBean {
 	
 	public List<Role> search(String p_searchTxt) throws EjbException {
 		try {
-			return oEntityManager.createNamedQuery("Role.search", Role.class).setParameter("role", p_searchTxt)
+			return oEntityManager.createNamedQuery("Role.search", Role.class).setParameter("role", "%"+p_searchTxt +"%")
 					.getResultList();
+		} catch (PersistenceException e) {
+			oLogger.error(e);
+			throw new EjbException(e);
+		}
+	}
+	
+	public Role getByName(String p_searchTxt) throws EjbException {
+		try {
+			return oEntityManager.createNamedQuery("Role.getByName", Role.class).setParameter("role", p_searchTxt)
+					.getSingleResult();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);

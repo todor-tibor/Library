@@ -11,6 +11,7 @@ import com.edu.library.business.exception.BusinessException;
 import com.edu.library.business.exception.ErrorMessages;
 import com.edu.library.data.publicationManagement.PublicationBean;
 import com.edu.library.model.Publication;
+import com.edu.library.util.ServiceValidation;
 
 /**
  * @author kiska
@@ -53,6 +54,7 @@ public class PublicationManagementBusiness {
 
 	public void remove(String p_id) {
 		Publication pub = dataAcces.getById(p_id);
+		ServiceValidation.checkNotNull(pub);
 		if (pub.getBorrows().isEmpty()) {
 			dataAcces.remove(pub);
 		} else {
