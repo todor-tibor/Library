@@ -9,6 +9,7 @@ import com.edu.library.LibraryException;
 import com.edu.library.model.Borrow;
 
 /**
+ * @author gallb
  * @author kiska Implements the basics of user login. Validates the given the
  *         input data.
  */
@@ -17,7 +18,6 @@ public class BorrowManagementFacade implements IBorrowService {
 
 	@Override
 	public List<Borrow> getAll() throws LibraryException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
