@@ -15,16 +15,6 @@
 			<h2>
 				<h:outputText id="wel" value="#{msg['welcome.jsf']}" />
 			</h2>
-
-			<p:commandButton value="#{msg['lang.hungarian']}"
-				action="#{amibeanunk.hungarianNow()}" update="@form tabViewId">
-
-			</p:commandButton>
-
-			<p:commandButton value="#{msg['lang.english']}"
-				action="#{amibeanunk.englishNow()}" update="@form tabViewId">
-			</p:commandButton>
-
 		</p:panel>
 	</h:form>
 	<p:growl id="msgs" showDetail="true" />

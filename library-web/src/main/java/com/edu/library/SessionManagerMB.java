@@ -39,7 +39,7 @@ public class SessionManagerMB implements Serializable {
 		System.out.println("Before: " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
 		// Locale tmpLoc = new Locale("en", "US");
 		FacesContext.getCurrentInstance().getViewRoot().setLocale(Locale.ENGLISH);
-		PropertyProvider.INSTANCE.setLocale(Locale.ENGLISH);
+		//PropertyProvider.INSTANCE.setLocale(Locale.ENGLISH);
 		localeManager.setUserLocale(Locale.ENGLISH);
 		System.out.println("After: " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
 	}
@@ -48,7 +48,7 @@ public class SessionManagerMB implements Serializable {
 		System.out.println("Before: " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
 		Locale tmpLoc = new Locale("hu", "HU");
 		FacesContext.getCurrentInstance().getViewRoot().setLocale(tmpLoc);
-		PropertyProvider.INSTANCE.setLocale(tmpLoc);
+		//PropertyProvider.INSTANCE.setLocale(tmpLoc);
 		localeManager.setUserLocale(tmpLoc);
 		System.out.println(
 				"After hungarian now: " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());

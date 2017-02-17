@@ -27,7 +27,7 @@ public enum PropertyProvider {
 	}
 	
 	public void setLocale(Locale locale) {
-		RESOURCE_BUNDLE = ResourceBundle.getBundle("booklandBundle", locale);
+		RESOURCE_BUNDLE = ResourceBundle.getBundle("errorMessages", locale);
 	}
 	
 }

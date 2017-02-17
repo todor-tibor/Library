@@ -22,5 +22,8 @@ public class ExceptionHandler {
 		}else if(t instanceof IllegalArgumentException){
 			MessageService.warn(e.getMessage());
 		}
+		else {
+			MessageService.error(e.getMessage());
+		}
 	}
 }
