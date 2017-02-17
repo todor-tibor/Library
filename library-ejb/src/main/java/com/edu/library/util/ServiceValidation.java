@@ -89,7 +89,7 @@ public class ServiceValidation {
 	
 	public static void checkNotEmpty(List<? extends BaseEntity> entityList) {
 		if (entityList == null || entityList.isEmpty()) {			
-				throw new IllegalArgumentException(ERROR_MESSAGE);			
+				throw new IllegalArgumentException(ErrorMessages.ERROR_MESSAGE);			
 		}
 	}
 	
