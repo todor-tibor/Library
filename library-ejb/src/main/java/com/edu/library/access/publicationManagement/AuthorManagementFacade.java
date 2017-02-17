@@ -2,12 +2,13 @@ package com.edu.library.access.publicationManagement;
 
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import com.edu.library.IAuthorService;
-import com.edu.library.LibraryException;
+import com.edu.library.business.publicationManagement.AuthorManagementBusiness;
 import com.edu.library.model.Author;
-import com.edu.library.model.Publication;
+import com.edu.library.util.ServiceValidation;
 
 /**
  * @author kiska Implements the basics of user login. Validates the given the
@@ -16,42 +17,43 @@ import com.edu.library.model.Publication;
 @Stateless
 public class AuthorManagementFacade implements IAuthorService {
 
+	@EJB
+	AuthorManagementBusiness authorBussines;
+
 	@Override
-	public List<Author> getAll() throws LibraryException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Author> getAll() {
+		return authorBussines.getAll();
 	}
 
 	@Override
-	public List<Author> search(String p_searchTxt) throws LibraryException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Author> search(String p_searchTxt) {
+		ServiceValidation.checkString(p_searchTxt);
+		return authorBussines.search(p_searchTxt);
 	}
 
 	@Override
-	public Author getById(String p_id) throws LibraryException {
-		// TODO Auto-generated method stub
-		return null;
+	public Author getById(String p_id) {
+		ServiceValidation.checkUuid(p_id);
+		return authorBussines.getById(p_id);
 	}
 
 	@Override
-	public void store(Author p_value) throws LibraryException {
-		// TODO Auto-generated method stub
-		
+	public void store(Author p_value) {
+		ServiceValidation.checkNotNull(p_value);
+		ServiceValidation.checkString(p_value.getName());
+		authorBussines.store(p_value);
 	}
 
 	@Override
-	public void update(Author p_user) throws LibraryException {
-		// TODO Auto-generated method stub
-		
+	public void update(Author p_user) {
+		ServiceValidation.checkNotNull(p_user);
+		authorBussines.update(p_user);
 	}
 
 	@Override
-	public void remove(String p_id) throws LibraryException {
-		// TODO Auto-generated method stub
-		
+	public void remove(String p_id) {
+		ServiceValidation.checkUuid(p_id);
+		authorBussines.remove(p_id);
 	}
 
-	
-	
 }

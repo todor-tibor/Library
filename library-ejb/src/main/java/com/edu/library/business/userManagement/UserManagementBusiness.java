@@ -37,11 +37,14 @@ public class UserManagementBusiness {
 	}
 
 	public void store(User user) {
-		if (dataAcces.getByUserName(user.getUserName()).getUserName().isEmpty()) {
-			dataAcces.store(user);
-		} else {
-			throw new BusinessException(ErrorMessages.ERROR_CONSTRAINT_VIOLATION);
-		}
+		// if
+		// (dataAcces.getByUserName(user.getUserName()).getUserName().isEmpty())
+		// {
+		dataAcces.store(user);
+		// } else {
+		// throw new
+		// BusinessException(ErrorMessages.ERROR_CONSTRAINT_VIOLATION);
+		// }
 	}
 
 	public void update(User user) {

@@ -9,8 +9,8 @@ import javax.persistence.PersistenceException;
 
 import org.jboss.logging.Logger;
 
+import com.edu.library.data.exception.TechnicalException;
 import com.edu.library.model.Author;
-import com.edu.library.util.EjbException;
 
 /**
  * crud operations from author Entity
@@ -25,72 +25,72 @@ public class AuthorBean {
 	private EntityManager oEntityManager;
 	private Logger oLogger = Logger.getLogger(Author.class);
 
-	
-	public List<Author> getAll() throws EjbException {
+	public List<Author> getAll() {
 		try {
-			return oEntityManager.createNamedQuery("Author.findAll",Author.class).getResultList();
+			return oEntityManager.createNamedQuery("Author.findAll", Author.class).getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 
-	
-	public List<Author> search(String p_searchTxt) throws EjbException {
+	public List<Author> search(String p_searchTxt) {
 		try {
-			return oEntityManager.createNamedQuery("Author.searchByName",Author.class).setParameter("name", "%" + p_searchTxt + "%")
-					.getResultList();
+			return oEntityManager.createNamedQuery("Author.searchByName", Author.class)
+					.setParameter("name", "%" + p_searchTxt + "%").getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 
-	
-	public Author getById(String p_id) throws EjbException {
+	public Author getById(String p_id) {
 		try {
-			return (Author) oEntityManager.createNamedQuery("Author.getById",Author.class).setParameter("uuid", p_id)
-					.getResultList();
+			return (Author) oEntityManager.createNamedQuery("Author.getById", Author.class).setParameter("uuid", p_id)
+					.getSingleResult();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 
-	
-	public void store(Author p_value) throws EjbException {
+	public Author getByname(String p_value) {
+		try {
+			return (Author) oEntityManager.createNamedQuery("Author.getByName", Author.class)
+					.setParameter("name", p_value).getSingleResult();
+		} catch (PersistenceException e) {
+			oLogger.error(e);
+			throw new TechnicalException(e);
+		}
+	}
+
+	public void store(Author p_value) {
 		try {
 			oEntityManager.persist(p_value);
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 
-	
-	public void update(Author p_user) throws EjbException {
+	public void update(Author p_user) {
 		try {
-			Author r = oEntityManager.find(Author.class, p_user.getUuid());
-			if (r != null) {
-				oEntityManager.merge(p_user);
-				oEntityManager.flush();
-			}
-		} catch (PersistenceException e) {
-			oLogger.error(e);
-			throw new EjbException(e);
-		}
-	}
-
-	
-	public void remove(String p_id) throws EjbException {
-		try {
-			Author r = oEntityManager.find(Author.class, p_id);
-			oEntityManager.remove(r);
+			oEntityManager.merge(p_user);
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
+		}
+	}
+
+	public void remove(Author author) {
+		try {
+			oEntityManager.remove(author);
+			oEntityManager.flush();
+		} catch (PersistenceException e) {
+			oLogger.error(e);
+			throw new TechnicalException(e);
 		}
 	}
 
