@@ -22,32 +22,32 @@ public class PublisherManagementFacade implements IPublisherService {
 	private PublisherManagementBusiness publisherBusiness;
 	
 	@Override
-	public List<Publisher> getAll() throws LibraryException {
+	public List<Publisher> getAll(){
 		
 		return publisherBusiness.getAll();
 	}
 
 	@Override
-	public List<Publisher> search(String p_searchTxt) throws LibraryException {
+	public List<Publisher> search(String p_searchTxt){
 		ServiceValidation.checkString(p_searchTxt);
 		return publisherBusiness.search(p_searchTxt);
 	}
 
 	@Override
-	public Publisher getById(String p_id) throws LibraryException {
+	public Publisher getById(String p_id){
 		ServiceValidation.checkUuid(p_id);
 		return publisherBusiness.getById(p_id);
 	}
 
 	@Override
-	public void store(Publisher p_value) throws LibraryException {
+	public void store(Publisher p_value){
 		ServiceValidation.checkNotNull(p_value);
 		publisherBusiness.store(p_value);
 
 	}
 
 	@Override
-	public void update(Publisher p_user) throws LibraryException {
+	public void update(Publisher p_user){
 		ServiceValidation.checkNotNull(p_user);
 		
 		publisherBusiness.update(p_user);
@@ -55,7 +55,7 @@ public class PublisherManagementFacade implements IPublisherService {
 	}
 
 	@Override
-	public void remove(String p_id) throws LibraryException {
+	public void remove(String p_id){
 		ServiceValidation.checkUuid(p_id);
 		publisherBusiness.remove(p_id);
 

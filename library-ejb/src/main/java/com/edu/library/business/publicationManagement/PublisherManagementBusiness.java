@@ -34,12 +34,13 @@ public class PublisherManagementBusiness {
 	}
 
 	public void store(Publisher p_value) {
-		Publisher publisher = publisherManager.getById(p_value.getUuid());
-		if(publisher.getName() == null){
+		Publisher publisher = publisherManager.getByName(p_value.getName());
+		if(publisher == null){
 			publisherManager.store(p_value);
-		}else{
+		} else {
 			throw new BusinessException(ErrorMessages.ERROR_CONSTRAINT_VIOLATION);
 		}
+		
 	}
 
 	public void update(Publisher p_value) {
