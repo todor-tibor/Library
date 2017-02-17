@@ -40,6 +40,7 @@ public class AuthorManagementFacade implements IAuthorService {
 	@Override
 	public void store(Author p_value) {
 		ServiceValidation.checkNotNull(p_value);
+		ServiceValidation.checkString(p_value.getName());
 		authorBussines.store(p_value);
 	}
 

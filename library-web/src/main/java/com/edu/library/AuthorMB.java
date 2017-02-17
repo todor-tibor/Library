@@ -10,9 +10,8 @@ import javax.inject.Named;
 
 import org.jboss.logging.Logger;
 
-import com.edu.library.IAuthorService;
-import com.edu.library.LibraryException;
 import com.edu.library.model.Author;
+import com.edu.library.util.ExceptionHandler;
 
 /**
  * Author manager.
@@ -65,8 +64,8 @@ public class AuthorMB implements Serializable {
 		try {
 			oLogger.info("--getAllAuthors()--authors queried");
 			authorList = oAuthorBean.getAll();
-		} catch (LibraryException e) {
-			MessageService.error(e.getMessage());
+		} catch (Exception e) {
+			new ExceptionHandler(e);
 		}
 		return authorList;
 	}
@@ -84,8 +83,8 @@ public class AuthorMB implements Serializable {
 			authorList.clear();
 			try {
 				authorList = oAuthorBean.search(p_searchTxt);
-			} catch (LibraryException e) {
-				MessageService.error(e.getMessage());
+			}catch (Exception e) {
+				new ExceptionHandler(e);
 			}
 		} else {
 			MessageService.error("Keyword too short. Min. 3 characters req.");
@@ -115,8 +114,8 @@ public class AuthorMB implements Serializable {
 			oAuthorBean.store(tmpAuthor);
 			authorList.add(tmpAuthor);
 			MessageService.info("Succesfully added: " + p_value);
-		} catch (LibraryException e) {
-			MessageService.error(e.getMessage());
+		} catch (Exception e) {
+			new ExceptionHandler(e);
 		}
 	}
 
@@ -135,9 +134,8 @@ public class AuthorMB implements Serializable {
 				authorList = oAuthorBean.getAll();
 				oLogger.info("**********************update succesfull************************************");
 				MessageService.info("Update succesfull.");
-			} catch (LibraryException e) {
-				oLogger.error(e);
-				MessageService.error(e.getMessage());
+			} catch (Exception e) {
+				new ExceptionHandler(e);
 			}
 		} else {
 			MessageService.error("New name too short.");
@@ -156,9 +154,8 @@ public class AuthorMB implements Serializable {
 				oAuthorBean.remove(currentAuthor.getUuid());
 				authorList = oAuthorBean.getAll();
 				MessageService.info("Delete succesfull.");
-			} catch (LibraryException e) {
-				oLogger.error(e);
-				MessageService.error(e.getMessage());
+			} catch (Exception e) {
+				new ExceptionHandler(e);
 			}
 		}
 	}
