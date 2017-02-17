@@ -36,10 +36,8 @@ public class BorrowManagementBusiness {
 	private BorrowDAO borrowDAO;
 
 	public List<Borrow> getAll() {
-		borrowDAO.getAll();
-		return null;
+		return borrowDAO.getAll();
 	}
-
 	public List<Borrow> search(String p_searchTxt) throws LibraryException {
 		// TODO Auto-generated method stub
 		return null;
