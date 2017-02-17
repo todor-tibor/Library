@@ -5,13 +5,10 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import com.edu.library.ILoginService;
 import com.edu.library.IPublicationService;
 import com.edu.library.LibraryException;
-import com.edu.library.business.userManagement.LoginManagementBusiness;
+import com.edu.library.business.publicationManagement.PublicationManagementBusiness;
 import com.edu.library.model.Publication;
-import com.edu.library.model.Role;
-import com.edu.library.util.EjbException;
 import com.edu.library.util.ServiceValidation;
 
 /**
@@ -21,6 +18,9 @@ import com.edu.library.util.ServiceValidation;
 @Stateless
 public class PublicationManagementFacade implements IPublicationService {
 
+	@EJB
+	private PublicationManagementBusiness publicationBusiness;
+	
 	@Override
 	public List<Publication> getAll() throws LibraryException {
 		// TODO Auto-generated method stub
@@ -53,7 +53,8 @@ public class PublicationManagementFacade implements IPublicationService {
 
 	@Override
 	public void remove(String p_id) throws LibraryException {
-		// TODO Auto-generated method stub
+		ServiceValidation.checkUuid(p_id);
+		publicationBusiness.remove(p_id);
 		
 	}
 	

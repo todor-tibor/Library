@@ -32,7 +32,7 @@ public class ServiceValidation {
 	 * - one special symbol (?=\\S+$) - can't have any whitespaces .{36,} - the
 	 * length should be at least 36 characters
 	 */
-	private static final String UUID_PATTERN = "(?=.*[0-9])(?=.*[a-z])(?=.*[@#$%^&+=])(?=\\S+$).{36,}";
+	private static final String UUID_PATTERN = "(?=.*[0-9])(?=.*[a-z])(?=.*[-])";
 
 	/**
 	 * Check whether the given string matches a set of constraints defined in
@@ -75,9 +75,7 @@ public class ServiceValidation {
 	 * @return - true if the two id match, false otherwise
 	 */
 	public static void checkUuid(String uuid) {
-		Pattern pattern = Pattern.compile(UUID_PATTERN);
-		Matcher matcher = pattern.matcher(uuid);
-		if(!matcher.matches()){
+		if(uuid==null || uuid.length()==0){
 			throw new IllegalArgumentException(ERROR_MESSAGE);
 		}
 	}

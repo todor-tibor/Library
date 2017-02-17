@@ -8,14 +8,17 @@ public class BusinessException extends LibraryException {
 
 	public BusinessException() {
 		super();
+		setLevel(2);
 	}
 
 	public BusinessException(String message) {
 		super(message);
+		setLevel(2);
 	}
 
 	public BusinessException(String message, Throwable cause) {
 		super(message);
+		setLevel(2);
 	}
 
 }

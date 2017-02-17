@@ -29,14 +29,17 @@ public class TechnicalException extends LibraryException {
 
 	public TechnicalException() {
 		super();
+		setLevel(1);
 	}
 
 	public TechnicalException(String message) {
 		super(message);
+		setLevel(1);
 	}
 
 	public TechnicalException(String message, Throwable cause) {
 		super(message);
+		setLevel(1);
 	}
 
 }

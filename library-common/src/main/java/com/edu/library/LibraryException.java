@@ -6,6 +6,7 @@ package com.edu.library;
  *
  */
 public class LibraryException extends RuntimeException {
+	private int level;
 
 	private static final long serialVersionUID = -2068564507434923735L;
 
@@ -20,5 +21,14 @@ public class LibraryException extends RuntimeException {
 	public LibraryException(String message) {
 		super(message);
 	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+	
 
 }
