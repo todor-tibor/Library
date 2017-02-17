@@ -1,6 +1,6 @@
 package com.edu.library;
 
-import edu.com.library.model.Author;
+import com.edu.library.model.Author;
 
 public interface IAuthorService extends IService<Author> {
 }

@@ -1,6 +1,6 @@
 package com.edu.library;
 
-import edu.com.library.model.User;
+import com.edu.library.model.User;
 
 
 public interface IUserService extends IService<User> {

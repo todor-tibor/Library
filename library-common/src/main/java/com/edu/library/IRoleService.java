@@ -1,6 +1,6 @@
 package com.edu.library;
 
-import edu.com.library.model.Role;
+import com.edu.library.model.Role;
 
 public interface IRoleService extends IService<Role> {
 }

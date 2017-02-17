@@ -1,4 +1,4 @@
-package edu.com.library.model;
+package com.edu.library.model;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;

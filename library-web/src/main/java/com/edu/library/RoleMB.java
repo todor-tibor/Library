@@ -14,8 +14,7 @@ import org.jboss.logging.Logger;
 
 import com.edu.library.IRoleService;
 import com.edu.library.LibraryException;
-
-import edu.com.library.model.Role;
+import com.edu.library.model.Role;
 
 /**
  * Role manager.

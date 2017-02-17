@@ -12,8 +12,7 @@ import org.jboss.logging.Logger;
 
 import com.edu.library.IAuthorService;
 import com.edu.library.LibraryException;
-
-import edu.com.library.model.Author;
+import com.edu.library.model.Author;
 
 /**
  * Author manager.

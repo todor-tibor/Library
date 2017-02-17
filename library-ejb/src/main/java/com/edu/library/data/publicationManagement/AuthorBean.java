@@ -9,9 +9,8 @@ import javax.persistence.PersistenceException;
 
 import org.jboss.logging.Logger;
 
+import com.edu.library.model.Author;
 import com.edu.library.util.EjbException;
-
-import edu.com.library.model.Author;
 
 /**
  * crud operations from author Entity
