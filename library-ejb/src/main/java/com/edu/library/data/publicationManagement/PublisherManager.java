@@ -97,15 +97,5 @@ public class PublisherManager {
 		}
 
 	}
-	
-	public Publisher getByName(String p_searchTxt) {
-		try {
-			return oEntityManager.createNamedQuery("Publisher.getByName", Publisher.class)
-					.setParameter("name",p_searchTxt).getSingleResult();
-		} catch (PersistenceException e) {
-			oLogger.error(e);
-			throw new TechnicalException(e);
-		}
-	}
 
 }

@@ -34,13 +34,8 @@ public class PublisherManagementBusiness {
 	}
 
 	public void store(Publisher p_value) {
-		Publisher publisher = publisherManager.getByName(p_value.getName());
-		if(publisher == null){
-			publisherManager.store(p_value);
-		} else {
-			throw new BusinessException(ErrorMessages.ERROR_CONSTRAINT_VIOLATION);
-		}
-		
+		publisherManager.store(p_value);
+
 	}
 
 	public void update(Publisher p_value) {
@@ -51,7 +46,7 @@ public class PublisherManagementBusiness {
 	public void remove(String p_id) {
 		Publisher publisher = publisherManager.getById(p_id);
 		publisherManager.remove(publisher);
-		
+
 	}
 
 }
