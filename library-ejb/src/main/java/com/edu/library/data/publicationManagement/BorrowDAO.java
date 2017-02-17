@@ -13,6 +13,7 @@ import javax.persistence.PersistenceException;
 
 import org.jboss.logging.Logger;
 
+import com.edu.library.data.exception.TechnicalException;
 import com.edu.library.model.Borrow;
 import com.edu.library.model.Publication;
 import com.edu.library.model.User;
@@ -98,9 +99,10 @@ public class BorrowDAO {
 		oLogger.info("delete borrow called on entity: " + p_borrow.toString());
 		try {
 			oEntityManager.remove(p_borrow);
+			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 }

@@ -130,19 +130,17 @@ public class BorrowMB implements Serializable {
 	}
 
 	public void remove() {
-		oLogger.info("--remove borrow by Id ManagedBean--p_id:" + borrow.getUuid());
+		oLogger.info("remove borrow by Id ManagedBean--p_id:" + borrow.getUuid());
 		if (borrow == null) {
 			MessageService.error("Empty field");
 		} else {
 			try {
 				oBorrowBean.remove(borrow.getUuid());
 				getAll();
-			} catch (LibraryException e) {
+			} catch (Exception e) {
 				oLogger.error(e);
-				MessageService.error(e.getMessage());
+				new ExceptionHandler(e);
 			}
-
 		}
 	}
-
 }

@@ -17,9 +17,11 @@ import com.edu.library.business.exception.BusinessException;
 import com.edu.library.business.exception.ErrorMessages;
 import com.edu.library.data.publicationManagement.BorrowDAO;
 import com.edu.library.data.publicationManagement.PublicationBean;
+import com.edu.library.data.userManagement.UserDao;
 import com.edu.library.model.Borrow;
 import com.edu.library.model.Publication;
 import com.edu.library.model.User;
+import com.edu.library.util.ServiceValidation;
 
 /**
  * @author gallb
@@ -34,7 +36,15 @@ public class BorrowManagementBusiness {
 	
 	@EJB
 	private BorrowDAO borrowDAO;
-
+	@EJB
+	private UserDao userDAO;
+	@EJB
+	private PublicationBean pubDAO;
+	
+	
+	/*
+	 *  @return List containing all entities.
+	 */
 	public List<Borrow> getAll() {
 		return borrowDAO.getAll();
 	}
@@ -66,6 +76,8 @@ public class BorrowManagementBusiness {
 	 */
 	public void remove(String p_id) {
 		Borrow tmpBorrow = borrowDAO.getById(p_id);
+		ServiceValidation.checkNotNull(tmpBorrow);
+		
 		Date tmpDate = new Date();
 		//verify if user is late
 		if (tmpBorrow.getBorrowUntil().before(tmpDate)) {
@@ -73,12 +85,15 @@ public class BorrowManagementBusiness {
 			//TO DO DECREASE LOYALTY INDEX, WHEN USER IS READY
 			User tmpUser = tmpBorrow.getUser();
 			tmpUser.setLoyaltyIndex(tmpUser.getLoyaltyIndex() - 1);
-			// user DAO call update
+			userDAO.update(tmpUser);
 		}
 		
 		//TO DO DECREASE LOYALTY INDEX, WHEN USER IS READY
 		Publication tmpPub = tmpBorrow.getPublication();
 		tmpPub.setOnStock(tmpPub.getOnStock() + 1);
-		// publication DAO call update
+		pubDAO.update(tmpPub);
+		
+		borrowDAO.remove(tmpBorrow);
+		
 	}
 }
