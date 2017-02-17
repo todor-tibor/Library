@@ -2,6 +2,7 @@ package com.edu.library.data.publicationManagement;
 
 import java.util.List;
 
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,6 +21,7 @@ import com.edu.library.util.EjbException;
  */
 
 @Stateless
+@LocalBean
 public class PublicationBean{
 
 	@PersistenceContext(unitName = "WildflyUsers")
@@ -82,10 +84,9 @@ public class PublicationBean{
 	}
 
 	
-	public void remove(String p_id) throws EjbException {
+	public void remove(Publication pub) throws EjbException {
 		try {
-			Publication r = oEntityManager.find(Publication.class, p_id);
-			oEntityManager.remove(r);
+			oEntityManager.remove(pub);
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);

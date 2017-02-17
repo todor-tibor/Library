@@ -19,6 +19,8 @@ import com.edu.library.model.Magazine;
 import com.edu.library.model.Newspaper;
 import com.edu.library.model.Publication;
 import com.edu.library.model.Publisher;
+import com.edu.library.util.ExceptionHandler;
+import com.edu.library.util.PropertyProvider;
 
 /**
  * 
@@ -62,13 +64,15 @@ public class PublicationMB implements Serializable {
 	 * @return List of all publications from persistency.
 	 */
 	public List<Publication> getAll() {
-		this.publicationList.clear();
-		try {
-			this.publicationList = oPublicationBean.getAll();
-		} catch (LibraryException e) {
-			oLogger.error(e.getMessage());
-			MessageService.error(e.getMessage());
-		}
+		remove();
+
+		/*
+		 * 
+		 * this.publicationList.clear(); try { this.publicationList =
+		 * oPublicationBean.getAll(); } catch (LibraryException e) {
+		 * oLogger.error(e.getMessage()); MessageService.error(e.getMessage());
+		 * }
+		 */
 		return this.publicationList;
 	}
 
@@ -195,18 +199,21 @@ public class PublicationMB implements Serializable {
 	 * Deletes currently selected publication from persistency.
 	 */
 	public void remove() {
-		if (this.currentPublication == null) {
-			MessageService.error("Empty field");
-		} else {
-			try {
-				oPublicationBean.remove(this.currentPublication.getUuid());
-				publicationList = oPublicationBean.getAll();
-				MessageService.info("Delete succesfull.");
-			} catch (LibraryException e) {
-				oLogger.error(e);
-				MessageService.error(e.getMessage());
-			}
+		try {
+			oPublicationBean.remove("b03e86a5-538e-4697-bcd5-3827f1ad1760");
+			oLogger.info("---------torolte");
+		} catch (Exception e) {
+			oLogger.info("nem sikerult torolni" + PropertyProvider.getProperty(e.getMessage()));
+			new ExceptionHandler(e);
 		}
+		/*
+		 * if (this.currentPublication == null) {
+		 * MessageService.error("Empty field"); } else { try {
+		 * oPublicationBean.remove(this.currentPublication.getUuid());
+		 * publicationList = oPublicationBean.getAll();
+		 * MessageService.info("Delete succesfull."); } catch (LibraryException
+		 * e) { oLogger.error(e); MessageService.error(e.getMessage()); } }
+		 */
 	}
 
 	public String getType() {
