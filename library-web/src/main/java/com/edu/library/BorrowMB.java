@@ -29,7 +29,6 @@ import com.edu.library.util.ExceptionHandler;
 
 @SessionScoped
 public class BorrowMB implements Serializable {
-
 	/**
 	 * 
 	 */
@@ -122,9 +121,17 @@ public class BorrowMB implements Serializable {
 			try {
 				oBorrowBean.store(p_Borrow);
 				borrows.add(p_Borrow);
-				MessageService.info("Succesfully added: " + p_Borrow);
+				MessageService.info("Succesfully added");
 			} catch (LibraryException e) {
-				MessageService.error(e.getMessage());
+				oLogger.error("-----------??????????????????????"+ e.getMessage());
+				new ExceptionHandler(e);
+			}catch (IllegalArgumentException e) {
+				oLogger.error("-----------<<<<<<<<<<<<<<<<<<<<<<"+ e.getMessage());
+				new ExceptionHandler(e);
+			}catch (Exception e) {
+				oLogger.error("-----------??????????????????????-------------------"+ e.getMessage());
+				oLogger.error("-----"+e.getClass().getSimpleName());
+				new ExceptionHandler(e);
 			}
 		}
 	}

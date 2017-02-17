@@ -24,30 +24,29 @@ import com.edu.library.model.User;
 import com.edu.library.util.ServiceValidation;
 
 /**
- * @author gallb
- *		Implements publication related business logic.
+ * @author gallb Implements publication related business logic.
  */
 
 @Stateless
-@LocalBean 
+@LocalBean
 public class BorrowManagementBusiness {
-	
-	private Logger oLogger = Logger.getLogger(Borrow.class);
-	
+
+	private Logger oLogger = Logger.getLogger(BorrowManagementBusiness.class);
+
 	@EJB
 	private BorrowDAO borrowDAO;
 	@EJB
 	private UserDao userDAO;
 	@EJB
 	private PublicationBean pubDAO;
-	
-	
+
 	/*
-	 *  @return List containing all entities.
+	 * @return List containing all entities.
 	 */
 	public List<Borrow> getAll() {
 		return borrowDAO.getAll();
 	}
+
 	public List<Borrow> search(String p_searchTxt) throws LibraryException {
 		// TODO Auto-generated method stub
 		return null;
@@ -78,32 +77,31 @@ public class BorrowManagementBusiness {
 		// TODO Auto-generated method stub
 
 	}
+
 	/*
-	 * Removes borrowing entity from persistence by ID.
-	 * Handles stock and trust index related changes for
-	 * publication and user entities.
+	 * Removes borrowing entity from persistence by ID. Handles stock and trust
+	 * index related changes for publication and user entities.
 	 * 
 	 * @param p_id - id of borrowing entity.
 	 */
 	public void remove(String p_id) {
 		Borrow tmpBorrow = borrowDAO.getById(p_id);
 		ServiceValidation.checkNotNull(tmpBorrow);
-		
+
 		Date tmpDate = new Date();
-		//verify if user is late
+		// verify if user is late
 		if (tmpBorrow.getBorrowUntil().before(tmpDate)) {
 			oLogger.info("Return late decrease loyalty index.");
-			//decrease loyalty index
+			// decrease loyalty index
 			User tmpUser = tmpBorrow.getUser();
 			tmpUser.setLoyaltyIndex(tmpUser.getLoyaltyIndex() - 1);
 			userDAO.update(tmpUser);
 		}
-		
-		borrowDAO.remove(tmpBorrow);
-		
-		//increase stock
-		Publication tmpPub = tmpBorrow.getPublication();
+		// increase stock
+		Publication tmpPub = pubDAO.getById(tmpBorrow.getPublication().getUuid());
 		tmpPub.setOnStock(tmpPub.getOnStock() + 1);
-		pubDAO.update(tmpPub);	
+		pubDAO.update(tmpPub);
+		oLogger.info("-------------" + tmpPub.getTitle());
+		borrowDAO.remove(tmpBorrow);
 	}
 }

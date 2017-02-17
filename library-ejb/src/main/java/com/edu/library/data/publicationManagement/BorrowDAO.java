@@ -102,7 +102,7 @@ public class BorrowDAO {
 	}
 
 	public void remove(Borrow p_borrow) throws EjbException {
-		oLogger.info("delete borrow called on entity: " + p_borrow.toString());
+		oLogger.info("delete borrow called on entity: " + p_borrow.getUuid());
 		try {
 			oEntityManager.remove(p_borrow);
 			oEntityManager.flush();

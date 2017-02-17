@@ -26,9 +26,9 @@ public class PublicationBean {
 
 	@PersistenceContext(unitName = "WildflyUsers")
 	private EntityManager oEntityManager;
-	private Logger oLogger = Logger.getLogger(Publication.class);
+	private Logger oLogger = Logger.getLogger(PublicationBean.class);
 
-	public List<Publication> getAll()  {
+	public List<Publication> getAll() {
 		try {
 			return oEntityManager.createNamedQuery("Publication.findAll", Publication.class).getResultList();
 		} catch (PersistenceException e) {
@@ -37,7 +37,7 @@ public class PublicationBean {
 		}
 	}
 
-	public List<Publication> search(String p_searchTxt)  {
+	public List<Publication> search(String p_searchTxt) {
 		try {
 			return oEntityManager.createNamedQuery("Publication.searchByName", Publication.class)
 					.setParameter("title", "%" + p_searchTxt + "%").getResultList();
@@ -47,17 +47,17 @@ public class PublicationBean {
 		}
 	}
 
-	public Publication getByName(String p_searchTxt)  {
+	public Publication getByName(String p_searchTxt) {
 		try {
 			return oEntityManager.createNamedQuery("Publication.getByName", Publication.class)
-					.setParameter("title",p_searchTxt).getSingleResult();
+					.setParameter("title", p_searchTxt).getSingleResult();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new TechnicalException(e);
 		}
 	}
 
-	public Publication getById(String p_id)  {
+	public Publication getById(String p_id) {
 		try {
 			return oEntityManager.createNamedQuery("Publication.getById", Publication.class).setParameter("uuid", p_id)
 					.getSingleResult();
@@ -67,7 +67,7 @@ public class PublicationBean {
 		}
 	}
 
-	public void store(Publication p_value)  {
+	public void store(Publication p_value) {
 		try {
 			oEntityManager.persist(p_value);
 			oEntityManager.flush();
@@ -77,7 +77,8 @@ public class PublicationBean {
 		}
 	}
 
-	public void update(Publication p_user)  {
+	public void update(Publication p_user) {
+		oLogger.info("-------------" + p_user);
 		try {
 			oEntityManager.merge(p_user);
 			oEntityManager.flush();
@@ -87,7 +88,7 @@ public class PublicationBean {
 		}
 	}
 
-	public void remove(Publication pub)  {
+	public void remove(Publication pub) {
 		try {
 			oEntityManager.remove(pub);
 			oEntityManager.flush();

@@ -4,8 +4,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public enum PropertyProvider {
-	INSTANCE;
+public class PropertyProvider {
 
 	private static ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("errorMessages",Locale.ENGLISH);
 	
@@ -18,7 +17,7 @@ public enum PropertyProvider {
 	 *            - name of property
 	 * @return value of the property
 	 */
-	public String getProperty(String property) {
+	public static String getProperty(String property) {
 		try {
 			return RESOURCE_BUNDLE.getString(property);
 		} catch (MissingResourceException e) {
@@ -26,7 +25,7 @@ public enum PropertyProvider {
 		}
 	}
 	
-	public void setLocale(Locale locale) {
+	public static void setLocale(Locale locale) {
 		RESOURCE_BUNDLE = ResourceBundle.getBundle("errorMessages", locale);
 	}
 	
