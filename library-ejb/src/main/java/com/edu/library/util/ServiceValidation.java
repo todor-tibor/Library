@@ -12,6 +12,7 @@ import com.edu.library.model.BaseEntity;
  *         Serves as a data validator class for different data input types.
  */
 public class ServiceValidation {
+	private static final String ERROR_MESSAGE="access.error.illegalArgument";
 	/**
 	 * STRING_PATTERN - the restriction for a correct user name [a-zA-Z]+ - has
 	 * only letters
@@ -58,10 +59,12 @@ public class ServiceValidation {
 	 * @return - true if the password satisfies the given constraints, otherwise
 	 *         returns false
 	 */
-	public static boolean checkPassword(String password) {
+	public static void checkPassword(String password) {
 		Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
 		Matcher matcher = pattern.matcher(password);
-		return matcher.matches();
+		if(!matcher.matches()){
+			throw new IllegalArgumentException(ERROR_MESSAGE);
+		}
 	}
 
 	/**
@@ -71,23 +74,23 @@ public class ServiceValidation {
 	 *            - the unique identification string of an object
 	 * @return - true if the two id match, false otherwise
 	 */
-	public static boolean checkUuid(String uuid) {
+	public static void checkUuid(String uuid) {
 		Pattern pattern = Pattern.compile(UUID_PATTERN);
 		Matcher matcher = pattern.matcher(uuid);
-		return matcher.matches();
+		if(!matcher.matches()){
+			throw new IllegalArgumentException(ERROR_MESSAGE);
+		}
 	}
 
-	public static boolean checkNotNull(BaseEntity entity) {
-		if (entity != null) {
-			return true;
+	public static void checkNotNull(BaseEntity entity) {
+		if (entity == null) {			
+				throw new IllegalArgumentException(ERROR_MESSAGE);			
 		}
-		return false;
 	}
 	
-	public static boolean checkIfNumberInRange(int number, int minRange, int maxRange){
-		if (number <= maxRange && number > minRange){
-			return true;
+	public static void checkIfNumberInRange(int number, int minRange, int maxRange){
+		if (!(number <= maxRange && number > minRange)){
+				throw new IllegalArgumentException(ERROR_MESSAGE);
 		}
-		return false;
 	}
 }
