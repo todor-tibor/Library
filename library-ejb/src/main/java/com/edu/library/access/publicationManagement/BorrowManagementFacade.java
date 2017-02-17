@@ -29,31 +29,36 @@ public class BorrowManagementFacade implements IBorrowService {
 	}
 
 	@Override
-	public List<Borrow> search(String p_searchTxt) throws LibraryException {
+	public List<Borrow> search(String p_searchTxt) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Borrow getById(String p_id) throws LibraryException {
+	public Borrow getById(String p_id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void store(Borrow p_value) throws LibraryException {
+	public void store(Borrow p_value) {
+		//Data validation.
+		ServiceValidation.checkNotNull(p_value);
+		ServiceValidation.checkNotNull(p_value.getPublication());
+		ServiceValidation.checkNotNull(p_value.getUser());
+		ServiceValidation.checDateOrder(p_value.getBorrowFrom(), p_value.getBorrowUntil());
+		
+		borrowBusiness.store(p_value);
+	}
+
+	@Override
+	public void update(Borrow p_user) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void update(Borrow p_user) throws LibraryException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void remove(String p_id) throws LibraryException {
+	public void remove(String p_id) {
 		ServiceValidation.checkUuid(p_id);
 		borrowBusiness.remove(p_id);
 	}

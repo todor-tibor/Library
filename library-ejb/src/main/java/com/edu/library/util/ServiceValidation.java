@@ -1,5 +1,6 @@
 package com.edu.library.util;
 
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -96,6 +97,15 @@ public class ServiceValidation {
 	public static void checkIfNumberInRange(int number, int minRange, int maxRange){
 		if (!(number <= maxRange && number > minRange)){
 				throw new IllegalArgumentException(ErrorMessages.ERROR_MESSAGE);
+		}
+	}
+	
+	/*
+	 * check if the two dates are in the correct chronological order. 
+	 */
+	public static void checDateOrder (Date from, Date until) {
+		if(from.after(until)) {
+			throw new IllegalArgumentException(ErrorMessages.ERROR_MESSAGE);
 		}
 	}
 }

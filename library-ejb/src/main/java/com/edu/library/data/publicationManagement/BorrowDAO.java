@@ -56,7 +56,7 @@ public class BorrowDAO {
 	}
 
 	public void store(Borrow p_value) throws EjbException {
-		try {
+		/*try {
 			if (p_value.getUser().getLoyaltyIndex() > 0) {
 				if (p_value.getPublication().getOnStock() > 0) {
 					oEntityManager.persist(p_value);
@@ -77,8 +77,14 @@ public class BorrowDAO {
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
+		} */
+		try {
+			oEntityManager.persist(p_value);
+			oEntityManager.flush();
+		} catch (PersistenceException e) {
+			oLogger.error(e);
+			throw new TechnicalException(e);
 		}
-
 	}
 
 	public void update(Borrow p_user) throws EjbException {
