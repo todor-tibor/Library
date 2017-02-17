@@ -17,7 +17,8 @@ import javax.persistence.Table;
 @Table(name = "authors")
 @NamedQueries({ @NamedQuery(name = "Author.findAll", query = "SELECT a FROM Author a"),
 		@NamedQuery(name = "Author.searchByName", query = "SELECT a FROM Author a WHERE a.name like :name"),
-		@NamedQuery(name = "Author.getById", query = "SELECT a FROM Author a WHERE a.uuid = :uuid") })
+		@NamedQuery(name = "Author.getById", query = "SELECT a FROM Author a WHERE a.uuid = :uuid"),
+		@NamedQuery(name = "Author.getByName", query = "SELECT a FROM Author a WHERE a.name = :name") })
 public class Author extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
@@ -38,6 +39,5 @@ public class Author extends BaseEntity {
 	public String toString() {
 		return "--" + name + "--";
 	}
-	
 
 }
