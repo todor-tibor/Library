@@ -4,10 +4,8 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
-import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
-import com.edu.library.IPublicationService;
 import com.edu.library.LibraryException;
 import com.edu.library.business.exception.BusinessException;
 import com.edu.library.business.exception.ErrorMessages;
