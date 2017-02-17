@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 
 import com.edu.library.business.exception.BusinessException;
 import com.edu.library.business.exception.ErrorMessages;
+import com.edu.library.data.exception.TechnicalException;
 import com.edu.library.data.publicationManagement.PublicationBean;
 import com.edu.library.model.Publication;
 import com.edu.library.util.ServiceValidation;
@@ -38,11 +39,11 @@ public class PublicationManagementBusiness {
 	}
 
 	public void store(Publication p_value)  {
-		Publication pub = dataAcces.getByName(p_value.getTitle());
-		if (pub == null) {
-			dataAcces.store(p_value);
-		} else {
+		try {
+			dataAcces.getByName(p_value.getTitle());
 			throw new BusinessException(ErrorMessages.ERROR_CONSTRAINT_VIOLATION);
+		} catch (TechnicalException e) {
+			dataAcces.store(p_value);
 		}
 	}
 

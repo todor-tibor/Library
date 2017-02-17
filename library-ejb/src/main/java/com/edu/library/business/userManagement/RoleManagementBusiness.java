@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 
 import com.edu.library.business.exception.BusinessException;
 import com.edu.library.business.exception.ErrorMessages;
+import com.edu.library.data.exception.TechnicalException;
 import com.edu.library.data.userManagement.RoleBean;
 import com.edu.library.model.Role;
 import com.edu.library.util.ServiceValidation;
@@ -32,11 +33,11 @@ public class RoleManagementBusiness {
 	}
 
 	public void store(Role p_value) {
-		Role r = dataAcces.getByName(p_value.getRole());
-		if (r == null) {
+		try {
+			dataAcces.getByName(p_value.getRole());
+			new BusinessException(ErrorMessages.ERROR_CONSTRAINT_VIOLATION);
+		} catch (TechnicalException e) {
 			dataAcces.store(p_value);
-		} else {
-			throw new BusinessException(ErrorMessages.ERROR_CONSTRAINT_VIOLATION);
 		}
 	}
 
