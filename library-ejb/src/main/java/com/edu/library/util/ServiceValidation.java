@@ -1,5 +1,6 @@
 package com.edu.library.util;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -83,6 +84,12 @@ public class ServiceValidation {
 	public static void checkNotNull(BaseEntity entity) {
 		if (entity == null) {			
 				throw new IllegalArgumentException(ErrorMessages.ERROR_MESSAGE);			
+		}
+	}
+	
+	public static void checkNotEmpty(List<? extends BaseEntity> entityList) {
+		if (entityList == null || entityList.isEmpty()) {			
+				throw new IllegalArgumentException(ERROR_MESSAGE);			
 		}
 	}
 	
