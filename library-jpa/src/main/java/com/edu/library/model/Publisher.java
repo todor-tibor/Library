@@ -15,6 +15,7 @@ import javax.persistence.Table;
 @Table(name = "publishers")
 @NamedQueries({ @NamedQuery(name = "Publisher.findAll", query = "SELECT p FROM Publisher p"),
 	@NamedQuery(name = "Publisher.findByName", query = "SELECT p FROM Publisher p WHERE p.name like :name"),
+	@NamedQuery(name = "Publisher.getByName", query = "SELECT p FROM Publisher p WHERE p.name = :name"),
 	@NamedQuery(name = "Publisher.findById", query = "SELECT p FROM Publisher p WHERE p.uuid = :uuid") })
 public class Publisher extends BaseEntity {
 	private static final long serialVersionUID = 1L;
