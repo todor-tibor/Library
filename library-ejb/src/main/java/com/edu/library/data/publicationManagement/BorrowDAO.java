@@ -97,7 +97,7 @@ public class BorrowDAO {
 	public void remove(Borrow p_borrow) throws EjbException {
 		oLogger.info("delete borrow called on entity: " + p_borrow.toString());
 		try {
-			oEntityManager.refresh(p_borrow);
+			oEntityManager.remove(p_borrow);
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new EjbException(e);
