@@ -8,7 +8,6 @@ import javax.ejb.Stateless;
 
 import com.edu.library.business.exception.BusinessException;
 import com.edu.library.business.exception.ErrorMessages;
-import com.edu.library.data.exception.TechnicalException;
 import com.edu.library.data.publicationManagement.PublicationBean;
 import com.edu.library.model.Publication;
 import com.edu.library.util.ServiceValidation;

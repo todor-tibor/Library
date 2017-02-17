@@ -13,12 +13,12 @@ import com.edu.library.model.BaseEntity;
  *
  *         Serves as a data validator class for different data input types.
  */
-public class ServiceValidation {	
+public class ServiceValidation {
 	/**
 	 * STRING_PATTERN - the restriction for a correct user name [a-zA-Z]+ - has
 	 * only letters
 	 */
-	private static final String STRING_PATTERN = "[a-z]+.{3,}";
+	private static final String STRING_PATTERN = "[a-zA-Z\\s,]+.{3,}";
 	/**
 	 * PASSWORD_PATTERN - the restriction for a correct password ((?=.*\\d) -
 	 * must have at least one number, (?=.*[a-z]) - one lowercase letter ,
@@ -45,10 +45,12 @@ public class ServiceValidation {
 	 * @return - true if the input data satisfies the given constraints,
 	 *         otherwise returns false
 	 */
-	public static boolean checkString(String inputString) {
+	public static void checkString(String inputString) {
 		Pattern pattern = Pattern.compile(STRING_PATTERN);
 		Matcher matcher = pattern.matcher(inputString);
-		return matcher.matches();
+		if (!matcher.matches()) {
+			throw new IllegalArgumentException(ErrorMessages.ERROR_MESSAGE);
+		}
 	}
 
 	/**
@@ -63,7 +65,7 @@ public class ServiceValidation {
 	public static void checkPassword(String password) {
 		Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
 		Matcher matcher = pattern.matcher(password);
-		if(!matcher.matches()){
+		if (!matcher.matches()) {
 			throw new IllegalArgumentException(ErrorMessages.ERROR_MESSAGE);
 		}
 	}
@@ -76,26 +78,26 @@ public class ServiceValidation {
 	 * @return - true if the two id match, false otherwise
 	 */
 	public static void checkUuid(String uuid) {
-		if(uuid==null || uuid.length()==0){
+		if (uuid == null || uuid.length() == 0) {
 			throw new IllegalArgumentException(ErrorMessages.ERROR_MESSAGE);
 		}
 	}
 
 	public static void checkNotNull(BaseEntity entity) {
-		if (entity == null) {			
-				throw new IllegalArgumentException(ErrorMessages.ERROR_MESSAGE);			
+		if (entity == null) {
+			throw new IllegalArgumentException(ErrorMessages.ERROR_MESSAGE);
 		}
 	}
-	
+
 	public static void checkNotEmpty(List<? extends BaseEntity> entityList) {
-		if (entityList == null || entityList.isEmpty()) {			
-				throw new IllegalArgumentException(ErrorMessages.ERROR_MESSAGE);			
+		if (entityList == null || entityList.isEmpty()) {
+			throw new IllegalArgumentException(ErrorMessages.ERROR_MESSAGE);
 		}
 	}
-	
-	public static void checkIfNumberInRange(int number, int minRange, int maxRange){
-		if (!(number <= maxRange && number > minRange)){
-				throw new IllegalArgumentException(ErrorMessages.ERROR_MESSAGE);
+
+	public static void checkIfNumberInRange(int number, int minRange, int maxRange) {
+		if (!(number <= maxRange && number > minRange)) {
+			throw new IllegalArgumentException(ErrorMessages.ERROR_MESSAGE);
 		}
 	}
 }
