@@ -47,7 +47,7 @@ public class PublisherManagementFacade implements IPublisherService {
 
 	@Override
 	public void remove(String p_id) throws LibraryException {
-		// TODO Auto-generated method stub
+		
 
 	}
 

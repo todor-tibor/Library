@@ -85,9 +85,8 @@ public class PublisherManager {
 
 	}
 
-	public void remove(String p_id) throws EjbException {
+	public void remove(Publisher publisher) throws EjbException {
 		try {
-			Publisher publisher = getById(p_id);
 			oEntityManager.remove(publisher);
 			oEntityManager.flush();
 
