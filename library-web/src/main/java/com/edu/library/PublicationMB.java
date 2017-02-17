@@ -20,6 +20,7 @@ import com.edu.library.model.Newspaper;
 import com.edu.library.model.Publication;
 import com.edu.library.model.Publisher;
 import com.edu.library.util.ExceptionHandler;
+import com.edu.library.util.PropertyProvider;
 
 /**
  * 
@@ -202,7 +203,7 @@ public class PublicationMB implements Serializable {
 			oPublicationBean.remove("b03e86a5-538e-4697-bcd5-3827f1ad1760");
 			oLogger.info("---------torolte");
 		} catch (Exception e) {
-			oLogger.info("nem sikerult torolni" + e.getMessage());
+			oLogger.info("nem sikerult torolni" + PropertyProvider.getProperty(e.getMessage()));
 			new ExceptionHandler(e);
 		}
 		/*
