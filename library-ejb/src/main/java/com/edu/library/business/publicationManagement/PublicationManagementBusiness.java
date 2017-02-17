@@ -6,11 +6,12 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
-import com.edu.library.LibraryException;
 import com.edu.library.business.exception.BusinessException;
 import com.edu.library.business.exception.ErrorMessages;
+import com.edu.library.data.exception.TechnicalException;
 import com.edu.library.data.publicationManagement.PublicationBean;
 import com.edu.library.model.Publication;
+import com.edu.library.util.ServiceValidation;
 
 /**
  * @author kiska
@@ -29,30 +30,31 @@ public class PublicationManagementBusiness {
 		return dataAcces.getAll();
 	}
 
-	public List<Publication> search(String p_searchTxt) throws LibraryException {
+	public List<Publication> search(String p_searchTxt)  {
 		return dataAcces.search(p_searchTxt);
 	}
 
-	public Publication getById(String p_id) throws LibraryException {
+	public Publication getById(String p_id)  {
 		return dataAcces.getById(p_id);
 	}
 
-	public void store(Publication p_value) throws LibraryException {
-		Publication pub = dataAcces.getByName(p_value.getTitle());
-		if (pub == null) {
-			dataAcces.store(p_value);
-		} else {
+	public void store(Publication p_value)  {
+		try {
+			dataAcces.getByName(p_value.getTitle());
 			throw new BusinessException(ErrorMessages.ERROR_CONSTRAINT_VIOLATION);
+		} catch (TechnicalException e) {
+			dataAcces.store(p_value);
 		}
 	}
 
-	public void update(Publication p_user) throws LibraryException {
+	public void update(Publication p_user)  {
 		dataAcces.getById(p_user.getUuid());
 		dataAcces.update(p_user);
 	}
 
 	public void remove(String p_id) {
 		Publication pub = dataAcces.getById(p_id);
+		ServiceValidation.checkNotNull(pub);
 		if (pub.getBorrows().isEmpty()) {
 			dataAcces.remove(pub);
 		} else {
