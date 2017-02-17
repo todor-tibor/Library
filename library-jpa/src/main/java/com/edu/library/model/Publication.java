@@ -32,8 +32,9 @@ import javax.persistence.TemporalType;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({ @NamedQuery(name = "Publication.findAll", query = "SELECT a FROM Publication a"),
-	@NamedQuery(name = "Publication.searchByName", query = "SELECT a FROM Publication a WHERE a.title like :title"),
-	@NamedQuery(name = "Publication.getById", query = "SELECT a FROM Publication a WHERE a.uuid = :uuid") })
+		@NamedQuery(name = "Publication.searchByName", query = "SELECT a FROM Publication a WHERE a.title like :title"),
+		@NamedQuery(name = "Publication.getByName", query = "SELECT a FROM Publication a WHERE a.title = :title"),
+		@NamedQuery(name = "Publication.getById", query = "SELECT a FROM Publication a WHERE a.uuid = :uuid") })
 public abstract class Publication extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
@@ -50,7 +51,7 @@ public abstract class Publication extends BaseEntity {
 	private String title;
 
 	// bi-directional many-to-one association to Borrow
-	@OneToMany(mappedBy = "publication",fetch=FetchType.EAGER)
+	@OneToMany(mappedBy = "publication", fetch = FetchType.EAGER)
 	private Set<Borrow> borrows;
 
 	// bi-directional many-to-one association to Publisher
@@ -95,7 +96,7 @@ public abstract class Publication extends BaseEntity {
 
 	public List<Borrow> getBorrows() {
 		return new ArrayList<>(this.borrows);
-		//(List<Borrow>)this.borrows.toArray();
+		// (List<Borrow>)this.borrows.toArray();
 	}
 
 	public void setBorrows(Set<Borrow> borrows) {
@@ -123,7 +124,5 @@ public abstract class Publication extends BaseEntity {
 	public void setPublisher(Publisher publisher) {
 		this.publisher = publisher;
 	}
-	
-	
 
 }

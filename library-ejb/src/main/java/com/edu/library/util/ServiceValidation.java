@@ -1,8 +1,10 @@
 package com.edu.library.util;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.edu.library.business.exception.ErrorMessages;
 import com.edu.library.model.BaseEntity;
 
 /***
@@ -11,8 +13,7 @@ import com.edu.library.model.BaseEntity;
  *
  *         Serves as a data validator class for different data input types.
  */
-public class ServiceValidation {
-	private static final String ERROR_MESSAGE="access.error.illegalArgument";
+public class ServiceValidation {	
 	/**
 	 * STRING_PATTERN - the restriction for a correct user name [a-zA-Z]+ - has
 	 * only letters
@@ -63,7 +64,7 @@ public class ServiceValidation {
 		Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
 		Matcher matcher = pattern.matcher(password);
 		if(!matcher.matches()){
-			throw new IllegalArgumentException(ERROR_MESSAGE);
+			throw new IllegalArgumentException(ErrorMessages.ERROR_MESSAGE);
 		}
 	}
 
@@ -76,19 +77,25 @@ public class ServiceValidation {
 	 */
 	public static void checkUuid(String uuid) {
 		if(uuid==null || uuid.length()==0){
-			throw new IllegalArgumentException(ERROR_MESSAGE);
+			throw new IllegalArgumentException(ErrorMessages.ERROR_MESSAGE);
 		}
 	}
 
 	public static void checkNotNull(BaseEntity entity) {
 		if (entity == null) {			
-				throw new IllegalArgumentException(ERROR_MESSAGE);			
+				throw new IllegalArgumentException(ErrorMessages.ERROR_MESSAGE);			
+		}
+	}
+	
+	public static void checkNotEmpty(List<? extends BaseEntity> entityList) {
+		if (entityList == null || entityList.isEmpty()) {			
+				throw new IllegalArgumentException(ErrorMessages.ERROR_MESSAGE);			
 		}
 	}
 	
 	public static void checkIfNumberInRange(int number, int minRange, int maxRange){
 		if (!(number <= maxRange && number > minRange)){
-				throw new IllegalArgumentException(ERROR_MESSAGE);
+				throw new IllegalArgumentException(ErrorMessages.ERROR_MESSAGE);
 		}
 	}
 }
