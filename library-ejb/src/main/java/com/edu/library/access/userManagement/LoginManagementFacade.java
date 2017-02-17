@@ -25,10 +25,9 @@ public class LoginManagementFacade implements ILoginService {
 	@EJB
 	private LoginManagementBusiness loginBusniess;
 
-	public List<Role> login(String userName, String password) throws LibraryException {
+	public List<Role> login(String userName, String password){
 		ServiceValidation.checkString(userName);
 		ServiceValidation.checkPassword(password);
 		return loginBusniess.authentication(userName, password);
-
 	}
 }
