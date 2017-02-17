@@ -21,11 +21,11 @@ public class LoginManagementFacade implements ILoginService {
 	/**
 	 * Error message for incorrect data
 	 */
-	//private static final String INPUT_DATA_VALIDATION_EXCEPTION = "loginManagementService.login.invalidData";
+
 	@EJB
 	private LoginManagementBusiness loginBusniess;
 
-	public List<Role> login(String userName, String password){
+	public List<Role> login(String userName, String password) {
 		ServiceValidation.checkString(userName);
 		ServiceValidation.checkPassword(password);
 		return loginBusniess.authentication(userName, password);

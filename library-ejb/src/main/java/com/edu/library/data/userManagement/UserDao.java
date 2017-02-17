@@ -2,6 +2,7 @@ package com.edu.library.data.userManagement;
 
 import java.util.List;
 
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -9,10 +10,9 @@ import javax.persistence.PersistenceException;
 
 import org.jboss.logging.Logger;
 
-import com.edu.library.LibraryException;
 import com.edu.library.PasswordEncrypter;
+import com.edu.library.data.exception.TechnicalException;
 import com.edu.library.model.User;
-import com.edu.library.util.EjbException;
 
 /**
  * @author kiska
@@ -20,70 +20,69 @@ import com.edu.library.util.EjbException;
  *         Invokes the CRUD methods for a user
  */
 @Stateless
-public class UserBean {
+@LocalBean
+public class UserDao {
 	@PersistenceContext(unitName = "WildflyUsers")
 	private EntityManager oEntityManager;
-	private Logger oLogger = Logger.getLogger(UserBean.class);
+	private Logger oLogger = Logger.getLogger(UserDao.class);
 
-	public List<User> getAll() throws EjbException {
+	public List<User> getAll() {
 		try {
 			return oEntityManager.createNamedQuery("User.findAll", User.class).getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 
-	public User getById(String id) throws EjbException {
+	public User getById(String id) {
 		try {
 			return oEntityManager.createNamedQuery("User.findById", User.class).setParameter("uuid", id)
 					.getSingleResult();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 
-	public void store(User user) throws LibraryException {
+	public void store(User user) {
 		try {
 			user.setPassword(PasswordEncrypter.encypted(user.getPassword(), " "));
 			oEntityManager.persist(user);
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 
-	public void remove(String id) throws EjbException {
+	public void remove(User user) {
 		try {
-			oEntityManager.clear();
-			User u = getById(id);
-			oEntityManager.remove(u);
+			oEntityManager.remove(user);
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 
-	public void update(User user) throws EjbException {
+	public void update(User user) {
 		try {
 			oEntityManager.merge(user);
 			oEntityManager.flush();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 
-	public List<User> search(String userName) throws EjbException {
+	public List<User> search(String userName) {
 		try {
 			return oEntityManager.createNamedQuery("User.searchByUserName", User.class)
 					.setParameter("user_name", "%" + userName + "%").getResultList();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 
@@ -93,9 +92,9 @@ public class UserBean {
 	 * @param userName
 	 *            - the user name of the user for which to search for
 	 * @return - a User object
-	 * @throws EjbException
+	 * @throws TechnicalException
 	 */
-	public User getByUserName(String userName) throws EjbException {
+	public User getByUserName(String userName) {
 
 		try {
 			User u = oEntityManager.createNamedQuery("User.findByName", User.class).setParameter("user_name", userName)
@@ -103,7 +102,7 @@ public class UserBean {
 			return u;
 		} catch (PersistenceException e) {
 			oLogger.error(e);
-			throw new EjbException(e);
+			throw new TechnicalException(e);
 		}
 	}
 }
