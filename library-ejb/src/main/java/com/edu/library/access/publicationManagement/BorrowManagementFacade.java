@@ -24,8 +24,8 @@ public class BorrowManagementFacade implements IBorrowService {
 	private BorrowManagementBusiness borrowBusiness;
 	
 	@Override
-	public List<Borrow> getAll() throws LibraryException {
-		return null;
+	public List<Borrow> getAll() {
+		return borrowBusiness.getAll();
 	}
 
 	@Override

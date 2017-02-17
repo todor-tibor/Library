@@ -35,27 +35,27 @@ public class BorrowManagementBusiness {
 	@EJB
 	private BorrowDAO borrowDAO;
 
-	public List<Publication> getAll() {
+	public List<Borrow> getAll() {
+		borrowDAO.getAll();
+		return null;
+	}
+
+	public List<Borrow> search(String p_searchTxt) throws LibraryException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public List<Publication> search(String p_searchTxt) throws LibraryException {
+	public Borrow getById(String p_entity) throws LibraryException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Publication getById(String p_id) throws LibraryException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void store(Publication p_value) throws LibraryException {
+	public void store(Borrow p_entity) throws LibraryException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void update(Publication p_user) throws LibraryException {
+	public void update(Borrow p_entity) throws LibraryException {
 		// TODO Auto-generated method stub
 
 	}
