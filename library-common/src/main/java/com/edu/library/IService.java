@@ -21,7 +21,7 @@ public interface IService<X extends BaseEntity> {
 	 * @return List containing all entities.
 	 * @throws LibraryException
 	 */
-	public List<X> getAll() throws LibraryException;
+	public List<X> getAll();
 
 	/**
 	 * Lists one object of {@code <X>} type that is in the database and contains
@@ -33,7 +33,7 @@ public interface IService<X extends BaseEntity> {
 	 * @throws LibraryException
 	 */
 
-	public List<X> search(String p_searchTxt) throws LibraryException;
+	public List<X> search(String p_searchTxt);
 
 	/**
 	 * Lists one object of {@code <X>} type that is in the database and contains
@@ -44,7 +44,7 @@ public interface IService<X extends BaseEntity> {
 	 * @return Search result entity, null if nothing found.
 	 * @throws LibraryException
 	 */
-	public X getById(String p_id) throws LibraryException;
+	public X getById(String p_id);
 
 	/**
 	 * Saves the object specified by {@code p_value} into the database
@@ -54,7 +54,7 @@ public interface IService<X extends BaseEntity> {
 	 * @return True if operation successful, false if not.
 	 * @throws LibraryException
 	 */
-	public void store(X p_value) throws LibraryException;
+	public void store(X p_value);
 
 	/**
 	 * Updates the object specified by {@code p_value}
@@ -64,7 +64,7 @@ public interface IService<X extends BaseEntity> {
 	 * @return True if operation successful, false if not.
 	 * @throws LibraryException
 	 */
-	public void update(X p_user) throws LibraryException;
+	public void update(X p_user);
 
 	/**
 	 * Removes an object defined by the {@code p_id} from the database
@@ -74,5 +74,5 @@ public interface IService<X extends BaseEntity> {
 	 * @return True if operation successful, false if not.
 	 * @throws LibraryException
 	 */
-	public void remove(String p_id) throws LibraryException;
+	public void remove(String p_id);
 }

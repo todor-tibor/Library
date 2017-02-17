@@ -11,8 +11,6 @@ import javax.inject.Named;
 
 import org.jboss.logging.Logger;
 
-import com.edu.library.IPublicationService;
-import com.edu.library.LibraryException;
 import com.edu.library.model.Author;
 import com.edu.library.model.Book;
 import com.edu.library.model.Magazine;
@@ -20,7 +18,6 @@ import com.edu.library.model.Newspaper;
 import com.edu.library.model.Publication;
 import com.edu.library.model.Publisher;
 import com.edu.library.util.ExceptionHandler;
-import com.edu.library.util.PropertyProvider;
 
 /**
  * 
@@ -64,15 +61,13 @@ public class PublicationMB implements Serializable {
 	 * @return List of all publications from persistency.
 	 */
 	public List<Publication> getAll() {
-		remove();
-
-		/*
-		 * 
-		 * this.publicationList.clear(); try { this.publicationList =
-		 * oPublicationBean.getAll(); } catch (LibraryException e) {
-		 * oLogger.error(e.getMessage()); MessageService.error(e.getMessage());
-		 * }
-		 */
+		this.publicationList.clear();
+		try {
+			this.publicationList = oPublicationBean.getAll();
+		} catch (Exception e) {
+			oLogger.error(e);
+			new ExceptionHandler(e);
+		}
 		return this.publicationList;
 	}
 
@@ -91,9 +86,9 @@ public class PublicationMB implements Serializable {
 				if (this.publicationList.isEmpty()) {
 					MessageService.warn("No entity found");
 				}
-			} catch (LibraryException e) {
-				oLogger.error(e.getMessage());
-				MessageService.error(e.getMessage());
+			} catch (Exception e) {
+				oLogger.error(e);
+				new ExceptionHandler(e);
 			}
 		} else {
 			MessageService.error("Keyword too short. Min. 3 characters req.");
@@ -154,9 +149,9 @@ public class PublicationMB implements Serializable {
 			oPublicationBean.store(publication);
 			publicationList.add(publication);
 			MessageService.info("Succesfully added: " + publication);
-		} catch (LibraryException e) {
-			oLogger.error(e.getMessage());
-			MessageService.error(e.getMessage());
+		} catch (Exception e) {
+			oLogger.error(e);
+			new ExceptionHandler(e);
 		}
 	}
 
@@ -186,9 +181,9 @@ public class PublicationMB implements Serializable {
 				this.publicationList = oPublicationBean.getAll();
 				oLogger.info("---update succesfull---");
 				MessageService.info("Update succesfull.");
-			} catch (LibraryException e) {
+			} catch (Exception e) {
 				oLogger.error(e);
-				MessageService.error(e.getMessage());
+				new ExceptionHandler(e);
 			}
 		} else {
 			MessageService.warn("All field is required");
@@ -199,21 +194,19 @@ public class PublicationMB implements Serializable {
 	 * Deletes currently selected publication from persistency.
 	 */
 	public void remove() {
-		try {
-			oPublicationBean.remove("b03e86a5-538e-4697-bcd5-3827f1ad1760");
-			oLogger.info("---------torolte");
-		} catch (Exception e) {
-			oLogger.info("nem sikerult torolni" + PropertyProvider.getProperty(e.getMessage()));
-			new ExceptionHandler(e);
+		if (this.currentPublication == null) {
+			MessageService.error("Empty field");
+		} else {
+			try {
+				oPublicationBean.remove(this.currentPublication.getUuid());
+				publicationList = oPublicationBean.getAll();
+				MessageService.info("Delete succesfull.");
+			} catch (Exception e) {
+				oLogger.error(e);
+				new ExceptionHandler(e);
+			}
 		}
-		/*
-		 * if (this.currentPublication == null) {
-		 * MessageService.error("Empty field"); } else { try {
-		 * oPublicationBean.remove(this.currentPublication.getUuid());
-		 * publicationList = oPublicationBean.getAll();
-		 * MessageService.info("Delete succesfull."); } catch (LibraryException
-		 * e) { oLogger.error(e); MessageService.error(e.getMessage()); } }
-		 */
+
 	}
 
 	public String getType() {
