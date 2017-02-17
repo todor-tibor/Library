@@ -15,10 +15,9 @@ import org.jboss.logging.Logger;
 
 import com.edu.library.IBorrowService;
 import com.edu.library.LibraryException;
-
-import edu.com.library.model.Borrow;
-import edu.com.library.model.Publication;
-import edu.com.library.model.User;
+import com.edu.library.model.Borrow;
+import com.edu.library.model.Publication;
+import com.edu.library.model.User;
 
 /**
  * @author nagys, gallb

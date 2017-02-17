@@ -2,8 +2,8 @@ package com.edu.library;
 
 import java.util.List;
 
-import edu.com.library.model.BaseEntity;
-import edu.com.library.model.Role;
+import com.edu.library.model.BaseEntity;
+import com.edu.library.model.Role;
 
 /**
  * 

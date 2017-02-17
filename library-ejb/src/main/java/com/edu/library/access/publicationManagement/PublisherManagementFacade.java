@@ -6,8 +6,7 @@ import javax.ejb.Stateless;
 
 import com.edu.library.IPublisherService;
 import com.edu.library.LibraryException;
-
-import edu.com.library.model.Publisher;
+import com.edu.library.model.Publisher;
 
 /**
  * @author kiska Implements the basics of user login. Validates the given the

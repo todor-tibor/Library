@@ -3,7 +3,7 @@
  */
 package com.edu.library;
 
-import edu.com.library.model.Borrow;
+import com.edu.library.model.Borrow;
 
 /**
  * @author nagys

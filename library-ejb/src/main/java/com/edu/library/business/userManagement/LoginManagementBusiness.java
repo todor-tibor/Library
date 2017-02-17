@@ -9,10 +9,9 @@ import javax.ejb.Stateless;
 import com.edu.library.IUserService;
 import com.edu.library.LibraryException;
 import com.edu.library.PasswordEncrypter;
+import com.edu.library.model.Role;
+import com.edu.library.model.User;
 import com.edu.library.util.EjbException;
-
-import edu.com.library.model.Role;
-import edu.com.library.model.User;
 
 /**
  * @author kiska

@@ -13,13 +13,12 @@ import org.jboss.logging.Logger;
 
 import com.edu.library.IPublicationService;
 import com.edu.library.LibraryException;
-
-import edu.com.library.model.Author;
-import edu.com.library.model.Book;
-import edu.com.library.model.Magazine;
-import edu.com.library.model.Newspaper;
-import edu.com.library.model.Publication;
-import edu.com.library.model.Publisher;
+import com.edu.library.model.Author;
+import com.edu.library.model.Book;
+import com.edu.library.model.Magazine;
+import com.edu.library.model.Newspaper;
+import com.edu.library.model.Publication;
+import com.edu.library.model.Publisher;
 
 /**
  * 
