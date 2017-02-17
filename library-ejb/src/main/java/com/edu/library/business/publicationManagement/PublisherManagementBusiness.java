@@ -34,7 +34,11 @@ public class PublisherManagementBusiness {
 	}
 
 	public void store(Publisher p_value) {
-		publisherManager.store(p_value);
+		if (!p_value.getName().isEmpty()) {
+			publisherManager.store(p_value);
+		} else {
+			throw new BusinessException("************************************************************************************hello");
+		}
 
 	}
 
