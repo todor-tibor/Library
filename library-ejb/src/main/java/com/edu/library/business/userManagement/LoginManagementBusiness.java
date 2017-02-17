@@ -11,6 +11,7 @@ import com.edu.library.LibraryException;
 import com.edu.library.PasswordEncrypter;
 import com.edu.library.business.exception.BusinessException;
 import com.edu.library.business.exception.ErrorMessages;
+import com.edu.library.data.userManagement.UserDao;
 import com.edu.library.model.BaseEntity;
 import com.edu.library.model.Role;
 import com.edu.library.model.User;
@@ -27,7 +28,7 @@ import com.edu.library.util.ServiceValidation;
 public class LoginManagementBusiness {
 
 	@EJB
-	private IUserService userAccess;
+	private UserDao userAccess;
 
 	/**
 	 * Error message for the case when passwords don't match.
@@ -46,8 +47,7 @@ public class LoginManagementBusiness {
 	 * @throws LibraryException
 	 * 
 	 */
-	public List<Role> authentication(String userName, String password) throws LibraryException {
-		ServiceValidation.checkNotNull((BaseEntity) userAccess);
+	public List<Role> authentication(String userName, String password) throws LibraryException {		
 		User user = userAccess.getByUserName(userName);
 		if (PasswordEncrypter.encypted(password, " ").equals(user.getPassword())) { //
 			return user.getRoles();
