@@ -39,7 +39,6 @@ public class AuthorManagementBusiness {
 
 	public void remove(String p_id) {
 		dataAcces.remove(dataAcces.getById(p_id));
-
 	}
 
 }
