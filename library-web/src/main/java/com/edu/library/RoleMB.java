@@ -39,15 +39,7 @@ public class RoleMB implements Serializable {
 	private IRoleService oRoleBean;
 
 	@Inject LocaleManager localeManager;
-	
-	/**
-	 * 
-	 */
-	
-	@PostConstruct
-	private void init(){
-		FacesContext.getCurrentInstance().getViewRoot().setLocale(localeManager.getUserLocale());	
-	}
+		
 	
 	public void change(){
 		oLogger.info("-----tab changed");

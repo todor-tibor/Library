@@ -48,14 +48,6 @@ public class UserMB implements Serializable {
 	@Inject
 	LocaleManager localeManager;
 
-	/**
-	 * 
-	 */
-
-	@PostConstruct
-	private void init() {
-		FacesContext.getCurrentInstance().getViewRoot().setLocale(localeManager.getUserLocale());
-	}
 
 	public void change() {
 		oLogger.info("-----tab changed");
