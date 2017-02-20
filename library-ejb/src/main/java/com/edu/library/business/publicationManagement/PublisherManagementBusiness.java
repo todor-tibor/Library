@@ -44,9 +44,7 @@ public class PublisherManagementBusiness {
 	}
 
 	public void remove(String p_id) {
-		Publisher publisher = publisherManager.getById(p_id);
-		publisherManager.remove(publisher);
-
+		publisherManager.remove(publisherManager.getById(p_id));
 	}
 
 }

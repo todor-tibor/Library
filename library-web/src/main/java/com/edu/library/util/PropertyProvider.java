@@ -1,15 +1,22 @@
 package com.edu.library.util;
 
+import java.io.Serializable;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public class PropertyProvider {
+import javax.enterprise.context.SessionScoped;
 
-	private static ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("errorMessages",Locale.ENGLISH);
+
+@SessionScoped
+public class PropertyProvider implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6253902624155383715L;
+	private ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("errorMessages",Locale.ENGLISH);
 	
-	private PropertyProvider() {
-	}
 	/**
 	 * get property using ResourceBundle
 	 * 
@@ -17,7 +24,8 @@ public class PropertyProvider {
 	 *            - name of property
 	 * @return value of the property
 	 */
-	public static String getProperty(String property) {
+	
+	public String getProperty(String property) {
 		try {
 			return RESOURCE_BUNDLE.getString(property);
 		} catch (MissingResourceException e) {
@@ -25,7 +33,7 @@ public class PropertyProvider {
 		}
 	}
 	
-	public static void setLocale(Locale locale) {
+	public void setLocale(Locale locale) {
 		RESOURCE_BUNDLE = ResourceBundle.getBundle("errorMessages", locale);
 	}
 	

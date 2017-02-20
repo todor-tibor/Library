@@ -39,16 +39,7 @@ public class RoleMB implements Serializable {
 	private IRoleService oRoleBean;
 
 	@Inject LocaleManager localeManager;
-	
-	/**
-	 * 
-	 */
-	
-	@PostConstruct
-	private void init(){
-		FacesContext.getCurrentInstance().getViewRoot().setLocale(localeManager.getUserLocale());
-		System.out.println("-*-*-*-*-*-*-* " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
-	}
+		
 	
 	public void change(){
 		oLogger.info("-----tab changed");
@@ -65,13 +56,12 @@ public class RoleMB implements Serializable {
 	 * 
 	 * @return List of all roles from persistency.
 	 */
-	public List<Role> getAll() {
-		oLogger.info("--getAllRoles()--");
+	public List<Role> getAll() {		
 		roleList.clear();
-		try {
-			oLogger.info("--getAllRoles()--roles queried");
+		try {		
 			roleList = oRoleBean.getAll();
-		} catch (LibraryException e) {
+		} catch (Exception e) {
+			oLogger.error(e);
 			MessageService.error("Server internal error.");
 		}
 		return roleList;
@@ -84,13 +74,13 @@ public class RoleMB implements Serializable {
 	 *            rolename.
 	 * @return List of role objects found.
 	 */
-	public List<Role> search(String p_searchTxt) {
-		oLogger.info("--search role--" + p_searchTxt);
+	public List<Role> search(String p_searchTxt) {	
 		if (p_searchTxt.length() >= 3) {
 			roleList.clear();
 			try {
 				roleList = oRoleBean.search(p_searchTxt);
-			} catch (LibraryException e) {
+			} catch (Exception e) {
+				oLogger.error(e);
 				MessageService.error(e.getMessage());
 			}
 		} else {
@@ -106,9 +96,7 @@ public class RoleMB implements Serializable {
 	 *         
 	 */
 
-	public void store(String p_name) {
-		oLogger.info("--store role--");
-		oLogger.info("--store param: " + p_name);
+	public void store(String p_name) {	
 		if (p_name.isEmpty() || "".equals(p_name)) {
 			MessageService.error("Empty field");
 			return;
@@ -119,7 +107,8 @@ public class RoleMB implements Serializable {
 			oRoleBean.store(tmpRole);
 			roleList.add(tmpRole);
 			MessageService.info("Succesfully added: " + p_name);
-		} catch (LibraryException e) {
+		} catch (Exception e) {
+			oLogger.error(e);
 			MessageService.error(e.getMessage());
 		}
 	}
@@ -135,10 +124,9 @@ public class RoleMB implements Serializable {
 			try {
 				currentRole.setRole(p_newTxt);
 				oRoleBean.update(currentRole);
-				roleList = oRoleBean.getAll();
-				oLogger.info("---update succesfull---");
+				roleList = oRoleBean.getAll();			
 				MessageService.info("Update succesfull.");
-			} catch (LibraryException e) {
+			} catch (Exception e) {
 				oLogger.error(e);
 				MessageService.error(e.getMessage());
 			}
@@ -151,15 +139,14 @@ public class RoleMB implements Serializable {
 	 * Deletes currently selected role from persistency.
 	 */
 	public void remove() {
-		if (currentRole == null) {
-			oLogger.warn("No selected item");
+		if (currentRole == null) {		
 			MessageService.error("No selected item");
 		} else {
 			try {
 				oRoleBean.remove(currentRole.getUuid());
 				roleList.remove(currentRole);
 				MessageService.info("Delete successful.");
-			} catch (LibraryException e) {
+			} catch (Exception e) {
 				oLogger.error(e);
 				MessageService.error(e.getMessage());
 			}

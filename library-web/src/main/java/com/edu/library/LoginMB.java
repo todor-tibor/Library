@@ -1,22 +1,24 @@
 package com.edu.library;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.Cache;
 
 import org.jboss.logging.Logger;
 
-import com.edu.library.ILoginService;
-import com.edu.library.IUserService;
-import com.edu.library.LibraryException;
 import com.edu.library.model.Role;
 import com.edu.library.model.RoleType;
 import com.edu.library.model.User;
+import com.edu.library.util.ExceptionHandler;
+import com.edu.library.util.PropertyProvider;
 
 /**
  * @author kiska
@@ -25,7 +27,7 @@ import com.edu.library.model.User;
  * 
  */
 @Named("loginbean")
-@SessionScoped
+@ApplicationScoped
 public class LoginMB implements Serializable {
 
 	private Logger oLogger = Logger.getLogger(LoginMB.class);
@@ -35,6 +37,8 @@ public class LoginMB implements Serializable {
 	private IUserService oUserBean;
 	@Inject
 	private ILoginService oLoginBean;
+	@Inject
+	private ExceptionHandler exceptionHandler;
 	/**
 	 * 
 	 */
@@ -73,24 +77,45 @@ public class LoginMB implements Serializable {
 			return "";
 	}
 
-	private String checkRole() {
+	private void checkRole() {
 		Role tmp = new Role();
 		tmp.setRole("LIBRARIAN");
 
 		if (roles.contains(tmp)) {
 			setCurrentRole("LIBRARIAN");
-			return "index";
+
+			try {
+				FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+				FacesContext.getCurrentInstance().getViewRoot()
+						.setLocale(FacesContext.getCurrentInstance().getViewRoot().getLocale());
+			} catch (IOException e) {
+				oLogger.error(e);
+				MessageService.fatal(e.getMessage());
+			}
 		} else {
 			tmp.setRole("READER");
 
 			if (roles.contains(tmp)) {
 				setCurrentRole("READER");
-				return "publication_user";
+				try {
+					FacesContext.getCurrentInstance().getExternalContext().redirect("publication_user.xhtml");
+				} catch (IOException e) {
+					oLogger.error(e);
+					MessageService.fatal(e.getMessage());
+				}
+
 			} else {
 				setCurrentRole("INVALID");
-				return "login";
 			}
 		}
+	}
+
+	public String processAdmin() {
+		return "index?facesRedirect=true";
+	}
+
+	public String processReader() {
+		return "publication_user?facesRedirect=true";
 	}
 
 	/**
@@ -99,13 +124,12 @@ public class LoginMB implements Serializable {
 	 * @return List of all users from persistency.
 	 */
 	public List<User> getAll() {
-		oLogger.info("--getAllUsers()--");
 		userList = new ArrayList<>();
 		try {
-			oLogger.info("--getAllUsers()--users queried");
 			userList = oUserBean.getAll();
-		} catch (LibraryException e) {
-			// this.error("Server internal error.");
+		} catch (Exception e) {
+			oLogger.error(e);
+			exceptionHandler.showMessage(e);
 		}
 		return userList;
 	}
@@ -117,28 +141,16 @@ public class LoginMB implements Serializable {
 	 *            username.
 	 * @return List of user objects found.
 	 */
-	public String search() {
-		oLogger.info("--search user--" + this.getUser_name());
+	public void search() {
 		if (this.getUser_name().length() >= 3) {
 			try {
-				System.out.println("/*/*-/*-/ " + this.getUser_name() + "    " + this.getPassword());
 				roles = oLoginBean.login(this.getUser_name(), this.getPassword());
-				System.out.println("///**********-----------    success    -*-*-*-*-*-");
-				return checkRole();
+				checkRole();
 			} catch (LibraryException e) {
-				oLogger.error(e.getMessage());
+				oLogger.error(e);
 				MessageService.error(e.getMessage());
-
 			}
 		}
-
-		return "";
-		/*
-		 * for (Role r : roles) { switch (r.getRole()) { case "LIBRARIAN":
-		 * return "index"; case "READER": return "publication_user"; default:
-		 * return "login"; } }
-		 */
-
 	}
 
 	public String getPassword() {

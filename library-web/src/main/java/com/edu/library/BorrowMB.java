@@ -37,6 +37,8 @@ public class BorrowMB implements Serializable {
 
 	@Inject
 	private IBorrowService oBorrowBean;
+	@Inject
+	ExceptionHandler exceptionHandler;
 
 	private List<Borrow> borrows = new ArrayList<>();
 	private User currentUser = null;
@@ -101,7 +103,7 @@ public class BorrowMB implements Serializable {
 			borrows = oBorrowBean.getAll();
 		} catch (Exception e) {
 			oLogger.error(e);
-			new ExceptionHandler(e);
+			exceptionHandler.showMessage(e);
 		}
 		return borrows;
 	}
@@ -124,14 +126,14 @@ public class BorrowMB implements Serializable {
 				MessageService.info("Succesfully added");
 			} catch (LibraryException e) {
 				oLogger.error("-----------??????????????????????"+ e.getMessage());
-				new ExceptionHandler(e);
+				exceptionHandler.showMessage(e);
 			}catch (IllegalArgumentException e) {
 				oLogger.error("-----------<<<<<<<<<<<<<<<<<<<<<<"+ e.getMessage());
-				new ExceptionHandler(e);
+				exceptionHandler.showMessage(e);
 			}catch (Exception e) {
 				oLogger.error("-----------??????????????????????-------------------"+ e.getMessage());
 				oLogger.error("-----"+e.getClass().getSimpleName());
-				new ExceptionHandler(e);
+				exceptionHandler.showMessage(e);
 			}
 		}
 	}
@@ -146,7 +148,7 @@ public class BorrowMB implements Serializable {
 				getAll();
 			} catch (Exception e) {
 				oLogger.error(e);
-				new ExceptionHandler(e);
+				exceptionHandler.showMessage(e);
 			}
 		}
 	}

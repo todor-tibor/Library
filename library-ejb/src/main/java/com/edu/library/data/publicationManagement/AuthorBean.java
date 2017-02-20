@@ -23,7 +23,7 @@ public class AuthorBean {
 
 	@PersistenceContext(unitName = "WildflyUsers")
 	private EntityManager oEntityManager;
-	private Logger oLogger = Logger.getLogger(Author.class);
+	private Logger oLogger = Logger.getLogger(AuthorBean.class);
 
 	public List<Author> getAll() {
 		try {

@@ -2,18 +2,18 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
-
+<f:view locale="#{localeBean.userLocale}"/>
 <h:head>
-	<p:messages id="messages" showDetail="true" autoUpdate="true"
+	<p:messages id="messagesLogin" showDetail="true" autoUpdate="true"
 		closable="true" />
 </h:head>
 
 <h:body>
 
-	<p:panel id="mainPanel" style="position: absolute; left:50px; top:0px;">
+	<p:panel id="loginPanel" style="position: absolute; left:50px; top:0px;">
 		<p:panel header="#{msg['login.text']}"
 			style="position: relative; left:0px; top:0px;">
-			<h:form id="actions_form">
+			<h:form id="login_action_form">
 				<p:outputLabel value="#{msg['username.text']}" />
 				<br />
 				<p:inputText id="loginTextBox" value="#{loginbean.user_name}" />
@@ -29,16 +29,16 @@
 		</p:panel>
 
 		<p:panel style="position: relative; left:650px; top:-200px;">
-			<h:outputText id="wel" value="#{msg['language.text']}" />
+			<h:outputText id="language" value="#{msg['language.text']}" />
 
 
 			<p:commandButton value="#{msg['lang.hungarian']}"
-				action="#{amibeanunk.hungarianNow()}" update="mainPanel">
+				action="#{amibeanunk.hungarianNow()}" update="loginPanel">
 
 			</p:commandButton>
 
 			<p:commandButton value="#{msg['lang.english']}"
-				action="#{amibeanunk.englishNow()}" update="mainPanel">
+				action="#{amibeanunk.englishNow()}" update="loginPanel">
 			</p:commandButton>
 		</p:panel>
 	</p:panel>
