@@ -28,6 +28,7 @@ import com.edu.library.util.PropertyProvider;
  * 
  * @author gallb
  * @author sipost
+ * @author kiska
  * 
  */
 @Named("userbean")

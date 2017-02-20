@@ -17,6 +17,7 @@ import com.edu.library.util.ExceptionHandler;
  * Author manager.
  * 
  * @author sipost
+ * @author kiska
  */
 @Named("authorBean")
 @SessionScoped

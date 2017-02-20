@@ -124,10 +124,8 @@ public class LoginMB implements Serializable {
 	 * @return List of all users from persistency.
 	 */
 	public List<User> getAll() {
-		oLogger.info("--getAllUsers()--");
 		userList = new ArrayList<>();
 		try {
-			oLogger.info("--getAllUsers()--users queried");
 			userList = oUserBean.getAll();
 		} catch (Exception e) {
 			oLogger.error(e);
