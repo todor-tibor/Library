@@ -1,5 +1,6 @@
 package com.edu.library.access.userManagement;
 
+import java.security.Provider.Service;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -50,6 +51,9 @@ public class UserManagementFacade implements IUserService {
 	public void update(User user) {
 		ServiceValidation.checkNotNull(user);
 		ServiceValidation.checkNotEmpty(user.getRoles());
+		ServiceValidation.checkUuid(user.getUuid());
+		ServiceValidation.checkString(user.getUserName());
+		ServiceValidation.checkPassword(user.getPassword());
 		userManagementBusiness.update(user);
 	}
 
