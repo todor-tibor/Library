@@ -38,13 +38,6 @@
 			<artifactId>library-common</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
-		<dependency>
-			<groupId>gallb</groupId>
-			<artifactId>library-ejb</artifactId>
-			<type>ejb</type>
-			<scope>test</scope>
-		</dependency>
 
 		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
