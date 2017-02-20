@@ -17,6 +17,7 @@ import com.edu.library.LibraryException;
 import com.edu.library.model.Role;
 import com.edu.library.model.RoleType;
 import com.edu.library.model.User;
+import com.edu.library.util.ExceptionHandler;
 
 /**
  * @author kiska
@@ -99,13 +100,12 @@ public class LoginMB implements Serializable {
 	 * @return List of all users from persistency.
 	 */
 	public List<User> getAll() {
-		oLogger.info("--getAllUsers()--");
 		userList = new ArrayList<>();
 		try {
-			oLogger.info("--getAllUsers()--users queried");
 			userList = oUserBean.getAll();
-		} catch (LibraryException e) {
-			// this.error("Server internal error.");
+		} catch (Exception e) {
+			oLogger.error(e);
+			new ExceptionHandler(e);
 		}
 		return userList;
 	}
@@ -118,27 +118,17 @@ public class LoginMB implements Serializable {
 	 * @return List of user objects found.
 	 */
 	public String search() {
-		oLogger.info("--search user--" + this.getUser_name());
 		if (this.getUser_name().length() >= 3) {
 			try {
-				System.out.println("/*/*-/*-/ " + this.getUser_name() + "    " + this.getPassword());
 				roles = oLoginBean.login(this.getUser_name(), this.getPassword());
-				System.out.println("///**********-----------    success    -*-*-*-*-*-");
 				return checkRole();
-			} catch (LibraryException e) {
-				oLogger.error(e.getMessage());
+			} catch (Exception e) {
+				oLogger.error(e);
 				MessageService.error(e.getMessage());
-
 			}
 		}
 
 		return "";
-		/*
-		 * for (Role r : roles) { switch (r.getRole()) { case "LIBRARIAN":
-		 * return "index"; case "READER": return "publication_user"; default:
-		 * return "login"; } }
-		 */
-
 	}
 
 	public String getPassword() {

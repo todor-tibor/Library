@@ -62,8 +62,8 @@ public class PublisherMB implements Serializable {
 		;
 		try {
 			publishersList = oPublisherBean.getAll();
-			oLogger.info("+++++++++++++++++return all publisher");
 		} catch (Exception e) {
+			oLogger.error(e);
 			new ExceptionHandler(e);
 		}
 		return publishersList;
@@ -83,6 +83,7 @@ public class PublisherMB implements Serializable {
 			try {
 				publishersList = oPublisherBean.search(p_searchTxt);
 			} catch (Exception e) {
+				oLogger.error(e);
 				new ExceptionHandler(e);
 			}
 		} else {
@@ -113,6 +114,7 @@ public class PublisherMB implements Serializable {
 			publishersList.add(tmpPublisher);
 			MessageService.info("Succesfully added: " + p_value);
 		} catch (Exception e) {
+			oLogger.error(e);
 			new ExceptionHandler(e);
 		}
 	}
@@ -132,6 +134,7 @@ public class PublisherMB implements Serializable {
 				publishersList = oPublisherBean.getAll();
 				MessageService.info("Update succesfull.");
 			} catch (Exception e) {
+				oLogger.error(e);
 				new ExceptionHandler(e);
 
 			}
@@ -152,6 +155,7 @@ public class PublisherMB implements Serializable {
 				publishersList = oPublisherBean.getAll();
 				MessageService.info("Delete succesfull.");
 			} catch (Exception e) {
+				oLogger.error(e);
 				new ExceptionHandler(e);
 			}
 		}

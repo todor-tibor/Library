@@ -21,6 +21,7 @@ import com.edu.library.IUserService;
 import com.edu.library.LibraryException;
 import com.edu.library.model.Role;
 import com.edu.library.model.User;
+import com.edu.library.util.PropertyProvider;
 
 /**
  * User manager.
@@ -54,8 +55,6 @@ public class UserMB implements Serializable {
 	@PostConstruct
 	private void init() {
 		FacesContext.getCurrentInstance().getViewRoot().setLocale(localeManager.getUserLocale());
-		System.out
-				.println("-*-*-*-*-*-*-* " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
 	}
 
 	public void change() {
@@ -86,13 +85,12 @@ public class UserMB implements Serializable {
 	 * @return List of all users from persistency.
 	 */
 	public List<User> getAll() {
-		oLogger.info("--getAllUsers()--");
 		userList.clear();
 		try {
-			oLogger.info("--getAllUsers()--users queried");
 			userList = oUserBean.getAll();
-		} catch (LibraryException e) {
-			MessageService.error("Server internal error.");
+		} catch (Exception e) {
+			oLogger.error(e);
+			MessageService.error(PropertyProvider.getProperty("ejb.message.error"));
 		}
 		return userList;
 	}
@@ -105,12 +103,12 @@ public class UserMB implements Serializable {
 	 * @return List of user objects found.
 	 */
 	public List<User> search(String p_searchTxt) {
-		oLogger.info("--search user--" + p_searchTxt);
 		if (p_searchTxt.length() >= 3) {
 			userList.clear();
 			try {
 				userList = oUserBean.search(p_searchTxt);
-			} catch (LibraryException e) {
+			} catch (Exception e) {
+				oLogger.error(e);
 				MessageService.error(e.getMessage());
 			}
 		} else {
@@ -128,8 +126,6 @@ public class UserMB implements Serializable {
 	 */
 
 	public void store(String p_name, String p_pass, int p_idx) {
-		oLogger.info("--store user--");
-		oLogger.info("--store param: " + p_name);
 		if (p_name.isEmpty() || "".equals(p_name)) {
 			MessageService.warn("Empty field");
 			return;
@@ -152,7 +148,8 @@ public class UserMB implements Serializable {
 			oUserBean.store(tmpUser);
 			userList.add(tmpUser);
 			MessageService.info("Succesfully added: " + p_name);
-		} catch (LibraryException e) {
+		} catch (Exception e) {
+			oLogger.error(e);
 			MessageService.error(e.getMessage());
 		}
 	}
@@ -172,9 +169,8 @@ public class UserMB implements Serializable {
 		try {
 			oUserBean.update(currentUser);
 			userList = oUserBean.getAll();
-			oLogger.info("----update succesfull----");
 			MessageService.info("Update succesfull.");
-		} catch (LibraryException e) {
+		} catch (Exception e) {
 			oLogger.error(e);
 			MessageService.error(e.getMessage());
 		}
@@ -185,7 +181,6 @@ public class UserMB implements Serializable {
 	 * Deletes currently selected user from persistency.
 	 */
 	public void remove() {
-		oLogger.info("--remove user by Id ManagedBean--p_id: " + currentUser.getUserName());
 		if (currentUser == null) {
 			MessageService.error("Empty field");
 		} else {
@@ -193,7 +188,7 @@ public class UserMB implements Serializable {
 				oUserBean.remove(currentUser.getUuid());
 				userList.remove(currentUser);
 				MessageService.info("Delete succesfull.");
-			} catch (LibraryException e) {
+			} catch (Exception e) {
 				oLogger.error(e);
 				MessageService.error(e.getMessage());
 			}
@@ -201,10 +196,7 @@ public class UserMB implements Serializable {
 	}
 
 	public void getCurrentLang() {
-
 		FacesContext.getCurrentInstance().getViewRoot().setLocale(localeManager.getUserLocale());
-		System.out
-				.println("-*-*-*-*-*-*-* " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
 
 	}
 
