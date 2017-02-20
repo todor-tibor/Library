@@ -17,6 +17,7 @@ import com.edu.library.util.ExceptionHandler;
  * Author manager.
  * 
  * @author sipost
+ * @author kiska
  */
 @Named("authorBean")
 @SessionScoped
@@ -30,7 +31,10 @@ public class AuthorMB implements Serializable {
 
 	@Inject
 	private IAuthorService oAuthorBean;
+<<<<<<< HEAD
 
+=======
+>>>>>>> branch 'afterPresentationFixes' of https://github.com/todor-tibor/Library.git
 	@Inject
 	private ExceptionHandler exceptionHandler;
 	/**
@@ -61,14 +65,13 @@ public class AuthorMB implements Serializable {
 	 * 
 	 * @return List of all authors from database.
 	 */
-	public List<Author> getAll() {
-		oLogger.info("--getAllAuthors()--");
+	public List<Author> getAll() {	
 		authorList.clear();
-		try {
-			oLogger.info("--getAllAuthors()--authors queried");
+		try {			
 			authorList = oAuthorBean.getAll();
 		} catch (Exception e) {
-			exceptionHandler.showMessage(e);
+			oLogger.error(e);
+		exceptionHandler.showMessage(e);
 		}
 		return authorList;
 	}
@@ -80,16 +83,21 @@ public class AuthorMB implements Serializable {
 	 *            authorname.
 	 * @return List of author objects found.
 	 */
-	public List<Author> search(String p_searchTxt) {
-		oLogger.info("--search author--" + p_searchTxt);
+	public List<Author> search(String p_searchTxt) {	
 		if (p_searchTxt.length() >= 3) {
 			authorList.clear();
 			try {
 				authorList = oAuthorBean.search(p_searchTxt);
+<<<<<<< HEAD
 
 			} catch (Exception e) {
 				exceptionHandler.showMessage(e);
 
+=======
+			}catch (Exception e) {
+				oLogger.error(e);
+			exceptionHandler.showMessage(e);
+>>>>>>> branch 'afterPresentationFixes' of https://github.com/todor-tibor/Library.git
 			}
 		} else {
 			MessageService.error("Keyword too short. Min. 3 characters req.");
@@ -104,9 +112,7 @@ public class AuthorMB implements Serializable {
 	 *            - authorname
 	 */
 
-	public void store(String p_value) {
-		oLogger.info("--store author--");
-		oLogger.info("--store param: " + p_value);
+	public void store(String p_value) {	
 		if (p_value.isEmpty()) {
 			MessageService.error("Empty field");
 		}
@@ -120,8 +126,8 @@ public class AuthorMB implements Serializable {
 			authorList.add(tmpAuthor);
 			MessageService.info("Succesfully added: " + p_value);
 		} catch (Exception e) {
-			oLogger.error(e.getMessage());
-			exceptionHandler.showMessage(e);
+			oLogger.error(e);
+		exceptionHandler.showMessage(e);
 		}
 	}
 
@@ -131,17 +137,16 @@ public class AuthorMB implements Serializable {
 	 * @param p_newTxt
 	 *            - new authorname.
 	 */
-	public void update(String p_newTxt) {
-		oLogger.info("--update author ManagedBean--id:" + currentAuthor.getName() + "new name: " + p_newTxt);
+	public void update(String p_newTxt) {	
 		if ((currentAuthor != null) && (p_newTxt.length() >= 3)) {
 			try {
 				currentAuthor.setName(p_newTxt);
 				oAuthorBean.update(currentAuthor);
-				authorList = oAuthorBean.getAll();
-				oLogger.info("**********************update succesfull************************************");
+				authorList = oAuthorBean.getAll();			
 				MessageService.info("Update succesfull.");
 			} catch (Exception e) {
-				exceptionHandler.showMessage(e);
+				oLogger.error(e);
+			exceptionHandler.showMessage(e);
 			}
 		} else {
 			MessageService.error("New name too short.");
@@ -151,8 +156,7 @@ public class AuthorMB implements Serializable {
 	/**
 	 * Deletes currently selected author from persistency.
 	 */
-	public void remove() {
-		oLogger.info("--remove author by Id ManagedBean--p_id: " + currentAuthor.getName());
+	public void remove() {	
 		if (currentAuthor == null) {
 			MessageService.error("Empty field");
 		} else {
@@ -161,7 +165,8 @@ public class AuthorMB implements Serializable {
 				authorList = oAuthorBean.getAll();
 				MessageService.info("Delete succesfull.");
 			} catch (Exception e) {
-				exceptionHandler.showMessage(e);
+				oLogger.error(e);
+			exceptionHandler.showMessage(e);
 			}
 		}
 	}

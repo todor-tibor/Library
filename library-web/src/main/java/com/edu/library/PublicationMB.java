@@ -24,6 +24,7 @@ import com.edu.library.util.ExceptionHandler;
  * Publication manager.
  * 
  * @author sipost
+ * @author kiska
  * 
  */
 @Named("publicationBean")
