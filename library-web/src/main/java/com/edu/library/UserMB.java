@@ -54,8 +54,7 @@ public class UserMB implements Serializable {
 	@PostConstruct
 	private void init() {
 		FacesContext.getCurrentInstance().getViewRoot().setLocale(localeManager.getUserLocale());
-		System.out
-				.println("-*-*-*-*-*-*-* " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
+		System.out.println("-*-*-**************-*-*-*-* " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
 	}
 
 	public void change() {

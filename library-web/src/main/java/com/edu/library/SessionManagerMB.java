@@ -42,4 +42,8 @@ public class SessionManagerMB implements Serializable {
 		System.out.println(
 				"After hungarian now: " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
 	}
+	
+	public void reseletLocale(){		
+		FacesContext.getCurrentInstance().getViewRoot().setLocale(localeManager.getUserLocale());
+	}
 }

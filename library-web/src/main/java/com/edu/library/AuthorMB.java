@@ -115,6 +115,7 @@ public class AuthorMB implements Serializable {
 			authorList.add(tmpAuthor);
 			MessageService.info("Succesfully added: " + p_value);
 		} catch (Exception e) {
+			oLogger.error(e.getMessage());
 			new ExceptionHandler(e);
 		}
 	}
