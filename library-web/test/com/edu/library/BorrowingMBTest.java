@@ -26,7 +26,7 @@ public class BorrowingMBTest {
 	public void testGetAll() {
 		List<Borrow> borr = new ArrayList<>();
 		Borrow bbb=new Borrow();
-		borr.add(new Borrow());
+		borr.add(bbb);
 		Mockito.when(oBorrow.getAll()).thenReturn(borr);
 		List<Borrow> listB = borrowingMB.getAll();
 		Assert.assertEquals(listB, borr);

@@ -12,13 +12,14 @@ import javax.ejb.Startup;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.inject.Named;
 
 /**
  * @author gallb
  *
  */
 
-// @Startup
+@Named("localeBean")
 @SessionScoped
 public class LocaleManager implements Serializable {
 
@@ -30,7 +31,7 @@ public class LocaleManager implements Serializable {
 
 	@PostConstruct
 	private void init() {
-		userLocale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
+		userLocale=Locale.ENGLISH;
 	}
 
 	public void setUserLocale(Locale userLocale) {
