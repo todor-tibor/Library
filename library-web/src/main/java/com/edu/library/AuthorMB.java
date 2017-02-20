@@ -31,6 +31,7 @@ public class AuthorMB implements Serializable {
 
 	@Inject
 	private IAuthorService oAuthorBean;
+
 	@Inject
 	private ExceptionHandler exceptionHandler;
 	/**
@@ -84,9 +85,11 @@ public class AuthorMB implements Serializable {
 			authorList.clear();
 			try {
 				authorList = oAuthorBean.search(p_searchTxt);
+
 			}catch (Exception e) {
 				oLogger.error(e);
 			exceptionHandler.showMessage(e);
+
 			}
 		} else {
 			MessageService.error("Keyword too short. Min. 3 characters req.");
@@ -157,6 +160,17 @@ public class AuthorMB implements Serializable {
 				oLogger.error(e);
 			exceptionHandler.showMessage(e);
 			}
+		}
+	}
+
+	/**
+	 * @return
+	 */
+	public Boolean isSelected() {
+		if (this.currentAuthor == null) {
+			return false;
+		} else {
+			return true;
 		}
 	}
 }
