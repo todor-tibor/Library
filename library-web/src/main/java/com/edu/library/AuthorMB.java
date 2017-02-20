@@ -83,7 +83,7 @@ public class AuthorMB implements Serializable {
 			authorList.clear();
 			try {
 				authorList = oAuthorBean.search(p_searchTxt);
-			}catch (Exception e) {
+			} catch (Exception e) {
 				new ExceptionHandler(e);
 			}
 		} else {
@@ -157,6 +157,17 @@ public class AuthorMB implements Serializable {
 			} catch (Exception e) {
 				new ExceptionHandler(e);
 			}
+		}
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isSelected() {
+		if (this.currentAuthor == null) {
+			return false;
+		}else{
+			return true;
 		}
 	}
 }

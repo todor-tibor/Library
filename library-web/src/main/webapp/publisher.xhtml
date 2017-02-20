@@ -33,7 +33,7 @@
 					</p:column>
 					<f:facet name="footer">
 						<p:commandButton process="publisherDT" icon="ui-icon-search"
-							value="#{msg['details.button']}" update="first"
+							value="#{msg['rename.button']}" update="first"
 							oncomplete="PF('publisherDialog').show()" />
 
 						<p:commandButton process="publisherDT" icon="fa-remove"
@@ -62,13 +62,28 @@
 					icon="ui-icon-search" action="#{publisherbean.getAll}">
 				</p:commandButton>
 
-				<p:separator />
-				<p:inputText id="addpublisherTxtBox" binding="#{newName}" />
-				<p:commandButton value="#{msg['add.label']}" update="publisherDT"
-					icon="fa-publisher-plu"
-					action="#{publisherbean.store(newName.value)}">
-					<f:param name="p_value" value="#{newName.value}" />
+				<p:commandButton value="#{publishMan['publisher.addpublisher.button']}" update="publisherDT"
+					icon="fa-publisher-plu" oncomplete="PF('add_publisherDialog').show()">
+
 				</p:commandButton>
+
+				
+				<p:dialog id="add_publisher_dialog" modal="true" showEffect="fade"
+					hideEffect="fade" widgetVar="add_publisherDialog"
+					header="#{publishMan['publisher.name']}" width="300" height="300">
+					<p:messages id="add_messages_publisher" showDetail="true"
+						autoUpdate="true" closable="true" />
+
+					<p:outputLabel value="#{publishMan['publisher.new']}" />
+					<br />
+					<p:inputText id="addTextBox" binding="#{addpublisher}" />
+					<br />
+					<br />
+					<p:commandButton value="#{msg['add.label']}" update=""
+						action="#{publisherbean.store(addpublisher.value)}">
+						<f:param name="p_newTxt" value="#{addpublisher.value}" />
+					</p:commandButton>
+				</p:dialog>
 
 			</h:form>
 		</p:panel>
