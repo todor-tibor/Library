@@ -30,6 +30,9 @@ public class AuthorMB implements Serializable {
 
 	@Inject
 	private IAuthorService oAuthorBean;
+	
+	@Inject
+	private ExceptionHandler exceptionHandler;
 	/**
 	 * 
 	 */
@@ -65,7 +68,7 @@ public class AuthorMB implements Serializable {
 			oLogger.info("--getAllAuthors()--authors queried");
 			authorList = oAuthorBean.getAll();
 		} catch (Exception e) {
-			new ExceptionHandler(e);
+			exceptionHandler.showMessage(e);
 		}
 		return authorList;
 	}
@@ -84,7 +87,7 @@ public class AuthorMB implements Serializable {
 			try {
 				authorList = oAuthorBean.search(p_searchTxt);
 			}catch (Exception e) {
-				new ExceptionHandler(e);
+				exceptionHandler.showMessage(e);
 			}
 		} else {
 			MessageService.error("Keyword too short. Min. 3 characters req.");
@@ -116,7 +119,7 @@ public class AuthorMB implements Serializable {
 			MessageService.info("Succesfully added: " + p_value);
 		} catch (Exception e) {
 			oLogger.error(e.getMessage());
-			new ExceptionHandler(e);
+			exceptionHandler.showMessage(e);
 		}
 	}
 
@@ -136,7 +139,7 @@ public class AuthorMB implements Serializable {
 				oLogger.info("**********************update succesfull************************************");
 				MessageService.info("Update succesfull.");
 			} catch (Exception e) {
-				new ExceptionHandler(e);
+				exceptionHandler.showMessage(e);
 			}
 		} else {
 			MessageService.error("New name too short.");
@@ -156,7 +159,7 @@ public class AuthorMB implements Serializable {
 				authorList = oAuthorBean.getAll();
 				MessageService.info("Delete succesfull.");
 			} catch (Exception e) {
-				new ExceptionHandler(e);
+				exceptionHandler.showMessage(e);
 			}
 		}
 	}

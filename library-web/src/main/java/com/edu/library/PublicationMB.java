@@ -36,6 +36,9 @@ public class PublicationMB implements Serializable {
 
 	@Inject
 	private IPublicationService oPublicationBean;
+	
+	@Inject
+	ExceptionHandler exceptionHandler;
 
 	/*
 	 * variables to select publication type, authors or publisher for update and
@@ -66,7 +69,7 @@ public class PublicationMB implements Serializable {
 			this.publicationList = oPublicationBean.getAll();
 		} catch (Exception e) {
 			oLogger.error(e);
-			new ExceptionHandler(e);
+			exceptionHandler.showMessage(e);
 		}
 		return this.publicationList;
 	}
@@ -88,7 +91,7 @@ public class PublicationMB implements Serializable {
 				}
 			} catch (Exception e) {
 				oLogger.error(e);
-				new ExceptionHandler(e);
+				exceptionHandler.showMessage(e);
 			}
 		} else {
 			MessageService.error("Keyword too short. Min. 3 characters req.");
@@ -151,7 +154,7 @@ public class PublicationMB implements Serializable {
 			MessageService.info("Succesfully added: " + publication);
 		} catch (Exception e) {
 			oLogger.error(e);
-			new ExceptionHandler(e);
+			exceptionHandler.showMessage(e);
 		}
 	}
 
@@ -183,7 +186,7 @@ public class PublicationMB implements Serializable {
 				MessageService.info("Update succesfull.");
 			} catch (Exception e) {
 				oLogger.error(e);
-				new ExceptionHandler(e);
+				exceptionHandler.showMessage(e);
 			}
 		} else {
 			MessageService.warn("All field is required");
@@ -203,7 +206,7 @@ public class PublicationMB implements Serializable {
 				MessageService.info("Delete succesfull.");
 			} catch (Exception e) {
 				oLogger.error(e);
-				new ExceptionHandler(e);
+				exceptionHandler.showMessage(e);
 			}
 		}
 

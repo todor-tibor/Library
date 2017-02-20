@@ -30,6 +30,8 @@ public class PublisherMB implements Serializable {
 
 	@Inject
 	private IPublisherService oPublisherBean;
+	@Inject
+	ExceptionHandler exceptionHandler;
 
 	/**
 	 * List containing all publishers
@@ -64,7 +66,7 @@ public class PublisherMB implements Serializable {
 			publishersList = oPublisherBean.getAll();
 			oLogger.info("+++++++++++++++++return all publisher");
 		} catch (Exception e) {
-			new ExceptionHandler(e);
+			exceptionHandler.showMessage(e);
 		}
 		return publishersList;
 	}
@@ -83,7 +85,7 @@ public class PublisherMB implements Serializable {
 			try {
 				publishersList = oPublisherBean.search(p_searchTxt);
 			} catch (Exception e) {
-				new ExceptionHandler(e);
+				exceptionHandler.showMessage(e);
 			}
 		} else {
 			MessageService.error("Keyword too short. Min. 3 characters req.");
@@ -113,7 +115,7 @@ public class PublisherMB implements Serializable {
 			publishersList.add(tmpPublisher);
 			MessageService.info("Succesfully added: " + p_value);
 		} catch (Exception e) {
-			new ExceptionHandler(e);
+			exceptionHandler.showMessage(e);
 		}
 	}
 
@@ -132,7 +134,7 @@ public class PublisherMB implements Serializable {
 				publishersList = oPublisherBean.getAll();
 				MessageService.info("Update succesfull.");
 			} catch (Exception e) {
-				new ExceptionHandler(e);
+				exceptionHandler.showMessage(e);
 
 			}
 		} else {
@@ -152,7 +154,7 @@ public class PublisherMB implements Serializable {
 				publishersList = oPublisherBean.getAll();
 				MessageService.info("Delete succesfull.");
 			} catch (Exception e) {
-				new ExceptionHandler(e);
+				exceptionHandler.showMessage(e);
 			}
 		}
 	}
