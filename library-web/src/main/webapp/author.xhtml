@@ -34,7 +34,6 @@
 						<h:outputText value="#{author.name}" />
 					</p:column>
 					<f:facet name="footer">
-
 						<p:commandButton process="authorDT" icon="ui-icon-search"
 							value="#{msg['rename.button']}" update="author_dialog"
 							oncomplete="PF('authorDialog').show()"
@@ -51,6 +50,7 @@
 							height="300">
 							<p:messages id="messages_author" showDetail="true"
 								autoUpdate="true" closable="true" />
+								
 							<p:outputLabel value="#{authorMan['author.new']}" />
 							<br />
 							<p:inputText id="renameTextBox" binding="#{renameauthor}" />
