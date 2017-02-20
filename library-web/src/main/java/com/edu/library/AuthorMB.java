@@ -30,6 +30,9 @@ public class AuthorMB implements Serializable {
 
 	@Inject
 	private IAuthorService oAuthorBean;
+	
+	@Inject
+	private ExceptionHandler exceptionHandler;
 	/**
 	 * 
 	 */
@@ -65,7 +68,7 @@ public class AuthorMB implements Serializable {
 			oLogger.info("--getAllAuthors()--authors queried");
 			authorList = oAuthorBean.getAll();
 		} catch (Exception e) {
-			new ExceptionHandler(e);
+			exceptionHandler.showMessage(e);
 		}
 		return authorList;
 	}
@@ -83,8 +86,13 @@ public class AuthorMB implements Serializable {
 			authorList.clear();
 			try {
 				authorList = oAuthorBean.search(p_searchTxt);
+<<<<<<< HEAD
 			} catch (Exception e) {
 				new ExceptionHandler(e);
+=======
+			}catch (Exception e) {
+				exceptionHandler.showMessage(e);
+>>>>>>> branch 'afterPresentationFixes' of https://github.com/todor-tibor/Library.git
 			}
 		} else {
 			MessageService.error("Keyword too short. Min. 3 characters req.");
@@ -115,7 +123,8 @@ public class AuthorMB implements Serializable {
 			authorList.add(tmpAuthor);
 			MessageService.info("Succesfully added: " + p_value);
 		} catch (Exception e) {
-			new ExceptionHandler(e);
+			oLogger.error(e.getMessage());
+			exceptionHandler.showMessage(e);
 		}
 	}
 
@@ -135,7 +144,7 @@ public class AuthorMB implements Serializable {
 				oLogger.info("**********************update succesfull************************************");
 				MessageService.info("Update succesfull.");
 			} catch (Exception e) {
-				new ExceptionHandler(e);
+				exceptionHandler.showMessage(e);
 			}
 		} else {
 			MessageService.error("New name too short.");
@@ -155,7 +164,7 @@ public class AuthorMB implements Serializable {
 				authorList = oAuthorBean.getAll();
 				MessageService.info("Delete succesfull.");
 			} catch (Exception e) {
-				new ExceptionHandler(e);
+				exceptionHandler.showMessage(e);
 			}
 		}
 	}
