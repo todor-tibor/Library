@@ -1,6 +1,7 @@
 package com.edu.library.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -124,6 +125,16 @@ public class User extends BaseEntity {
 
 	public void setRoles(List<Role> roles) {
 		this.roles = new HashSet<Role>(roles);
+	}
+	
+	public boolean isLate(){
+		Date today = new Date();
+		for (int i = 0; i < borrows.size(); i++) {
+			if (today.after(borrows.get(i).getBorrowUntil())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
