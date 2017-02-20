@@ -5,19 +5,22 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import com.edu.library.access.publicationManagement.BorrowManagementFacade;
 import com.edu.library.model.Borrow;
 
+@RunWith(MockitoJUnitRunner.class)
 public class BorrowingMBTest {
+	
 	@InjectMocks
 	BorrowMB borrowingMB;
 
 	@Mock
-	BorrowManagementFacade oBorrow;
+	IBorrowService oBorrow;
 
 	@Test
 	public void testGetAll() {
