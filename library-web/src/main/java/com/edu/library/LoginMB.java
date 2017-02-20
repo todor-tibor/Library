@@ -1,19 +1,17 @@
 package com.edu.library;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.Cache;
 
 import org.jboss.logging.Logger;
 
-import com.edu.library.ILoginService;
-import com.edu.library.IUserService;
-import com.edu.library.LibraryException;
 import com.edu.library.model.Role;
 import com.edu.library.model.RoleType;
 import com.edu.library.model.User;
@@ -79,18 +77,30 @@ public class LoginMB implements Serializable {
 
 		if (roles.contains(tmp)) {
 			setCurrentRole("LIBRARIAN");
-			return "index";
+			try {
+				FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+			} catch (IOException e) {
+				oLogger.error(e.getMessage());				
+				MessageService.fatal(e.getMessage());
+			}
+			//return "index";
 		} else {
 			tmp.setRole("READER");
 
 			if (roles.contains(tmp)) {
 				setCurrentRole("READER");
-				return "publication_user";
+				try {
+					FacesContext.getCurrentInstance().getExternalContext().redirect("publication_user.xhtml");
+				} catch (IOException e) {
+					oLogger.error(e.getMessage());				
+					MessageService.fatal(e.getMessage());
+				}
+				//return "publication_user";
 			} else {
 				setCurrentRole("INVALID");
 				return "login";
 			}
-		}
+		}return " ";
 	}
 
 	/**
