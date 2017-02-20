@@ -17,6 +17,7 @@ import org.jboss.logging.Logger;
 import com.edu.library.model.Role;
 import com.edu.library.model.RoleType;
 import com.edu.library.model.User;
+import com.edu.library.util.ExceptionHandler;
 import com.edu.library.util.PropertyProvider;
 
 /**
@@ -37,7 +38,7 @@ public class LoginMB implements Serializable {
 	@Inject
 	private ILoginService oLoginBean;
 	@Inject
-	private ExceptionHandler exceptionhandler
+	private ExceptionHandler exceptionHandler;
 	/**
 	 * 
 	 */
@@ -130,7 +131,7 @@ public class LoginMB implements Serializable {
 			userList = oUserBean.getAll();
 		} catch (Exception e) {
 			oLogger.error(e);
-			exceptionHandler.showMessage("Server internal error");
+			exceptionHandler.showMessage(e);
 		}
 		return userList;
 	}

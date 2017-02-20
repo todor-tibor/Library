@@ -82,7 +82,7 @@ public class UserMB implements Serializable {
 			userList = oUserBean.getAll();
 		} catch (Exception e) {
 			oLogger.error(e);
-			MessageService.error(PropertyProvider.getProperty("ejb.message.error"));
+			MessageService.error("Internal error");
 		}
 		return userList;
 	}
