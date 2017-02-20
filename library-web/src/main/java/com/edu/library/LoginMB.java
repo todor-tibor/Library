@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -18,7 +16,6 @@ import com.edu.library.model.Role;
 import com.edu.library.model.RoleType;
 import com.edu.library.model.User;
 import com.edu.library.util.ExceptionHandler;
-import com.edu.library.util.PropertyProvider;
 
 /**
  * @author kiska
@@ -35,10 +32,12 @@ public class LoginMB implements Serializable {
 
 	@Inject
 	private IUserService oUserBean;
+	
 	@Inject
 	private ILoginService oLoginBean;
+	
 	@Inject
-	private ExceptionHandler exceptionHandler;
+	ExceptionHandler exceptionHandler;
 	/**
 	 * 
 	 */
@@ -72,9 +71,16 @@ public class LoginMB implements Serializable {
 
 	public String isAdmin() {
 		if (RoleType.LIBRARIAN.name().equals(currentRole)) {
-			return "index";
-		} else
 			return "";
+		} else
+			return "index";
+	}
+	
+	public String isReader() {
+		if (RoleType.READER.name().equals(currentRole)) {
+			return "";
+		} else
+			return "index";
 	}
 
 	private void checkRole() {
@@ -83,9 +89,8 @@ public class LoginMB implements Serializable {
 
 		if (roles.contains(tmp)) {
 			setCurrentRole("LIBRARIAN");
-
 			try {
-				FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+				FacesContext.getCurrentInstance().getExternalContext().redirect("admin.xhtml");
 				FacesContext.getCurrentInstance().getViewRoot()
 						.setLocale(FacesContext.getCurrentInstance().getViewRoot().getLocale());
 			} catch (IOException e) {
@@ -94,11 +99,10 @@ public class LoginMB implements Serializable {
 			}
 		} else {
 			tmp.setRole("READER");
-
 			if (roles.contains(tmp)) {
 				setCurrentRole("READER");
 				try {
-					FacesContext.getCurrentInstance().getExternalContext().redirect("publication_user.xhtml");
+					FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
 				} catch (IOException e) {
 					oLogger.error(e);
 					MessageService.fatal(e.getMessage());
@@ -106,16 +110,9 @@ public class LoginMB implements Serializable {
 
 			} else {
 				setCurrentRole("INVALID");
+				MessageService.error("login.invalid");
 			}
 		}
-	}
-
-	public String processAdmin() {
-		return "index?facesRedirect=true";
-	}
-
-	public String processReader() {
-		return "publication_user?facesRedirect=true";
 	}
 
 	/**
@@ -146,10 +143,12 @@ public class LoginMB implements Serializable {
 			try {
 				roles = oLoginBean.login(this.getUser_name(), this.getPassword());
 				checkRole();
-			} catch (LibraryException e) {
+			} catch (Exception e) {
 				oLogger.error(e);
-				MessageService.error(e.getMessage());
+				exceptionHandler.showMessage(e);
 			}
+		}else{
+			MessageService.warn("Username is to short");
 		}
 	}
 

@@ -35,7 +35,7 @@ public class ExceptionHandler implements Serializable {
 		} else if (t instanceof IllegalArgumentException) {
 			MessageService.warn(provider.getProperty(t.getMessage()));
 		} else {
-			MessageService.error(provider.getProperty(t.getMessage()));
+			MessageService.error(provider.getProperty(e.getMessage()));
 		}
 	}
 }
