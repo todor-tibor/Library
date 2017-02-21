@@ -37,7 +37,7 @@ public class PublicationMB implements Serializable {
 
 	@Inject
 	private IPublicationService oPublicationBean;
-	
+
 	@Inject
 	ExceptionHandler exceptionHandler;
 
@@ -257,7 +257,9 @@ public class PublicationMB implements Serializable {
 	 * @return List<Authors>
 	 */
 	public List<Author> getAuthors() {
-		authors.clear();
+		if (authors != null) {
+			authors.clear();
+		}
 		if (currentPublication instanceof Book) {
 			this.authors = ((Book) this.currentPublication).getAuthors();
 		}
