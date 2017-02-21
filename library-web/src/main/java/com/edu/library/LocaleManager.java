@@ -50,12 +50,10 @@ public class LocaleManager implements Serializable {
 	}
 
 	public void setUserLocale(Locale userLocale) {
-		System.out.println("locale set."+userLocale);
 		this.userLocale = userLocale;
 	}
 
 	public Locale getUserLocale() {
-		System.out.println("locale get."+userLocale);
 		return userLocale;
 	}
 }
