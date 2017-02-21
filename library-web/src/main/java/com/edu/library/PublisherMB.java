@@ -61,7 +61,6 @@ public class PublisherMB implements Serializable {
 	 */
 	public List<Publisher> getAll() {
 		publishersList.clear();
-		;
 		try {
 			publishersList = oPublisherBean.getAll();
 		} catch (Exception e) {

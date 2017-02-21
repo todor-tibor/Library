@@ -38,9 +38,6 @@ public class RoleMB implements Serializable {
 	@Inject
 	private IRoleService oRoleBean;
 
-	@Inject
-	LocaleManager localeManager;
-
 	public void change() {
 		oLogger.info("-----tab changed");
 	}
@@ -152,10 +149,6 @@ public class RoleMB implements Serializable {
 		}
 	}
 
-	public List<Role> getroleList() {
-		return roleList;
-	}
-
 	public Role getCurrentRole() {
 		return currentRole;
 	}
@@ -175,5 +168,13 @@ public class RoleMB implements Serializable {
 		} else {
 			return true;
 		}
+	}
+	
+	public List<Role> getRoleList() {
+		return roleList;
+	}
+
+	public void setRoleList(List<Role> roleList) {
+		this.roleList = roleList;
 	}
 }
