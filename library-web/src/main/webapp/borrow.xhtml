@@ -40,9 +40,27 @@
 						<p:commandButton process="borrowDT" icon="fa-remove"
 							value="#{borrowMan['button.return']}" action="#{borrowBean.remove()}" update="borrowDT" 
 							disabled="#{borrowBean.currentBorrow == null}"/>
-
+						<p:commandButton process="borrowDT" icon="fa-remove"
+							value="#{borrowMan['button.renew']}"  update="renewDialog" oncomplete="PF('renewDialog').show()"
+							action="#{borrowBean.setUntil()}"
+							disabled="#{borrowBean.currentBorrow == null}"/>
+							
+						<p:dialog id="renewDialog" modal="true" showEffect="fade"
+					hideEffect="fade" widgetVar="renewDialog" header="#{borrowMan['button.add']}"
+					width="500" height="500">
+					<p:messages id="messages5" showDetail="true" autoUpdate="true"
+						closable="true" />
+					
+					<p:panel >						
+						<p:outputLabel value="#{borrowMan['column.until']}" readOnlyInputText="true"/>						
+						<p:calendar id="calendar4" value="#{borrowBean.date3}" mode="inline" />
+						<p:commandButton value="#{borrowMan['button.renew']}" update="borrow_actions_form"
+							icon="fa-user-plu" action="#{borrowBean.update()}">
+						</p:commandButton>
+					</p:panel>
+				</p:dialog>
+							
 					</f:facet>
-
 				</p:dataTable>
 
 				<p:commandButton value="#{borrowMan['button.listAll']}" icon="ui-icon-search"
@@ -86,6 +104,7 @@
 						</p:commandButton>
 					</h:panelGrid>
 				</p:dialog>
+								
 			</h:form>
 		</p:panel>
 	</h:panelGrid>
