@@ -15,7 +15,7 @@ import com.edu.library.model.Borrow;
 import com.edu.library.model.Publication;
 
 /**
- * CRUD operations from Publication Entity
+ * CRUD operations of Publication Entity
  * 
  * @author sipost
  *

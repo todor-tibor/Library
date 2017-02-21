@@ -11,8 +11,8 @@ import com.edu.library.business.publicationManagement.PublisherManagementBusines
 import com.edu.library.model.Publisher;
 
 /**
- * Implements the basics of publisher management. Validates the given input data,
- * and call the business layer if params are valid.
+ * Implements the basics of publisher management. Validates the given input data
+ * and calls the business layer if params are valid.
  * 
  * @author nagys
  */

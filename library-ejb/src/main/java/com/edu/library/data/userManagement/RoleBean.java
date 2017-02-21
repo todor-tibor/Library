@@ -13,7 +13,7 @@ import com.edu.library.data.exception.TechnicalException;
 import com.edu.library.model.Role;
 
 /**
- * CRUD operations from Role Entity
+ * CRUD operations of Role Entity
  * 
  * @author sipost
  * @author gallb

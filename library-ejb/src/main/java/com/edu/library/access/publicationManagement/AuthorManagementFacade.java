@@ -11,8 +11,8 @@ import com.edu.library.business.publicationManagement.AuthorManagementBusiness;
 import com.edu.library.model.Author;
 
 /**
- * Implements the basics of author management. Validates the given input data,
- * and call the business layer if params are valid.
+ * Implements the basics of author management. Validates the given input data
+ * and calls the business layer if params are valid.
  * 
  * @author sipost
  */

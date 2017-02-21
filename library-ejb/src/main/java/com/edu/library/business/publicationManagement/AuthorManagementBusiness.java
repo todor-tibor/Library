@@ -10,7 +10,7 @@ import com.edu.library.data.publicationManagement.AuthorBean;
 import com.edu.library.model.Author;
 
 /**
- * Implements basics business logic for author management. 
+ * Implements basic business logic for author management. 
  * (same functions as in the IAuthorService interface)
  * 
  * @author sipost

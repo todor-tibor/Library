@@ -12,7 +12,7 @@ import com.edu.library.data.publicationManagement.PublicationBean;
 import com.edu.library.model.Publication;
 
 /**
- * Implements basics business logic for publication management. 
+ * Implements basic business logic for publication management. 
  * (same functions as in the IPublicationService interface)
  * 
  * @author sipost

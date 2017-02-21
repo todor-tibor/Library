@@ -14,7 +14,7 @@ import com.edu.library.model.Publication;
 
 /**
  * Implements the basics of publication management. Validates the given input
- * data, and call the business layer if params are valid
+ * data and calls the business layer if params are valid.
  * 
  * @author sipost
  */
