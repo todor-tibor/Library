@@ -13,7 +13,7 @@ import com.edu.library.data.exception.TechnicalException;
 import com.edu.library.model.Author;
 
 /**
- * crud operations from author Entity
+ * CRUD operations of Author Entity
  * 
  * @author sipost
  *

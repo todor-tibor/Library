@@ -49,7 +49,6 @@ public class UserMB implements Serializable {
 	@Inject
 	LocaleManager localeManager;
 
-
 	public void change() {
 		oLogger.info("-----tab changed");
 	}
@@ -75,7 +74,7 @@ public class UserMB implements Serializable {
 	/**
 	 * Requests all user objects and stores them in userList.
 	 * 
-	 * @return List of all users from persistency.
+	 * @return List of all users from database.
 	 */
 	public List<User> getAll() {
 		userList.clear();
@@ -89,7 +88,7 @@ public class UserMB implements Serializable {
 	}
 
 	/**
-	 * Search for user by username and stores them in userList.
+	 * Search for user by user name and stores them in userList.
 	 * 
 	 * @param p_searchTxt
 	 *            username.
@@ -111,7 +110,7 @@ public class UserMB implements Serializable {
 	}
 
 	/**
-	 * Stores new user with username.
+	 * Stores new user with user name.
 	 * 
 	 * @param p_name
 	 *            - username, p_pass - password, p_idx - loyalty index
@@ -151,7 +150,7 @@ public class UserMB implements Serializable {
 	 * Renames currently selected user.
 	 * 
 	 * @param p_newTxt
-	 *            - new username.
+	 *            - new user name.
 	 */
 	public void update(String p_newTxt) {
 		if ((currentUser == null) || (p_newTxt.length() <= 3)) {
@@ -171,7 +170,7 @@ public class UserMB implements Serializable {
 	}
 
 	/**
-	 * Deletes currently selected user from persistency.
+	 * Deletes currently selected user from database.
 	 */
 	public void remove() {
 		if (currentUser == null) {
@@ -203,5 +202,18 @@ public class UserMB implements Serializable {
 
 	public void setCurrentRoles(List<Role> currentRoles) {
 		this.currentRoles = currentRoles;
+	}
+
+	/**
+	 * Checks whether a user is selected.
+	 * 
+	 * @return - true if it is, false otherwise
+	 */
+	public Boolean isSelected() {
+		if (this.currentUser == null) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }

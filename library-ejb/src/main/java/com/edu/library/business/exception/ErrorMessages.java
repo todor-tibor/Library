@@ -1,5 +1,11 @@
 package com.edu.library.business.exception;
 
+/**
+ * Define custom error messages for business layer.
+ * 
+ * @author sipost
+ *
+ */
 public class ErrorMessages {
 	public static final String ERROR_BOUND="bussiness.error.bound";
 	public static final String ERROR_LOYALTY="bussiness.error.loyalty";

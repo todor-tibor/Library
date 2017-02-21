@@ -1,9 +1,7 @@
 package com.edu.library;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -28,7 +26,6 @@ public class SessionManagerMB implements Serializable {
 
 	public void englishNow() {
 		System.out.println("Before: " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
-		// Locale tmpLoc = new Locale("en", "US");
 		FacesContext.getCurrentInstance().getViewRoot().setLocale(Locale.ENGLISH);
 		provider.setLocale(Locale.ENGLISH);
 		localeManager.setUserLocale(Locale.ENGLISH);

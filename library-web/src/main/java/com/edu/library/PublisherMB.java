@@ -61,7 +61,6 @@ public class PublisherMB implements Serializable {
 	 */
 	public List<Publisher> getAll() {
 		publishersList.clear();
-		;
 		try {
 			publishersList = oPublisherBean.getAll();
 		} catch (Exception e) {
@@ -72,7 +71,7 @@ public class PublisherMB implements Serializable {
 	}
 
 	/**
-	 * Searches for all publishers whom name contain the {@code p_searchTxt}
+	 * Searches for all publishers whose name contain the {@code p_searchTxt}
 	 * input data
 	 * 
 	 * @param p_searchTxt
@@ -160,6 +159,19 @@ public class PublisherMB implements Serializable {
 				oLogger.error(e);
 				exceptionHandler.showMessage(e);
 			}
+		}
+	}
+
+	/**
+	 * Checks whether a publisher is selected.
+	 * 
+	 * @return - true if it is, false otherwise
+	 */
+	public Boolean isSelected() {
+		if (this.currentPublisher == null) {
+			return false;
+		} else {
+			return true;
 		}
 	}
 }

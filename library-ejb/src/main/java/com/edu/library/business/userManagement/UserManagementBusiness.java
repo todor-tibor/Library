@@ -13,9 +13,10 @@ import com.edu.library.data.userManagement.UserDao;
 import com.edu.library.model.User;
 
 /**
- * @author kiska
+ * Business implementation of user management. * (same functions as in the
+ * IPublisherService interface)
  * 
- *         Business implementation of user management.
+ * @author kiska
  */
 
 @Stateless

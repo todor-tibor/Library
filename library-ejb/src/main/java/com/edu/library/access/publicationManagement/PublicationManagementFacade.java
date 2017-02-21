@@ -6,15 +6,17 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import com.edu.library.IPublicationService;
+import com.edu.library.access.util.ServiceValidation;
 import com.edu.library.business.publicationManagement.PublicationManagementBusiness;
 import com.edu.library.model.Book;
 import com.edu.library.model.Magazine;
 import com.edu.library.model.Publication;
-import com.edu.library.util.ServiceValidation;
 
 /**
- * @author kiska Implements the basics of user login. Validates the given the
- *         input data.
+ * Implements the basics of publication management. Validates the given input
+ * data and calls the business layer if params are valid.
+ * 
+ * @author sipost
  */
 @Stateless
 public class PublicationManagementFacade implements IPublicationService {
@@ -42,8 +44,7 @@ public class PublicationManagementFacade implements IPublicationService {
 	@Override
 	public void store(Publication p_value) {
 		ServiceValidation.checkNotNull(p_value);
-		ServiceValidation.checkIfNumberInRange(p_value.getNrOfCopys(), 1, Integer.MAX_VALUE);
-		ServiceValidation.checkIfNumberInRange(p_value.getOnStock(), 1, p_value.getNrOfCopys());
+		checkCopies(p_value);
 		authorCheck(p_value);
 
 		publicationBusiness.store(p_value);
@@ -52,10 +53,9 @@ public class PublicationManagementFacade implements IPublicationService {
 	@Override
 	public void update(Publication p_user) {
 		ServiceValidation.checkNotNull(p_user);
+		checkCopies(p_user);
 		authorCheck(p_user);
-		ServiceValidation.checkIfNumberInRange(p_user.getNrOfCopys(), 1, Integer.MAX_VALUE);
-		ServiceValidation.checkIfNumberInRange(p_user.getOnStock(), 1, p_user.getNrOfCopys());
-
+		
 		publicationBusiness.update(p_user);
 	}
 
@@ -73,6 +73,11 @@ public class PublicationManagementFacade implements IPublicationService {
 		if (p_value instanceof Magazine) {
 			ServiceValidation.checkNotEmpty(((Magazine) p_value).getAuthors());
 		}
+	}
+	
+	private void checkCopies(Publication p_value){
+		ServiceValidation.checkIfNumberInRange(p_value.getNrOfCopys(), 1, Integer.MAX_VALUE);
+		ServiceValidation.checkIfNumberInRange(p_value.getOnStock(), 1, p_value.getNrOfCopys());
 	}
 
 }

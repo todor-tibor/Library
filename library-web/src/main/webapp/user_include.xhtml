@@ -25,6 +25,8 @@
 				<p:dataTable id="userDT" var="user" value="#{userbean.userList}"
 					selectionMode="single" selection="#{userbean.currentUser}"
 					rowKey="#{user.uuid}">
+					<p:ajax event="rowSelect" listener="#{userbean.isSelected}"
+						update="userDT" />
 					<f:facet name="header">
             			#{userMan['users.text']}
         			</f:facet>
@@ -36,11 +38,12 @@
 					<f:facet name="footer">
 						<p:commandButton process="userDT" icon="ui-icon-search"
 							value="#{msg['details.button']}" update="first"
-							oncomplete="PF('roleDialog').show()" />
+							oncomplete="PF('roleDialog').show()"
+							disabled="#{userbean.currentUser == null}" />
 
 						<p:commandButton process="userDT" icon="fa-remove"
 							value="#{msg['delete.button']}" action="#{userbean.remove()}"
-							update="userDT" />
+							update="userDT" disabled="#{userbean.currentUser == null}" />
 
 						<p:dialog id="first" modal="true" showEffect="fade"
 							hideEffect="fade" widgetVar="roleDialog"
@@ -84,6 +87,7 @@
 					<p:messages id="messages" showDetail="true" autoUpdate="true"
 						closable="true" />
 					<h:panelGrid columns="2" cellpadding="5">
+					
 						<p:column>
 							<p:outputLabel value="#{userMan['user.header']}" />
 							<br />

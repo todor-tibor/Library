@@ -10,12 +10,12 @@ import com.edu.library.business.exception.BusinessException;
 import com.edu.library.business.exception.ErrorMessages;
 import com.edu.library.data.publicationManagement.PublicationBean;
 import com.edu.library.model.Publication;
-import com.edu.library.util.ServiceValidation;
 
 /**
- * @author kiska
+ * Implements basic business logic for publication management. 
+ * (same functions as in the IPublicationService interface)
  * 
- *         Implements a simple authentication process of a user.
+ * @author sipost
  */
 
 @Stateless
@@ -29,26 +29,25 @@ public class PublicationManagementBusiness {
 		return dataAcces.getAll();
 	}
 
-	public List<Publication> search(String p_searchTxt)  {
+	public List<Publication> search(String p_searchTxt) {
 		return dataAcces.search(p_searchTxt);
 	}
 
-	public Publication getById(String p_id)  {
+	public Publication getById(String p_id) {
 		return dataAcces.getById(p_id);
 	}
 
-	public void store(Publication p_value)  {
+	public void store(Publication p_value) {
 		dataAcces.store(p_value);
 	}
 
-	public void update(Publication p_user)  {
+	public void update(Publication p_user) {
 		dataAcces.getById(p_user.getUuid());
 		dataAcces.update(p_user);
 	}
 
 	public void remove(String p_id) {
 		Publication pub = dataAcces.getById(p_id);
-		ServiceValidation.checkNotNull(pub);
 		if (pub.getBorrows().isEmpty()) {
 			dataAcces.remove(pub);
 		} else {

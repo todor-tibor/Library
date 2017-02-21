@@ -10,7 +10,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 /**
- * MessageService for ManageBeans
+ * MessageService for ManagedBeans
  * 
  * @author sipost
  */

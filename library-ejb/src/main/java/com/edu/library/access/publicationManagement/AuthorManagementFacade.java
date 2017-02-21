@@ -6,13 +6,15 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import com.edu.library.IAuthorService;
+import com.edu.library.access.util.ServiceValidation;
 import com.edu.library.business.publicationManagement.AuthorManagementBusiness;
 import com.edu.library.model.Author;
-import com.edu.library.util.ServiceValidation;
 
 /**
- * @author kiska Implements the basics of user login. Validates the given the
- *         input data.
+ * Implements the basics of author management. Validates the given input data
+ * and calls the business layer if params are valid.
+ * 
+ * @author sipost
  */
 @Stateless
 public class AuthorManagementFacade implements IAuthorService {
@@ -47,6 +49,7 @@ public class AuthorManagementFacade implements IAuthorService {
 	@Override
 	public void update(Author p_user) {
 		ServiceValidation.checkNotNull(p_user);
+		ServiceValidation.checkString(p_user.getName());
 		authorBussines.update(p_user);
 	}
 

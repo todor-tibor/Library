@@ -2,12 +2,9 @@ package com.edu.library;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -16,15 +13,14 @@ import org.jboss.logging.Logger;
 
 import com.edu.library.model.Role;
 import com.edu.library.model.RoleType;
-import com.edu.library.model.User;
 import com.edu.library.util.ExceptionHandler;
-import com.edu.library.util.PropertyProvider;
 
 /**
+ *
+ * 
+ * Login functionalities for the web app.
+ * 
  * @author kiska
- * 
- *         Login
- * 
  */
 @Named("loginbean")
 @ApplicationScoped
@@ -34,33 +30,16 @@ public class LoginMB implements Serializable {
 	private static final long serialVersionUID = -4702598250751689454L;
 
 	@Inject
-	private IUserService oUserBean;
-	@Inject
 	private ILoginService oLoginBean;
+
 	@Inject
-	private ExceptionHandler exceptionHandler;
+	ExceptionHandler exceptionHandler;
 	/**
 	 * 
 	 */
-	private List<User> userList = new ArrayList<>();// Currently displayed
-													// users.
-	private User currentUser = null;// Currently selected user.
-	private String password;
-	private String user_name;
+	private String userName;
 	private List<Role> roles;
 	private String currentRole;
-
-	public List<User> getUserList() {
-		return userList;
-	}
-
-	public User getCurrentUser() {
-		return currentUser;
-	}
-
-	public void setCurrentUser(User currentUser) {
-		this.currentUser = currentUser;
-	}
 
 	public String getCurrentRole() {
 		return currentRole;
@@ -70,22 +49,42 @@ public class LoginMB implements Serializable {
 		this.currentRole = currentRole;
 	}
 
+	/**
+	 * Checks whether the user is a librarian.
+	 * 
+	 * @return - the site to which to redirect.
+	 */
 	public String isAdmin() {
 		if (RoleType.LIBRARIAN.name().equals(currentRole)) {
-			return "index";
-		} else
 			return "";
+		} else
+			return "index";
 	}
 
+	/**
+	 * Checks whether the user is a reader.
+	 * 
+	 * @return - the site to which to redirect.
+	 */
+	public String isReader() {
+		if (RoleType.READER.name().equals(currentRole)) {
+			return "";
+		} else
+			return "index";
+	}
+
+	/**
+	 * Checks whether the librarian or reader roles are listed in the user's
+	 * roles. If they are it redirects to role specific website. Otherwise
+	 * displays a user friendly message.
+	 */
 	private void checkRole() {
 		Role tmp = new Role();
 		tmp.setRole("LIBRARIAN");
-
 		if (roles.contains(tmp)) {
 			setCurrentRole("LIBRARIAN");
-
 			try {
-				FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+				FacesContext.getCurrentInstance().getExternalContext().redirect("admin.xhtml");
 				FacesContext.getCurrentInstance().getViewRoot()
 						.setLocale(FacesContext.getCurrentInstance().getViewRoot().getLocale());
 			} catch (IOException e) {
@@ -94,11 +93,10 @@ public class LoginMB implements Serializable {
 			}
 		} else {
 			tmp.setRole("READER");
-
 			if (roles.contains(tmp)) {
 				setCurrentRole("READER");
 				try {
-					FacesContext.getCurrentInstance().getExternalContext().redirect("publication_user.xhtml");
+					FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
 				} catch (IOException e) {
 					oLogger.error(e);
 					MessageService.fatal(e.getMessage());
@@ -106,32 +104,9 @@ public class LoginMB implements Serializable {
 
 			} else {
 				setCurrentRole("INVALID");
+				MessageService.error("login.invalid");
 			}
 		}
-	}
-
-	public String processAdmin() {
-		return "index?facesRedirect=true";
-	}
-
-	public String processReader() {
-		return "publication_user?facesRedirect=true";
-	}
-
-	/**
-	 * Requests all user objects and stores them in userList.
-	 * 
-	 * @return List of all users from persistency.
-	 */
-	public List<User> getAll() {
-		userList = new ArrayList<>();
-		try {
-			userList = oUserBean.getAll();
-		} catch (Exception e) {
-			oLogger.error(e);
-			exceptionHandler.showMessage(e);
-		}
-		return userList;
 	}
 
 	/**
@@ -141,32 +116,23 @@ public class LoginMB implements Serializable {
 	 *            username.
 	 * @return List of user objects found.
 	 */
-	public void search() {
-		if (this.getUser_name().length() >= 3) {
+	public void search(String user_name, String password) {
+		if (user_name.length() >= 3) {
 			try {
-				roles = oLoginBean.login(this.getUser_name(), this.getPassword());
+				roles = oLoginBean.login(user_name, password);
+				userName = user_name;
 				checkRole();
-			} catch (LibraryException e) {
+			} catch (Exception e) {
 				oLogger.error(e);
-				MessageService.error(e.getMessage());
+				exceptionHandler.showMessage(e);
 			}
+		} else {
+			MessageService.warn("Username is to short");
 		}
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getUser_name() {
-		return user_name;
-	}
-
-	public void setUser_name(String user_name) {
-		this.user_name = user_name;
+	public String getUserName() {
+		return userName;
 	}
 
 }

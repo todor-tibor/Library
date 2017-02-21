@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import com.edu.library.LibraryException;
 import com.edu.library.MessageService;
 /**
- * ExceptionHandler to handler exceptions and show it using MessageService
+ * ExceptionHandler to handle exceptions and show it using MessageService
  * @author sipost
  *
  */
@@ -35,7 +35,7 @@ public class ExceptionHandler implements Serializable {
 		} else if (t instanceof IllegalArgumentException) {
 			MessageService.warn(provider.getProperty(t.getMessage()));
 		} else {
-			MessageService.error(provider.getProperty(t.getMessage()));
+			MessageService.error(provider.getProperty(e.getMessage()));
 		}
 	}
 }

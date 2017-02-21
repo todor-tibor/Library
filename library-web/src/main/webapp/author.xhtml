@@ -3,7 +3,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
 
-<f:view locale="#{localeBean.userLocale}"/>
+<f:view locale="#{localeBean.userLocale}" />
 <h:head>
 	<p:messages id="messages_author" showDetail="true" autoUpdate="true"
 		closable="true" />
@@ -38,11 +38,11 @@
 						<p:commandButton process="authorDT" icon="ui-icon-search"
 							value="#{msg['rename.button']}" update="author_dialog"
 							oncomplete="PF('authorDialog').show()"
-							disabled="#{authorBean.currentAuthor} == null}" />
+							disabled="#{authorBean.currentAuthor == null}" />
 
 						<p:commandButton process="authorDT" icon="fa-remove"
 							value="#{msg['delete.button']}" action="#{authorBean.remove()}"
-							update="authorDT" disabled="#{authorBean.currentAuthor} == null}" />
+							update="authorDT" disabled="#{authorBean.currentAuthor == null}" />
 
 
 						<p:dialog id="author_dialog" modal="true" showEffect="fade"
@@ -51,7 +51,7 @@
 							height="300">
 							<p:messages id="messages_author" showDetail="true"
 								autoUpdate="true" closable="true" />
-								
+
 							<p:outputLabel value="#{authorMan['author.new']}" />
 							<br />
 							<p:inputText id="renameTextBox" binding="#{renameauthor}" />
