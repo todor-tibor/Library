@@ -38,4 +38,18 @@ public class ExceptionHandler implements Serializable {
 			MessageService.error(provider.getProperty(e.getMessage()));
 		}
 	}
+	
+	public void showError(String message) {
+		MessageService.error(provider.getProperty(message));
+	}
+	
+	public void showWarning(String message) {
+		MessageService.warn(provider.getProperty(message));
+	}
+	
+	public void showInfo(String message) {
+		MessageService.info(provider.getProperty(message));
+	}
+	
+	
 }

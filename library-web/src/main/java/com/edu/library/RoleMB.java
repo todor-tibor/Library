@@ -4,17 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.jboss.logging.Logger;
 
-import com.edu.library.IRoleService;
-import com.edu.library.LibraryException;
 import com.edu.library.model.Role;
+import com.edu.library.util.ExceptionHandler;
 
 /**
  * Role manager.
@@ -26,7 +23,6 @@ import com.edu.library.model.Role;
 @Named("rolebean")
 
 @SessionScoped
-// @ViewScoped
 public class RoleMB implements Serializable {
 
 	/**
@@ -38,45 +34,51 @@ public class RoleMB implements Serializable {
 	@Inject
 	private IRoleService oRoleBean;
 
-	public void change() {
+	@Inject
+	private ExceptionHandler exceptionHandler;
+		
+	
+	public void change(){
 		oLogger.info("-----tab changed");
 	}
-
+	
 	private List<Role> roleList = new ArrayList<>();// Currently displayed
 													// roles.
 	private Role currentRole = null;// Currently selected role.
 
+	
+
 	/**
-	 * Requests all role objects and stores them in {@code roleList}.
+	 * Requests all role objects and stores them in roleList.
 	 * 
-	 * @return List of all roles from database.
+	 * @return List of all roles from persistency.
 	 */
-	public List<Role> getAll() {
+	public List<Role> getAll() {		
 		roleList.clear();
-		try {
+		try {		
 			roleList = oRoleBean.getAll();
 		} catch (Exception e) {
 			oLogger.error(e);
-			MessageService.error("Server internal error.");
+			exceptionHandler.showMessage(e);
 		}
 		return roleList;
 	}
 
 	/**
-	 * Search for role by role name and stores them in {@code roleList}.
+	 * Search for role by rolename and stores them in roleList.
 	 * 
 	 * @param p_searchTxt
 	 *            rolename.
 	 * @return List of role objects found.
 	 */
-	public List<Role> search(String p_searchTxt) {
+	public List<Role> search(String p_searchTxt) {	
 		if (p_searchTxt.length() >= 3) {
 			roleList.clear();
 			try {
 				roleList = oRoleBean.search(p_searchTxt);
 			} catch (Exception e) {
-				oLogger.error(e);
-				MessageService.error(e.getMessage());
+				oLogger.error(e.getMessage());
+				exceptionHandler.showMessage(e);
 			}
 		} else {
 			MessageService.error("Keyword too short. Min. 3 characters req.");
@@ -85,14 +87,13 @@ public class RoleMB implements Serializable {
 	}
 
 	/**
-	 * Stores new role with role name.
+	 * Stores new role with rolename.
 	 * 
-	 * @param p_name
-	 *            - rolename
-	 * 
+	 * @param p_name - rolename, p_pass - password, p_idx - loyalty index
+	 *         
 	 */
 
-	public void store(String p_name) {
+	public void store(String p_name) {	
 		if (p_name.isEmpty() || "".equals(p_name)) {
 			MessageService.error("Empty field");
 			return;
@@ -105,7 +106,7 @@ public class RoleMB implements Serializable {
 			MessageService.info("Succesfully added: " + p_name);
 		} catch (Exception e) {
 			oLogger.error(e);
-			MessageService.error(e.getMessage());
+			exceptionHandler.showMessage(e);
 		}
 	}
 
@@ -113,18 +114,18 @@ public class RoleMB implements Serializable {
 	 * Renames currently selected role.
 	 * 
 	 * @param p_newTxt
-	 *            - new role name.
+	 *            - new rolename.
 	 */
 	public void update(String p_newTxt) {
 		if ((currentRole != null) && (p_newTxt.length() >= 3)) {
 			try {
 				currentRole.setRole(p_newTxt);
 				oRoleBean.update(currentRole);
-				roleList = oRoleBean.getAll();
+				roleList = getAll();			
 				MessageService.info("Update succesfull.");
 			} catch (Exception e) {
 				oLogger.error(e);
-				MessageService.error(e.getMessage());
+				exceptionHandler.showMessage(e);
 			}
 		} else {
 			MessageService.error("New name too short.");
@@ -132,10 +133,10 @@ public class RoleMB implements Serializable {
 	}
 
 	/**
-	 * Deletes currently selected role from database.
+	 * Deletes currently selected role from persistency.
 	 */
 	public void remove() {
-		if (currentRole == null) {
+		if (currentRole == null) {		
 			MessageService.error("No selected item");
 		} else {
 			try {
@@ -144,10 +145,12 @@ public class RoleMB implements Serializable {
 				MessageService.info("Delete successful.");
 			} catch (Exception e) {
 				oLogger.error(e);
-				MessageService.error(e.getMessage());
+				exceptionHandler.showMessage(e);
 			}
 		}
 	}
+	
+	
 
 	public Role getCurrentRole() {
 		return currentRole;
@@ -156,11 +159,8 @@ public class RoleMB implements Serializable {
 	public void setCurrentRole(Role currentRole) {
 		this.currentRole = currentRole;
 	}
-
 	/**
-	 * Checks whether a role was selected.
-	 * 
-	 * @return - true if it is, false otherwise
+	 * @return
 	 */
 	public Boolean isSelected() {
 		if (this.currentRole == null) {
@@ -169,7 +169,7 @@ public class RoleMB implements Serializable {
 			return true;
 		}
 	}
-	
+
 	public List<Role> getRoleList() {
 		return roleList;
 	}
@@ -177,4 +177,5 @@ public class RoleMB implements Serializable {
 	public void setRoleList(List<Role> roleList) {
 		this.roleList = roleList;
 	}
+	
 }

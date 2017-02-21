@@ -28,7 +28,6 @@ import com.edu.library.util.ExceptionHandler;
  * 
  */
 @Named("publicationBean")
-
 @SessionScoped
 public class PublicationMB implements Serializable {
 
@@ -90,14 +89,14 @@ public class PublicationMB implements Serializable {
 			try {
 				this.publicationList = oPublicationBean.search(p_searchTxt);
 				if (this.publicationList.isEmpty()) {
-					MessageService.warn("No entity found");
+					exceptionHandler.showWarning("ejb.message.noEntity");
 				}
 			} catch (Exception e) {
 				oLogger.error(e);
 				exceptionHandler.showMessage(e);
 			}
 		} else {
-			MessageService.error("Keyword too short. Min. 3 characters req.");
+			exceptionHandler.showWarning("managedbean.string");
 		}
 		return this.publicationList;
 	}
@@ -113,14 +112,14 @@ public class PublicationMB implements Serializable {
 	 */
 	public void store(String pTitle, String pNrOfCopies) {
 		if (pTitle.isEmpty() || pNrOfCopies.isEmpty()) {
-			MessageService.warn("All field is required");
+			exceptionHandler.showWarning("managedbean.required");
 			return;
 		}
 		int nrOfCopies;
 		try {
 			nrOfCopies = Integer.parseInt(pNrOfCopies);
 		} catch (NumberFormatException e) {
-			MessageService.warn("Number of copies is not a valid Number");
+			exceptionHandler.showWarning("managedbean.numberFormatExeption");
 			return;
 		}
 		Publication publication;
@@ -128,7 +127,7 @@ public class PublicationMB implements Serializable {
 		case "Book":
 			publication = new Book();
 			if (this.currentAuthors == null) {
-				MessageService.warn("All field is required");
+				exceptionHandler.showWarning("managedbean.required");
 				return;
 			}
 			((Book) publication).setAuthors(this.currentAuthors);
@@ -136,7 +135,7 @@ public class PublicationMB implements Serializable {
 		case "Magazine":
 			publication = new Magazine();
 			if (this.currentAuthors == null) {
-				MessageService.warn("All field is required");
+				exceptionHandler.showWarning("managedbean.required");
 				return;
 			}
 			((Magazine) publication).setAuthors(this.currentAuthors);
@@ -154,7 +153,7 @@ public class PublicationMB implements Serializable {
 		try {
 			oPublicationBean.store(publication);
 			publicationList.add(publication);
-			MessageService.info("Succesfully added: " + publication);
+			exceptionHandler.showInfo("managedBean.storeSuccess");
 		} catch (Exception e) {
 			oLogger.error(e);
 			exceptionHandler.showMessage(e);
@@ -172,27 +171,26 @@ public class PublicationMB implements Serializable {
 				if (authors != null && !authors.isEmpty()) {
 					((Book) this.currentPublication).setAuthors(this.authors);
 				} else {
-					MessageService.warn("All field is requered");
+					exceptionHandler.showWarning("managedbean.required");
 					return;
 				}
 			if ("Magazine".equals(currentPublication.getClass().getSimpleName()))
 				if (this.authors != null && !this.authors.isEmpty()) {
 					((Magazine) this.currentPublication).setAuthors(this.authors);
 				} else {
-					MessageService.warn("All field is requered");
+					exceptionHandler.showWarning("managedbean.required");
 					return;
 				}
 			try {
 				oPublicationBean.update(this.currentPublication);
 				this.publicationList = oPublicationBean.getAll();
-				oLogger.info("---update succesfull---");
-				MessageService.info("Update succesfull.");
+				exceptionHandler.showInfo("managedbean.updateSuccess");
 			} catch (Exception e) {
 				oLogger.error(e);
 				exceptionHandler.showMessage(e);
 			}
 		} else {
-			MessageService.warn("All field is required");
+			exceptionHandler.showWarning("managedbean.required");
 		}
 	}
 
@@ -201,12 +199,12 @@ public class PublicationMB implements Serializable {
 	 */
 	public void remove() {
 		if (this.currentPublication == null) {
-			MessageService.error("Empty field");
+			exceptionHandler.showError("managedbean.empty");
 		} else {
 			try {
 				oPublicationBean.remove(this.currentPublication.getUuid());
 				publicationList = oPublicationBean.getAll();
-				MessageService.info("Delete succesfull.");
+				exceptionHandler.showInfo("managedbean.deleteSuccess");
 			} catch (Exception e) {
 				oLogger.error(e);
 				exceptionHandler.showMessage(e);
