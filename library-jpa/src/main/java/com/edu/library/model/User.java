@@ -54,7 +54,7 @@ public class User extends BaseEntity {
 	private String userName;
 
 	// bi-directional many-to-one association to Borrow
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
 	/**
 	 * @param borrows
 	 *            - List of already borrowed publications for a given user
