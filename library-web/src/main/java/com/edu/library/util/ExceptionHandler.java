@@ -16,7 +16,7 @@ import com.edu.library.MessageService;
 public class ExceptionHandler implements Serializable {
 	private static final long serialVersionUID = -2696292772744640375L;
 	@Inject
-	PropertyProvider provider;
+	MessageService message;
 
 	public void showMessage(Exception e) {
 		Throwable t = e;
@@ -27,29 +27,15 @@ public class ExceptionHandler implements Serializable {
 		if (t instanceof LibraryException) {
 			int level = ((LibraryException) t).getLevel();
 			if (level == 1) {
-				MessageService.error(provider.getProperty(t.getMessage()));
+				message.error(t.getMessage());
 			}
 			if (level == 2) {
-				MessageService.warn(provider.getProperty(t.getMessage()));
+				message.warn(t.getMessage());
 			}
 		} else if (t instanceof IllegalArgumentException) {
-			MessageService.warn(provider.getProperty(t.getMessage()));
+			message.warn(t.getMessage());
 		} else {
-			MessageService.error(provider.getProperty(e.getMessage()));
+			message.error(e.getMessage());
 		}
-	}
-	
-	public void showError(String message) {
-		MessageService.error(provider.getProperty(message));
-	}
-	
-	public void showWarning(String message) {
-		MessageService.warn(provider.getProperty(message));
-	}
-	
-	public void showInfo(String message) {
-		MessageService.info(provider.getProperty(message));
-	}
-	
-	
+	}	
 }

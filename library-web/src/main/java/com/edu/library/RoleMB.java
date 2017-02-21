@@ -36,6 +36,9 @@ public class RoleMB implements Serializable {
 
 	@Inject
 	private ExceptionHandler exceptionHandler;
+	
+	@Inject
+	MessageService message;
 		
 	
 	public void change(){
@@ -81,7 +84,7 @@ public class RoleMB implements Serializable {
 				exceptionHandler.showMessage(e);
 			}
 		} else {
-			MessageService.error("Keyword too short. Min. 3 characters req.");
+			message.error("managedbean.string");
 		}
 		return roleList;
 	}
@@ -95,7 +98,7 @@ public class RoleMB implements Serializable {
 
 	public void store(String p_name) {	
 		if (p_name.isEmpty() || "".equals(p_name)) {
-			MessageService.error("Empty field");
+			message.error("managedbean.empty");
 			return;
 		}
 		try {
@@ -103,7 +106,7 @@ public class RoleMB implements Serializable {
 			tmpRole.setRole(p_name);
 			oRoleBean.store(tmpRole);
 			roleList.add(tmpRole);
-			MessageService.info("Succesfully added: " + p_name);
+			message.info("managedBean.storeSuccess");
 		} catch (Exception e) {
 			oLogger.error(e);
 			exceptionHandler.showMessage(e);
@@ -122,13 +125,13 @@ public class RoleMB implements Serializable {
 				currentRole.setRole(p_newTxt);
 				oRoleBean.update(currentRole);
 				roleList = getAll();			
-				MessageService.info("Update succesfull.");
+				message.info("managedbean.updateSuccess");
 			} catch (Exception e) {
 				oLogger.error(e);
 				exceptionHandler.showMessage(e);
 			}
 		} else {
-			MessageService.error("New name too short.");
+			message.error("managedbean.string");
 		}
 	}
 
@@ -137,12 +140,12 @@ public class RoleMB implements Serializable {
 	 */
 	public void remove() {
 		if (currentRole == null) {		
-			MessageService.error("No selected item");
+			message.error("managedbean.empty");
 		} else {
 			try {
 				oRoleBean.remove(currentRole.getUuid());
 				roleList.remove(currentRole);
-				MessageService.info("Delete successful.");
+				message.info("managedbean.deleteSuccess");
 			} catch (Exception e) {
 				oLogger.error(e);
 				exceptionHandler.showMessage(e);
@@ -159,9 +162,7 @@ public class RoleMB implements Serializable {
 	public void setCurrentRole(Role currentRole) {
 		this.currentRole = currentRole;
 	}
-	/**
-	 * @return
-	 */
+
 	public Boolean isSelected() {
 		if (this.currentRole == null) {
 			return false;

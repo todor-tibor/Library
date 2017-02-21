@@ -34,6 +34,9 @@ public class LoginMB implements Serializable {
 
 	@Inject
 	ExceptionHandler exceptionHandler;
+	
+	@Inject
+	MessageService message;
 	/**
 	 * 
 	 */
@@ -89,7 +92,7 @@ public class LoginMB implements Serializable {
 						.setLocale(FacesContext.getCurrentInstance().getViewRoot().getLocale());
 			} catch (IOException e) {
 				oLogger.error(e);
-				MessageService.fatal(e.getMessage());
+				message.fatal(e.getMessage());
 			}
 		} else {
 			tmp.setRole("READER");
@@ -99,12 +102,12 @@ public class LoginMB implements Serializable {
 					FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
 				} catch (IOException e) {
 					oLogger.error(e);
-					MessageService.fatal(e.getMessage());
+					message.fatal(e.getMessage());
 				}
 
 			} else {
 				setCurrentRole("INVALID");
-				MessageService.error("login.invalid");
+				message.error("login.invalid");
 			}
 		}
 	}
@@ -127,7 +130,7 @@ public class LoginMB implements Serializable {
 				exceptionHandler.showMessage(e);
 			}
 		} else {
-			MessageService.warn("Username is to short");
+			message.warn("managedbean.string");
 		}
 	}
 

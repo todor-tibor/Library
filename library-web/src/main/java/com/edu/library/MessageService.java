@@ -5,28 +5,34 @@ package com.edu.library;
 
 import java.io.Serializable;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+
+import com.edu.library.util.PropertyProvider;
 
 /**
  * MessageService for ManagedBeans
  * 
  * @author sipost
  */
-@ApplicationScoped
+@SessionScoped
 public class MessageService implements Serializable {
 
 	private static final long serialVersionUID = -4702598250751689454L;
+
+	@Inject
+	PropertyProvider provider;
 
 	/**
 	 * Sets faces context error message.
 	 * 
 	 * @param message
 	 */
-	public static void error(String message) {
+	public void error(String message) {
 		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", message));
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", provider.getProperty(message)));
 	}
 
 	/**
@@ -34,9 +40,9 @@ public class MessageService implements Serializable {
 	 * 
 	 * @param message
 	 */
-	public static void info(String message) {
+	public void info(String message) {
 		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", message));
+				new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", provider.getProperty(message)));
 	}
 
 	/**
@@ -44,9 +50,9 @@ public class MessageService implements Serializable {
 	 * 
 	 * @param message
 	 */
-	public static void warn(String message) {
+	public void warn(String message) {
 		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning!", message));
+				new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning!", provider.getProperty(message)));
 	}
 
 	/**
@@ -54,9 +60,9 @@ public class MessageService implements Serializable {
 	 * 
 	 * @param message
 	 */
-	public static void fatal(String message) {
+	public void fatal(String message) {
 		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_FATAL, "Fatal!", message));
+				new FacesMessage(FacesMessage.SEVERITY_FATAL, "Fatal!", provider.getProperty(message)));
 	}
 
 }

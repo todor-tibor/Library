@@ -1,8 +1,6 @@
 package com.edu.library;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,8 +11,6 @@ import javax.inject.Named;
 
 import org.jboss.logging.Logger;
 
-import com.edu.library.IBorrowService;
-import com.edu.library.LibraryException;
 import com.edu.library.model.Borrow;
 import com.edu.library.model.Publication;
 import com.edu.library.model.User;
@@ -39,6 +35,9 @@ public class BorrowMB implements Serializable {
 	private IBorrowService oBorrowBean;
 	@Inject
 	ExceptionHandler exceptionHandler;
+	
+	@Inject
+	MessageService message;
 
 	private List<Borrow> borrows = new ArrayList<>();
 	private User currentUser = null;
@@ -113,7 +112,7 @@ public class BorrowMB implements Serializable {
 		Borrow p_Borrow;
 		p_Borrow = new Borrow();
 		if ((currentPublication == null) || (currentUser == null) || (date2 == null)) {
-			MessageService.warn("All field is requered");
+			message.warn("All field is requered");
 
 		} else {
 			p_Borrow.setUser(currentUser);
@@ -123,7 +122,7 @@ public class BorrowMB implements Serializable {
 			try {
 				oBorrowBean.store(p_Borrow);
 				borrows.add(p_Borrow);
-				MessageService.info("Succesfully added");
+				message.info("Succesfully added");
 			} catch (LibraryException e) {
 				oLogger.error("-----------??????????????????????"+ e.getMessage());
 				exceptionHandler.showMessage(e);
@@ -141,7 +140,7 @@ public class BorrowMB implements Serializable {
 	public void remove() {
 		oLogger.info("remove borrow by Id ManagedBean--p_id:" + borrow.getUuid());
 		if (borrow == null) {
-			MessageService.error("Empty field");
+			message.error("Empty field");
 		} else {
 			try {
 				oBorrowBean.remove(borrow.getUuid());

@@ -31,6 +31,9 @@ public class AuthorMB implements Serializable {
 
 	@Inject
 	private ExceptionHandler exceptionHandler;
+	
+	@Inject
+	MessageService message;
 	/**
 	 * Currently displayed authors.
 	 */
@@ -91,7 +94,7 @@ public class AuthorMB implements Serializable {
 
 			}
 		} else {
-			MessageService.error("Keyword too short. Min. 3 characters req.");
+			message.error("managedbean.string");
 		}
 		return authorList;
 	}
@@ -104,18 +107,15 @@ public class AuthorMB implements Serializable {
 	 */
 
 	public void store(String p_value) {
-		if (p_value.isEmpty()) {
-			MessageService.error("Empty field");
-		}
-		if (p_value == "") {
-			MessageService.error("Empty field");
+		if (p_value.isEmpty() || p_value == "") {
+			message.warn("managedbean.empty");
 		}
 		try {
 			Author tmpAuthor = new Author();
 			tmpAuthor.setName(p_value);
 			oAuthorBean.store(tmpAuthor);
 			authorList.add(tmpAuthor);
-			MessageService.info("Succesfully added: " + p_value);
+			message.info("managedBean.storeSuccess");
 		} catch (Exception e) {
 			oLogger.error(e);
 			exceptionHandler.showMessage(e);
@@ -134,13 +134,13 @@ public class AuthorMB implements Serializable {
 				currentAuthor.setName(p_newTxt);
 				oAuthorBean.update(currentAuthor);
 				authorList = oAuthorBean.getAll();
-				MessageService.info("Update succesfull.");
+				message.info("managedbean.updateSuccess");
 			} catch (Exception e) {
 				oLogger.error(e);
 				exceptionHandler.showMessage(e);
 			}
 		} else {
-			MessageService.error("New name too short.");
+			message.error("managedbean.string");
 		}
 	}
 
@@ -149,12 +149,12 @@ public class AuthorMB implements Serializable {
 	 */
 	public void remove() {
 		if (currentAuthor == null) {
-			MessageService.error("Empty field");
+			message.error("managedbean.empty");
 		} else {
 			try {
 				oAuthorBean.remove(currentAuthor.getUuid());
 				authorList = oAuthorBean.getAll();
-				MessageService.info("Delete succesfull.");
+				message.info("managedbean.deleteSuccess");
 			} catch (Exception e) {
 				oLogger.error(e);
 				exceptionHandler.showMessage(e);

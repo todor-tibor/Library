@@ -16,6 +16,7 @@ import org.jboss.logging.Logger;
 
 import com.edu.library.model.Role;
 import com.edu.library.model.User;
+import com.edu.library.util.ExceptionHandler;
 
 /**
  * User manager.
@@ -38,6 +39,12 @@ public class UserMB implements Serializable {
 
 	@Inject
 	LocaleManager localeManager;
+
+	@Inject
+	MessageService message;
+	
+	@Inject
+	ExceptionHandler exceptionHandler;
 
 	public void change() {
 		oLogger.info("-----tab changed");
@@ -72,7 +79,7 @@ public class UserMB implements Serializable {
 			userList = oUserBean.getAll();
 		} catch (Exception e) {
 			oLogger.error(e);
-			MessageService.error("Internal error");
+			exceptionHandler.showMessage(e);
 		}
 		return userList;
 	}
@@ -91,10 +98,10 @@ public class UserMB implements Serializable {
 				userList = oUserBean.search(p_searchTxt);
 			} catch (Exception e) {
 				oLogger.error(e);
-				MessageService.error(e.getMessage());
+				exceptionHandler.showMessage(e);
 			}
 		} else {
-			MessageService.error("Keyword too short. Min. 3 characters req.");
+			message.warn("managedbean.string");
 		}
 		return userList;
 	}
@@ -109,15 +116,15 @@ public class UserMB implements Serializable {
 
 	public void store(String p_name, String p_pass, int p_idx) {
 		if (p_name.isEmpty() || "".equals(p_name)) {
-			MessageService.warn("Empty field");
+			message.warn("managedbean.empty");
 			return;
 		}
 		if ((p_idx > 10) || (p_idx < 0)) {
-			MessageService.warn("Loyalty index must be an integer beteen 0..10");
+			message.warn("managedbean.loyalty");
 			return;
 		}
 		if (currentRoles.isEmpty()) {
-			MessageService.warn("Please select role");
+			message.warn("managedbean.empty");
 			return;
 		}
 
@@ -129,10 +136,10 @@ public class UserMB implements Serializable {
 		try {
 			oUserBean.store(tmpUser);
 			userList.add(tmpUser);
-			MessageService.info("Succesfully added: " + p_name);
+			message.info("managedBean.storeSuccess");
 		} catch (Exception e) {
 			oLogger.error(e);
-			MessageService.error(e.getMessage());
+			message.error(e.getMessage());
 		}
 	}
 
@@ -144,17 +151,17 @@ public class UserMB implements Serializable {
 	 */
 	public void update(String p_newTxt) {
 		if ((currentUser == null) || (p_newTxt.length() <= 3)) {
-			MessageService.warn("New name too short.");
+			message.warn("managedbean.string");
 			return;
 		}
 		currentUser.setUserName(p_newTxt);
 		try {
 			oUserBean.update(currentUser);
 			userList = oUserBean.getAll();
-			MessageService.info("Update succesfull.");
+			message.info("managedbean.updateSuccess");
 		} catch (Exception e) {
 			oLogger.error(e);
-			MessageService.error(e.getMessage());
+			exceptionHandler.showMessage(e);
 		}
 
 	}
@@ -164,15 +171,15 @@ public class UserMB implements Serializable {
 	 */
 	public void remove() {
 		if (currentUser == null) {
-			MessageService.error("Empty field");
+			message.error("Empty field");
 		} else {
 			try {
 				oUserBean.remove(currentUser.getUuid());
 				userList.remove(currentUser);
-				MessageService.info("Delete succesfull.");
+				message.info("managedbean.deleteSuccess");
 			} catch (Exception e) {
 				oLogger.error(e);
-				MessageService.error(e.getMessage());
+				exceptionHandler.showMessage(e);
 			}
 		}
 	}

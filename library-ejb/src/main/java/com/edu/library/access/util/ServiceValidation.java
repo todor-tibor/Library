@@ -25,7 +25,7 @@ public class ServiceValidation {
 	 * 
 	 * [a-zA-Z]+.{3,} - has only letters and is at least 3 characters long
 	 */
-	private static final String STRING_PATTERN = "[a-zA-Z\\s,]+.{3,}";
+	private static final String STRING_PATTERN = "[a-zA-Z\\s,]+.{2,}";
 	/**
 	 * PASSWORD_PATTERN - the restriction for a correct password ((?=.*\\d) -
 	 * must have at least one number,

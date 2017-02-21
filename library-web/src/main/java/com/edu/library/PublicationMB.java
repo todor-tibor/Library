@@ -39,6 +39,8 @@ public class PublicationMB implements Serializable {
 
 	@Inject
 	ExceptionHandler exceptionHandler;
+	@Inject
+	MessageService message;
 
 	/*
 	 * variables to select publication type, authors or publisher for update and
@@ -89,14 +91,14 @@ public class PublicationMB implements Serializable {
 			try {
 				this.publicationList = oPublicationBean.search(p_searchTxt);
 				if (this.publicationList.isEmpty()) {
-					exceptionHandler.showWarning("ejb.message.noEntity");
+					message.warn("ejb.message.noEntity");
 				}
 			} catch (Exception e) {
 				oLogger.error(e);
 				exceptionHandler.showMessage(e);
 			}
 		} else {
-			exceptionHandler.showWarning("managedbean.string");
+			message.warn("managedbean.string");
 		}
 		return this.publicationList;
 	}
@@ -112,14 +114,14 @@ public class PublicationMB implements Serializable {
 	 */
 	public void store(String pTitle, String pNrOfCopies) {
 		if (pTitle.isEmpty() || pNrOfCopies.isEmpty()) {
-			exceptionHandler.showWarning("managedbean.required");
+			message.warn("managedbean.required");
 			return;
 		}
 		int nrOfCopies;
 		try {
 			nrOfCopies = Integer.parseInt(pNrOfCopies);
 		} catch (NumberFormatException e) {
-			exceptionHandler.showWarning("managedbean.numberFormatExeption");
+			message.warn("managedbean.numberFormatExeption");
 			return;
 		}
 		Publication publication;
@@ -127,7 +129,7 @@ public class PublicationMB implements Serializable {
 		case "Book":
 			publication = new Book();
 			if (this.currentAuthors == null) {
-				exceptionHandler.showWarning("managedbean.required");
+				message.warn("managedbean.required");
 				return;
 			}
 			((Book) publication).setAuthors(this.currentAuthors);
@@ -135,7 +137,7 @@ public class PublicationMB implements Serializable {
 		case "Magazine":
 			publication = new Magazine();
 			if (this.currentAuthors == null) {
-				exceptionHandler.showWarning("managedbean.required");
+				message.warn("managedbean.required");
 				return;
 			}
 			((Magazine) publication).setAuthors(this.currentAuthors);
@@ -153,7 +155,7 @@ public class PublicationMB implements Serializable {
 		try {
 			oPublicationBean.store(publication);
 			publicationList.add(publication);
-			exceptionHandler.showInfo("managedBean.storeSuccess");
+			message.info("managedBean.storeSuccess");
 		} catch (Exception e) {
 			oLogger.error(e);
 			exceptionHandler.showMessage(e);
@@ -171,26 +173,26 @@ public class PublicationMB implements Serializable {
 				if (authors != null && !authors.isEmpty()) {
 					((Book) this.currentPublication).setAuthors(this.authors);
 				} else {
-					exceptionHandler.showWarning("managedbean.required");
+					message.warn("managedbean.required");
 					return;
 				}
 			if ("Magazine".equals(currentPublication.getClass().getSimpleName()))
 				if (this.authors != null && !this.authors.isEmpty()) {
 					((Magazine) this.currentPublication).setAuthors(this.authors);
 				} else {
-					exceptionHandler.showWarning("managedbean.required");
+					message.warn("managedbean.required");
 					return;
 				}
 			try {
 				oPublicationBean.update(this.currentPublication);
 				this.publicationList = oPublicationBean.getAll();
-				exceptionHandler.showInfo("managedbean.updateSuccess");
+				message.info("managedbean.updateSuccess");
 			} catch (Exception e) {
 				oLogger.error(e);
 				exceptionHandler.showMessage(e);
 			}
 		} else {
-			exceptionHandler.showWarning("managedbean.required");
+			message.warn("managedbean.required");
 		}
 	}
 
@@ -199,12 +201,12 @@ public class PublicationMB implements Serializable {
 	 */
 	public void remove() {
 		if (this.currentPublication == null) {
-			exceptionHandler.showError("managedbean.empty");
+			message.error("managedbean.empty");
 		} else {
 			try {
 				oPublicationBean.remove(this.currentPublication.getUuid());
 				publicationList = oPublicationBean.getAll();
-				exceptionHandler.showInfo("managedbean.deleteSuccess");
+				message.info("managedbean.deleteSuccess");
 			} catch (Exception e) {
 				oLogger.error(e);
 				exceptionHandler.showMessage(e);

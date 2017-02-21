@@ -30,6 +30,9 @@ public class PublisherMB implements Serializable {
 	private IPublisherService oPublisherBean;
 	@Inject
 	ExceptionHandler exceptionHandler;
+	
+	@Inject
+	MessageService message;
 
 	/**
 	 * List containing all publishers
@@ -86,7 +89,7 @@ public class PublisherMB implements Serializable {
 				exceptionHandler.showMessage(e);
 			}
 		} else {
-			MessageService.error("Keyword too short. Min. 3 characters req.");
+			message.error("managedbean.string");
 		}
 		return publishersList;
 	}
@@ -101,17 +104,17 @@ public class PublisherMB implements Serializable {
 
 	public void store(String p_value) {
 		if (p_value.isEmpty()) {
-			MessageService.error("Empty field");
+			message.error("managedbean.empty");
 		}
 		if (p_value == "") {
-			MessageService.error("Empty field");
+			message.error("managedbean.empty");
 		}
 		try {
 			Publisher tmpPublisher = new Publisher();
 			tmpPublisher.setName(p_value);
 			oPublisherBean.store(tmpPublisher);
 			publishersList.add(tmpPublisher);
-			MessageService.info("Succesfully added: " + p_value);
+			message.info("managedBean.storeSuccess");
 		} catch (Exception e) {
 			oLogger.error(e);
 			exceptionHandler.showMessage(e);
@@ -131,14 +134,14 @@ public class PublisherMB implements Serializable {
 				currentPublisher.setName(p_newTxt);
 				oPublisherBean.update(currentPublisher);
 				publishersList = oPublisherBean.getAll();
-				MessageService.info("Update succesfull.");
+				message.info("managedbean.updateSuccess");
 			} catch (Exception e) {
 				oLogger.error(e);
 				exceptionHandler.showMessage(e);
 
 			}
 		} else {
-			MessageService.error("New name too short.");
+			message.error("managedbean.string");
 		}
 	}
 
@@ -147,12 +150,12 @@ public class PublisherMB implements Serializable {
 	 */
 	public void remove() {
 		if (currentPublisher == null) {
-			MessageService.error("Empty field");
+			message.error("managedbean.empty");
 		} else {
 			try {
 				oPublisherBean.remove(currentPublisher.getUuid());
 				publishersList = oPublisherBean.getAll();
-				MessageService.info("Delete succesfull.");
+				message.info("managedbean.deleteSuccess");
 			} catch (Exception e) {
 				oLogger.error(e);
 				exceptionHandler.showMessage(e);
