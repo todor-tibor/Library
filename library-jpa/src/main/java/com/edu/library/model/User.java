@@ -27,7 +27,8 @@ import javax.persistence.Table;
 @NamedQueries({ @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
 		@NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.userName = :user_name"),
 		@NamedQuery(name = "User.searchByUserName", query = "SELECT u FROM User u where u.userName like :user_name"),
-		@NamedQuery(name = "User.findById", query = "SELECT u FROM User u WHERE u.uuid= :uuid") })
+		@NamedQuery(name = "User.findById", query = "SELECT u FROM User u WHERE u.uuid= :uuid"),
+		@NamedQuery(name = "User.findBorrow", query = "SELECT DISTINCT b FROM Borrow b, User u JOIN b.user bUser JOIN u.borrows uUser WHERE bUser.uuid = uUser.user.uuid AND u.userName= :userName")})
 
 public class User extends BaseEntity {
 	private static final long serialVersionUID = 1L;

@@ -34,7 +34,8 @@ import javax.persistence.TemporalType;
 @NamedQueries({ @NamedQuery(name = "Publication.findAll", query = "SELECT a FROM Publication a"),
 		@NamedQuery(name = "Publication.searchByName", query = "SELECT a FROM Publication a WHERE a.title like :title"),
 		@NamedQuery(name = "Publication.getByName", query = "SELECT a FROM Publication a WHERE a.title = :title"),
-		@NamedQuery(name = "Publication.getById", query = "SELECT a FROM Publication a WHERE a.uuid = :uuid") })
+		@NamedQuery(name = "Publication.getById", query = "SELECT a FROM Publication a WHERE a.uuid = :uuid"),
+		@NamedQuery(name = "Publication.findBorrow", query = "SELECT DISTINCT b FROM Borrow b, Publication p JOIN b.publication bPublication JOIN p.borrows pPublication WHERE bPublication.uuid = pPublication.publication.uuid AND p.title= :title") })
 public abstract class Publication extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
