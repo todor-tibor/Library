@@ -12,6 +12,7 @@ import org.jboss.logging.Logger;
 
 import com.edu.library.PasswordEncrypter;
 import com.edu.library.data.exception.TechnicalException;
+import com.edu.library.model.Borrow;
 import com.edu.library.model.User;
 
 /**
@@ -99,6 +100,18 @@ public class UserDao {
 		try {
 			User u = oEntityManager.createNamedQuery("User.findByName", User.class).setParameter("user_name", userName)
 					.getSingleResult();
+			return u;
+		} catch (PersistenceException e) {
+			oLogger.error(e);
+			throw new TechnicalException(e);
+		}
+	}
+	
+	public List<Borrow> getBorrow(String userName){
+
+		try {
+			List<Borrow> u = oEntityManager.createNamedQuery("User.findBorrow", Borrow.class).setParameter("userName", userName)
+					.getResultList();
 			return u;
 		} catch (PersistenceException e) {
 			oLogger.error(e);

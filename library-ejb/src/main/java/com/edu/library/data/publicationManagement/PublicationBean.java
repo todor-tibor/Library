@@ -11,6 +11,7 @@ import javax.persistence.PersistenceException;
 import org.jboss.logging.Logger;
 
 import com.edu.library.data.exception.TechnicalException;
+import com.edu.library.model.Borrow;
 import com.edu.library.model.Publication;
 
 /**
@@ -92,6 +93,18 @@ public class PublicationBean {
 		try {
 			oEntityManager.remove(pub);
 			oEntityManager.flush();
+		} catch (PersistenceException e) {
+			oLogger.error(e);
+			throw new TechnicalException(e);
+		}
+	}
+	
+	public List<Borrow> getBorrow(String title){
+
+		try {
+			List<Borrow> u = oEntityManager.createNamedQuery("Publication.findBorrow", Borrow.class).setParameter("title", title)
+					.getResultList();
+			return u;
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new TechnicalException(e);
