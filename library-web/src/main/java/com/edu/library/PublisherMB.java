@@ -162,4 +162,15 @@ public class PublisherMB implements Serializable {
 			}
 		}
 	}
+
+	/**
+	 * @return
+	 */
+	public Boolean isSelected() {
+		if (this.currentPublisher == null) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 }

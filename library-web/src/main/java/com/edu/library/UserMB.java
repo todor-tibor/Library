@@ -204,4 +204,15 @@ public class UserMB implements Serializable {
 	public void setCurrentRoles(List<Role> currentRoles) {
 		this.currentRoles = currentRoles;
 	}
+	
+	/**
+	 * @return
+	 */
+	public Boolean isSelected() {
+		if (this.currentUser == null) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 }
