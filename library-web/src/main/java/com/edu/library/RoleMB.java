@@ -164,4 +164,14 @@ public class RoleMB implements Serializable {
 	public void setCurrentRole(Role currentRole) {
 		this.currentRole = currentRole;
 	}
+	/**
+	 * @return
+	 */
+	public Boolean isSelected() {
+		if (this.currentRole == null) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 }
