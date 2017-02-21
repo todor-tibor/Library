@@ -11,6 +11,7 @@ import javax.inject.Named;
 import org.jboss.logging.Logger;
 
 import com.edu.library.model.Role;
+import com.edu.library.util.ExceptionHandler;
 
 /**
  * Role manager.
@@ -34,7 +35,8 @@ public class RoleMB implements Serializable {
 	@Inject
 	private IRoleService oRoleBean;
 
-	
+	@Inject
+	private ExceptionHandler exceptionHandler;
 		
 	
 	public void change(){
@@ -58,7 +60,7 @@ public class RoleMB implements Serializable {
 			roleList = oRoleBean.getAll();
 		} catch (Exception e) {
 			oLogger.error(e);
-			MessageService.error("Server internal error.");
+			exceptionHandler.showMessage(e);
 		}
 		return roleList;
 	}
@@ -76,8 +78,8 @@ public class RoleMB implements Serializable {
 			try {
 				roleList = oRoleBean.search(p_searchTxt);
 			} catch (Exception e) {
-				oLogger.error(e);
-				MessageService.error(e.getMessage());
+				oLogger.error(e.getMessage());
+				exceptionHandler.showMessage(e);
 			}
 		} else {
 			MessageService.error("Keyword too short. Min. 3 characters req.");
@@ -105,7 +107,7 @@ public class RoleMB implements Serializable {
 			MessageService.info("Succesfully added: " + p_name);
 		} catch (Exception e) {
 			oLogger.error(e);
-			MessageService.error(e.getMessage());
+			exceptionHandler.showMessage(e);
 		}
 	}
 
@@ -120,11 +122,11 @@ public class RoleMB implements Serializable {
 			try {
 				currentRole.setRole(p_newTxt);
 				oRoleBean.update(currentRole);
-				roleList = oRoleBean.getAll();			
+				roleList = getAll();			
 				MessageService.info("Update succesfull.");
 			} catch (Exception e) {
 				oLogger.error(e);
-				MessageService.error(e.getMessage());
+				exceptionHandler.showMessage(e);
 			}
 		} else {
 			MessageService.error("New name too short.");
@@ -144,7 +146,7 @@ public class RoleMB implements Serializable {
 				MessageService.info("Delete successful.");
 			} catch (Exception e) {
 				oLogger.error(e);
-				MessageService.error(e.getMessage());
+				exceptionHandler.showMessage(e);
 			}
 		}
 	}
