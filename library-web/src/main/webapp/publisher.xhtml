@@ -2,7 +2,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
-<f:view locale="#{localeBean.userLocale}"/>
+<f:view locale="#{localeBean.userLocale}" />
 <h:head>
 	<p:messages id="messages_publisher" showDetail="true" autoUpdate="true"
 		closable="true" />
@@ -13,8 +13,10 @@
 		<p:panel header="#{msg['publisher.button']}">
 			<h:form id="publisher_actions_form">
 
-				<p:inputText id="publisher_searchTextBox" binding="#{srch_publisher}" />
-				<p:commandButton value="#{msg['search.button']}" update="publisherDT"
+				<p:inputText id="publisher_searchTextBox"
+					binding="#{srch_publisher}" />
+				<p:commandButton value="#{msg['search.button']}"
+					update="publisherDT"
 					action="#{publisherbean.search(srch_publisher.value)}">
 					<f:param name="p_value" value="#{srch_publisher.value}" />
 				</p:commandButton>
@@ -23,6 +25,8 @@
 					value="#{publisherbean.publishersList}" selectionMode="single"
 					selection="#{publisherbean.currentPublisher}"
 					rowKey="#{publisher.uuid}">
+					<p:ajax event="rowSelect" listener="#{publisherbean.isSelected}"
+						update="publisherDT" />
 					<f:facet name="header">
             			#{publishMan['publishers.text']}
         			</f:facet>
@@ -34,18 +38,20 @@
 					<f:facet name="footer">
 						<p:commandButton process="publisherDT" icon="ui-icon-search"
 							value="#{msg['rename.button']}" update="first"
-							oncomplete="PF('publisherDialog').show()" />
+							oncomplete="PF('publisherDialog').show()"
+							disabled="#{publisherbean.currentPublisher == null}"/>
 
 						<p:commandButton process="publisherDT" icon="fa-remove"
-							value="#{msg['delete.button']}" action="#{publisherbean.remove()}"
-							update="publisherDT" />
+							value="#{msg['delete.button']}"
+							action="#{publisherbean.remove()}" update="publisherDT"
+							disabled="#{publisherbean.currentPublisher == null}" />
 
 						<p:dialog id="first" modal="true" showEffect="fade"
 							hideEffect="fade" widgetVar="publisherDialog"
 							header="#{publisherbean.currentPublisher.name}" width="300"
 							height="300">
-							<p:messages id="messages_publisher1111" showDetail="true" autoUpdate="true"
-								closable="true" />
+							<p:messages id="messages_publisher1111" showDetail="true"
+								autoUpdate="true" closable="true" />
 							<p:inputText id="renameTextBox" binding="#{renamepublisher}" />
 							<p:commandButton value="#{msg['rename.button']}" update=""
 								action="#{publisherbean.update(renamepublisher.value)}">
@@ -58,16 +64,19 @@
 				</p:dataTable>
 
 
-				<p:commandButton value="#{publishMan['listPublishers.button']}" update="publisherDT"
-					icon="ui-icon-search" action="#{publisherbean.getAll}">
+				<p:commandButton value="#{publishMan['listPublishers.button']}"
+					update="publisherDT" icon="ui-icon-search"
+					action="#{publisherbean.getAll}">
 				</p:commandButton>
 
-				<p:commandButton value="#{publishMan['publisher.addpublisher.button']}" update="publisherDT"
-					icon="fa-publisher-plu" oncomplete="PF('add_publisherDialog').show()">
+				<p:commandButton
+					value="#{publishMan['publisher.addpublisher.button']}"
+					update="publisherDT" icon="fa-publisher-plu"
+					oncomplete="PF('add_publisherDialog').show()">
 
 				</p:commandButton>
 
-				
+
 				<p:dialog id="add_publisher_dialog" modal="true" showEffect="fade"
 					hideEffect="fade" widgetVar="add_publisherDialog"
 					header="#{publishMan['publisher.name']}" width="300" height="300">
