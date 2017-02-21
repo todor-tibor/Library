@@ -152,4 +152,15 @@ public class BorrowMB implements Serializable {
 			}
 		}
 	}
+	
+	/**
+	 * @return
+	 */
+	public Boolean isSelected() {
+		if (this.borrow == null) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 }
