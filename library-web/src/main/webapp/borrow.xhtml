@@ -16,7 +16,8 @@
 				<p:dataTable id="borrowDT" var="borrow"
 					value="#{borrowBean.borrowsList}" selectionMode="single"
 					selection="#{borrowBean.currentBorrow}" rowKey="#{borrow.uuid}">
-					
+					<p:ajax event="rowSelect" listener="#{borrowBean.isSelected}"
+						update="borrowDT" />
 					
 					<f:facet name="header">
 						#{borrowMan['header.borrows']}
@@ -37,7 +38,8 @@
 					</p:column>
 					<f:facet name="footer">
 						<p:commandButton process="borrowDT" icon="fa-remove"
-							value="#{borrowMan['button.return']}" action="#{borrowBean.remove()}" update="borrowDT" />
+							value="#{borrowMan['button.return']}" action="#{borrowBean.remove()}" update="borrowDT" 
+							disabled="#{borrowBean.currentBorrow == null}"/>
 
 					</f:facet>
 
