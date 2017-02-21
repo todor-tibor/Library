@@ -2,7 +2,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
-<f:view locale="#{localeBean.userLocale}"/>
+<f:view locale="#{localeBean.userLocale}" />
 <h:head>
 	<p:messages id="messagesLogin" showDetail="true" autoUpdate="true"
 		closable="true" />
@@ -10,20 +10,23 @@
 
 <h:body>
 
-	<p:panel id="loginPanel" style="position: absolute; left:50px; top:50px;">
+	<p:panel id="loginPanel"
+		style="position: absolute; left:50px; top:50px;">
 		<p:panel header="#{msg['login.text']}"
 			style="position: relative; left:0px; top:0px;">
 			<h:form id="login_action_form">
 				<p:outputLabel value="#{msg['username.text']}" />
 				<br />
-				<p:inputText id="loginTextBox" value="#{loginbean.user_name}" />
+				<p:inputText id="loginTextBox" binding="#{user_name}" />
 				<br />
 				<p:outputLabel value="#{msg['password.text']}" />
 				<br />
-				<p:password id="loginPassword" value="#{loginbean.password}"></p:password>
+				<p:password id="loginPassword" binding="#{password}"></p:password>
 				<br />
 				<p:commandButton value="#{msg['login.text']}"
-					action="#{loginbean.search()}">
+					action="#{loginbean.search(user_name.value,password.value)}">
+					<f:param name="user_name" value="#{user_name.value}" />
+					<f:param name="password" value="#{password.value}" />
 				</p:commandButton>
 			</h:form>
 		</p:panel>
