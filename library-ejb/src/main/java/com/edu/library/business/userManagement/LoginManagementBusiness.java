@@ -9,13 +9,13 @@ import javax.ejb.Stateless;
 import com.edu.library.IUserService;
 import com.edu.library.LibraryException;
 import com.edu.library.PasswordEncrypter;
+import com.edu.library.access.util.ServiceValidation;
 import com.edu.library.business.exception.BusinessException;
 import com.edu.library.business.exception.ErrorMessages;
 import com.edu.library.data.userManagement.UserDao;
 import com.edu.library.model.BaseEntity;
 import com.edu.library.model.Role;
 import com.edu.library.model.User;
-import com.edu.library.util.ServiceValidation;
 
 /**
  * @author kiska

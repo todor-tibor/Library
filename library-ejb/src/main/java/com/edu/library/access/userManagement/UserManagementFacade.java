@@ -1,15 +1,14 @@
 package com.edu.library.access.userManagement;
 
-import java.security.Provider.Service;
 import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import com.edu.library.IUserService;
+import com.edu.library.access.util.ServiceValidation;
 import com.edu.library.business.userManagement.UserManagementBusiness;
 import com.edu.library.model.User;
-import com.edu.library.util.ServiceValidation;
 
 /**
  * @author kiska Implements the basics of user login. Validates the given the
@@ -41,11 +40,9 @@ public class UserManagementFacade implements IUserService {
 	public void store(User user) {
 		ServiceValidation.checkNotNull(user);
 		ServiceValidation.checkNotEmpty(user.getRoles());
-		ServiceValidation.checkUuid(user.getUuid());
 		ServiceValidation.checkString(user.getUserName());
 		ServiceValidation.checkPassword(user.getPassword());
 		userManagementBusiness.store(user);
-
 	}
 
 	@Override

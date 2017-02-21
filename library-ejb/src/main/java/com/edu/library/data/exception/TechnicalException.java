@@ -8,7 +8,11 @@ import javax.persistence.RollbackException;
 import org.jboss.logging.Logger;
 
 import com.edu.library.LibraryException;
-
+/**
+ * Specify exception for DAO layer.
+ * 
+ * @author sipost
+ */
 public class TechnicalException extends LibraryException {
 
 	private static final long serialVersionUID = 5633917663462543264L;
@@ -25,16 +29,6 @@ public class TechnicalException extends LibraryException {
 		}
 		oLogger.error(message);
 		throw new TechnicalException(message, e);
-	}
-
-	public TechnicalException() {
-		super();
-		setLevel(1);
-	}
-
-	public TechnicalException(String message) {
-		super(message);
-		setLevel(1);
 	}
 
 	public TechnicalException(String message, Throwable cause) {

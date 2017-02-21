@@ -6,22 +6,18 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import com.edu.library.ILoginService;
-import com.edu.library.LibraryException;
+import com.edu.library.access.util.ServiceValidation;
 import com.edu.library.business.userManagement.LoginManagementBusiness;
 import com.edu.library.model.Role;
-import com.edu.library.util.EjbException;
-import com.edu.library.util.ServiceValidation;
 
 /**
- * @author kiska Implements the basics of user login. Validates the given the
- *         input data.
+ * Implements the basics of user login. Validates the given input data.
+ * 
+ * @author kiska
  */
 @Stateless
 public class LoginManagementFacade implements ILoginService {
-	/**
-	 * Error message for incorrect data
-	 */
-
+	
 	@EJB
 	private LoginManagementBusiness loginBusniess;
 

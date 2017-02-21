@@ -9,6 +9,13 @@ import javax.ejb.Stateless;
 import com.edu.library.data.publicationManagement.AuthorBean;
 import com.edu.library.model.Author;
 
+/**
+ * Implements basics business logic for author management. 
+ * (same functions as in the IAuthorService interface)
+ * 
+ * @author sipost
+ *
+ */
 @Stateless
 @LocalBean
 public class AuthorManagementBusiness {
@@ -34,7 +41,6 @@ public class AuthorManagementBusiness {
 
 	public void update(Author p_user) {
 		dataAcces.update(p_user);
-
 	}
 
 	public void remove(String p_id) {

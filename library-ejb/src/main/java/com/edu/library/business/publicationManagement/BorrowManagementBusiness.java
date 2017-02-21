@@ -13,6 +13,7 @@ import javax.ejb.Stateless;
 import org.jboss.logging.Logger;
 
 import com.edu.library.LibraryException;
+import com.edu.library.access.util.ServiceValidation;
 import com.edu.library.business.exception.BusinessException;
 import com.edu.library.business.exception.ErrorMessages;
 import com.edu.library.data.publicationManagement.BorrowDAO;
@@ -21,7 +22,6 @@ import com.edu.library.data.userManagement.UserDao;
 import com.edu.library.model.Borrow;
 import com.edu.library.model.Publication;
 import com.edu.library.model.User;
-import com.edu.library.util.ServiceValidation;
 
 /**
  * @author gallb Implements publication related business logic.

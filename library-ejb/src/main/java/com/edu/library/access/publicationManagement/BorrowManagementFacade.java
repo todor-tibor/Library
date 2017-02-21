@@ -6,11 +6,9 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import com.edu.library.IBorrowService;
-import com.edu.library.LibraryException;
+import com.edu.library.access.util.ServiceValidation;
 import com.edu.library.business.publicationManagement.BorrowManagementBusiness;
-import com.edu.library.business.publicationManagement.PublicationManagementBusiness;
 import com.edu.library.model.Borrow;
-import com.edu.library.util.ServiceValidation;
 
 /**
  * @author gallb

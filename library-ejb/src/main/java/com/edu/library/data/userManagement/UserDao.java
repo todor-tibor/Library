@@ -15,9 +15,9 @@ import com.edu.library.data.exception.TechnicalException;
 import com.edu.library.model.User;
 
 /**
- * @author kiska
- *
- *         Invokes the CRUD methods for a user
+ * Invokes the CRUD methods for a user
+ * 
+ * @author kiska 
  */
 @Stateless
 @LocalBean

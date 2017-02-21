@@ -15,7 +15,7 @@ import com.edu.library.model.Publication;
 import com.edu.library.model.Publisher;
 
 /**
- * crud operations from publisher Entity
+ * CRUD operations from Publisher Entity
  * 
  * @author nagys
  *

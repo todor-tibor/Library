@@ -6,9 +6,9 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
+import com.edu.library.access.util.ServiceValidation;
 import com.edu.library.data.userManagement.RoleBean;
 import com.edu.library.model.Role;
-import com.edu.library.util.ServiceValidation;
 
 @Stateless
 @LocalBean
