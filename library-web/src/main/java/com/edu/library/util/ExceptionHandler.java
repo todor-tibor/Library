@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import com.edu.library.LibraryException;
 import com.edu.library.MessageService;
 /**
- * ExceptionHandler to handler exceptions and show it using MessageService
+ * ExceptionHandler to handle exceptions and show it using MessageService
  * @author sipost
  *
  */

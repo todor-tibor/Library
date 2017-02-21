@@ -23,9 +23,6 @@ import com.edu.library.util.ExceptionHandler;
 @SessionScoped
 public class AuthorMB implements Serializable {
 
-	/**
-	 * 
-	 */
 	private Logger oLogger = Logger.getLogger(AuthorMB.class);
 	private static final long serialVersionUID = -4702598250751689454L;
 
@@ -35,14 +32,16 @@ public class AuthorMB implements Serializable {
 	@Inject
 	private ExceptionHandler exceptionHandler;
 	/**
-	 * 
+	 * Currently displayed authors.
 	 */
-	private List<Author> authorList = new ArrayList<>();// Currently displayed
-														// authors.
-	private Author currentAuthor = null;// Currently selected author.
+	private List<Author> authorList = new ArrayList<>();
+	/**
+	 * Currently selected author.
+	 */
+	private Author currentAuthor = null;
 
-	/*
-	 * getters and setters for private variables
+	/**
+	 * Getters and setters for private variables
 	 * 
 	 */
 	public List<Author> getAuthorList() {
@@ -62,33 +61,33 @@ public class AuthorMB implements Serializable {
 	 * 
 	 * @return List of all authors from database.
 	 */
-	public List<Author> getAll() {	
+	public List<Author> getAll() {
 		authorList.clear();
-		try {			
+		try {
 			authorList = oAuthorBean.getAll();
 		} catch (Exception e) {
 			oLogger.error(e);
-		exceptionHandler.showMessage(e);
+			exceptionHandler.showMessage(e);
 		}
 		return authorList;
 	}
 
 	/**
-	 * Search for author by authorname and stores them in authorList.
+	 * Search for author by author name and stores them in authorList.
 	 * 
 	 * @param p_searchTxt
-	 *            authorname.
+	 *            author's name.
 	 * @return List of author objects found.
 	 */
-	public List<Author> search(String p_searchTxt) {	
+	public List<Author> search(String p_searchTxt) {
 		if (p_searchTxt.length() >= 3) {
 			authorList.clear();
 			try {
 				authorList = oAuthorBean.search(p_searchTxt);
 
-			}catch (Exception e) {
+			} catch (Exception e) {
 				oLogger.error(e);
-			exceptionHandler.showMessage(e);
+				exceptionHandler.showMessage(e);
 
 			}
 		} else {
@@ -98,13 +97,13 @@ public class AuthorMB implements Serializable {
 	}
 
 	/**
-	 * Stores new author with authorname.
+	 * Stores new author with author name.
 	 * 
 	 * @param p_value
-	 *            - authorname
+	 *            - author's name
 	 */
 
-	public void store(String p_value) {	
+	public void store(String p_value) {
 		if (p_value.isEmpty()) {
 			MessageService.error("Empty field");
 		}
@@ -119,7 +118,7 @@ public class AuthorMB implements Serializable {
 			MessageService.info("Succesfully added: " + p_value);
 		} catch (Exception e) {
 			oLogger.error(e);
-		exceptionHandler.showMessage(e);
+			exceptionHandler.showMessage(e);
 		}
 	}
 
@@ -127,18 +126,18 @@ public class AuthorMB implements Serializable {
 	 * Renames currently selected author.
 	 * 
 	 * @param p_newTxt
-	 *            - new authorname.
+	 *            - new author name.
 	 */
-	public void update(String p_newTxt) {	
+	public void update(String p_newTxt) {
 		if ((currentAuthor != null) && (p_newTxt.length() >= 3)) {
 			try {
 				currentAuthor.setName(p_newTxt);
 				oAuthorBean.update(currentAuthor);
-				authorList = oAuthorBean.getAll();			
+				authorList = oAuthorBean.getAll();
 				MessageService.info("Update succesfull.");
 			} catch (Exception e) {
 				oLogger.error(e);
-			exceptionHandler.showMessage(e);
+				exceptionHandler.showMessage(e);
 			}
 		} else {
 			MessageService.error("New name too short.");
@@ -146,9 +145,9 @@ public class AuthorMB implements Serializable {
 	}
 
 	/**
-	 * Deletes currently selected author from persistency.
+	 * Deletes currently selected author from database.
 	 */
-	public void remove() {	
+	public void remove() {
 		if (currentAuthor == null) {
 			MessageService.error("Empty field");
 		} else {
@@ -158,13 +157,15 @@ public class AuthorMB implements Serializable {
 				MessageService.info("Delete succesfull.");
 			} catch (Exception e) {
 				oLogger.error(e);
-			exceptionHandler.showMessage(e);
+				exceptionHandler.showMessage(e);
 			}
 		}
 	}
 
 	/**
-	 * @return
+	 * Checks whether the current author is selected.
+	 * 
+	 * @return - Returns true if it is, false otherwise.
 	 */
 	public Boolean isSelected() {
 		if (this.currentAuthor == null) {

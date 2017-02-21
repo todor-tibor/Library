@@ -26,7 +26,7 @@ import com.edu.library.model.Role;
 @Named("rolebean")
 
 @SessionScoped
-//@ViewScoped
+// @ViewScoped
 public class RoleMB implements Serializable {
 
 	/**
@@ -38,27 +38,25 @@ public class RoleMB implements Serializable {
 	@Inject
 	private IRoleService oRoleBean;
 
-	@Inject LocaleManager localeManager;
-		
-	
-	public void change(){
+	@Inject
+	LocaleManager localeManager;
+
+	public void change() {
 		oLogger.info("-----tab changed");
 	}
-	
+
 	private List<Role> roleList = new ArrayList<>();// Currently displayed
 													// roles.
 	private Role currentRole = null;// Currently selected role.
 
-	
-
 	/**
-	 * Requests all role objects and stores them in roleList.
+	 * Requests all role objects and stores them in {@code roleList}.
 	 * 
-	 * @return List of all roles from persistency.
+	 * @return List of all roles from database.
 	 */
-	public List<Role> getAll() {		
+	public List<Role> getAll() {
 		roleList.clear();
-		try {		
+		try {
 			roleList = oRoleBean.getAll();
 		} catch (Exception e) {
 			oLogger.error(e);
@@ -68,13 +66,13 @@ public class RoleMB implements Serializable {
 	}
 
 	/**
-	 * Search for role by rolename and stores them in roleList.
+	 * Search for role by role name and stores them in {@code roleList}.
 	 * 
 	 * @param p_searchTxt
 	 *            rolename.
 	 * @return List of role objects found.
 	 */
-	public List<Role> search(String p_searchTxt) {	
+	public List<Role> search(String p_searchTxt) {
 		if (p_searchTxt.length() >= 3) {
 			roleList.clear();
 			try {
@@ -90,13 +88,14 @@ public class RoleMB implements Serializable {
 	}
 
 	/**
-	 * Stores new role with rolename.
+	 * Stores new role with role name.
 	 * 
-	 * @param p_name - rolename, p_pass - password, p_idx - loyalty index
-	 *         
+	 * @param p_name
+	 *            - rolename
+	 * 
 	 */
 
-	public void store(String p_name) {	
+	public void store(String p_name) {
 		if (p_name.isEmpty() || "".equals(p_name)) {
 			MessageService.error("Empty field");
 			return;
@@ -117,14 +116,14 @@ public class RoleMB implements Serializable {
 	 * Renames currently selected role.
 	 * 
 	 * @param p_newTxt
-	 *            - new rolename.
+	 *            - new role name.
 	 */
 	public void update(String p_newTxt) {
 		if ((currentRole != null) && (p_newTxt.length() >= 3)) {
 			try {
 				currentRole.setRole(p_newTxt);
 				oRoleBean.update(currentRole);
-				roleList = oRoleBean.getAll();			
+				roleList = oRoleBean.getAll();
 				MessageService.info("Update succesfull.");
 			} catch (Exception e) {
 				oLogger.error(e);
@@ -136,10 +135,10 @@ public class RoleMB implements Serializable {
 	}
 
 	/**
-	 * Deletes currently selected role from persistency.
+	 * Deletes currently selected role from database.
 	 */
 	public void remove() {
-		if (currentRole == null) {		
+		if (currentRole == null) {
 			MessageService.error("No selected item");
 		} else {
 			try {
@@ -152,7 +151,7 @@ public class RoleMB implements Serializable {
 			}
 		}
 	}
-	
+
 	public List<Role> getroleList() {
 		return roleList;
 	}
@@ -164,8 +163,11 @@ public class RoleMB implements Serializable {
 	public void setCurrentRole(Role currentRole) {
 		this.currentRole = currentRole;
 	}
+
 	/**
-	 * @return
+	 * Checks whether a role was selected.
+	 * 
+	 * @return - true if it is, false otherwise
 	 */
 	public Boolean isSelected() {
 		if (this.currentRole == null) {

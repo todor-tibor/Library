@@ -60,9 +60,10 @@ public class PublicationMB implements Serializable {
 	private Publication currentPublication = null;
 
 	/**
-	 * Requests all publication objects and stores them in publicationList.
+	 * Requests all publication objects and stores them in
+	 * {@code publicationList}.
 	 * 
-	 * @return List of all publications from persistency.
+	 * @return List of all publications from database.
 	 */
 	public List<Publication> getAll() {
 		this.publicationList.clear();
@@ -76,7 +77,8 @@ public class PublicationMB implements Serializable {
 	}
 
 	/**
-	 * Search for publication by title and stores them in publicationList.
+	 * Search for publication by title and stores them in
+	 * {@code publicationList}.
 	 * 
 	 * @param p_searchTxt
 	 *            publication title.
@@ -101,8 +103,8 @@ public class PublicationMB implements Serializable {
 	}
 
 	/**
-	 * Insert new Book, Magazine or Newspaper Use currentAuthors and
-	 * currentPublisher
+	 * Insert new Book, Magazine or Newspaper uses {@code currentAuthors} and
+	 * {@code currentPublisher}
 	 * 
 	 * @param p_title-new
 	 *            title
@@ -160,8 +162,8 @@ public class PublicationMB implements Serializable {
 	}
 
 	/**
-	 * Update currently selected publication. Use currentPublication,and
-	 * currently selected authors
+	 * Update currently selected publication. Uses {@code currentPublication}
+	 * and currently selected authors
 	 */
 	public void update() {
 		if ((this.currentPublication != null) && this.currentPublication.getTitle() != null
@@ -195,7 +197,7 @@ public class PublicationMB implements Serializable {
 	}
 
 	/**
-	 * Deletes currently selected publication from persistency.
+	 * Deletes currently selected publication from database.
 	 */
 	public void remove() {
 		if (this.currentPublication == null) {
@@ -222,9 +224,9 @@ public class PublicationMB implements Serializable {
 	}
 
 	/**
-	 * Check if have selected publication
+	 * Check if has selected publication
 	 * 
-	 * @return
+	 * @return - true if it has, false otherwise
 	 */
 	public Boolean isSelected() {
 		if (this.currentPublication == null) {
@@ -235,10 +237,10 @@ public class PublicationMB implements Serializable {
 	}
 
 	/**
-	 * Check if the Publication selected have property authors (only the
-	 * Newspaper can't have)
+	 * Check if the Publication selected has authors property(the Newspaper
+	 * can't have any authors)
 	 * 
-	 * @return true if have
+	 * @return - true if it has, false otherwise
 	 */
 	public Boolean hasAuthor() {
 		if (this.currentPublication == null) {
