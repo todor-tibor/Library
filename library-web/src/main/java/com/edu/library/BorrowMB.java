@@ -25,9 +25,7 @@ import com.edu.library.util.ExceptionHandler;
 
 @SessionScoped
 public class BorrowMB implements Serializable {
-	/**
-	 * 
-	 */
+	
 	private Logger oLogger = Logger.getLogger(BorrowMB.class);
 	private static final long serialVersionUID = 1479586528417507035L;
 
@@ -107,10 +105,8 @@ public class BorrowMB implements Serializable {
 	 * @return
 	 */
 	public List<Borrow> getAll() {
-		oLogger.info("--getAllBorrows()--");
 		borrows.clear();
 		try {
-			oLogger.info("--getAllBorrows()--borrows queried");
 			borrows = oBorrowBean.getAll();
 		} catch (Exception e) {
 			oLogger.error(e);
@@ -124,7 +120,7 @@ public class BorrowMB implements Serializable {
 		Borrow p_Borrow;
 		p_Borrow = new Borrow();
 		if ((currentPublication == null) || (currentUser == null) || (date2 == null)) {
-			message.warn("All field is requered");
+			message.warn("managedbean.required");
 
 		} else {
 			p_Borrow.setUser(currentUser);
@@ -134,29 +130,22 @@ public class BorrowMB implements Serializable {
 			try {
 				oBorrowBean.store(p_Borrow);
 				borrows.add(p_Borrow);
-				message.info("Succesfully added");
-			} catch (LibraryException e) {
-				oLogger.error("-----------??????????????????????"+ e.getMessage());
-				exceptionHandler.showMessage(e);
-			}catch (IllegalArgumentException e) {
-				oLogger.error("-----------<<<<<<<<<<<<<<<<<<<<<<"+ e.getMessage());
-				exceptionHandler.showMessage(e);
-			}catch (Exception e) {
-				oLogger.error("-----------??????????????????????-------------------"+ e.getMessage());
-				oLogger.error("-----"+e.getClass().getSimpleName());
+				message.info("managedBean.storeSuccess");
+			} catch (Exception e) {
+				oLogger.error(e.getMessage());
 				exceptionHandler.showMessage(e);
 			}
 		}
 	}
 
 	public void remove() {
-		oLogger.info("remove borrow by Id ManagedBean--p_id:" + borrow.getUuid());
 		if (borrow == null) {
-			message.error("Empty field");
+			message.error("managedbean.empty");
 		} else {
 			try {
 				oBorrowBean.remove(borrow.getUuid());
 				getAll();
+				message.info("managedbean.deleteSuccess");
 			} catch (Exception e) {
 				oLogger.error(e);
 				exceptionHandler.showMessage(e);
@@ -168,6 +157,8 @@ public class BorrowMB implements Serializable {
 		borrow.setBorrowUntil(date3);
 		try {
 			oBorrowBean.update(borrow);
+			getAll();
+			message.info("managedbean.updateSuccess");
 		} catch (Exception e) {
 			oLogger.error(e);
 			exceptionHandler.showMessage(e);
@@ -185,13 +176,10 @@ public class BorrowMB implements Serializable {
 				exceptionHandler.showMessage(e);
 			}
 		} else {
-			MessageService.error("Keyword too short. Min. 3 characters req.");
+			message.error("managedbean.string");
 		}
 	}
 	
-	/**
-	 * @return
-	 */
 	public Boolean isSelected() {
 		if (this.borrow == null) {
 			return false;
