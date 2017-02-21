@@ -1,6 +1,7 @@
 package com.edu.library.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +29,7 @@ import javax.persistence.Table;
 		@NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.userName = :user_name"),
 		@NamedQuery(name = "User.searchByUserName", query = "SELECT u FROM User u where u.userName like :user_name"),
 		@NamedQuery(name = "User.findById", query = "SELECT u FROM User u WHERE u.uuid= :uuid"),
-		@NamedQuery(name = "User.findBorrow", query = "SELECT DISTINCT b FROM Borrow b, User u JOIN b.user bUser JOIN u.borrows uUser WHERE bUser.uuid = uUser.user.uuid AND u.userName= :userName")})
+		@NamedQuery(name = "User.findBorrow", query = "SELECT DISTINCT b FROM Borrow b, User u JOIN b.user bUser JOIN u.borrows uUser WHERE bUser.uuid = uUser.user.uuid AND u.userName LIKE :userName")})
 
 public class User extends BaseEntity {
 	private static final long serialVersionUID = 1L;
@@ -125,6 +126,16 @@ public class User extends BaseEntity {
 
 	public void setRoles(List<Role> roles) {
 		this.roles = new HashSet<Role>(roles);
+	}
+	
+	public boolean isLate(){
+		Date today = new Date();
+		for (int i = 0; i < borrows.size(); i++) {
+			if (today.after(borrows.get(i).getBorrowUntil())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

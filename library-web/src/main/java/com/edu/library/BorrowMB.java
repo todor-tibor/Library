@@ -46,6 +46,18 @@ public class BorrowMB implements Serializable {
 	private Borrow borrow = null;
 	private Date date1 = new Date();
 	private Date date2 = null;
+	private Date date3 = null;
+
+
+	
+	
+	public Date getDate3() {
+		return date3;
+	}
+
+	public void setDate3(Date date3) {
+		this.date3 = date3;
+	}
 
 	public Date getDate1() {
 		return date1;
@@ -152,6 +164,31 @@ public class BorrowMB implements Serializable {
 		}
 	}
 	
+	public void update() {
+		borrow.setBorrowUntil(date3);
+		try {
+			oBorrowBean.update(borrow);
+		} catch (Exception e) {
+			oLogger.error(e);
+			exceptionHandler.showMessage(e);
+		}
+
+	}
+	
+	public void search(String p_searchTxt) {
+		if (p_searchTxt.length() >= 3) {
+			borrows.clear();
+			try {
+				borrows = oBorrowBean.search(p_searchTxt);
+			} catch (Exception e) {
+				oLogger.error(e);
+				exceptionHandler.showMessage(e);
+			}
+		} else {
+			MessageService.error("Keyword too short. Min. 3 characters req.");
+		}
+	}
+	
 	/**
 	 * @return
 	 */
@@ -162,4 +199,9 @@ public class BorrowMB implements Serializable {
 			return true;
 		}
 	}
+	
+	public void setUntil() {
+		date3 = borrow.getBorrowUntil();
+	}
+	
 }

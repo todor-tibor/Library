@@ -110,7 +110,7 @@ public class UserDao {
 	public List<Borrow> getBorrow(String userName){
 
 		try {
-			List<Borrow> u = oEntityManager.createNamedQuery("User.findBorrow", Borrow.class).setParameter("userName", userName)
+			List<Borrow> u = oEntityManager.createNamedQuery("User.findBorrow", Borrow.class).setParameter("userName", "%" +  userName + "%")
 					.getResultList();
 			return u;
 		} catch (PersistenceException e) {
