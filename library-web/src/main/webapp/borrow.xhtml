@@ -3,28 +3,28 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
 
-<f:view locale="#{localeBean.userLocale}"/>
+<f:view locale="#{localeBean.userLocale}" />
 <h:head>
-	<p:messages id="messages" showDetail="true" autoUpdate="true"
+	<p:messages id="messagesBrw" showDetail="true" autoUpdate="true"
 		closable="true" />
 </h:head>
 <h:body>
 	<h:panelGrid columns="3" cellpadding="10">
 		<p:panel header="#{msg['borrow.button']}">
 			<h:form id="borrow_actions_form">
-				
+
 				<p:inputText id="borrow_searchTextBox" binding="#{srch_brw}" />
 				<p:commandButton value="#{msg['search.button']}" update="borrowDT"
 					action="#{borrowBean.search(srch_brw.value)}">
 					<f:param name="p_value" value="#{srch_brw.value}" />
 				</p:commandButton>
-				
+
 				<p:dataTable id="borrowDT" var="borrow"
 					value="#{borrowBean.borrowsList}" selectionMode="single"
 					selection="#{borrowBean.currentBorrow}" rowKey="#{borrow.uuid}">
 					<p:ajax event="rowSelect" listener="#{borrowBean.isSelected}"
 						update="borrowDT" />
-					
+
 					<f:facet name="header">
 						#{borrowMan['header.borrows']}
 					</f:facet>
@@ -43,45 +43,52 @@
 						<h:outputText value="#{borrow.borrowUntil}" />
 					</p:column>
 					<f:facet name="footer">
-						<p:commandButton process="borrowDT" icon="fa-remove"
-							value="#{borrowMan['button.return']}" action="#{borrowBean.remove()}" update="borrowDT" 
-							disabled="#{borrowBean.currentBorrow == null}"/>
-						<p:commandButton process="borrowDT" icon="fa-remove"
-							value="#{borrowMan['button.renew']}"  update="renewDialog" oncomplete="PF('renewDialog').show()"
+						<p:commandButton icon="fa-remove"
+							value="#{borrowMan['button.return']}"
+							action="#{borrowBean.remove()}" update="borrowDT"
+							disabled="#{borrowBean.currentBorrow == null}" />
+						<p:commandButton  icon="fa-remove"
+							value="#{borrowMan['button.renew']}" update="renewDialog"
+							oncomplete="PF('renewDialog').show()"
 							action="#{borrowBean.setUntil()}"
-							disabled="#{borrowBean.currentBorrow == null}"/>
-							
+							disabled="#{borrowBean.currentBorrow == null}" />
+
 						<p:dialog id="renewDialog" modal="true" showEffect="fade"
-					hideEffect="fade" widgetVar="renewDialog" header="#{borrowMan['button.add']}"
-					width="500" height="500">
-					<p:messages id="messages5" showDetail="true" autoUpdate="true"
-						closable="true" />
-					
-					<p:panel >						
-						<p:outputLabel value="#{borrowMan['column.until']}" readOnlyInputText="true"/>						
-						<p:calendar id="calendar4" value="#{borrowBean.date3}" mode="inline" />
-						<p:commandButton value="#{borrowMan['button.renew']}" update="borrow_actions_form"
-							icon="fa-user-plu" action="#{borrowBean.update()}">
-						</p:commandButton>
-					</p:panel>
-				</p:dialog>
-							
+							hideEffect="fade" widgetVar="renewDialog"
+							header="#{borrowMan['button.add']}" width="500" height="500">
+							<p:messages id="messagesBr5" showDetail="true" autoUpdate="true"
+								closable="true" />
+														<p:panel id="updateBrwdialog">
+															<p:outputLabel value="#{borrowMan['column.until']}"
+																readOnlyInputText="true" />
+															<p:calendar id="calendar4" value="#{borrowBean.date3}"
+																mode="inline" />
+															<p:commandButton value="#{borrowMan['button.renew']}"
+																update="borrowDT" icon="fa-user-plu"
+																action="#{borrowBean.update()}">
+															</p:commandButton>
+														</p:panel>
+
+						</p:dialog>
+
 					</f:facet>
 				</p:dataTable>
 
-				<p:commandButton value="#{borrowMan['button.listAll']}" icon="ui-icon-search"
-					update="borrowDT" action="#{borrowBean.getAll}">
+				<p:commandButton value="#{borrowMan['button.listAll']}"
+					icon="ui-icon-search" update="borrowDT"
+					action="#{borrowBean.getAll}">
 				</p:commandButton>
-				<p:commandButton icon="ui-icon-remove" value="#{borrowMan['button.add']}"
-					update="addDialog" oncomplete="PF('addDialog').show()" >
+				<p:commandButton icon="ui-icon-remove"
+					value="#{borrowMan['button.add']}" update="addDialog"
+					oncomplete="PF('addDialog').show()">
 				</p:commandButton>
-				
+
 				<p:dialog id="addDialog" modal="true" showEffect="fade"
-					hideEffect="fade" widgetVar="addDialog" header="#{borrowMan['button.add']}"
-					width="500" height="500">
-					<p:messages id="messages4" showDetail="true" autoUpdate="true"
+					hideEffect="fade" widgetVar="addDialog"
+					header="#{borrowMan['button.add']}" width="500" height="500">
+					<p:messages id="messagesBr4" showDetail="true" autoUpdate="true"
 						closable="true" />
-					
+
 					<h:panelGrid columns="2" cellpadding="4">
 						<h:outputLabel value="#{borrowMan['column.username']}" />
 						<p:dataTable id="User" var="user" value="#{userbean.all}"
@@ -100,17 +107,20 @@
 								<h:outputText value="#{publication.title}" />
 							</p:column>
 						</p:dataTable>
-						
-						<p:outputLabel value="#{borrowMan['column.from']}" />						
-						<p:calendar id="calendar1" value="#{borrowBean.date1}" mode="inline" />
-						<p:outputLabel value="#{borrowMan['column.until']}" />						
-						<p:calendar id="calendar2" value="#{borrowBean.date2}" mode="inline" />
-						<p:commandButton value="#{borrowMan['button.add']}" update="borrow_actions_form"
-							icon="fa-user-plu" action="#{borrowBean.store()}">
+
+						<p:outputLabel value="#{borrowMan['column.from']}" />
+						<p:calendar id="calendar1" value="#{borrowBean.date1}"
+							mode="inline" />
+						<p:outputLabel value="#{borrowMan['column.until']}" />
+						<p:calendar id="calendar2" value="#{borrowBean.date2}"
+							mode="inline" />
+						<p:commandButton value="#{borrowMan['button.add']}"
+							update="borrow_actions_form" icon="fa-user-plu"
+							action="#{borrowBean.store()}">
 						</p:commandButton>
 					</h:panelGrid>
 				</p:dialog>
-								
+
 			</h:form>
 		</p:panel>
 	</h:panelGrid>
