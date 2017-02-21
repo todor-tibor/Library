@@ -102,7 +102,7 @@ public class PublicationBean {
 	public List<Borrow> getBorrow(String title){
 
 		try {
-			List<Borrow> u = oEntityManager.createNamedQuery("Publication.findBorrow", Borrow.class).setParameter("title", title)
+			List<Borrow> u = oEntityManager.createNamedQuery("Publication.findBorrow", Borrow.class).setParameter("title", "%" + title + "%")
 					.getResultList();
 			return u;
 		} catch (PersistenceException e) {
