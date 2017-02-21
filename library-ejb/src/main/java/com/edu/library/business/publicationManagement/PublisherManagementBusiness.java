@@ -9,7 +9,7 @@ import javax.ejb.Stateless;
 import com.edu.library.data.publicationManagement.PublisherManager;
 import com.edu.library.model.Publisher;
 /**
- *  Implements basics business logic for publisher management. 
+ *  Implements basic business logic for publisher management. 
  * (same functions as in the IPublisherService interface)
  
  * @author nagys

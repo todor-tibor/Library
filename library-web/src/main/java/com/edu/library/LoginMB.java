@@ -16,10 +16,11 @@ import com.edu.library.model.RoleType;
 import com.edu.library.util.ExceptionHandler;
 
 /**
+ *
+ * 
+ * Login functionalities for the web app.
+ * 
  * @author kiska
- * 
- *         Login
- * 
  */
 @Named("loginbean")
 @ApplicationScoped
@@ -30,7 +31,7 @@ public class LoginMB implements Serializable {
 
 	@Inject
 	private ILoginService oLoginBean;
-	
+
 	@Inject
 	ExceptionHandler exceptionHandler;
 	/**
@@ -40,7 +41,6 @@ public class LoginMB implements Serializable {
 	private List<Role> roles;
 	private String currentRole;
 
-
 	public String getCurrentRole() {
 		return currentRole;
 	}
@@ -49,13 +49,23 @@ public class LoginMB implements Serializable {
 		this.currentRole = currentRole;
 	}
 
+	/**
+	 * Checks whether the user is a librarian.
+	 * 
+	 * @return - the site to which to redirect.
+	 */
 	public String isAdmin() {
 		if (RoleType.LIBRARIAN.name().equals(currentRole)) {
 			return "";
 		} else
 			return "index";
 	}
-	
+
+	/**
+	 * Checks whether the user is a reader.
+	 * 
+	 * @return - the site to which to redirect.
+	 */
 	public String isReader() {
 		if (RoleType.READER.name().equals(currentRole)) {
 			return "";
@@ -63,6 +73,11 @@ public class LoginMB implements Serializable {
 			return "index";
 	}
 
+	/**
+	 * Checks whether the librarian or reader roles are listed in the user's
+	 * roles. If they are it redirects to role specific website. Otherwise
+	 * displays a user friendly message.
+	 */
 	private void checkRole() {
 		Role tmp = new Role();
 		tmp.setRole("LIBRARIAN");
@@ -105,13 +120,13 @@ public class LoginMB implements Serializable {
 		if (user_name.length() >= 3) {
 			try {
 				roles = oLoginBean.login(user_name, password);
-				userName=user_name;
+				userName = user_name;
 				checkRole();
 			} catch (Exception e) {
 				oLogger.error(e);
 				exceptionHandler.showMessage(e);
 			}
-		}else{
+		} else {
 			MessageService.warn("Username is to short");
 		}
 	}

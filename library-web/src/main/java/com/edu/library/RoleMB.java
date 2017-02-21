@@ -23,7 +23,6 @@ import com.edu.library.util.ExceptionHandler;
 @Named("rolebean")
 
 @SessionScoped
-//@ViewScoped
 public class RoleMB implements Serializable {
 
 	/**

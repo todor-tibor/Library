@@ -11,8 +11,9 @@ import com.edu.library.business.userManagement.UserManagementBusiness;
 import com.edu.library.model.User;
 
 /**
- * @author kiska Implements the basics of user login. Validates the given the
- *         input data.
+ * Implements the basics of user login. Validates the given the input data.
+ * 
+ * @author kiska
  */
 @Stateless
 public class UserManagementFacade implements IUserService {
