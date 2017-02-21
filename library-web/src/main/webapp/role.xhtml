@@ -14,16 +14,16 @@
 			<h:form id="role_actions_form">
 			
 				<p:inputText id="role_seacrhTextBox" binding="#{srch_role}" />
-				<p:commandButton value="#{msg['search.button']}" update="roleDT"
+				<p:commandButton value="#{msg['search.button']}" update="roleMNDT"
 					action="#{rolebean.search(srch_role.value)}">
-					<f:param name="p_value" value="#{srch_role.value}" />
+					<f:param name="p_searchTxt" value="#{srch_role.value}" />
 				</p:commandButton>
 				
-				<p:dataTable id="roleDT" var="role" value="#{rolebean.roleList}"
+				<p:dataTable id="roleMNDT" var="role" value="#{rolebean.roleList}"
 					selectionMode="single" selection="#{rolebean.currentRole}"
 					rowKey="#{role.uuid}" autoUpdate="true">
 					<p:ajax event="rowSelect" listener="#{rolebean.isSelected}"
-						update="roleDT" />
+						update="roleMNDT" />
 					<f:facet name="header">
 					#{roleMan['role.text']}
 				</f:facet>
@@ -32,12 +32,12 @@
 						<h:outputText value="#{role.role}" />
 					</p:column>
 					<f:facet name="footer">
-						<p:commandButton process="roleDT" value="#{msg['rename.button']}"
+						<p:commandButton process="roleMNDT" value="#{msg['rename.button']}"
 							update="role_dialog" oncomplete="PF('roleDialog').show()" 
 							disabled="#{rolebean.currentRole == null}" />
-						<p:commandButton process="roleDT" icon="fa-remove"
+						<p:commandButton process="roleMNDT" icon="fa-remove"
 							value="#{msg['delete.button']}" action="#{rolebean.remove()}"
-							update="roleDT" disabled="#{rolebean.currentRole == null}" />
+							update="roleMNDT" disabled="#{rolebean.currentRole == null}" />
 
 						<p:dialog id="role_dialog" modal="true" showEffect="fade"
 							hideEffect="fade" widgetVar="roleDialog"
@@ -49,7 +49,7 @@
 							<p:inputText id="renameTextBox" binding="#{renamerole}" />
 							<br />
 							<br />
-							<p:commandButton value="#{msg['rename.button']}" update="roleDT"
+							<p:commandButton value="#{msg['rename.button']}" update="roleMNDT"
 								action="#{rolebean.update(renamerole.value)}">
 								<f:param name="p_newTxt" value="#{renamerole.value}" />
 							</p:commandButton>
@@ -58,9 +58,9 @@
 					</f:facet>
 				</p:dataTable>
 				<p:commandButton value="#{roleMan['listRoles.button']}"
-					update="roleDT" icon="ui-icon-search" action="#{rolebean.getAll}" />
+					update="roleMNDT" icon="ui-icon-search" action="#{rolebean.getAll}" />
 
-				<p:commandButton value="#{roleMan['role.addRole']}" update="roleDT"
+				<p:commandButton value="#{roleMan['role.addRole']}" update="roleMNDT"
 					icon="fa-role-plu" oncomplete="PF('add_roleDialog').show()" />
 
 				<p:dialog id="add_role_dialog" modal="true" showEffect="fade"
@@ -74,7 +74,7 @@
 					<p:inputText id="addTextBox" binding="#{addrole}" />
 					<br />
 					<br />
-					<p:commandButton value="#{msg['add.label']}" update="roleDT"
+					<p:commandButton value="#{msg['add.label']}" update="roleMNDT"
 						action="#{rolebean.store(addrole.value)}">
 						<f:param name="p_newTxt" value="#{addrole.value}" />
 

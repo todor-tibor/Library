@@ -4,16 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.jboss.logging.Logger;
 
-import com.edu.library.IRoleService;
-import com.edu.library.LibraryException;
 import com.edu.library.model.Role;
 
 /**
@@ -38,7 +34,7 @@ public class RoleMB implements Serializable {
 	@Inject
 	private IRoleService oRoleBean;
 
-	@Inject LocaleManager localeManager;
+	
 		
 	
 	public void change(){
@@ -153,9 +149,7 @@ public class RoleMB implements Serializable {
 		}
 	}
 	
-	public List<Role> getroleList() {
-		return roleList;
-	}
+	
 
 	public Role getCurrentRole() {
 		return currentRole;
@@ -174,4 +168,13 @@ public class RoleMB implements Serializable {
 			return true;
 		}
 	}
+
+	public List<Role> getRoleList() {
+		return roleList;
+	}
+
+	public void setRoleList(List<Role> roleList) {
+		this.roleList = roleList;
+	}
+	
 }
