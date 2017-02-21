@@ -52,8 +52,14 @@ public class BorrowManagementFacade implements IBorrowService {
 	}
 
 	@Override
-	public void update(Borrow p_user) {
-		// TODO Auto-generated method stub
+	public void update(Borrow p_value) {
+		//Data validation.
+		ServiceValidation.checkNotNull(p_value);
+		ServiceValidation.checkNotNull(p_value.getPublication());
+		ServiceValidation.checkNotNull(p_value.getUser());
+		ServiceValidation.checDateOrder(p_value.getBorrowFrom(), p_value.getBorrowUntil());	
+		
+		borrowBusiness.update(p_value);
 		
 	}
 

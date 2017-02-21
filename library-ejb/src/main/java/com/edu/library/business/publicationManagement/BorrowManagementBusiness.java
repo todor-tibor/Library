@@ -112,7 +112,8 @@ public class BorrowManagementBusiness {
 	}
 
 	public void update(Borrow p_entity) throws LibraryException {
-		// TODO Auto-generated method stub
+		borrowDAO.getById(p_entity.getUuid());
+		borrowDAO.update(p_entity);
 
 	}
 
