@@ -6,22 +6,16 @@ package com.edu.library;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.jboss.logging.Logger;
 
-import com.edu.library.IUserService;
-import com.edu.library.LibraryException;
 import com.edu.library.model.Role;
 import com.edu.library.model.User;
-import com.edu.library.util.PropertyProvider;
 
 /**
  * User manager.
@@ -34,12 +28,8 @@ import com.edu.library.util.PropertyProvider;
 @Named("userbean")
 
 @SessionScoped
-// @ViewScoped
 public class UserMB implements Serializable {
 
-	/**
-	 * 
-	 */
 	private Logger oLogger = Logger.getLogger(UserMB.class);
 	private static final long serialVersionUID = -4702598250751689454L;
 

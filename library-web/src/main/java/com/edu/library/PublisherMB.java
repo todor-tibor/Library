@@ -10,8 +10,6 @@ import javax.inject.Named;
 
 import org.jboss.logging.Logger;
 
-import com.edu.library.IPublisherService;
-import com.edu.library.LibraryException;
 import com.edu.library.model.Publisher;
 import com.edu.library.util.ExceptionHandler;
 
