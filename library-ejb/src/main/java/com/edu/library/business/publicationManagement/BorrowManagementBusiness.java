@@ -3,8 +3,11 @@
  */
 package com.edu.library.business.publicationManagement;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -16,6 +19,7 @@ import com.edu.library.LibraryException;
 import com.edu.library.access.util.ServiceValidation;
 import com.edu.library.business.exception.BusinessException;
 import com.edu.library.business.exception.ErrorMessages;
+import com.edu.library.data.exception.TechnicalException;
 import com.edu.library.data.publicationManagement.BorrowDAO;
 import com.edu.library.data.publicationManagement.PublicationBean;
 import com.edu.library.data.userManagement.UserDao;
@@ -63,17 +67,20 @@ public class BorrowManagementBusiness {
 		return false;	
 	}
 	
-	public List<Borrow> search(String p_searchTxt) throws LibraryException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Borrow> search(String p_searchTxt)   {
+		List<Borrow> tmpList = userDAO.getBorrow(p_searchTxt);
+		Set<Borrow> tempSet = new HashSet<Borrow>(tmpList);
+		tempSet.addAll(pubDAO.getBorrow(p_searchTxt));
+		tmpList.clear();
+		tmpList.addAll(tempSet);
+		return tmpList;
 	}
 
-	public Borrow getById(String p_entity) throws LibraryException {
-		// TODO Auto-generated method stub
-		return null;
+	public Borrow getById(String p_entity)   {
+		return borrowDAO.getById(p_entity);
 	}
 
-	public void store(Borrow p_entity) throws LibraryException {
+	public void store(Borrow p_entity)   {
 		// get current data of user
 		User tmpUser = userDAO.getById(p_entity.getUser().getUuid());
 		// check if trust index is OK
@@ -111,7 +118,7 @@ public class BorrowManagementBusiness {
 		}
 	}
 
-	public void update(Borrow p_entity) throws LibraryException {
+	public void update(Borrow p_entity)   {
 		borrowDAO.getById(p_entity.getUuid());
 		borrowDAO.update(p_entity);
 

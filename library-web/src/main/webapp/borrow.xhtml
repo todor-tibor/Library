@@ -12,7 +12,13 @@
 	<h:panelGrid columns="3" cellpadding="10">
 		<p:panel header="#{msg['borrow.button']}">
 			<h:form id="borrow_actions_form">
-
+				
+				<p:inputText id="borrow_searchTextBox" binding="#{srch_brw}" />
+				<p:commandButton value="#{msg['search.button']}" update="borrowDT"
+					action="#{borrowBean.search(srch_brw.value)}">
+					<f:param name="p_value" value="#{srch_brw.value}" />
+				</p:commandButton>
+				
 				<p:dataTable id="borrowDT" var="borrow"
 					value="#{borrowBean.borrowsList}" selectionMode="single"
 					selection="#{borrowBean.currentBorrow}" rowKey="#{borrow.uuid}">

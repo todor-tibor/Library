@@ -28,14 +28,14 @@ public class BorrowManagementFacade implements IBorrowService {
 
 	@Override
 	public List<Borrow> search(String p_searchTxt) {
-		// TODO Auto-generated method stub
-		return null;
+		ServiceValidation.checkString(p_searchTxt);
+		return borrowBusiness.search(p_searchTxt);
 	}
 
 	@Override
 	public Borrow getById(String p_id) {
-		// TODO Auto-generated method stub
-		return null;
+		ServiceValidation.checkUuid(p_id);
+		return borrowBusiness.getById(p_id);
 	}
 
 	@Override

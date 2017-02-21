@@ -176,6 +176,20 @@ public class BorrowMB implements Serializable {
 
 	}
 	
+	public void search(String p_searchTxt) {
+		if (p_searchTxt.length() >= 3) {
+			borrows.clear();
+			try {
+				borrows = oBorrowBean.search(p_searchTxt);
+			} catch (Exception e) {
+				oLogger.error(e);
+				exceptionHandler.showMessage(e);
+			}
+		} else {
+			MessageService.error("Keyword too short. Min. 3 characters req.");
+		}
+	}
+	
 	/**
 	 * @return
 	 */
@@ -190,4 +204,5 @@ public class BorrowMB implements Serializable {
 	public void setUntil() {
 		date3 = borrow.getBorrowUntil();
 	}
+	
 }
