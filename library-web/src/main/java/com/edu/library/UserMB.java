@@ -45,6 +45,9 @@ public class UserMB implements Serializable {
 
 	@Inject
 	ExceptionHandler exceptionHandler;
+	
+	@Inject
+	LoginMB loginMB;
 
 	public void change() {
 		oLogger.info("-----tab changed");
@@ -189,13 +192,13 @@ public class UserMB implements Serializable {
 	 * 
 	 * @param p_username
 	 */
-	public void getByUserName(String p_username) {
-		if (p_username != null && p_username.length() <= 3) {
+	public void getByUserName() {
+		if (loginMB.getUserName() != null && loginMB.getUserName().length() <= 3) {
 			message.warn("managedbean.string");
 			return;
 		}
 		try {
-			loggedInUser = oUserBean.getByUserName(p_username);
+			loggedInUser = oUserBean.getByUserName(loginMB.getUserName());
 		} catch (Exception e) {
 			oLogger.error(e);
 			exceptionHandler.showMessage(e);
