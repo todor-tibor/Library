@@ -137,5 +137,16 @@ public class LoginMB implements Serializable {
 	public String getUserName() {
 		return userName;
 	}
+	
+	public void logout(){
+		userName = "";
+		setCurrentRole("GUEST");
+		try {
+			FacesContext.getCurrentInstance().getExternalContext().redirect("publication_guest.xhtml");
+		} catch (IOException e) {
+			oLogger.error(e);
+			message.fatal(e.getMessage());
+		}
+	}
 
 }
