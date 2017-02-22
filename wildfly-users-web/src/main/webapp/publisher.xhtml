@@ -1,0 +1,77 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<p:messages id="messages" showDetail="true" autoUpdate="true"
+		closable="true" />
+</h:head>
+
+<h:body>
+	<h:panelGrid columns="3" cellpadding="10">
+		<p:panel header="Publisher management">
+			<h:form id="actions_form">
+
+				<p:inputText id="searchTextBox" binding="#{srch}" />
+				<p:commandButton value="Search" update="publisherDT"
+					action="#{publisherbean.search(srch.value)}">
+					<f:param name="p_value" value="#{srch.value}" />
+				</p:commandButton>
+
+				<p:dataTable id="publisherDT" var="publisher"
+					value="#{publisherbean.publishersList}" selectionMode="single"
+					selection="#{publisherbean.currentPublisher}"
+					rowKey="#{publisher.uuid}">
+					<f:facet name="header">
+            			Publishers
+        			</f:facet>
+					<f:facet name="header">
+					</f:facet>
+					<p:column headerText="Publisher name">
+						<h:outputText value="#{publisher.name}" />
+					</p:column>
+					<f:facet name="footer">
+						<p:commandButton process="publisherDT" icon="ui-icon-search"
+							value="Details" update="first"
+							oncomplete="PF('publisherDialog').show()" />
+
+						<p:commandButton process="publisherDT" icon="fa-remove"
+							value="Delete" action="#{publisherbean.remove()}"
+							update="publisherDT" />
+
+						<p:dialog id="first" modal="true" showEffect="fade"
+							hideEffect="fade" widgetVar="publisherDialog"
+							header="#{publisherbean.currentPublisher.name}" width="300"
+							height="300">
+							<p:messages id="messages" showDetail="true" autoUpdate="true"
+								closable="true" />
+							<p:inputText id="renameTextBox" binding="#{renamepublisher}" />
+							<p:commandButton value="Rename" update=""
+								action="#{publisherbean.update(renamepublisher.value)}">
+								<f:param name="p_newTxt" value="#{renamepublisher.value}" />
+							</p:commandButton>
+						</p:dialog>
+
+
+					</f:facet>
+				</p:dataTable>
+
+
+				<p:commandButton value="List all publishers" update="publisherDT"
+					icon="ui-icon-search" action="#{publisherbean.getAll}">
+				</p:commandButton>
+
+				<p:separator />
+				<p:inputText id="addpublisherTxtBox" binding="#{newName}" />
+				<p:commandButton value="Add" update="publisherDT"
+					icon="fa-publisher-plu"
+					action="#{publisherbean.store(newName.value)}">
+					<f:param name="p_value" value="#{newName.value}" />
+				</p:commandButton>
+
+			</h:form>
+		</p:panel>
+	</h:panelGrid>
+</h:body>
+</html>
