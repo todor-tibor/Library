@@ -8,6 +8,7 @@ drop table if exists `authors`;
 CREATE TABLE `authors` (
   `uuid` varchar(80) NOT NULL,
   `name` varchar(50) NOT NULL,
+  CONSTRAINT `uk_author_name` UNIQUE (`name`),
   PRIMARY KEY (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -18,8 +19,10 @@ drop table if exists `publishers`;
 CREATE TABLE `publishers` (
   `uuid`  varchar(80) NOT NULL,
   `name` varchar(50) NOT NULL,
-  PRIMARY KEY (`uuid`)
+  PRIMARY KEY (`uuid`),
+    CONSTRAINT `uk_publisher_name` UNIQUE (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 
 CREATE TABLE `publications` (
@@ -32,7 +35,8 @@ CREATE TABLE `publications` (
   `on_stock` int(11) NOT NULL,
   PRIMARY KEY (`uuid`),
   KEY `publisher_id_idx` (`publisher_id`),
-  CONSTRAINT `publisher_id` FOREIGN KEY (`publisher_id`) REFERENCES `publishers` (`uuid`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `publisher_id` FOREIGN KEY (`publisher_id`) REFERENCES `publishers` (`uuid`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+   CONSTRAINT `uk_title` UNIQUE (`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -74,7 +78,9 @@ CREATE TABLE `borrows` (
         ON DELETE CASCADE,
   CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`uuid`) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
+        
+  CONSTRAINT `fk_user_publication` UNIQUE (`user_id`, `publication_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 drop table if exists `roles`;

@@ -1,0 +1,90 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<p:messages id="messages" showDetail="true" autoUpdate="true"
+		closable="true" />
+</h:head>
+<h:body>
+	<h:panelGrid columns="3" cellpadding="10">
+		<p:panel header="#{msg['borrow.button']}">
+			<h:form id="borrow_actions_form">
+
+				<p:dataTable id="borrowDT" var="borrow"
+					value="#{borrowBean.borrowsList}" selectionMode="single"
+					selection="#{borrowBean.currentBorrow}" rowKey="#{borrow.uuid}">
+					
+					
+					<f:facet name="header">
+						#{borrowMan['header.borrows']}
+					</f:facet>
+					<f:facet name="header">
+					</f:facet>
+					<p:column headerText="#{borrowMan['column.username']}">
+						<h:outputText value="#{borrow.user.userName}" />
+					</p:column>
+					<p:column headerText="#{borrowMan['column.publication']}">
+						<h:outputText value="#{borrow.publication.title}" />
+					</p:column>
+					<p:column headerText="#{borrowMan['column.from']}">
+						<h:outputText value="#{borrow.borrowFrom}" />
+					</p:column>
+					<p:column headerText="#{borrowMan['column.until']}">
+						<h:outputText value="#{borrow.borrowUntil}" />
+					</p:column>
+					<f:facet name="footer">
+						<p:commandButton process="borrowDT" icon="fa-remove"
+							value="#{borrowMan['button.return']}" action="#{borrowBean.remove()}" update="borrowDT" />
+
+					</f:facet>
+
+				</p:dataTable>
+
+				<p:commandButton value="#{borrowMan['button.listAll']}" icon="ui-icon-search"
+					update="borrowDT" action="#{borrowBean.getAll}">
+				</p:commandButton>
+				<p:commandButton icon="ui-icon-remove" value="#{borrowMan['button.add']}"
+					update="addDialog" oncomplete="PF('addDialog').show()" >
+				</p:commandButton>
+				
+				<p:dialog id="addDialog" modal="true" showEffect="fade"
+					hideEffect="fade" widgetVar="addDialog" header="#{borrowMan['button.add']}"
+					width="500" height="500">
+					<p:messages id="messages4" showDetail="true" autoUpdate="true"
+						closable="true" />
+					
+					<h:panelGrid columns="2" cellpadding="4">
+						<h:outputLabel value="#{borrowMan['column.username']}" />
+						<p:dataTable id="User" var="user" value="#{userbean.all}"
+							selectionMode="single" selection="#{borrowBean.currentUser}"
+							rowKey="#{user.uuid}">
+							<p:column>
+								<h:outputText value="#{user.userName}" />
+							</p:column>
+						</p:dataTable>
+						<h:outputLabel value="#{borrowMan['column.publication']}" />
+						<p:dataTable id="Publication" var="publication"
+							value="#{publicationBean.all}" selectionMode="single"
+							selection="#{borrowBean.currentPublication}"
+							rowKey="#{publication.uuid}">
+							<p:column>
+								<h:outputText value="#{publication.title}" />
+							</p:column>
+						</p:dataTable>
+						
+						<p:outputLabel value="#{borrowMan['column.from']}" />						
+						<p:calendar id="calendar1" value="#{borrowBean.date1}" mode="inline" />
+						<p:outputLabel value="#{borrowMan['column.until']}" />						
+						<p:calendar id="calendar2" value="#{borrowBean.date2}" mode="inline" />
+						<p:commandButton value="#{borrowMan['button.add']}" update="borrow_actions_form"
+							icon="fa-user-plu" action="#{borrowBean.store()}">
+						</p:commandButton>
+					</h:panelGrid>
+				</p:dialog>
+			</h:form>
+		</p:panel>
+	</h:panelGrid>
+</h:body>
+</html>

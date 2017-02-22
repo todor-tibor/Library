@@ -1,0 +1,11 @@
+model\Author.class
+model\Newspaper.class
+model\Publisher.class
+model\Role.class
+model\Publication.class
+model\Book.class
+model\Magazine.class
+model\Borrow.class
+model\BaseEntity.class
+model\RoleType.class
+model\User.class
