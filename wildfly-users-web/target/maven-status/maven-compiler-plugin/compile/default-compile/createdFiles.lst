@@ -1,0 +1,10 @@
+gallb\wildfly\users\web\LoginMB.class
+gallb\wildfly\users\web\AuthorMB.class
+gallb\wildfly\users\web\SessionManagerMB.class
+gallb\wildfly\users\web\UserMB.class
+gallb\wildfly\users\web\PublisherMB.class
+gallb\wildfly\users\web\RoleMB.class
+gallb\wildfly\users\web\MessageService.class
+gallb\wildfly\users\web\LocaleManager.class
+gallb\wildfly\users\web\PublicationMB.class
+gallb\wildfly\users\web\BorrowMB.class
