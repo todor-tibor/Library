@@ -60,45 +60,6 @@
 					action="#{publicationBean.getAll()}">
 				</p:commandButton>
 
-				<p:commandButton icon="fa-remove" value="#{msg['user.myAccount']}"
-					update="myAccount" oncomplete="PF('myAccount').show()"
-					action="#{userbean.getByUserName()}">
-					<f:param name="pTitle" value="#{title.value}" />
-				</p:commandButton>
-
-				<p:dialog id="myAccount" modal="true" showEffect="fade"
-					hideEffect="fade" widgetVar="myAccount"
-					header="#{msg['user.myAccount']}" width="500" height="500">
-					<p:messages id="messages_profile" showDetail="true"
-						autoUpdate="true" closable="true" />
-					<h:panelGrid columns="2" cellpadding="10">
-						<p:outputLabel value="#{userMan['user.header']}" />
-						<p:outputLabel value="#{userbean.loggedInUser.userName}" />
-						<p:outputLabel value="#{userMan['loyalty.label']}" />
-						<p:outputLabel value="#{userbean.loggedInUser.loyaltyIndex}" />
-						<p:outputLabel value="#{roleMan['role.text']}" />
-						<p:dataTable id="user_role_dialog" var="role"
-							value="#{userbean.loggedInUser.roles}" rowKey="#{role.uuid}">
-							<p:column>
-								<h:outputText value="#{role.role}" />
-							</p:column>
-						</p:dataTable>
-						<p:outputLabel value="#{pubMan['publication.borrows']}" />
-					</h:panelGrid>
-					<p:dataTable id="user_borrow_dialog" var="borrows"
-						value="#{userbean.loggedInUser.borrows}" rowKey="#{borrows.uuid}">
-						<p:column headerText="#{pubMan['publication.title']}">
-							<h:outputText value="#{borrows.publication.title}" />
-						</p:column>
-						<p:column headerText="#{pubMan['publication.from']}">
-							<h:outputText value="#{borrows.borrowFrom}" />
-						</p:column>
-						<p:column headerText="#{pubMan['publication.until']}">
-							<h:outputText value="#{borrows.borrowUntil}" />
-						</p:column>
-					</p:dataTable>
-				</p:dialog>
-
 			</h:form>
 		</p:panel>
 	</h:panelGrid>
