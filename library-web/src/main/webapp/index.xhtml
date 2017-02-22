@@ -28,12 +28,12 @@
 
 
 
-			<c:if test="${ loginbean.isLoggedIn() }">
+			<c:if test="${loginbean.isLoggedIn()}">
 				<p:commandButton style="float:right;" value="#{msg['logout.text']}"
 					action="#{loginbean.logout()}">
 				</p:commandButton>
 			</c:if>
-			<c:if test="${ !loginbean.isLoggedIn() }">
+			<c:if test="${!loginbean.isLoggedIn()}">
 				<p:commandButton style="float:right;" value="#{msg['login.text']}"
 					action="login?faces-redirect=true">
 				</p:commandButton>
