@@ -107,6 +107,7 @@ public class LoginMB implements Serializable {
 
 			} else {
 				setCurrentRole("INVALID");
+				userName="";
 				message.error("login.invalid");
 			}
 		}
@@ -142,11 +143,18 @@ public class LoginMB implements Serializable {
 		userName = "";
 		setCurrentRole("GUEST");
 		try {
-			FacesContext.getCurrentInstance().getExternalContext().redirect("publication_guest.xhtml");
+			FacesContext.getCurrentInstance().getExternalContext().redirect("reader.xhtml");
 		} catch (IOException e) {
 			oLogger.error(e);
 			message.fatal(e.getMessage());
 		}
+	}
+	
+	public boolean isLoggedIn(){
+		if (userName.isEmpty()){
+			return false;
+		}
+		return true;
 	}
 
 }
