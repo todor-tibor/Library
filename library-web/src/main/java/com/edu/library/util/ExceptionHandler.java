@@ -5,10 +5,13 @@ import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 
-import com.edu.library.LibraryException;
 import com.edu.library.MessageService;
+import com.edu.library.exception.ErrorLevel;
+import com.edu.library.exception.LibraryException;
+
 /**
  * ExceptionHandler to handle exceptions and show it using MessageService
+ * 
  * @author sipost
  *
  */
@@ -25,11 +28,11 @@ public class ExceptionHandler implements Serializable {
 			t = t.getCause();
 		}
 		if (t instanceof LibraryException) {
-			int level = ((LibraryException) t).getLevel();
-			if (level == 1) {
+			ErrorLevel level = ((LibraryException) t).getLevel();
+			if (ErrorLevel.ERROR.equals(level)) {
 				message.error(t.getMessage());
 			}
-			if (level == 2) {
+			if (ErrorLevel.WARNING.equals(level)) {
 				message.warn(t.getMessage());
 			}
 		} else if (t instanceof IllegalArgumentException) {
@@ -37,5 +40,5 @@ public class ExceptionHandler implements Serializable {
 		} else {
 			message.error(e.getMessage());
 		}
-	}	
+	}
 }

@@ -2,6 +2,13 @@ package com.edu.library.filter;
 
 import java.util.Date;
 
+/**
+ * A representation of all the fields that can be filtered for a Publication
+ * object.
+ * 
+ * @author sipost
+ * @author kiska
+ */
 public class PublicationFilter {
 	private String title;
 	private String publisher;
@@ -47,7 +54,7 @@ public class PublicationFilter {
 	}
 
 	public void setFrom(Date from) {
-		this.from=from;
+		this.from = from;
 	}
 
 	public Date getUntil() {

@@ -46,7 +46,7 @@ public class AuthorBean {
 
 	public Author getById(String p_id) {
 		try {
-			return (Author) oEntityManager.createNamedQuery("Author.getById", Author.class).setParameter("uuid", p_id)
+			return oEntityManager.createNamedQuery("Author.getById", Author.class).setParameter("uuid", p_id)
 					.getSingleResult();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
@@ -56,8 +56,8 @@ public class AuthorBean {
 
 	public Author getByname(String p_value) {
 		try {
-			return (Author) oEntityManager.createNamedQuery("Author.getByName", Author.class)
-					.setParameter("name", p_value).getSingleResult();
+			return oEntityManager.createNamedQuery("Author.getByName", Author.class).setParameter("name", p_value)
+					.getSingleResult();
 		} catch (PersistenceException e) {
 			oLogger.error(e);
 			throw new TechnicalException(e);

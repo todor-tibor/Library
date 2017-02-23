@@ -11,7 +11,8 @@ import com.edu.library.business.userManagement.RoleManagementBusiness;
 import com.edu.library.model.Role;
 
 /**
- * Implements the basics of role management. Validates the given input data.
+ * Implements the basics of role management. Validates the given input data and
+ * calls the business layer if params are valid
  * 
  * @author sipost
  */

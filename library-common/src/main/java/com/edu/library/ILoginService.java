@@ -2,17 +2,16 @@ package com.edu.library;
 
 import java.util.List;
 
-import com.edu.library.model.BaseEntity;
+import com.edu.library.exception.LibraryException;
 import com.edu.library.model.Role;
 
 /**
+ * The login interface to which the client has access. Defines the login
+ * process.
  * 
  * @author kiska
- *
- *         The login interface to which the client has access. Defines the login
- *         process.
  */
-public interface ILoginService{
+public interface ILoginService {
 	/**
 	 * Does a validation on the input data. If these are correct, tries to
 	 * authenticate the user.

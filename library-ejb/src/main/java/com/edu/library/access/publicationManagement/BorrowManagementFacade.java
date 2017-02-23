@@ -12,9 +12,11 @@ import com.edu.library.filter.BorrowFilter;
 import com.edu.library.model.Borrow;
 
 /**
+ * Implements the basics of borrowing. Validates the given input data and calls
+ * the business layer if params are valid
+ * 
  * @author gallb
- * @author kiska Implements the basics of user login. Validates the given the
- *         input data.
+ * @author kiska
  */
 @Stateless
 public class BorrowManagementFacade implements IBorrowService {
@@ -68,6 +70,7 @@ public class BorrowManagementFacade implements IBorrowService {
 		borrowBusiness.remove(p_id);
 	}
 
+	@Override
 	public List<Borrow> filterBorrow(BorrowFilter filter) {
 		if (filter.getBorrowedFrom() != null && filter.getBorrowedUntil() != null) {
 			ServiceValidation.checDateOrder(filter.getBorrowedFrom(), filter.getBorrowedUntil());

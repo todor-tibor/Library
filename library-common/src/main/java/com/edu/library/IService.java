@@ -2,14 +2,14 @@ package com.edu.library;
 
 import java.util.List;
 
+import com.edu.library.exception.LibraryException;
 import com.edu.library.model.BaseEntity;
 
 /**
+ * Defines persistence operations, for entities.
  * 
  * @author gallb
  * @author kiska
- *
- *         Defines persistence operations, for entities.
  *
  * @param <X>
  *            Specifies entity type.

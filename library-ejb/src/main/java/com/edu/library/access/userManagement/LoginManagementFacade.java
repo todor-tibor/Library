@@ -11,16 +11,18 @@ import com.edu.library.business.userManagement.LoginManagementBusiness;
 import com.edu.library.model.Role;
 
 /**
- * Implements the basics of user login. Validates the given input data.
+ * Implements the basics of user login. Validates the given input data and calls
+ * the business layer if params are valid
  * 
  * @author kiska
  */
 @Stateless
 public class LoginManagementFacade implements ILoginService {
-	
+
 	@EJB
 	private LoginManagementBusiness loginBusniess;
 
+	@Override
 	public List<Role> login(String userName, String password) {
 		ServiceValidation.checkString(userName);
 		ServiceValidation.checkPassword(password);

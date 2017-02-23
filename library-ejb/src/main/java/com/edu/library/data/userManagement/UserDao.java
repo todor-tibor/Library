@@ -10,10 +10,10 @@ import javax.persistence.PersistenceException;
 
 import org.jboss.logging.Logger;
 
-import com.edu.library.PasswordEncrypter;
 import com.edu.library.data.exception.TechnicalException;
 import com.edu.library.model.Borrow;
 import com.edu.library.model.User;
+import com.edu.library.util.PasswordEncrypter;
 
 /**
  * Invokes the CRUD methods for a user

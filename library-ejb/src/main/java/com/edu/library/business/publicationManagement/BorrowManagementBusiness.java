@@ -26,7 +26,10 @@ import com.edu.library.model.Publication;
 import com.edu.library.model.User;
 
 /**
- * @author gallb, kiska Implements publication related business logic.
+ * Implements basic business logic for borrow management.
+ * 
+ * @author gallb
+ * @author kiska
  */
 
 @Stateless

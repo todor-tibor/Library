@@ -9,17 +9,21 @@ import org.jboss.logging.Logger;
 
 import com.edu.library.model.BaseEntity;
 
-/***
- * Serves as a data validator class for different data input types.
+/**
+ * Serves as a Singleton data validator class for different data input types.
+ * 
  * @author kiska
- *
- *       
+ * @author gallb
  */
 public class ServiceValidation {
 
 	private static Logger oLogger = Logger.getLogger(ServiceValidation.class);
 
-	public static final String ERROR_MESSAGE = "access.error.illegalArgument";
+	private ServiceValidation() {
+
+	}
+
+	private static final String ERROR_MESSAGE = "access.error.illegalArgument";
 	/**
 	 * STRING_PATTERN - the restriction for a correct user name
 	 * 
@@ -51,7 +55,7 @@ public class ServiceValidation {
 	 * $ - end of line
 	 */
 
-	public static final String UUID_PATTERN = "^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$";
+	private static final String UUID_PATTERN = "^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$";
 
 	/**
 	 * Check whether the given string matches a set of constraints defined in

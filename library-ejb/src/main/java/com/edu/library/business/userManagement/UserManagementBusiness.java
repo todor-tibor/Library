@@ -6,7 +6,6 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
-import com.edu.library.LibraryException;
 import com.edu.library.business.exception.BusinessException;
 import com.edu.library.business.exception.ErrorMessages;
 import com.edu.library.data.userManagement.UserDao;
@@ -38,14 +37,7 @@ public class UserManagementBusiness {
 	}
 
 	public void store(User user) {
-		// if
-		// (dataAcces.getByUserName(user.getUserName()).getUserName().isEmpty())
-		// {
 		dataAcces.store(user);
-		// } else {
-		// throw new
-		// BusinessException(ErrorMessages.ERROR_CONSTRAINT_VIOLATION);
-		// }
 	}
 
 	public void update(User user) {

@@ -11,7 +11,8 @@ import com.edu.library.business.userManagement.UserManagementBusiness;
 import com.edu.library.model.User;
 
 /**
- * Implements the basics of user login. Validates the given the input data.
+ * Implements the basics of user login. Validates the given the input data and
+ * calls the business layer if params are valid
  * 
  * @author kiska
  */

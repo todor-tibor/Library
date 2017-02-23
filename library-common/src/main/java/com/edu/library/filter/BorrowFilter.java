@@ -2,6 +2,12 @@ package com.edu.library.filter;
 
 import java.util.Date;
 
+/**
+ * A representation of all the fields that can be filtered for a Borrow object.
+ * 
+ * @author sipost
+ * @author kiska
+ */
 public class BorrowFilter {
 	private String title;
 	private String userName;
