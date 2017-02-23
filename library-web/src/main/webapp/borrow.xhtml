@@ -19,6 +19,10 @@
 					<f:param name="p_value" value="#{srch_brw.value}" />
 				</p:commandButton>
 
+				<p:commandButton value="#{msg['filter.button']}" update="borrowDT"
+					action="#{borrowBean.filterBorrow()}">
+				</p:commandButton>
+
 				<p:dataTable id="borrowDT" var="borrow"
 					value="#{borrowBean.borrowsList}" selectionMode="single"
 					selection="#{borrowBean.currentBorrow}" rowKey="#{borrow.uuid}">
@@ -30,24 +34,52 @@
 					</f:facet>
 					<f:facet name="header">
 					</f:facet>
-					<p:column headerText="#{borrowMan['column.username']}">
+					<p:column headerText="">
+						<f:facet name="header">
+							<p:outputLabel value="#{borrowMan['column.username']}" />
+							<br />
+							<p:inputText value="#{borrowBean.filter.userName}" />
+						</f:facet>
 						<h:outputText value="#{borrow.user.userName}" />
 					</p:column>
-					<p:column headerText="#{borrowMan['column.publication']}">
+
+					<p:column>
+						<f:facet name="header">
+							<p:outputLabel value="#{borrowMan['column.publication']}" />
+							<br />
+							<p:inputText value="#{borrowBean.filter.title}" />
+						</f:facet>
 						<h:outputText value="#{borrow.publication.title}" />
 					</p:column>
-					<p:column headerText="#{borrowMan['column.from']}">
+
+					<p:column>
+						<f:facet name="header">
+							<p:outputLabel value="#{borrowMan['column.from']}" />
+							<br />
+							<p:inputText value="#{borrowBean.filter.borrowedFrom}">
+							<f:convertDateTime pattern="yyyy-MM-dd" />
+							</p:inputText>
+						</f:facet>
 						<h:outputText value="#{borrow.borrowFrom}" />
 					</p:column>
+
 					<p:column headerText="#{borrowMan['column.until']}">
+						<f:facet name="header">
+							<p:outputLabel value="#{borrowMan['column.until']}" />
+							<br />
+							<p:inputText value="#{borrowBean.filter.borrowedUntil}">
+								<f:convertDateTime pattern="yyyy-MM-dd" />
+							</p:inputText>
+						</f:facet>
 						<h:outputText value="#{borrow.borrowUntil}" />
 					</p:column>
+
 					<f:facet name="footer">
 						<p:commandButton icon="fa-remove"
 							value="#{borrowMan['button.return']}"
 							action="#{borrowBean.remove()}" update="borrowDT"
 							disabled="#{borrowBean.currentBorrow == null}" />
-						<p:commandButton  icon="fa-remove"
+						<p:commandButton icon="fa-remove"
 							value="#{borrowMan['button.renew']}" update="renewDialog"
 							oncomplete="PF('renewDialog').show()"
 							action="#{borrowBean.setUntil()}"
@@ -58,16 +90,16 @@
 							header="#{borrowMan['button.add']}" width="500" height="500">
 							<p:messages id="messagesBr5" showDetail="true" autoUpdate="true"
 								closable="true" />
-														<p:panel id="updateBrwdialog">
-															<p:outputLabel value="#{borrowMan['column.until']}"
-																readOnlyInputText="true" />
-															<p:calendar id="calendar4" value="#{borrowBean.date3}"
-																mode="inline" />
-															<p:commandButton value="#{borrowMan['button.renew']}"
-																update="borrowDT" icon="fa-user-plu"
-																action="#{borrowBean.update()}">
-															</p:commandButton>
-														</p:panel>
+							<p:panel id="updateBrwdialog">
+								<p:outputLabel value="#{borrowMan['column.until']}"
+									readOnlyInputText="true" />
+								<p:calendar id="calendar4" value="#{borrowBean.date3}"
+									mode="inline" />
+								<p:commandButton value="#{borrowMan['button.renew']}"
+									update="borrowDT" icon="fa-user-plu"
+									action="#{borrowBean.update()}">
+								</p:commandButton>
+							</p:panel>
 
 						</p:dialog>
 

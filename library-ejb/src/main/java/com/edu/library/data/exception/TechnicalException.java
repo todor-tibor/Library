@@ -19,7 +19,7 @@ public class TechnicalException extends LibraryException {
 	private static Logger oLogger = Logger.getLogger(TechnicalException.class);
 
 	public TechnicalException(PersistenceException e) throws TechnicalException {
-		String message = "ejb.message.error";
+		String message = "ejb.message.noEntity";
 		if (e instanceof EntityNotFoundException) {
 			message = "ejb.message.noEntity";
 		} else if (e instanceof NonUniqueResultException) {

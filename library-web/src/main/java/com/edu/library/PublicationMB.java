@@ -2,6 +2,7 @@ package com.edu.library;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import javax.inject.Named;
 
 import org.jboss.logging.Logger;
 
+import com.edu.library.filter.PublicationFilter;
 import com.edu.library.model.Author;
 import com.edu.library.model.Book;
 import com.edu.library.model.Magazine;
@@ -42,6 +44,8 @@ public class PublicationMB implements Serializable {
 	@Inject
 	MessageService message;
 
+	PublicationFilter filter = new PublicationFilter();
+	private Date date = new Date();
 	/*
 	 * variables to select publication type, authors or publisher for update and
 	 * insert
@@ -150,8 +154,12 @@ public class PublicationMB implements Serializable {
 		publication.setNrOfCopys(nrOfCopies);
 		publication.setOnStock(nrOfCopies);
 		publication.setPublisher(this.currentPublisher);
-		publication.setPublicationDate(new Date());
-
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.add(Calendar.DATE, 1);
+		date = c.getTime();
+		publication.setPublicationDate(date);
+		
 		try {
 			oPublicationBean.store(publication);
 			publicationList.add(publication);
@@ -213,6 +221,25 @@ public class PublicationMB implements Serializable {
 			}
 		}
 
+	}
+
+	/**
+	 * filter publication
+	 * 
+	 * @return
+	 */
+	public List<Publication> filterPublication() {
+		this.publicationList.clear();
+		try {
+			this.publicationList = oPublicationBean.filterPublication(filter);
+			if (this.publicationList.isEmpty()) {
+				message.warn("ejb.message.noEntity");
+			}
+		} catch (Exception e) {
+			oLogger.error(e);
+			exceptionHandler.showMessage(e);
+		}
+		return this.publicationList;
 	}
 
 	public String getType() {
@@ -304,5 +331,21 @@ public class PublicationMB implements Serializable {
 
 	public void setCurrentPublication(Publication currentPublication) {
 		this.currentPublication = currentPublication;
+	}
+
+	public PublicationFilter getFilter() {
+		return filter;
+	}
+
+	public void setFilter(PublicationFilter filter) {
+		this.filter = filter;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 }

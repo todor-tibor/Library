@@ -34,7 +34,7 @@ public class LoginMB implements Serializable {
 
 	@Inject
 	ExceptionHandler exceptionHandler;
-	
+
 	@Inject
 	MessageService message;
 	/**
@@ -99,7 +99,7 @@ public class LoginMB implements Serializable {
 			if (roles.contains(tmp)) {
 				setCurrentRole("READER");
 				try {
-					FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+					FacesContext.getCurrentInstance().getExternalContext().redirect("reader.xhtml");
 				} catch (IOException e) {
 					oLogger.error(e);
 					message.fatal(e.getMessage());
@@ -136,6 +136,33 @@ public class LoginMB implements Serializable {
 
 	public String getUserName() {
 		return userName;
+	}
+
+	/**
+	 * Implements a simple logout process, by setting the user name to empty
+	 * string. Redirects to the application's start page.
+	 */
+	public void logout() {
+		userName = "";
+		setCurrentRole("GUEST");
+		try {
+			FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+		} catch (IOException e) {
+			oLogger.error(e);
+			message.fatal(e.getMessage());
+		}
+	}
+
+	/**
+	 * Checks whether the user is logged in. Returns false if it is not.
+	 * 
+	 * @return
+	 */
+	public boolean isLoggedIn() {
+		if (userName == null || userName.isEmpty()) {
+			return false;
+		}
+		return true;
 	}
 
 }

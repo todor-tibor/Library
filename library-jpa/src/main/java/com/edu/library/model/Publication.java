@@ -1,7 +1,7 @@
 package com.edu.library.model;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -44,7 +44,7 @@ public abstract class Publication extends BaseEntity {
 
 	@Column(name = "on_stock")
 	private int onStock;
-
+	
 	@Temporal(TemporalType.DATE)
 	@Column(name = "publication_date")
 	private Date publicationDate;
@@ -97,7 +97,6 @@ public abstract class Publication extends BaseEntity {
 
 	public List<Borrow> getBorrows() {
 		return new ArrayList<>(this.borrows);
-		// (List<Borrow>)this.borrows.toArray();
 	}
 
 	public void setBorrows(Set<Borrow> borrows) {

@@ -26,6 +26,10 @@
 			<p:commandButton value="#{msg['lang.english']}"
 				action="#{amibeanunk.englishNow()}" update="@form tabViewId">
 			</p:commandButton>
+			
+			<p:commandButton style="float:right;" value="#{msg['logout.text']}"
+				action="#{loginbean.logout()}">
+			</p:commandButton>
 		</p:panel>
 	</h:form>
 	<p:growl id="msgs" showDetail="true" />
