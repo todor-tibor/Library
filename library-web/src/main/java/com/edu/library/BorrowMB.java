@@ -11,13 +11,14 @@ import javax.inject.Named;
 
 import org.jboss.logging.Logger;
 
+import com.edu.library.filter.BorrowFilter;
 import com.edu.library.model.Borrow;
 import com.edu.library.model.Publication;
 import com.edu.library.model.User;
 import com.edu.library.util.ExceptionHandler;
 
 /**
- * @author nagys, gallb
+ * @author nagys, gallb, kiska
  *
  */
 
@@ -25,7 +26,7 @@ import com.edu.library.util.ExceptionHandler;
 
 @SessionScoped
 public class BorrowMB implements Serializable {
-	
+
 	private Logger oLogger = Logger.getLogger(BorrowMB.class);
 	private static final long serialVersionUID = 1479586528417507035L;
 
@@ -33,9 +34,11 @@ public class BorrowMB implements Serializable {
 	private IBorrowService oBorrowBean;
 	@Inject
 	ExceptionHandler exceptionHandler;
-	
+
 	@Inject
 	MessageService message;
+
+	BorrowFilter filter = new BorrowFilter();
 
 	private List<Borrow> borrows = new ArrayList<>();
 	private User currentUser = null;
@@ -46,9 +49,6 @@ public class BorrowMB implements Serializable {
 	private Date date2 = null;
 	private Date date3 = null;
 
-
-	
-	
 	public Date getDate3() {
 		return date3;
 	}
@@ -152,7 +152,7 @@ public class BorrowMB implements Serializable {
 			}
 		}
 	}
-	
+
 	public void update() {
 		borrow.setBorrowUntil(date3);
 		try {
@@ -165,7 +165,7 @@ public class BorrowMB implements Serializable {
 		}
 
 	}
-	
+
 	public void search(String p_searchTxt) {
 		if (p_searchTxt.length() >= 3) {
 			borrows.clear();
@@ -179,7 +179,7 @@ public class BorrowMB implements Serializable {
 			message.error("managedbean.string");
 		}
 	}
-	
+
 	public Boolean isSelected() {
 		if (this.borrow == null) {
 			return false;
@@ -187,9 +187,37 @@ public class BorrowMB implements Serializable {
 			return true;
 		}
 	}
-	
+
 	public void setUntil() {
 		date3 = borrow.getBorrowUntil();
 	}
-	
+
+	/**
+	 * filter publication
+	 * 
+	 * @return
+	 */
+	public List<Borrow> filterBorrow() {
+		oLogger.info("filter publication " + filter.getTitle());
+		this.borrows.clear();
+		try {
+			this.borrows = oBorrowBean.filterBorrow(filter);
+			if (this.borrows.isEmpty()) {
+				message.warn("ejb.message.noEntity");
+			}
+		} catch (Exception e) {
+			oLogger.error(e);
+			exceptionHandler.showMessage(e);
+		}
+		return this.borrows;
+	}
+
+	public BorrowFilter getFilter() {
+		return filter;
+	}
+
+	public void setFilter(BorrowFilter filter) {
+		this.filter = filter;
+	}
+
 }

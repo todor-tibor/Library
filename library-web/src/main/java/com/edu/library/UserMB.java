@@ -42,9 +42,12 @@ public class UserMB implements Serializable {
 
 	@Inject
 	MessageService message;
-	
+
 	@Inject
 	ExceptionHandler exceptionHandler;
+	
+	@Inject
+	LoginMB loginMB;
 
 	public void change() {
 		oLogger.info("-----tab changed");
@@ -52,7 +55,7 @@ public class UserMB implements Serializable {
 
 	private List<User> userList = new ArrayList<>();// Currently displayed
 													// users.
-	private User currentUser = null;// Currently selected user.
+	private User loggedInUser=null, currentUser = null;// Currently selected user.
 
 	private List<Role> currentRoles = new ArrayList<>();
 
@@ -184,6 +187,24 @@ public class UserMB implements Serializable {
 		}
 	}
 
+	/**
+	 * Get user by name
+	 * 
+	 * @param p_username
+	 */
+	public void getByUserName() {
+		if (loginMB.getUserName() != null && loginMB.getUserName().length() <= 3) {
+			message.warn("managedbean.string");
+			return;
+		}
+		try {
+			loggedInUser = oUserBean.getByUserName(loginMB.getUserName());
+		} catch (Exception e) {
+			oLogger.error(e);
+			exceptionHandler.showMessage(e);
+		}
+	}
+
 	public void getCurrentLang() {
 		FacesContext.getCurrentInstance().getViewRoot().setLocale(localeManager.getUserLocale());
 
@@ -212,5 +233,9 @@ public class UserMB implements Serializable {
 		} else {
 			return true;
 		}
+	}
+ 
+	public User getLoggedInUser() {
+		return loggedInUser;
 	}
 }

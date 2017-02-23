@@ -5,7 +5,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 
-<f:view locale="#{localeBean.userLocale}"/>
+<f:view locale="#{localeBean.userLocale}" />
 <h:head>
 	<p:messages id="messagesPub1" showDetail="true" autoUpdate="true"
 		closable="true" />
@@ -16,8 +16,10 @@
 		<p:panel header="#{msg['publication.button']}">
 			<h:form id="publication_actions_form">
 
-				<p:inputText id="publication_searchTextBox" binding="#{srch_publication}" />
-				<p:commandButton value="#{msg['search.button']}" update="publicationDT"
+				<p:inputText id="publication_searchTextBox"
+					binding="#{srch_publication}" />
+				<p:commandButton value="#{msg['search.button']}"
+					update="publicationDT"
 					action="#{publicationBean.search(srch_publication.value)}">
 					<f:param name="p_value" value="#{srch_publication.value}" />
 				</p:commandButton>
@@ -49,7 +51,7 @@
 						<h:outputText value="#{publication.authors}"
 							rendered="#{publication['class'].simpleName eq 'Magazine'}" />
 					</p:column>
-					<f:facet name="footer">						
+					<f:facet name="footer">
 					</f:facet>
 
 				</p:dataTable>
@@ -57,7 +59,46 @@
 					update="publicationDT" icon="ui-icon-search"
 					action="#{publicationBean.getAll()}">
 				</p:commandButton>
-				
+
+				<p:commandButton icon="fa-remove" value="#{msg['user.myAccount']}"
+					update="myAccount" oncomplete="PF('myAccount').show()"
+					action="#{userbean.getByUserName()}">
+					<f:param name="pTitle" value="#{title.value}" />
+				</p:commandButton>
+
+				<p:dialog id="myAccount" modal="true" showEffect="fade"
+					hideEffect="fade" widgetVar="myAccount"
+					header="#{msg['user.myAccount']}" width="500" height="500">
+					<p:messages id="messages_profile" showDetail="true"
+						autoUpdate="true" closable="true" />
+					<h:panelGrid columns="2" cellpadding="10">
+						<p:outputLabel value="#{userMan['user.header']}" />
+						<p:outputLabel value="#{userbean.loggedInUser.userName}" />
+						<p:outputLabel value="#{userMan['loyalty.label']}" />
+						<p:outputLabel value="#{userbean.loggedInUser.loyaltyIndex}" />
+						<p:outputLabel value="#{roleMan['role.text']}" />
+						<p:dataTable id="user_role_dialog" var="role"
+							value="#{userbean.loggedInUser.roles}" rowKey="#{role.uuid}">
+							<p:column>
+								<h:outputText value="#{role.role}" />
+							</p:column>
+						</p:dataTable>
+						<p:outputLabel value="#{pubMan['publication.borrows']}" />
+					</h:panelGrid>
+					<p:dataTable id="user_borrow_dialog" var="borrows"
+						value="#{userbean.loggedInUser.borrows}" rowKey="#{borrows.uuid}">
+						<p:column headerText="#{pubMan['publication.title']}">
+							<h:outputText value="#{borrows.publication.title}" />
+						</p:column>
+						<p:column headerText="#{pubMan['publication.from']}">
+							<h:outputText value="#{borrows.borrowFrom}" />
+						</p:column>
+						<p:column headerText="#{pubMan['publication.until']}">
+							<h:outputText value="#{borrows.borrowUntil}" />
+						</p:column>
+					</p:dataTable>
+				</p:dialog>
+
 			</h:form>
 		</p:panel>
 	</h:panelGrid>

@@ -9,6 +9,7 @@ import javax.ejb.Stateless;
 import com.edu.library.business.exception.BusinessException;
 import com.edu.library.business.exception.ErrorMessages;
 import com.edu.library.data.publicationManagement.PublicationBean;
+import com.edu.library.filter.PublicationFilter;
 import com.edu.library.model.Publication;
 
 /**
@@ -54,5 +55,10 @@ public class PublicationManagementBusiness {
 			throw new BusinessException(ErrorMessages.ERROR_BOUND);
 		}
 	}
+	
+	public List<Publication> filterPublication(PublicationFilter filter) {
+		return dataAcces.filterPublication(filter);
+	}
+
 
 }

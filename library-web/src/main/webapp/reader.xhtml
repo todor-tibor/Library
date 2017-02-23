@@ -2,10 +2,12 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 <f:view locale="#{localeBean.userLocale}" />
 <h:head>
+<f:metadata>
+		<f:viewAction action="#{loginbean.isReader()}" />
+	</f:metadata>
 	<title>.msg Library</title>
 </h:head>
 <h:body>
@@ -24,21 +26,13 @@
 				action="#{amibeanunk.englishNow()}" update="@form publication_user">
 			</p:commandButton>
 			
-			<c:if test="${loginbean.isLoggedIn()}">
-				<p:commandButton style="float:right;" value="#{msg['logout.text']}"
-					action="#{loginbean.logout()}">
-				</p:commandButton>
-			</c:if>
-			<c:if test="${!loginbean.isLoggedIn()}">
-				<p:commandButton style="float:right;" value="#{msg['login.text']}"
-					action="login?faces-redirect=true">
-				</p:commandButton>
-				
-			</c:if>
+			<p:commandButton style="float:right;" value="#{msg['logout.text']}"
+				action="#{loginbean.logout()}">
+			</p:commandButton>
 		</p:panel>
 	</h:form>
 	<p:panel id="publication_user">
-		<ui:include src="publication_guest.xhtml" />
+		<ui:include src="publication_user.xhtml" />
 	</p:panel>
 </h:body>
 </html>

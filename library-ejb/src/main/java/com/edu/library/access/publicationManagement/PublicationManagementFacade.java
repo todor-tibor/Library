@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import com.edu.library.IPublicationService;
 import com.edu.library.access.util.ServiceValidation;
 import com.edu.library.business.publicationManagement.PublicationManagementBusiness;
+import com.edu.library.filter.PublicationFilter;
 import com.edu.library.model.Book;
 import com.edu.library.model.Magazine;
 import com.edu.library.model.Publication;
@@ -55,7 +56,7 @@ public class PublicationManagementFacade implements IPublicationService {
 		ServiceValidation.checkNotNull(p_user);
 		checkCopies(p_user);
 		authorCheck(p_user);
-		
+
 		publicationBusiness.update(p_user);
 	}
 
@@ -66,6 +67,11 @@ public class PublicationManagementFacade implements IPublicationService {
 
 	}
 
+	@Override
+	public List<Publication> filterPublication(PublicationFilter filter) {
+		return publicationBusiness.filterPublication(filter);
+	}
+
 	private void authorCheck(Publication p_value) {
 		if (p_value instanceof Book) {
 			ServiceValidation.checkNotEmpty(((Book) p_value).getAuthors());
@@ -74,10 +80,10 @@ public class PublicationManagementFacade implements IPublicationService {
 			ServiceValidation.checkNotEmpty(((Magazine) p_value).getAuthors());
 		}
 	}
-	
-	private void checkCopies(Publication p_value){
-		ServiceValidation.checkIfNumberInRange(p_value.getNrOfCopys(), 1, Integer.MAX_VALUE);
-		ServiceValidation.checkIfNumberInRange(p_value.getOnStock(), 1, p_value.getNrOfCopys());
+
+	private void checkCopies(Publication p_value) {
+		ServiceValidation.checkIfNumberInRange(p_value.getNrOfCopys(), 0, Integer.MAX_VALUE);
+		ServiceValidation.checkIfNumberInRange(p_value.getOnStock(), 0, p_value.getNrOfCopys());
 	}
 
 }

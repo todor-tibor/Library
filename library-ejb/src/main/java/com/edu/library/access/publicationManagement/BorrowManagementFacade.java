@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import com.edu.library.IBorrowService;
 import com.edu.library.access.util.ServiceValidation;
 import com.edu.library.business.publicationManagement.BorrowManagementBusiness;
+import com.edu.library.filter.BorrowFilter;
 import com.edu.library.model.Borrow;
 
 /**
@@ -20,7 +21,7 @@ public class BorrowManagementFacade implements IBorrowService {
 
 	@EJB
 	private BorrowManagementBusiness borrowBusiness;
-	
+
 	@Override
 	public List<Borrow> getAll() {
 		return borrowBusiness.getAll();
@@ -40,25 +41,25 @@ public class BorrowManagementFacade implements IBorrowService {
 
 	@Override
 	public void store(Borrow p_value) {
-		//Data validation.
+		// Data validation.
 		ServiceValidation.checkNotNull(p_value);
 		ServiceValidation.checkNotNull(p_value.getPublication());
 		ServiceValidation.checkNotNull(p_value.getUser());
 		ServiceValidation.checDateOrder(p_value.getBorrowFrom(), p_value.getBorrowUntil());
-		
+
 		borrowBusiness.store(p_value);
 	}
 
 	@Override
 	public void update(Borrow p_value) {
-		//Data validation.
+		// Data validation.
 		ServiceValidation.checkNotNull(p_value);
 		ServiceValidation.checkNotNull(p_value.getPublication());
 		ServiceValidation.checkNotNull(p_value.getUser());
-		ServiceValidation.checDateOrder(p_value.getBorrowFrom(), p_value.getBorrowUntil());	
-		
+		ServiceValidation.checDateOrder(p_value.getBorrowFrom(), p_value.getBorrowUntil());
+
 		borrowBusiness.update(p_value);
-		
+
 	}
 
 	@Override
@@ -66,5 +67,11 @@ public class BorrowManagementFacade implements IBorrowService {
 		ServiceValidation.checkUuid(p_id);
 		borrowBusiness.remove(p_id);
 	}
-	
+
+	public List<Borrow> filterBorrow(BorrowFilter filter) {
+		if (filter.getBorrowedFrom() != null && filter.getBorrowedUntil() != null) {
+			ServiceValidation.checDateOrder(filter.getBorrowedFrom(), filter.getBorrowedUntil());
+		}
+		return borrowBusiness.filterBorrow(filter);
+	}
 }

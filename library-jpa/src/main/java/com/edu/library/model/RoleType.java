@@ -4,5 +4,5 @@ package com.edu.library.model;
  *
  */
 public enum RoleType {
-	LIBRARIAN, READER, INVALID
+	LIBRARIAN, READER, INVALID, GUEST
 }
