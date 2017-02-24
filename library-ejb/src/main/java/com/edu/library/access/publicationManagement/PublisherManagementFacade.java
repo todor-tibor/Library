@@ -13,7 +13,7 @@ import com.edu.library.model.Publisher;
 /**
  * Implements the basics of publisher management. Validates the given input data
  * and calls the business layer if params are valid.
- * 
+ *
  * @author nagys
  */
 @Stateless
@@ -24,39 +24,39 @@ public class PublisherManagementFacade implements IPublisherService {
 
 	@Override
 	public List<Publisher> getAll() {
-		return publisherBusiness.getAll();
+		return this.publisherBusiness.getAll();
 	}
 
 	@Override
-	public List<Publisher> search(String p_searchTxt) {
-		ServiceValidation.checkString(p_searchTxt);
-		return publisherBusiness.search(p_searchTxt);
+	public List<Publisher> search(final String searchText) {
+		ServiceValidation.checkString(searchText);
+		return this.publisherBusiness.search(searchText);
 	}
 
 	@Override
-	public Publisher getById(String p_id) {
-		ServiceValidation.checkUuid(p_id);
-		return publisherBusiness.getById(p_id);
+	public Publisher getById(final String id) {
+		ServiceValidation.checkUuid(id);
+		return this.publisherBusiness.getById(id);
 	}
 
 	@Override
-	public void store(Publisher p_value) {
-		ServiceValidation.checkNotNull(p_value);
-		ServiceValidation.checkString(p_value.getName());
-		publisherBusiness.store(p_value);
+	public void store(final Publisher publisher) {
+		ServiceValidation.checkNotNull(publisher);
+		ServiceValidation.checkString(publisher.getName());
+		this.publisherBusiness.store(publisher);
 	}
 
 	@Override
-	public void update(Publisher p_user) {
-		ServiceValidation.checkNotNull(p_user);
-		ServiceValidation.checkString(p_user.getName());
-		publisherBusiness.update(p_user);
+	public void update(final Publisher publisher) {
+		ServiceValidation.checkNotNull(publisher);
+		ServiceValidation.checkString(publisher.getName());
+		this.publisherBusiness.update(publisher);
 	}
 
 	@Override
-	public void remove(String p_id) {
-		ServiceValidation.checkUuid(p_id);
-		publisherBusiness.remove(p_id);
+	public void remove(final String id) {
+		ServiceValidation.checkUuid(id);
+		this.publisherBusiness.remove(id);
 	}
 
 }
