@@ -23,18 +23,18 @@ import com.edu.library.util.ExceptionHandler;
 import com.edu.library.util.MessageService;
 
 /**
- * 
+ *
  * Publication manager.
- * 
+ *
  * @author sipost
  * @author kiska
- * 
+ *
  */
 @Named("publicationBean")
 @SessionScoped
 public class PublicationMB implements Serializable {
 
-	private Logger oLogger = Logger.getLogger(PublicationMB.class);
+	private final Logger oLogger = Logger.getLogger(PublicationMB.class);
 	private static final long serialVersionUID = -4702598250751689454L;
 
 	@Inject
@@ -47,6 +47,7 @@ public class PublicationMB implements Serializable {
 
 	PublicationFilter filter = new PublicationFilter();
 	private Date date = new Date();
+
 	/*
 	 * variables to select publication type, authors or publisher for update and
 	 * insert
@@ -68,16 +69,16 @@ public class PublicationMB implements Serializable {
 	/**
 	 * Requests all publication objects and stores them in
 	 * {@code publicationList}.
-	 * 
+	 *
 	 * @return List of all publications from database.
 	 */
 	public List<Publication> getAll() {
 		this.publicationList.clear();
 		try {
-			this.publicationList = oPublicationBean.getAll();
+			this.publicationList = this.oPublicationBean.getAll();
 		} catch (Exception e) {
-			oLogger.error(e);
-			exceptionHandler.showMessage(e);
+			this.oLogger.error(e);
+			this.exceptionHandler.showMessage(e);
 		}
 		return this.publicationList;
 	}
@@ -85,25 +86,25 @@ public class PublicationMB implements Serializable {
 	/**
 	 * Search for publication by title and stores them in
 	 * {@code publicationList}.
-	 * 
-	 * @param p_searchTxt
+	 *
+	 * @param searchTxt
 	 *            publication title.
 	 * @return List of publication objects found.
 	 */
-	public List<Publication> search(String p_searchTxt) {
-		if (p_searchTxt.length() >= 3) {
+	public List<Publication> search(final String searchTxt) {
+		if (searchTxt.length() >= 3) {
 			this.publicationList.clear();
 			try {
-				this.publicationList = oPublicationBean.search(p_searchTxt);
+				this.publicationList = this.oPublicationBean.search(searchTxt);
 				if (this.publicationList.isEmpty()) {
-					message.warn("ejb.message.noEntity");
+					this.message.warn("ejb.message.noEntity");
 				}
 			} catch (Exception e) {
-				oLogger.error(e);
-				exceptionHandler.showMessage(e);
+				this.oLogger.error(e);
+				this.exceptionHandler.showMessage(e);
 			}
 		} else {
-			message.warn("managedbean.string");
+			this.message.warn("managedbean.string");
 		}
 		return this.publicationList;
 	}
@@ -111,22 +112,22 @@ public class PublicationMB implements Serializable {
 	/**
 	 * Insert new Book, Magazine or Newspaper uses {@code currentAuthors} and
 	 * {@code currentPublisher}
-	 * 
+	 *
 	 * @param p_title-new
 	 *            title
 	 * @param p_nrOfCopies-number
 	 *            of copies left, and copies on stock
 	 */
-	public void store(String pTitle, String pNrOfCopies) {
+	public void store(final String pTitle, final String pNrOfCopies) {
 		if (pTitle.isEmpty() || pNrOfCopies.isEmpty()) {
-			message.warn("managedbean.required");
+			this.message.warn("managedbean.required");
 			return;
 		}
 		int nrOfCopies;
 		try {
 			nrOfCopies = Integer.parseInt(pNrOfCopies);
 		} catch (NumberFormatException e) {
-			message.warn("managedbean.numberFormatExeption");
+			this.message.warn("managedbean.numberFormatExeption");
 			return;
 		}
 		Publication publication;
@@ -134,7 +135,7 @@ public class PublicationMB implements Serializable {
 		case "Book":
 			publication = new Book();
 			if (this.currentAuthors == null) {
-				message.warn("managedbean.required");
+				this.message.warn("managedbean.required");
 				return;
 			}
 			((Book) publication).setAuthors(this.currentAuthors);
@@ -142,7 +143,7 @@ public class PublicationMB implements Serializable {
 		case "Magazine":
 			publication = new Magazine();
 			if (this.currentAuthors == null) {
-				message.warn("managedbean.required");
+				this.message.warn("managedbean.required");
 				return;
 			}
 			((Magazine) publication).setAuthors(this.currentAuthors);
@@ -156,18 +157,18 @@ public class PublicationMB implements Serializable {
 		publication.setOnStock(nrOfCopies);
 		publication.setPublisher(this.currentPublisher);
 		Calendar c = Calendar.getInstance();
-		c.setTime(date);
+		c.setTime(this.date);
 		c.add(Calendar.DATE, 1);
-		date = c.getTime();
-		publication.setPublicationDate(date);
-		
+		this.date = c.getTime();
+		publication.setPublicationDate(this.date);
+
 		try {
-			oPublicationBean.store(publication);
-			publicationList.add(publication);
-			message.info("managedBean.storeSuccess");
+			this.oPublicationBean.store(publication);
+			this.publicationList.add(publication);
+			this.message.info("managedBean.storeSuccess");
 		} catch (Exception e) {
-			oLogger.error(e);
-			exceptionHandler.showMessage(e);
+			this.oLogger.error(e);
+			this.exceptionHandler.showMessage(e);
 		}
 	}
 
@@ -178,30 +179,30 @@ public class PublicationMB implements Serializable {
 	public void update() {
 		if ((this.currentPublication != null) && this.currentPublication.getTitle() != null
 				&& this.currentPublication.getPublisher() != null) {
-			if (currentPublication instanceof Book)
-				if (authors != null && !authors.isEmpty()) {
+			if (this.currentPublication instanceof Book)
+				if (this.authors != null && !this.authors.isEmpty()) {
 					((Book) this.currentPublication).setAuthors(this.authors);
 				} else {
-					message.warn("managedbean.required");
+					this.message.warn("managedbean.required");
 					return;
 				}
-			if ("Magazine".equals(currentPublication.getClass().getSimpleName()))
+			if ("Magazine".equals(this.currentPublication.getClass().getSimpleName()))
 				if (this.authors != null && !this.authors.isEmpty()) {
 					((Magazine) this.currentPublication).setAuthors(this.authors);
 				} else {
-					message.warn("managedbean.required");
+					this.message.warn("managedbean.required");
 					return;
 				}
 			try {
-				oPublicationBean.update(this.currentPublication);
-				this.publicationList = oPublicationBean.getAll();
-				message.info("managedbean.updateSuccess");
+				this.oPublicationBean.update(this.currentPublication);
+				this.publicationList = this.oPublicationBean.getAll();
+				this.message.info("managedbean.updateSuccess");
 			} catch (Exception e) {
-				oLogger.error(e);
-				exceptionHandler.showMessage(e);
+				this.oLogger.error(e);
+				this.exceptionHandler.showMessage(e);
 			}
 		} else {
-			message.warn("managedbean.required");
+			this.message.warn("managedbean.required");
 		}
 	}
 
@@ -210,15 +211,15 @@ public class PublicationMB implements Serializable {
 	 */
 	public void remove() {
 		if (this.currentPublication == null) {
-			message.error("managedbean.empty");
+			this.message.error("managedbean.empty");
 		} else {
 			try {
-				oPublicationBean.remove(this.currentPublication.getUuid());
-				publicationList = oPublicationBean.getAll();
-				message.info("managedbean.deleteSuccess");
+				this.oPublicationBean.remove(this.currentPublication.getUuid());
+				this.publicationList = this.oPublicationBean.getAll();
+				this.message.info("managedbean.deleteSuccess");
 			} catch (Exception e) {
-				oLogger.error(e);
-				exceptionHandler.showMessage(e);
+				this.oLogger.error(e);
+				this.exceptionHandler.showMessage(e);
 			}
 		}
 
@@ -226,34 +227,26 @@ public class PublicationMB implements Serializable {
 
 	/**
 	 * filter publication
-	 * 
+	 *
 	 * @return
 	 */
 	public List<Publication> filterPublication() {
 		this.publicationList.clear();
 		try {
-			this.publicationList = oPublicationBean.filterPublication(filter);
+			this.publicationList = this.oPublicationBean.filterPublication(this.filter);
 			if (this.publicationList.isEmpty()) {
-				message.warn("ejb.message.noEntity");
+				this.message.warn("ejb.message.noEntity");
 			}
 		} catch (Exception e) {
-			oLogger.error(e);
-			exceptionHandler.showMessage(e);
+			this.oLogger.error(e);
+			this.exceptionHandler.showMessage(e);
 		}
 		return this.publicationList;
 	}
 
-	public String getType() {
-		return this.type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
 	/**
 	 * Check if has selected publication
-	 * 
+	 *
 	 * @return - true if it has, false otherwise
 	 */
 	public Boolean isSelected() {
@@ -267,14 +260,14 @@ public class PublicationMB implements Serializable {
 	/**
 	 * Check if the Publication selected has authors property(the Newspaper
 	 * can't have any authors)
-	 * 
+	 *
 	 * @return - true if it has, false otherwise
 	 */
 	public Boolean hasAuthor() {
 		if (this.currentPublication == null) {
 			return false;
 		}
-		if (currentPublication instanceof Newspaper) {
+		if (this.currentPublication instanceof Newspaper) {
 			return false;
 		} else {
 			return true;
@@ -283,26 +276,35 @@ public class PublicationMB implements Serializable {
 
 	/**
 	 * Return the authors of the current publication
-	 * 
+	 *
 	 * @return List<Authors>
 	 */
 	public List<Author> getAuthors() {
-		if (authors != null) {
-			authors.clear();
+		if (this.authors != null) {
+			this.authors.clear();
 		}
-		if (currentPublication instanceof Book) {
+		if (this.currentPublication instanceof Book) {
 			this.authors = ((Book) this.currentPublication).getAuthors();
 		}
-		if (currentPublication instanceof Magazine) {
+		if (this.currentPublication instanceof Magazine) {
 			this.authors = ((Magazine) this.currentPublication).getAuthors();
 		}
 		return this.authors;
 	}
 
-	/**
+	/*
 	 * Getters and setters for private variables
 	 */
-	public void setAuthors(List<Author> authors) {
+
+	public String getType() {
+		return this.type;
+	}
+
+	public void setType(final String type) {
+		this.type = type;
+	}
+
+	public void setAuthors(final List<Author> authors) {
 		this.authors = authors;
 	}
 
@@ -310,7 +312,7 @@ public class PublicationMB implements Serializable {
 		return this.currentAuthors;
 	}
 
-	public void setCurrentAuthors(List<Author> currentAuthors) {
+	public void setCurrentAuthors(final List<Author> currentAuthors) {
 		this.currentAuthors = currentAuthors;
 	}
 
@@ -318,7 +320,7 @@ public class PublicationMB implements Serializable {
 		return this.currentPublisher;
 	}
 
-	public void setCurrentPublisher(Publisher currentPublisher) {
+	public void setCurrentPublisher(final Publisher currentPublisher) {
 		this.currentPublisher = currentPublisher;
 	}
 
@@ -330,23 +332,23 @@ public class PublicationMB implements Serializable {
 		return this.currentPublication;
 	}
 
-	public void setCurrentPublication(Publication currentPublication) {
+	public void setCurrentPublication(final Publication currentPublication) {
 		this.currentPublication = currentPublication;
 	}
 
 	public PublicationFilter getFilter() {
-		return filter;
+		return this.filter;
 	}
 
-	public void setFilter(PublicationFilter filter) {
+	public void setFilter(final PublicationFilter filter) {
 		this.filter = filter;
 	}
 
 	public Date getDate() {
-		return date;
+		return this.date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(final Date date) {
 		this.date = date;
 	}
 }

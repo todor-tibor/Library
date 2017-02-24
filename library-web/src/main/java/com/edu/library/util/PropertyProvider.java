@@ -9,6 +9,11 @@ import javax.enterprise.context.SessionScoped;
 
 import org.jboss.logging.Logger;
 
+/**
+ * Property provider to get messages from resource bundle using property name
+ *
+ * @author sipost
+ */
 @SessionScoped
 public class PropertyProvider implements Serializable {
 
@@ -38,6 +43,11 @@ public class PropertyProvider implements Serializable {
 		}
 	}
 
+	/**
+	 * Reset Resource bundle using the new locale
+	 * 
+	 * @param locale
+	 */
 	public void setLocale(final Locale locale) {
 		this.RESOURCE_BUNDLE = ResourceBundle.getBundle("errorMessages", locale);
 	}

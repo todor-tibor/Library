@@ -20,7 +20,7 @@
 				<p:commandButton value="#{msg['search.button']}"
 					update="publicationDT"
 					action="#{publicationBean.search(srch_publication.value)}">
-					<f:param name="p_value" value="#{srch_publication.value}" />
+					<f:param name="searchTxt" value="#{srch_publication.value}" />
 				</p:commandButton>
 
 				<p:commandButton value="#{msg['filter.button']}"
