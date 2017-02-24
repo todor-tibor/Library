@@ -26,6 +26,6 @@ public interface IBorrowService extends IService<Borrow> {
 	 *            filtered of a borrow object.
 	 * @return List of Borrows
 	 */
-	public List<Borrow> filterBorrow(BorrowFilter filter);
+	public List<Borrow> filterBorrow(final BorrowFilter filter);
 
 }
