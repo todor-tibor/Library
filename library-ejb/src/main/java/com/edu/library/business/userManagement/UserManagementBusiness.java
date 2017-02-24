@@ -14,7 +14,7 @@ import com.edu.library.model.User;
 /**
  * Business implementation of user management. * (same functions as in the
  * IPublisherService interface)
- * 
+ *
  * @author kiska
  */
 
@@ -25,36 +25,35 @@ public class UserManagementBusiness {
 	private UserDao dataAcces;
 
 	public List<User> getAll() {
-		return dataAcces.getAll();
+		return this.dataAcces.getAll();
 	}
 
-	public List<User> search(String userName) {
-		return dataAcces.search(userName);
+	public List<User> search(final String userName) {
+		return this.dataAcces.search(userName);
 	}
 
-	public User getById(String userId) {
-		return dataAcces.getById(userId);
+	public User getById(final String userId) {
+		return this.dataAcces.getById(userId);
 	}
 
-	public void store(User user) {
-		dataAcces.store(user);
+	public void store(final User user) {
+		this.dataAcces.store(user);
 	}
 
-	public void update(User user) {
-		dataAcces.update(user);
+	public void update(final User user) {
+		this.dataAcces.update(user);
 	}
 
-	public void remove(String userId) {
-		User pub = dataAcces.getById(userId);
+	public void remove(final String userId) {
+		final User pub = this.dataAcces.getById(userId);
 		if (pub.getBorrows().isEmpty()) {
-			dataAcces.remove(pub);
+			this.dataAcces.remove(pub);
 		} else {
 			throw new BusinessException(ErrorMessages.ERROR_BOUND);
 		}
 	}
 
-	public User searchForUserName(String userName) {
-		return dataAcces.getByUserName(userName);
+	public User searchForUserName(final String userName) {
+		return this.dataAcces.getByUserName(userName);
 	}
-
 }

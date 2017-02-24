@@ -13,7 +13,7 @@ import com.edu.library.model.Role;
 /**
  * Implements basic business logic for publisher management. (same functions as
  * in the IRoleService interface)
- * 
+ *
  * @author kiska
  * @author sipost
  */
@@ -25,29 +25,29 @@ public class RoleManagementBusiness {
 	private RoleBean dataAcces;
 
 	public List<Role> getAll() {
-		return dataAcces.getAll();
+		return this.dataAcces.getAll();
 	}
 
-	public List<Role> search(String p_searchTxt) {
-		return dataAcces.search(p_searchTxt);
+	public List<Role> search(final String searchText) {
+		return this.dataAcces.search(searchText);
 	}
 
-	public Role getById(String p_id) {
-		return dataAcces.getById(p_id);
+	public Role getById(final String id) {
+		return this.dataAcces.getById(id);
 	}
 
-	public void store(Role p_value) {
-		dataAcces.store(p_value);
+	public void store(final Role role) {
+		this.dataAcces.store(role);
 	}
 
-	public void update(Role p_user) {
-		dataAcces.update(p_user);
+	public void update(final Role role) {
+		this.dataAcces.update(role);
 	}
 
-	public void remove(String p_id) {
-		Role r = dataAcces.getById(p_id);
+	public void remove(final String id) {
+		final Role r = this.dataAcces.getById(id);
 		ServiceValidation.checkNotNull(r);
-		dataAcces.remove(r);
+		this.dataAcces.remove(r);
 	}
 
 }
