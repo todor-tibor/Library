@@ -25,7 +25,7 @@ import com.edu.library.util.MessageService;
 @ApplicationScoped
 public class LoginMB implements Serializable {
 
-	private final Logger oLogger = Logger.getLogger(LoginMB.class);
+	private final Logger logger = Logger.getLogger(LoginMB.class);
 	private static final long serialVersionUID = -4702598250751689454L;
 
 	@Inject
@@ -53,12 +53,13 @@ public class LoginMB implements Serializable {
 	 * @return - the site to which to redirect.
 	 */
 	public String isAdmin() {
-		Role tmp = new Role();
+		final Role tmp = new Role();
 		tmp.setRole(RoleType.LIBRARIAN.toString());
-		if (this.roles.contains(tmp)) {
+		if (this.roles != null && this.roles.contains(tmp)) {
 			return "";
-		} else
+		} else {
 			return "index";
+		}
 	}
 
 	/**
@@ -67,12 +68,13 @@ public class LoginMB implements Serializable {
 	 * @return - the site to which to redirect.
 	 */
 	public String isReader() {
-		Role tmp = new Role();
+		final Role tmp = new Role();
 		tmp.setRole(RoleType.READER.toString());
 		if (this.roles.contains(tmp)) {
 			return "";
-		} else
+		} else {
 			return "index";
+		}
 	}
 
 	/**
@@ -81,15 +83,15 @@ public class LoginMB implements Serializable {
 	 * displays a user friendly message.
 	 */
 	private void checkRole() {
-		Role tmp = new Role();
+		final Role tmp = new Role();
 		tmp.setRole("LIBRARIAN");
 		if (this.roles.contains(tmp)) {
 			try {
 				FacesContext.getCurrentInstance().getExternalContext().redirect("admin.xhtml");
 				FacesContext.getCurrentInstance().getViewRoot()
 						.setLocale(FacesContext.getCurrentInstance().getViewRoot().getLocale());
-			} catch (IOException e) {
-				this.oLogger.error(e);
+			} catch (final IOException e) {
+				this.logger.error(e);
 				this.message.fatal(e.getMessage());
 			}
 		} else {
@@ -97,11 +99,10 @@ public class LoginMB implements Serializable {
 			if (this.roles.contains(tmp)) {
 				try {
 					FacesContext.getCurrentInstance().getExternalContext().redirect("reader.xhtml");
-				} catch (IOException e) {
-					this.oLogger.error(e);
+				} catch (final IOException e) {
+					this.logger.error(e);
 					this.message.fatal(e.getMessage());
 				}
-
 			} else {
 				this.message.error("login.invalid");
 			}
@@ -109,7 +110,7 @@ public class LoginMB implements Serializable {
 	}
 
 	/**
-	 * Search for user by username and stores them in userList.
+	 * Search for user by user name and stores them in userList.
 	 *
 	 * @param p_searchTxt
 	 *            username.
@@ -121,8 +122,8 @@ public class LoginMB implements Serializable {
 				this.roles = this.oLoginBean.login(user_name, password);
 				this.userName = user_name;
 				checkRole();
-			} catch (Exception e) {
-				this.oLogger.error(e);
+			} catch (final Exception e) {
+				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
 			}
 		} else {
@@ -143,8 +144,8 @@ public class LoginMB implements Serializable {
 		this.roles.clear();
 		try {
 			FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
-		} catch (IOException e) {
-			this.oLogger.error(e);
+		} catch (final IOException e) {
+			this.logger.error(e);
 			this.message.fatal(e.getMessage());
 		}
 	}

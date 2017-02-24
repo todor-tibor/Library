@@ -20,6 +20,11 @@ public class ExceptionHandler implements Serializable {
 	@Inject
 	MessageService message;
 
+	/**
+	 * Shows info, warning or error messages based on {@code e}
+	 * 
+	 * @param e
+	 */
 	public void showMessage(final Exception e) {
 		Throwable t = e;
 
@@ -27,7 +32,7 @@ public class ExceptionHandler implements Serializable {
 			t = t.getCause();
 		}
 		if (t instanceof LibraryException) {
-			ErrorLevel level = ((LibraryException) t).getLevel();
+			final ErrorLevel level = ((LibraryException) t).getLevel();
 			if (ErrorLevel.ERROR.equals(level)) {
 				this.message.error(t.getMessage());
 			}

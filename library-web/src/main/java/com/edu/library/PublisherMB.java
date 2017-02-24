@@ -24,7 +24,7 @@ import com.edu.library.util.MessageService;
 @SessionScoped
 public class PublisherMB implements Serializable {
 
-	private final Logger oLogger = Logger.getLogger(PublisherMB.class);
+	private final Logger logger = Logger.getLogger(PublisherMB.class);
 	private static final long serialVersionUID = -4702598250751689454L;
 
 	@Inject
@@ -54,8 +54,8 @@ public class PublisherMB implements Serializable {
 		this.publishersList.clear();
 		try {
 			this.publishersList = this.oPublisherBean.getAll();
-		} catch (Exception e) {
-			this.oLogger.error(e);
+		} catch (final Exception e) {
+			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		}
 		return this.publishersList;
@@ -74,8 +74,8 @@ public class PublisherMB implements Serializable {
 			this.publishersList.clear();
 			try {
 				this.publishersList = this.oPublisherBean.search(searchTxt);
-			} catch (Exception e) {
-				this.oLogger.error(e);
+			} catch (final Exception e) {
+				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
 			}
 		} else {
@@ -100,13 +100,12 @@ public class PublisherMB implements Serializable {
 			this.message.error("managedbean.empty");
 		}
 		try {
-			Publisher tmpPublisher = new Publisher();
+			final Publisher tmpPublisher = new Publisher();
 			tmpPublisher.setName(value);
 			this.oPublisherBean.store(tmpPublisher);
 			this.publishersList.add(tmpPublisher);
-			this.message.info("managedBean.storeSuccess");
-		} catch (Exception e) {
-			this.oLogger.error(e);
+		} catch (final Exception e) {
+			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		}
 	}
@@ -124,9 +123,8 @@ public class PublisherMB implements Serializable {
 				this.currentPublisher.setName(newTxt);
 				this.oPublisherBean.update(this.currentPublisher);
 				this.publishersList = this.oPublisherBean.getAll();
-				this.message.info("managedbean.updateSuccess");
-			} catch (Exception e) {
-				this.oLogger.error(e);
+			} catch (final Exception e) {
+				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
 
 			}
@@ -145,9 +143,8 @@ public class PublisherMB implements Serializable {
 			try {
 				this.oPublisherBean.remove(this.currentPublisher.getUuid());
 				this.publishersList = this.oPublisherBean.getAll();
-				this.message.info("managedbean.deleteSuccess");
-			} catch (Exception e) {
-				this.oLogger.error(e);
+			} catch (final Exception e) {
+				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
 			}
 		}

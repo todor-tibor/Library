@@ -11,12 +11,11 @@ import javax.persistence.PersistenceException;
 import org.jboss.logging.Logger;
 
 import com.edu.library.data.exception.TechnicalException;
-import com.edu.library.model.Publication;
 import com.edu.library.model.Publisher;
 
 /**
  * CRUD operations of Publisher Entity
- * 
+ *
  * @author nagys
  *
  */
@@ -25,74 +24,116 @@ import com.edu.library.model.Publisher;
 @LocalBean
 public class PublisherManager {
 	@PersistenceContext(unitName = "WildflyUsers")
-	private EntityManager oEntityManager;
-	private Logger oLogger = Logger.getLogger(Publisher.class);
+	private EntityManager entityManager;
+	private final Logger logger = Logger.getLogger(Publisher.class);
 
+	/**
+	 * Returns all publishers in the database.
+	 *
+	 * @return - List of publishers
+	 */
 	public List<Publisher> getAll() {
 		try {
-			return oEntityManager.createNamedQuery("Publisher.findAll", Publisher.class).getResultList();
-		} catch (PersistenceException e) {
-			oLogger.error(e);
+			return this.entityManager.createNamedQuery("Publisher.findAll", Publisher.class).getResultList();
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 	}
 
-	public List<Publisher> search(String p_searchTxt) {
+	/**
+	 * Searches for a publisher in the database by the given parameter
+	 * {@code searchText}
+	 *
+	 * @param searchText
+	 *            - the name or part of the name of the publisher to search for
+	 * @return - List with all the publishers that match the search criteria
+	 */
+	public List<Publisher> search(final String searchText) {
 		try {
 
-			return oEntityManager.createNamedQuery("Publisher.findByName", Publisher.class)
-					.setParameter("name", "%" + p_searchTxt + "%").getResultList();
-		} catch (PersistenceException e) {
-			oLogger.error(e);
+			return this.entityManager.createNamedQuery("Publisher.findByName", Publisher.class)
+					.setParameter("name", "%" + searchText + "%").getResultList();
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 
 		}
 	}
 
-	public Publisher getById(String p_id) {
+	/**
+	 * Return the publisher in the database by the given parameter {@code id}
+	 *
+	 * @param id
+	 *            - the unique identifier of a publisher
+	 * @return - a publisher
+	 */
+
+	public Publisher getById(final String id) {
 		try {
-			return oEntityManager.createNamedQuery("Publisher.findById", Publisher.class).setParameter("uuid", p_id)
+			return this.entityManager.createNamedQuery("Publisher.findById", Publisher.class).setParameter("uuid", id)
 					.getSingleResult();
-		} catch (PersistenceException e) {
-			oLogger.error(e);
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 
 	}
 
-	public void store(Publisher p_value) {
+	/**
+	 * Save the publisher in the database by the given parameter
+	 * {@code publisher}
+	 *
+	 * @param publisher
+	 *            - a publisher type object containing all the necessary
+	 *            information for saving a publisher to the DB.
+	 */
+	public void store(final Publisher publisher) {
 		try {
-			oEntityManager.persist(p_value);
-			oEntityManager.flush();
-		} catch (PersistenceException e) {
-			oLogger.error(e);
+			this.entityManager.persist(publisher);
+			this.entityManager.flush();
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 
 	}
 
-	public void update(Publisher p_user) {
+	/**
+	 * Update the publisher in the database by the given parameter
+	 * {@code publisher}
+	 *
+	 * @param publisher
+	 *            - the publisher object on which the update will be done
+	 */
+	public void update(final Publisher updatePublisher) {
 		try {
-			Publisher publisher = getById(p_user.getUuid());
+			final Publisher publisher = getById(updatePublisher.getUuid());
 			if (publisher != null) {
-				oEntityManager.merge(p_user);
-				oEntityManager.flush();
+				this.entityManager.merge(updatePublisher);
+				this.entityManager.flush();
 			}
 
-		} catch (PersistenceException e) {
-			oLogger.error(e);
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 
 	}
 
-	public void remove(Publisher publisher) {
+	/**
+	 * Remove the publisher from the database by the given parameter {@code id}
+	 *
+	 * @param id
+	 *            - the unique identifier of the publisher
+	 */
+	public void remove(final Publisher publisher) {
 		try {
-			oEntityManager.remove(publisher);
-			oEntityManager.flush();
+			this.entityManager.remove(publisher);
+			this.entityManager.flush();
 
-		} catch (PersistenceException e) {
-			oLogger.error(e);
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 

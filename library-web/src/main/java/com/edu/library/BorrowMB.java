@@ -30,7 +30,7 @@ import com.edu.library.util.MessageService;
 @SessionScoped
 public class BorrowMB implements Serializable {
 
-	private final Logger oLogger = Logger.getLogger(BorrowMB.class);
+	private final Logger logger = Logger.getLogger(BorrowMB.class);
 	private static final long serialVersionUID = 1479586528417507035L;
 
 	@Inject
@@ -78,8 +78,8 @@ public class BorrowMB implements Serializable {
 		this.borrows.clear();
 		try {
 			this.borrows = this.oBorrowBean.getAll();
-		} catch (Exception e) {
-			this.oLogger.error(e);
+		} catch (final Exception e) {
+			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		}
 		return this.borrows;
@@ -103,9 +103,8 @@ public class BorrowMB implements Serializable {
 			try {
 				this.oBorrowBean.store(p_Borrow);
 				this.borrows.add(p_Borrow);
-				this.message.info("managedBean.storeSuccess");
-			} catch (Exception e) {
-				this.oLogger.error(e.getMessage());
+			} catch (final Exception e) {
+				this.logger.error(e.getMessage());
 				this.exceptionHandler.showMessage(e);
 			}
 		}
@@ -121,9 +120,8 @@ public class BorrowMB implements Serializable {
 			try {
 				this.oBorrowBean.remove(this.borrow.getUuid());
 				getAll();
-				this.message.info("managedbean.deleteSuccess");
-			} catch (Exception e) {
-				this.oLogger.error(e);
+			} catch (final Exception e) {
+				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
 			}
 		}
@@ -137,16 +135,16 @@ public class BorrowMB implements Serializable {
 		try {
 			this.oBorrowBean.update(this.borrow);
 			getAll();
-			this.message.info("managedbean.updateSuccess");
-		} catch (Exception e) {
-			this.oLogger.error(e);
+		} catch (final Exception e) {
+			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		}
 
 	}
 
 	/**
-	 * Search borrow by User_name and/or Publication_title
+	 * Search borrow by User_name and/or Publication_title given by
+	 * {@code searchTxt}
 	 *
 	 * @param searchTxt
 	 *            -user name or publication title
@@ -156,8 +154,8 @@ public class BorrowMB implements Serializable {
 			this.borrows.clear();
 			try {
 				this.borrows = this.oBorrowBean.search(searchTxt);
-			} catch (Exception e) {
-				this.oLogger.error(e);
+			} catch (final Exception e) {
+				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
 			}
 		} else {
@@ -166,7 +164,7 @@ public class BorrowMB implements Serializable {
 	}
 
 	/**
-	 * Check if is selected Borrow from data table.
+	 * Check if there is selected Borrow from data table.
 	 *
 	 * @return true if currently selected borrow not null
 	 */
@@ -184,15 +182,14 @@ public class BorrowMB implements Serializable {
 	 * @return list of filtered borrows
 	 */
 	public List<Borrow> filterBorrow() {
-		this.oLogger.info("filter publication " + this.filter.getTitle());
 		this.borrows.clear();
 		try {
 			this.borrows = this.oBorrowBean.filterBorrow(this.filter);
 			if (this.borrows.isEmpty()) {
 				this.message.warn("ejb.message.noEntity");
 			}
-		} catch (Exception e) {
-			this.oLogger.error(e);
+		} catch (final Exception e) {
+			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		}
 		return this.borrows;

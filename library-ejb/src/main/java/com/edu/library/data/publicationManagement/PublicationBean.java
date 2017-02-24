@@ -25,7 +25,7 @@ import com.edu.library.model.Publisher;
 
 /**
  * CRUD operations of Publication Entity
- * 
+ *
  * @author sipost
  *
  */
@@ -36,138 +36,198 @@ public class PublicationBean {
 
 	@EJB
 	PublisherManager publisherBean;
-	
+
 	@EJB
 	AuthorBean authorBean;
 
 	@PersistenceContext(unitName = "WildflyUsers")
-	private EntityManager oEntityManager;
-	private Logger oLogger = Logger.getLogger(PublicationBean.class);
+	private EntityManager entityManager;
+	private final Logger logger = Logger.getLogger(PublicationBean.class);
+
+	/**
+	 * Returns all publications in the database.
+	 *
+	 * @return - List of publications
+	 */
 
 	public List<Publication> getAll() {
 		try {
-			return oEntityManager.createNamedQuery("Publication.findAll", Publication.class).getResultList();
-		} catch (PersistenceException e) {
-			oLogger.error(e);
+			return this.entityManager.createNamedQuery("Publication.findAll", Publication.class).getResultList();
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 	}
 
-	public List<Publication> search(String p_searchTxt) {
+	/**
+	 * Searches for a publication in the database by the given parameter
+	 * {@code searchText}
+	 *
+	 * @param searchText
+	 *            - the title or part of the title of the publication to search
+	 *            for
+	 * @return - List with all the publications that match the search criteria
+	 */
+
+	public List<Publication> search(final String searchText) {
 		try {
-			return oEntityManager.createNamedQuery("Publication.searchByName", Publication.class)
-					.setParameter("title", "%" + p_searchTxt + "%").getResultList();
-		} catch (PersistenceException e) {
-			oLogger.error(e);
+			return this.entityManager.createNamedQuery("Publication.searchByName", Publication.class)
+					.setParameter("title", "%" + searchText + "%").getResultList();
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 	}
 
-	public Publication getByName(String p_searchTxt) {
+	/**
+	 * Return the publication in the database by the given parameter
+	 * {@code publication}
+	 *
+	 * @param publication
+	 *            - the title of a publication
+	 * @return - a publication
+	 */
+	public Publication getByName(final String publication) {
 		try {
-			return oEntityManager.createNamedQuery("Publication.getByName", Publication.class)
-					.setParameter("title", p_searchTxt).getSingleResult();
-		} catch (PersistenceException e) {
-			oLogger.error(e);
+			return this.entityManager.createNamedQuery("Publication.getByName", Publication.class)
+					.setParameter("title", publication).getSingleResult();
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 	}
 
-	public Publication getById(String p_id) {
+	/**
+	 * Return the publication in the database by the given parameter {@code id}
+	 *
+	 * @param id
+	 *            - the unique identifier of a publication
+	 * @return - a publication
+	 */
+	public Publication getById(final String id) {
 		try {
-			return oEntityManager.createNamedQuery("Publication.getById", Publication.class).setParameter("uuid", p_id)
-					.getSingleResult();
-		} catch (PersistenceException e) {
-			oLogger.error(e);
+			return this.entityManager.createNamedQuery("Publication.getById", Publication.class)
+					.setParameter("uuid", id).getSingleResult();
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 	}
 
-	public void store(Publication p_value) {
+	/**
+	 * Save the publication in the database by the given parameter
+	 * {@code publication}
+	 *
+	 * @param publication
+	 *            - a publication type object containing all the necessary
+	 *            information for saving a publication to the DB.
+	 */
+	public void store(final Publication publication) {
 		try {
-			oEntityManager.persist(p_value);
-			oEntityManager.flush();
-		} catch (PersistenceException e) {
-			oLogger.error(e);
+			this.entityManager.persist(publication);
+			this.entityManager.flush();
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 	}
 
-	public void update(Publication p_user) {
-		oLogger.info("-------------" + p_user);
+	/**
+	 * Update the publication in the database by the given parameter
+	 * {@code publication}
+	 *
+	 * @param publication
+	 *            - the publication object on which the update will be done
+	 */
+	public void update(final Publication publication) {
 		try {
-			oEntityManager.merge(p_user);
-			oEntityManager.flush();
-		} catch (PersistenceException e) {
-			oLogger.error(e);
+			this.entityManager.merge(publication);
+			this.entityManager.flush();
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 	}
 
-	public void remove(Publication pub) {
+	/**
+	 * Remove the publication from the database by the given parameter
+	 * {@code id}
+	 *
+	 * @param id
+	 *            - the unique identifier of the publication
+	 */
+	public void remove(final Publication pub) {
 		try {
-			oEntityManager.remove(pub);
-			oEntityManager.flush();
-		} catch (PersistenceException e) {
-			oLogger.error(e);
+			this.entityManager.remove(pub);
+			this.entityManager.flush();
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 	}
 
-	public List<Borrow> getBorrow(String title) {
+	/**
+	 * Lists all borrowings from the database that a user has, given by the
+	 * {@code title}
+	 *
+	 * @param title
+	 *            - the title of the publication
+	 * @return - list of borrowings
+	 */
+	public List<Borrow> getBorrow(final String title) {
 
 		try {
-			List<Borrow> u = oEntityManager.createNamedQuery("Publication.findBorrow", Borrow.class)
+			final List<Borrow> u = this.entityManager.createNamedQuery("Publication.findBorrow", Borrow.class)
 					.setParameter("title", "%" + title + "%").getResultList();
 			return u;
-		} catch (PersistenceException e) {
-			oLogger.error(e);
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 	}
 
-	public List<Publication> filterPublication(PublicationFilter filter) {
+	/**
+	 * Searches for all publications in the database that match certain criteria
+	 * given by {@code filter}
+	 *
+	 * @param filter
+	 *            - a custom filter for publications, which represents the
+	 *            fields that can be filtered
+	 * @return - list of publications that match the search criteria
+	 */
+	public List<Publication> filterPublication(final PublicationFilter filter) {
 
-		CriteriaBuilder qb = oEntityManager.getCriteriaBuilder();
-		CriteriaQuery<Publication> cq = qb.createQuery(Publication.class);
-		Root<Publication> publication = cq.from(Publication.class);
+		final CriteriaBuilder qb = this.entityManager.getCriteriaBuilder();
+		final CriteriaQuery<Publication> cq = qb.createQuery(Publication.class);
+		final Root<Publication> publication = cq.from(Publication.class);
 
 		// Constructing list of parameters
-		List<Predicate> predicates = new ArrayList<Predicate>();
+		final List<Predicate> predicates = new ArrayList<Predicate>();
 
 		// Adding predicates in case of parameter not being null
 		if (filter.getTitle() != null && filter.getTitle().length() >= 3) {
-			oLogger.warn("-----title: " + filter.getTitle());
 			predicates.add(qb.like(publication.get("title"), "%" + filter.getTitle() + "%"));
 		}
 		if (filter.getPublisher() != null && filter.getPublisher().length() >= 3) {
-			List<Publisher> publishers = publisherBean.search(filter.getPublisher());
-			oLogger.warn("-------publisher.name: " + filter.getPublisher());
+			final List<Publisher> publishers = this.publisherBean.search(filter.getPublisher());
 			// publication.get("authors").in(filter.getAuthor());
 			predicates.add(publication.get("publisher").in(publishers));
 		}
 		if (filter.isOnStock() == true) {
-			oLogger.warn("--------onStock: " + filter.isOnStock());
 			predicates.add(qb.greaterThan(publication.get("onStock"), 0));
 		}
 		if (filter.getFrom() != null) {
-			oLogger.warn("-----from: " + filter.getFrom());
 			if (filter.getUntil() == null) {
 				filter.setUntil(new Date());
-				oLogger.warn("-----until: " + filter.getUntil());
 			}
 			predicates.add(qb.between(publication.get("publicationDate"), filter.getFrom(), filter.getUntil()));
 		}
-		/*if (filter.getAuthor() != null && filter.getAuthor().length() > 3) {
-			List<Author> authors = authorBean.search(filter.getAuthor());
-			predicates.add(publication.get("authors").in(authors));
-		}*/
 		// query itself
 		cq.select(publication).where(qb.and(predicates.toArray(new Predicate[] {})));
 		// execute query and do something with result
 		try {
-			return oEntityManager.createQuery(cq).getResultList();
-		} catch (PersistenceException e) {
+			return this.entityManager.createQuery(cq).getResultList();
+		} catch (final PersistenceException e) {
 			throw new TechnicalException(e);
 		}
 	}

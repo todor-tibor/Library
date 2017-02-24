@@ -10,14 +10,14 @@ import com.edu.library.exception.LibraryException;
 
 /**
  * Specify exception for DAO layer.
- * 
+ *
  * @author sipost
  */
 public class TechnicalException extends LibraryException {
 
 	private static final long serialVersionUID = 5633917663462543264L;
 
-	public TechnicalException(PersistenceException e) {
+	public TechnicalException(final PersistenceException e) {
 		String message = "ejb.message.noEntity";
 		if (e instanceof EntityNotFoundException) {
 			message = "ejb.message.noEntity";
@@ -29,7 +29,7 @@ public class TechnicalException extends LibraryException {
 		new TechnicalException(message, e);
 	}
 
-	public TechnicalException(String message, Throwable cause) {
+	public TechnicalException(final String message, final Throwable cause) {
 		super(message, ErrorLevel.ERROR);
 	}
 }

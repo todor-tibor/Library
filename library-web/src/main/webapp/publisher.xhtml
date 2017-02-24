@@ -26,7 +26,7 @@
 					selection="#{publisherbean.currentPublisher}"
 					rowKey="#{publisher.uuid}">
 					<p:ajax event="rowSelect" listener="#{publisherbean.isSelected}"
-						update="publisherDT" />
+						update="renamebuttonP deletebuttonP" />
 					<f:facet name="header">
             			#{publishMan['publishers.text']}
         			</f:facet>
@@ -36,12 +36,12 @@
 						<h:outputText value="#{publisher.name}" />
 					</p:column>
 					<f:facet name="footer">
-						<p:commandButton process="publisherDT" icon="ui-icon-search"
+						<p:commandButton id="renamebuttonP" process="publisherDT" icon="ui-icon-search"
 							value="#{msg['rename.button']}" update="first"
 							oncomplete="PF('publisherDialog').show()"
 							disabled="#{publisherbean.currentPublisher == null}"/>
 
-						<p:commandButton process="publisherDT" icon="fa-remove"
+						<p:commandButton id="deletebuttonP" process="publisherDT" icon="fa-remove"
 							value="#{msg['delete.button']}"
 							action="#{publisherbean.remove()}" update="publisherDT"
 							disabled="#{publisherbean.currentPublisher == null}" />

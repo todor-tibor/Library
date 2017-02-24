@@ -19,7 +19,7 @@ public class PropertyProvider implements Serializable {
 
 	private static final long serialVersionUID = 6253902624155383715L;
 
-	private final Logger oLogger = Logger.getLogger(PropertyProvider.class);
+	private final Logger logger = Logger.getLogger(PropertyProvider.class);
 	/**
 	 * Represents the ResourceBundle for user friendly error messages used at
 	 * Internationalization.
@@ -27,7 +27,7 @@ public class PropertyProvider implements Serializable {
 	private ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("errorMessages", Locale.ENGLISH);
 
 	/**
-	 * get property using ResourceBundle
+	 * Get property using ResourceBundle
 	 *
 	 * @param property
 	 *            - name of property
@@ -37,15 +37,15 @@ public class PropertyProvider implements Serializable {
 	public String getProperty(final String property) {
 		try {
 			return this.RESOURCE_BUNDLE.getString(property);
-		} catch (MissingResourceException e) {
-			this.oLogger.error("Missing Resource");
+		} catch (final MissingResourceException e) {
+			this.logger.error("Missing Resource");
 			return "!" + property + "!";
 		}
 	}
 
 	/**
 	 * Reset Resource bundle using the new locale
-	 * 
+	 *
 	 * @param locale
 	 */
 	public void setLocale(final Locale locale) {
