@@ -54,7 +54,8 @@ public class PublicationFilter {
 	}
 
 	public void setFrom(final Date from) {
-		this.from = from;
+		if (from != null)
+			this.from = from;
 	}
 
 	public Date getUntil() {
