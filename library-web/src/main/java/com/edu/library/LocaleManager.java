@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.edu.library;
 
@@ -16,6 +16,8 @@ import javax.inject.Named;
 import com.edu.library.util.PropertyProvider;
 
 /**
+ * Locale manager for internationalization
+ *
  * @author gallb
  * @author sipost
  */
@@ -25,35 +27,42 @@ import com.edu.library.util.PropertyProvider;
 public class LocaleManager implements Serializable {
 
 	private static final long serialVersionUID = -296467386290222310L;
+
+	/**
+	 * Current locale of the application
+	 */
 	private Locale userLocale;
 
 	@Inject
 	private PropertyProvider propertyProvider;
 
+	/**
+	 * Gets Locals from the browser and set the locale of the application.
+	 */
 	@PostConstruct
 	private void init() {
-		Iterator<Locale> locales=FacesContext.getCurrentInstance().getExternalContext().getRequestLocales();
-		while(locales.hasNext()){
-			userLocale=locales.next();
-			if("hu".equals(userLocale.getLanguage()) || "HU".equals(userLocale.getCountry())){
-				userLocale=new Locale("hu", "HU");
-				propertyProvider.setLocale(userLocale);
+		Iterator<Locale> locales = FacesContext.getCurrentInstance().getExternalContext().getRequestLocales();
+		while (locales.hasNext()) {
+			this.userLocale = locales.next();
+			if ("hu".equals(this.userLocale.getLanguage()) || "HU".equals(this.userLocale.getCountry())) {
+				this.userLocale = new Locale("hu", "HU");
+				this.propertyProvider.setLocale(this.userLocale);
 				return;
-			}else if("en".equals(userLocale.getLanguage()) || "US".equals(userLocale.getCountry())){
-				userLocale=Locale.ENGLISH;
-				propertyProvider.setLocale(userLocale);
+			} else if ("en".equals(this.userLocale.getLanguage()) || "US".equals(this.userLocale.getCountry())) {
+				this.userLocale = Locale.ENGLISH;
+				this.propertyProvider.setLocale(this.userLocale);
 				return;
 			}
 		}
-		userLocale=Locale.ENGLISH;
-		propertyProvider.setLocale(userLocale);
+		this.userLocale = Locale.ENGLISH;
+		this.propertyProvider.setLocale(this.userLocale);
 	}
 
-	public void setUserLocale(Locale userLocale) {
+	public void setUserLocale(final Locale userLocale) {
 		this.userLocale = userLocale;
 	}
 
 	public Locale getUserLocale() {
-		return userLocale;
+		return this.userLocale;
 	}
 }

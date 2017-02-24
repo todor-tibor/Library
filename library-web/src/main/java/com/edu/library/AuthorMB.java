@@ -12,10 +12,11 @@ import org.jboss.logging.Logger;
 
 import com.edu.library.model.Author;
 import com.edu.library.util.ExceptionHandler;
+import com.edu.library.util.MessageService;
 
 /**
  * Author manager.
- * 
+ *
  * @author sipost
  * @author kiska
  */
@@ -34,34 +35,20 @@ public class AuthorMB implements Serializable {
 
 	@Inject
 	MessageService message;
+
 	/**
 	 * Currently displayed authors.
 	 */
 	private List<Author> authorList = new ArrayList<>();
+
 	/**
 	 * Currently selected author.
 	 */
 	private Author currentAuthor = null;
 
 	/**
-	 * Getters and setters for private variables
-	 * 
-	 */
-	public List<Author> getAuthorList() {
-		return this.authorList;
-	}
-
-	public Author getCurrentAuthor() {
-		return this.currentAuthor;
-	}
-
-	public void setCurrentAuthor(final Author currentAuthor) {
-		this.currentAuthor = currentAuthor;
-	}
-
-	/**
 	 * Requests all author objects and stores them in authorList.
-	 * 
+	 *
 	 * @return List of all authors from database.
 	 */
 	public List<Author> getAll() {
@@ -77,7 +64,7 @@ public class AuthorMB implements Serializable {
 
 	/**
 	 * Search for author by author name and stores them in authorList.
-	 * 
+	 *
 	 * @param searchTxt
 	 *            author's name.
 	 * @return List of author objects found.
@@ -101,7 +88,7 @@ public class AuthorMB implements Serializable {
 
 	/**
 	 * Stores new author with author name.
-	 * 
+	 *
 	 * @param value
 	 *            - author's name
 	 */
@@ -124,7 +111,7 @@ public class AuthorMB implements Serializable {
 
 	/**
 	 * Renames currently selected author.
-	 * 
+	 *
 	 * @param newValue
 	 *            - new author name.
 	 */
@@ -164,7 +151,7 @@ public class AuthorMB implements Serializable {
 
 	/**
 	 * Checks whether the current author is selected.
-	 * 
+	 *
 	 * @return - Returns true if it is, false otherwise.
 	 */
 	public Boolean isSelected() {
@@ -173,5 +160,21 @@ public class AuthorMB implements Serializable {
 		} else {
 			return true;
 		}
+	}
+
+	/**
+	 * Getters and setters for private variables
+	 *
+	 */
+	public List<Author> getAuthorList() {
+		return this.authorList;
+	}
+
+	public Author getCurrentAuthor() {
+		return this.currentAuthor;
+	}
+
+	public void setCurrentAuthor(final Author currentAuthor) {
+		this.currentAuthor = currentAuthor;
 	}
 }

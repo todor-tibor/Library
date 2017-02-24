@@ -14,19 +14,18 @@ import org.jboss.logging.Logger;
 import com.edu.library.model.Role;
 import com.edu.library.model.RoleType;
 import com.edu.library.util.ExceptionHandler;
+import com.edu.library.util.MessageService;
 
 /**
- *
- * 
  * Login functionalities for the web app.
- * 
+ *
  * @author kiska
  */
 @Named("loginbean")
 @ApplicationScoped
 public class LoginMB implements Serializable {
 
-	private Logger oLogger = Logger.getLogger(LoginMB.class);
+	private final Logger oLogger = Logger.getLogger(LoginMB.class);
 	private static final long serialVersionUID = -4702598250751689454L;
 
 	@Inject
@@ -37,28 +36,26 @@ public class LoginMB implements Serializable {
 
 	@Inject
 	MessageService message;
+
 	/**
-	 * 
+	 * User name
 	 */
 	private String userName;
+
+	/**
+	 * Currently logged in user roles
+	 */
 	private List<Role> roles;
-	private String currentRole;
-
-	public String getCurrentRole() {
-		return currentRole;
-	}
-
-	public void setCurrentRole(String currentRole) {
-		this.currentRole = currentRole;
-	}
 
 	/**
 	 * Checks whether the user is a librarian.
-	 * 
+	 *
 	 * @return - the site to which to redirect.
 	 */
 	public String isAdmin() {
-		if (RoleType.LIBRARIAN.name().equals(currentRole)) {
+		Role tmp = new Role();
+		tmp.setRole(RoleType.LIBRARIAN.toString());
+		if (this.roles.contains(tmp)) {
 			return "";
 		} else
 			return "index";
@@ -66,11 +63,13 @@ public class LoginMB implements Serializable {
 
 	/**
 	 * Checks whether the user is a reader.
-	 * 
+	 *
 	 * @return - the site to which to redirect.
 	 */
 	public String isReader() {
-		if (RoleType.READER.name().equals(currentRole)) {
+		Role tmp = new Role();
+		tmp.setRole(RoleType.READER.toString());
+		if (this.roles.contains(tmp)) {
 			return "";
 		} else
 			return "index";
@@ -84,58 +83,55 @@ public class LoginMB implements Serializable {
 	private void checkRole() {
 		Role tmp = new Role();
 		tmp.setRole("LIBRARIAN");
-		if (roles.contains(tmp)) {
-			setCurrentRole("LIBRARIAN");
+		if (this.roles.contains(tmp)) {
 			try {
 				FacesContext.getCurrentInstance().getExternalContext().redirect("admin.xhtml");
 				FacesContext.getCurrentInstance().getViewRoot()
 						.setLocale(FacesContext.getCurrentInstance().getViewRoot().getLocale());
 			} catch (IOException e) {
-				oLogger.error(e);
-				message.fatal(e.getMessage());
+				this.oLogger.error(e);
+				this.message.fatal(e.getMessage());
 			}
 		} else {
 			tmp.setRole("READER");
-			if (roles.contains(tmp)) {
-				setCurrentRole("READER");
+			if (this.roles.contains(tmp)) {
 				try {
 					FacesContext.getCurrentInstance().getExternalContext().redirect("reader.xhtml");
 				} catch (IOException e) {
-					oLogger.error(e);
-					message.fatal(e.getMessage());
+					this.oLogger.error(e);
+					this.message.fatal(e.getMessage());
 				}
 
 			} else {
-				setCurrentRole("INVALID");
-				message.error("login.invalid");
+				this.message.error("login.invalid");
 			}
 		}
 	}
 
 	/**
 	 * Search for user by username and stores them in userList.
-	 * 
+	 *
 	 * @param p_searchTxt
 	 *            username.
 	 * @return List of user objects found.
 	 */
-	public void search(String user_name, String password) {
+	public void search(final String user_name, final String password) {
 		if (user_name.length() >= 3) {
 			try {
-				roles = oLoginBean.login(user_name, password);
-				userName = user_name;
+				this.roles = this.oLoginBean.login(user_name, password);
+				this.userName = user_name;
 				checkRole();
 			} catch (Exception e) {
-				oLogger.error(e);
-				exceptionHandler.showMessage(e);
+				this.oLogger.error(e);
+				this.exceptionHandler.showMessage(e);
 			}
 		} else {
-			message.warn("managedbean.string");
+			this.message.warn("managedbean.string");
 		}
 	}
 
 	public String getUserName() {
-		return userName;
+		return this.userName;
 	}
 
 	/**
@@ -143,23 +139,23 @@ public class LoginMB implements Serializable {
 	 * string. Redirects to the application's start page.
 	 */
 	public void logout() {
-		userName = "";
-		setCurrentRole("GUEST");
+		this.userName = "";
+		this.roles.clear();
 		try {
 			FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
 		} catch (IOException e) {
-			oLogger.error(e);
-			message.fatal(e.getMessage());
+			this.oLogger.error(e);
+			this.message.fatal(e.getMessage());
 		}
 	}
 
 	/**
 	 * Checks whether the user is logged in. Returns false if it is not.
-	 * 
-	 * @return
+	 *
+	 * @return true if user is logged in
 	 */
 	public boolean isLoggedIn() {
-		if (userName == null || userName.isEmpty()) {
+		if (this.userName == null || this.userName.isEmpty() || this.roles.isEmpty()) {
 			return false;
 		}
 		return true;

@@ -17,6 +17,7 @@ import org.jboss.logging.Logger;
 import com.edu.library.model.Role;
 import com.edu.library.model.User;
 import com.edu.library.util.ExceptionHandler;
+import com.edu.library.util.MessageService;
 
 /**
  * User manager.

@@ -12,6 +12,7 @@ import org.jboss.logging.Logger;
 
 import com.edu.library.model.Publisher;
 import com.edu.library.util.ExceptionHandler;
+import com.edu.library.util.MessageService;
 
 /**
  * Publisher manager. Invokes the CRUD methods of the server
