@@ -7,9 +7,14 @@ package com.edu.library.exception;
  *
  */
 public class LibraryException extends RuntimeException {
-	private ErrorLevel level;
 
 	private static final long serialVersionUID = -2068564507434923735L;
+
+	/**
+	 * The level of the exception that can be thrown. These are enumerated in
+	 * the ErrorLevel class.
+	 */
+	private ErrorLevel level;
 
 	public LibraryException(String message, Throwable cause, ErrorLevel level) {
 		super(message, cause);
@@ -26,12 +31,6 @@ public class LibraryException extends RuntimeException {
 		this.level = ErrorLevel.ERROR;
 	}
 
-	/**
-	 * The level of the exception that can be thrown. These are enumerated in
-	 * the ErrorLevel class.
-	 * 
-	 * @return
-	 */
 	public ErrorLevel getLevel() {
 		return level;
 	}

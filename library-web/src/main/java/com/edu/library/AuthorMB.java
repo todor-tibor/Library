@@ -23,7 +23,7 @@ import com.edu.library.util.ExceptionHandler;
 @SessionScoped
 public class AuthorMB implements Serializable {
 
-	private Logger oLogger = Logger.getLogger(AuthorMB.class);
+	private final Logger oLogger = Logger.getLogger(AuthorMB.class);
 	private static final long serialVersionUID = -4702598250751689454L;
 
 	@Inject
@@ -31,7 +31,7 @@ public class AuthorMB implements Serializable {
 
 	@Inject
 	private ExceptionHandler exceptionHandler;
-	
+
 	@Inject
 	MessageService message;
 	/**
@@ -48,14 +48,14 @@ public class AuthorMB implements Serializable {
 	 * 
 	 */
 	public List<Author> getAuthorList() {
-		return authorList;
+		return this.authorList;
 	}
 
 	public Author getCurrentAuthor() {
-		return currentAuthor;
+		return this.currentAuthor;
 	}
 
-	public void setCurrentAuthor(Author currentAuthor) {
+	public void setCurrentAuthor(final Author currentAuthor) {
 		this.currentAuthor = currentAuthor;
 	}
 
@@ -65,38 +65,38 @@ public class AuthorMB implements Serializable {
 	 * @return List of all authors from database.
 	 */
 	public List<Author> getAll() {
-		authorList.clear();
+		this.authorList.clear();
 		try {
-			authorList = oAuthorBean.getAll();
+			this.authorList = this.oAuthorBean.getAll();
 		} catch (Exception e) {
-			oLogger.error(e);
-			exceptionHandler.showMessage(e);
+			this.oLogger.error(e);
+			this.exceptionHandler.showMessage(e);
 		}
-		return authorList;
+		return this.authorList;
 	}
 
 	/**
 	 * Search for author by author name and stores them in authorList.
 	 * 
-	 * @param p_searchTxt
+	 * @param searchTxt
 	 *            author's name.
 	 * @return List of author objects found.
 	 */
-	public List<Author> search(String p_searchTxt) {
-		if (p_searchTxt.length() >= 3) {
-			authorList.clear();
+	public List<Author> search(final String searchTxt) {
+		if (searchTxt.length() >= 3) {
+			this.authorList.clear();
 			try {
-				authorList = oAuthorBean.search(p_searchTxt);
+				this.authorList = this.oAuthorBean.search(searchTxt);
 
 			} catch (Exception e) {
-				oLogger.error(e);
-				exceptionHandler.showMessage(e);
+				this.oLogger.error(e);
+				this.exceptionHandler.showMessage(e);
 
 			}
 		} else {
-			message.error("managedbean.string");
+			this.message.error("managedbean.string");
 		}
-		return authorList;
+		return this.authorList;
 	}
 
 	/**
@@ -106,19 +106,19 @@ public class AuthorMB implements Serializable {
 	 *            - author's name
 	 */
 
-	public void store(String p_value) {
+	public void store(final String p_value) {
 		if (p_value.isEmpty() || p_value == "") {
-			message.warn("managedbean.empty");
+			this.message.warn("managedbean.empty");
 		}
 		try {
 			Author tmpAuthor = new Author();
 			tmpAuthor.setName(p_value);
-			oAuthorBean.store(tmpAuthor);
-			authorList.add(tmpAuthor);
-			message.info("managedBean.storeSuccess");
+			this.oAuthorBean.store(tmpAuthor);
+			this.authorList.add(tmpAuthor);
+			this.message.info("managedBean.storeSuccess");
 		} catch (Exception e) {
-			oLogger.error(e);
-			exceptionHandler.showMessage(e);
+			this.oLogger.error(e);
+			this.exceptionHandler.showMessage(e);
 		}
 	}
 
@@ -128,19 +128,19 @@ public class AuthorMB implements Serializable {
 	 * @param p_newTxt
 	 *            - new author name.
 	 */
-	public void update(String p_newTxt) {
-		if ((currentAuthor != null) && (p_newTxt.length() >= 3)) {
+	public void update(final String p_newTxt) {
+		if ((this.currentAuthor != null) && (p_newTxt.length() >= 3)) {
 			try {
-				currentAuthor.setName(p_newTxt);
-				oAuthorBean.update(currentAuthor);
-				authorList = oAuthorBean.getAll();
-				message.info("managedbean.updateSuccess");
+				this.currentAuthor.setName(p_newTxt);
+				this.oAuthorBean.update(this.currentAuthor);
+				this.authorList = this.oAuthorBean.getAll();
+				this.message.info("managedbean.updateSuccess");
 			} catch (Exception e) {
-				oLogger.error(e);
-				exceptionHandler.showMessage(e);
+				this.oLogger.error(e);
+				this.exceptionHandler.showMessage(e);
 			}
 		} else {
-			message.error("managedbean.string");
+			this.message.error("managedbean.string");
 		}
 	}
 
@@ -148,16 +148,16 @@ public class AuthorMB implements Serializable {
 	 * Deletes currently selected author from database.
 	 */
 	public void remove() {
-		if (currentAuthor == null) {
-			message.error("managedbean.empty");
+		if (this.currentAuthor == null) {
+			this.message.error("managedbean.empty");
 		} else {
 			try {
-				oAuthorBean.remove(currentAuthor.getUuid());
-				authorList = oAuthorBean.getAll();
-				message.info("managedbean.deleteSuccess");
+				this.oAuthorBean.remove(this.currentAuthor.getUuid());
+				this.authorList = this.oAuthorBean.getAll();
+				this.message.info("managedbean.deleteSuccess");
 			} catch (Exception e) {
-				oLogger.error(e);
-				exceptionHandler.showMessage(e);
+				this.oLogger.error(e);
+				this.exceptionHandler.showMessage(e);
 			}
 		}
 	}

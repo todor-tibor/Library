@@ -2,7 +2,6 @@ package com.edu.library;
 
 import java.util.List;
 
-import com.edu.library.exception.LibraryException;
 import com.edu.library.model.Role;
 
 /**
@@ -21,7 +20,6 @@ public interface ILoginService {
 	 * @param password
 	 *            - the password the user typed in
 	 * @return - the roles of the user
-	 * @throws LibraryException
 	 */
-	public List<Role> login(String userName, String password) throws LibraryException;
+	public List<Role> login(String userName, String password);
 }
