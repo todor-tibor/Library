@@ -21,7 +21,7 @@ import com.edu.library.model.Author;
 public class AuthorManagementBusiness {
 
 	@EJB
-	private AuthorBean dataAcces;
+	private AuthorBean dataAccess;
 
 	/**
 	 * Returns all authors.
@@ -29,7 +29,7 @@ public class AuthorManagementBusiness {
 	 * @return - List of authors
 	 */
 	public List<Author> getAll() {
-		return this.dataAcces.getAll();
+		return this.dataAccess.getAll();
 	}
 
 	/**
@@ -40,7 +40,7 @@ public class AuthorManagementBusiness {
 	 * @return - List with all the authors that match the search criteria
 	 */
 	public List<Author> search(final String searchText) {
-		return this.dataAcces.search(searchText);
+		return this.dataAccess.search(searchText);
 	}
 
 	/**
@@ -51,38 +51,37 @@ public class AuthorManagementBusiness {
 	 * @return - an author
 	 */
 	public Author getById(final String id) {
-		return this.dataAcces.getById(id);
+		return this.dataAccess.getById(id);
 	}
 
 	/**
 	 * Save the author given by {@code author}
-	 * 
+	 *
 	 * @param author
 	 *            - an Author type object containing all the necessary
 	 *            information for saving an author to the DB.
 	 */
 	public void store(final Author author) {
-		this.dataAcces.store(author);
+		this.dataAccess.store(author);
 	}
 
 	/**
 	 * Update the author given in {@code author}
-	 * 
+	 *
 	 * @param author
 	 *            - the author object on which the update will be done
 	 */
 	public void update(final Author author) {
-		this.dataAcces.update(author);
+		this.dataAccess.update(author);
 	}
 
 	/**
 	 * Remove the author given by {@code id}
-	 * 
+	 *
 	 * @param id
 	 *            - the unique identifier of the author
 	 */
 	public void remove(final String id) {
-		this.dataAcces.remove(this.dataAcces.getById(id));
+		this.dataAccess.remove(this.dataAccess.getById(id));
 	}
-
 }
