@@ -34,7 +34,7 @@
 					rowKey="#{publication.uuid}">
 
 					<p:ajax event="rowSelect" listener="#{publicationBean.isSelected}"
-						update="publicationDT" />
+						update="deleteButton detailsButton updateButton" />
 					<f:facet name="header">
             			#{pubMan['publications.text']}
         			</f:facet>
@@ -92,17 +92,17 @@
 					</p:column>
 
 					<f:facet name="footer">
-						<p:commandButton process="publicationDT" icon="ui-icon-search"
+						<p:commandButton id="detailsButton" process="publicationDT" icon="ui-icon-search"
 							value="#{msg['details.button']}" update="first"
 							oncomplete="PF('publicationDialog').show()"
 							disabled="#{publicationBean.currentPublication == null}" />
 
-						<p:commandButton process="publicationDT" icon="fa-remove"
+						<p:commandButton id="deleteButton" process="publicationDT" icon="fa-remove"
 							value="#{msg['delete.button']}"
 							action="#{publicationBean.remove()}" update="publicationDT"
 							disabled="#{publicationBean.currentPublication == null}" />
 
-						<p:commandButton process="publicationDT" icon="fa-remove"
+						<p:commandButton id="updateButton" process="publicationDT" icon="fa-remove"
 							value="#{pubMan['publication.update']}" update="updateDialog"
 							oncomplete="PF('updateDialog').show()"
 							disabled="#{publicationBean.currentPublication == null}" />
@@ -190,9 +190,8 @@
 							</c:if>
 						</p:dialog>
 					</f:facet>
-
 				</p:dataTable>
-				<p:commandButton value="#{pubMan['listPublications.button']}"
+				<p:commandButton process="publication_actions_form" value="#{pubMan['listPublications.button']}"
 					update="publicationDT" icon="ui-icon-search"
 					action="#{publicationBean.getAll()}">
 				</p:commandButton>
@@ -241,7 +240,6 @@
 							value="#{publicationBean.date}" pattern="yyyy-MM-dd"
 							effect="slideDown" navigator="true" mode="inline" lang="#{localeBean.userLocale.language}"
 							locale="#{localeBean.userLocale}" style="moisAnSeul"/>
-
 					</h:panelGrid>
 					<p:commandButton value="#{msg['add.label']}"
 						update="publication_actions_form" icon="fa-user-plu"

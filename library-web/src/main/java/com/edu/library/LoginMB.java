@@ -55,7 +55,7 @@ public class LoginMB implements Serializable {
 	public String isAdmin() {
 		Role tmp = new Role();
 		tmp.setRole(RoleType.LIBRARIAN.toString());
-		if (this.roles.contains(tmp)) {
+		if (this.roles != null && this.roles.contains(tmp)) {
 			return "";
 		} else
 			return "index";
@@ -101,7 +101,6 @@ public class LoginMB implements Serializable {
 					this.oLogger.error(e);
 					this.message.fatal(e.getMessage());
 				}
-
 			} else {
 				this.message.error("login.invalid");
 			}
