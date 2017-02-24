@@ -13,7 +13,7 @@ import com.edu.library.model.User;
 /**
  * Implements the basics of user login. Validates the given the input data and
  * calls the business layer if params are valid
- * 
+ *
  * @author kiska
  */
 @Stateless
@@ -23,49 +23,49 @@ public class UserManagementFacade implements IUserService {
 
 	@Override
 	public List<User> getAll() {
-		return userManagementBusiness.getAll();
+		return this.userManagementBusiness.getAll();
 	}
 
 	@Override
-	public List<User> search(String searchUserName) {
+	public List<User> search(final String searchUserName) {
 		ServiceValidation.checkString(searchUserName);
-		return userManagementBusiness.search(searchUserName);
+		return this.userManagementBusiness.search(searchUserName);
 	}
 
 	@Override
-	public User getById(String user_id) {
-		ServiceValidation.checkUuid(user_id);
-		return userManagementBusiness.getById(user_id);
+	public User getById(final String userId) {
+		ServiceValidation.checkUuid(userId);
+		return this.userManagementBusiness.getById(userId);
 	}
 
 	@Override
-	public void store(User user) {
+	public void store(final User user) {
 		ServiceValidation.checkNotNull(user);
 		ServiceValidation.checkNotEmpty(user.getRoles());
 		ServiceValidation.checkString(user.getUserName());
 		ServiceValidation.checkPassword(user.getPassword());
-		userManagementBusiness.store(user);
+		this.userManagementBusiness.store(user);
 	}
 
 	@Override
-	public void update(User user) {
+	public void update(final User user) {
 		ServiceValidation.checkNotNull(user);
 		ServiceValidation.checkNotEmpty(user.getRoles());
 		ServiceValidation.checkString(user.getUserName());
-		userManagementBusiness.update(user);
+		this.userManagementBusiness.update(user);
 	}
 
 	@Override
-	public void remove(String user_id) {
-		ServiceValidation.checkUuid(user_id);
-		userManagementBusiness.remove(user_id);
+	public void remove(final String userId) {
+		ServiceValidation.checkUuid(userId);
+		this.userManagementBusiness.remove(userId);
 
 	}
 
 	@Override
-	public User getByUserName(String userName) {
+	public User getByUserName(final String userName) {
 		ServiceValidation.checkString(userName);
-		return userManagementBusiness.searchForUserName(userName);
+		return this.userManagementBusiness.searchForUserName(userName);
 	}
 
 }

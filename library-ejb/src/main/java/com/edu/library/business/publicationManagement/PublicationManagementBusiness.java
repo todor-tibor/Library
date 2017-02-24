@@ -13,9 +13,9 @@ import com.edu.library.filter.PublicationFilter;
 import com.edu.library.model.Publication;
 
 /**
- * Implements basic business logic for publication management. 
- * (same functions as in the IPublicationService interface)
- * 
+ * Implements basic business logic for publication management. (same functions
+ * as in the IPublicationService interface)
+ *
  * @author sipost
  */
 
@@ -27,38 +27,37 @@ public class PublicationManagementBusiness {
 	private PublicationBean dataAcces;
 
 	public List<Publication> getAll() {
-		return dataAcces.getAll();
+		return this.dataAcces.getAll();
 	}
 
-	public List<Publication> search(String p_searchTxt) {
-		return dataAcces.search(p_searchTxt);
+	public List<Publication> search(final String searchText) {
+		return this.dataAcces.search(searchText);
 	}
 
-	public Publication getById(String p_id) {
-		return dataAcces.getById(p_id);
+	public Publication getById(final String id) {
+		return this.dataAcces.getById(id);
 	}
 
-	public void store(Publication p_value) {
-		dataAcces.store(p_value);
+	public void store(final Publication publication) {
+		this.dataAcces.store(publication);
 	}
 
-	public void update(Publication p_user) {
-		dataAcces.getById(p_user.getUuid());
-		dataAcces.update(p_user);
+	public void update(final Publication publication) {
+		this.dataAcces.getById(publication.getUuid());
+		this.dataAcces.update(publication);
 	}
 
-	public void remove(String p_id) {
-		Publication pub = dataAcces.getById(p_id);
+	public void remove(final String id) {
+		final Publication pub = this.dataAcces.getById(id);
 		if (pub.getBorrows().isEmpty()) {
-			dataAcces.remove(pub);
+			this.dataAcces.remove(pub);
 		} else {
 			throw new BusinessException(ErrorMessages.ERROR_BOUND);
 		}
 	}
-	
-	public List<Publication> filterPublication(PublicationFilter filter) {
-		return dataAcces.filterPublication(filter);
-	}
 
+	public List<Publication> filterPublication(final PublicationFilter filter) {
+		return this.dataAcces.filterPublication(filter);
+	}
 
 }
