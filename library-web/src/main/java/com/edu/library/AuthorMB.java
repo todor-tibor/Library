@@ -102,17 +102,17 @@ public class AuthorMB implements Serializable {
 	/**
 	 * Stores new author with author name.
 	 * 
-	 * @param p_value
+	 * @param value
 	 *            - author's name
 	 */
 
-	public void store(final String p_value) {
-		if (p_value.isEmpty() || p_value == "") {
+	public void store(final String value) {
+		if (value.isEmpty() || value == "") {
 			this.message.warn("managedbean.empty");
 		}
 		try {
 			Author tmpAuthor = new Author();
-			tmpAuthor.setName(p_value);
+			tmpAuthor.setName(value);
 			this.oAuthorBean.store(tmpAuthor);
 			this.authorList.add(tmpAuthor);
 			this.message.info("managedBean.storeSuccess");
@@ -125,13 +125,13 @@ public class AuthorMB implements Serializable {
 	/**
 	 * Renames currently selected author.
 	 * 
-	 * @param p_newTxt
+	 * @param newValue
 	 *            - new author name.
 	 */
-	public void update(final String p_newTxt) {
-		if ((this.currentAuthor != null) && (p_newTxt.length() >= 3)) {
+	public void update(final String newValue) {
+		if ((this.currentAuthor != null) && (newValue.length() >= 3)) {
 			try {
-				this.currentAuthor.setName(p_newTxt);
+				this.currentAuthor.setName(newValue);
 				this.oAuthorBean.update(this.currentAuthor);
 				this.authorList = this.oAuthorBean.getAll();
 				this.message.info("managedbean.updateSuccess");

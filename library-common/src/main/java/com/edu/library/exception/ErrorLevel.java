@@ -2,7 +2,7 @@ package com.edu.library.exception;
 
 /**
  * Define the level of the exception that can be thrown.
- * 
+ *
  * @author sipost
  *
  */

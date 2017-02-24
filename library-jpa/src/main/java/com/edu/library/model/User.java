@@ -78,7 +78,7 @@ public class User extends BaseEntity {
 		return this.loyaltyIndex;
 	}
 
-	public void setLoyaltyIndex(int loyaltyIndex) {
+	public void setLoyaltyIndex(final int loyaltyIndex) {
 		this.loyaltyIndex = loyaltyIndex;
 	}
 
@@ -86,7 +86,7 @@ public class User extends BaseEntity {
 		return this.password;
 	}
 
-	public void setPassword(String password) {
+	public void setPassword(final String password) {
 		this.password = password;
 	}
 
@@ -94,7 +94,7 @@ public class User extends BaseEntity {
 		return this.userName;
 	}
 
-	public void setUserName(String userName) {
+	public void setUserName(final String userName) {
 		this.userName = userName;
 	}
 
@@ -102,18 +102,18 @@ public class User extends BaseEntity {
 		return this.borrows;
 	}
 
-	public void setBorrows(List<Borrow> borrows) {
+	public void setBorrows(final List<Borrow> borrows) {
 		this.borrows = borrows;
 	}
 
-	public Borrow addBorrow(Borrow borrow) {
+	public Borrow addBorrow(final Borrow borrow) {
 		getBorrows().add(borrow);
 		borrow.setUser(this);
 
 		return borrow;
 	}
 
-	public Borrow removeBorrow(Borrow borrow) {
+	public Borrow removeBorrow(final Borrow borrow) {
 		getBorrows().remove(borrow);
 		borrow.setUser(null);
 
@@ -124,14 +124,14 @@ public class User extends BaseEntity {
 		return new ArrayList<Role>(this.roles);
 	}
 
-	public void setRoles(List<Role> roles) {
+	public void setRoles(final List<Role> roles) {
 		this.roles = new HashSet<Role>(roles);
 	}
 	
 	public boolean isLate(){
 		Date today = new Date();
-		for (int i = 0; i < borrows.size(); i++) {
-			if (today.after(borrows.get(i).getBorrowUntil())) {
+		for (int i = 0; i < this.borrows.size(); i++) {
+			if (today.after(this.borrows.get(i).getBorrowUntil())) {
 				return true;
 			}
 		}

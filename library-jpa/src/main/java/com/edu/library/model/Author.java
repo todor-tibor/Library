@@ -31,13 +31,13 @@ public class Author extends BaseEntity {
 		return this.name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
 	@Override
 	public String toString() {
-		return "--" + name + "--";
+		return "--" + this.name + "--";
 	}
 
 }

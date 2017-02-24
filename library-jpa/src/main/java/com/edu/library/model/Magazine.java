@@ -35,7 +35,7 @@ public class Magazine extends Publication {
 		return this.authors;
 	}
 
-	public void setAuthors(List<Author> authors) {
+	public void setAuthors(final List<Author> authors) {
 		this.authors = authors;
 	}
 }

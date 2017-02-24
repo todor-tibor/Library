@@ -7,14 +7,14 @@ import com.edu.library.model.Role;
 /**
  * The login interface to which the client has access. Defines the login
  * process.
- * 
+ *
  * @author kiska
  */
 public interface ILoginService {
 	/**
 	 * Does a validation on the input data. If these are correct, tries to
 	 * authenticate the user.
-	 * 
+	 *
 	 * @param userName
 	 *            - the user name of the user
 	 * @param password

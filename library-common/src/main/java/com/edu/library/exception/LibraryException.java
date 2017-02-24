@@ -2,7 +2,7 @@ package com.edu.library.exception;
 
 /**
  * A custom RuntimeException from which other exceptions are derived.
- * 
+ *
  * @author sipost
  *
  */
@@ -14,14 +14,14 @@ public class LibraryException extends RuntimeException {
 	 * The level of the exception that can be thrown. These are enumerated in
 	 * the ErrorLevel class.
 	 */
-	private ErrorLevel level;
+	private final ErrorLevel level;
 
-	public LibraryException(String message, Throwable cause, ErrorLevel level) {
+	public LibraryException(final String message, final Throwable cause, final ErrorLevel level) {
 		super(message, cause);
 		this.level = level;
 	}
 
-	public LibraryException(String message, ErrorLevel level) {
+	public LibraryException(final String message, final ErrorLevel level) {
 		super(message);
 		this.level = level;
 	}
@@ -32,6 +32,6 @@ public class LibraryException extends RuntimeException {
 	}
 
 	public ErrorLevel getLevel() {
-		return level;
+		return this.level;
 	}
 }

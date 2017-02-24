@@ -1,7 +1,7 @@
 package com.edu.library.model;
 
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -23,7 +23,7 @@ import javax.persistence.TemporalType;
 
 /**
  * The persistent abstract class for the publications database table.
- * 
+ *
  * @author sipost
  * @author kiska
  */
@@ -44,7 +44,7 @@ public abstract class Publication extends BaseEntity {
 
 	@Column(name = "on_stock")
 	private int onStock;
-	
+
 	@Temporal(TemporalType.DATE)
 	@Column(name = "publication_date")
 	private Date publicationDate;
@@ -67,7 +67,7 @@ public abstract class Publication extends BaseEntity {
 		return this.nrOfCopys;
 	}
 
-	public void setNrOfCopys(int nrOfCopys) {
+	public void setNrOfCopys(final int nrOfCopys) {
 		this.nrOfCopys = nrOfCopys;
 	}
 
@@ -75,7 +75,7 @@ public abstract class Publication extends BaseEntity {
 		return this.onStock;
 	}
 
-	public void setOnStock(int onStock) {
+	public void setOnStock(final int onStock) {
 		this.onStock = onStock;
 	}
 
@@ -83,7 +83,7 @@ public abstract class Publication extends BaseEntity {
 		return this.publicationDate;
 	}
 
-	public void setPublicationDate(Date publicationDate) {
+	public void setPublicationDate(final Date publicationDate) {
 		this.publicationDate = publicationDate;
 	}
 
@@ -91,7 +91,7 @@ public abstract class Publication extends BaseEntity {
 		return this.title;
 	}
 
-	public void setTitle(String title) {
+	public void setTitle(final String title) {
 		this.title = title;
 	}
 
@@ -99,18 +99,18 @@ public abstract class Publication extends BaseEntity {
 		return new ArrayList<>(this.borrows);
 	}
 
-	public void setBorrows(Set<Borrow> borrows) {
+	public void setBorrows(final Set<Borrow> borrows) {
 		this.borrows = borrows;
 	}
 
-	public Borrow addBorrow(Borrow borrow) {
+	public Borrow addBorrow(final Borrow borrow) {
 		getBorrows().add(borrow);
 		borrow.setPublication(this);
 
 		return borrow;
 	}
 
-	public Borrow removeBorrow(Borrow borrow) {
+	public Borrow removeBorrow(final Borrow borrow) {
 		getBorrows().remove(borrow);
 		borrow.setPublication(null);
 
@@ -121,7 +121,7 @@ public abstract class Publication extends BaseEntity {
 		return this.publisher;
 	}
 
-	public void setPublisher(Publisher publisher) {
+	public void setPublisher(final Publisher publisher) {
 		this.publisher = publisher;
 	}
 

@@ -7,7 +7,7 @@ import com.edu.library.model.BaseEntity;
 
 /**
  * Defines persistence operations, for entities.
- * 
+ *
  * @author gallb
  * @author kiska
  *
@@ -17,7 +17,7 @@ import com.edu.library.model.BaseEntity;
 public interface IService<X extends BaseEntity> {
 	/**
 	 * Lists all objects of {@code <X>} type that are in the database
-	 * 
+	 *
 	 * @return List containing all entities.
 	 * @throws LibraryException
 	 */
@@ -26,7 +26,7 @@ public interface IService<X extends BaseEntity> {
 	/**
 	 * Lists one object of {@code <X>} type that is in the database and contains
 	 * the {@code searchTxt} input string
-	 * 
+	 *
 	 * @param searchTxt
 	 *            String to search for
 	 * @return List of entities found, empty list if nothing found.
@@ -38,7 +38,7 @@ public interface IService<X extends BaseEntity> {
 	/**
 	 * Lists one object of {@code <X>} type that is in the database and contains
 	 * the {@code id} input string, which is the objects unique id.
-	 * 
+	 *
 	 * @param id
 	 *            Id of entity
 	 * @return Search result entity, null if nothing found.
@@ -48,7 +48,7 @@ public interface IService<X extends BaseEntity> {
 
 	/**
 	 * Saves the object specified by {@code value} into the database
-	 * 
+	 *
 	 * @param value
 	 *            {@code <X>} with new value.
 	 * @return True if operation successful, false if not.
@@ -58,7 +58,7 @@ public interface IService<X extends BaseEntity> {
 
 	/**
 	 * Updates the object specified by {@code value}
-	 * 
+	 *
 	 * @param value
 	 *            {@code <X>} with new value.
 	 * @return True if operation successful, false if not.
@@ -68,7 +68,7 @@ public interface IService<X extends BaseEntity> {
 
 	/**
 	 * Removes an object defined by the {@code id} from the database
-	 * 
+	 *
 	 * @param id
 	 *            Id of entity that should be removed from persistence.
 	 * @return True if operation successful, false if not.

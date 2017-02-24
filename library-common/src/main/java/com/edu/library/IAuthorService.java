@@ -4,7 +4,7 @@ import com.edu.library.model.Author;
 
 /**
  * Defines persistence operations, for Author entities.
- * 
+ *
  * @author sipost
  *
  */
