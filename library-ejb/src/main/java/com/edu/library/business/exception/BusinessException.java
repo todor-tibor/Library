@@ -5,14 +5,14 @@ import com.edu.library.exception.LibraryException;
 
 /**
  * Specify exception for business layer.
- * 
+ *
  * @author sipost
  */
 public class BusinessException extends LibraryException {
 
 	private static final long serialVersionUID = 5633917663462543264L;
 
-	public BusinessException(String message) {
+	public BusinessException(final String message) {
 		super(message, ErrorLevel.WARNING);
 	}
 }

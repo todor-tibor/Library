@@ -15,7 +15,7 @@ import com.edu.library.util.PasswordEncrypter;
 
 /**
  * Implements a simple authentication process of a user.
- * 
+ *
  * @author kiska
  */
 
@@ -30,7 +30,7 @@ public class LoginManagementBusiness {
 	 * Checks whether the provided password is the same as the stored hashed
 	 * password of the user. If the passwords match, the role of the user is
 	 * returned, otherwise an exception is thrown.
-	 * 
+	 *
 	 * @param userName
 	 *            - the user name of the user who wants to log in
 	 * @param password
@@ -38,8 +38,8 @@ public class LoginManagementBusiness {
 	 * @return - the roles (type) of the user if login was not successful,
 	 *         otherwise throws an error
 	 */
-	public List<Role> authentication(String userName, String password) {
-		User user = userAccess.getByUserName(userName);
+	public List<Role> authentication(final String userName, final String password) {
+		final User user = this.userAccess.getByUserName(userName);
 		if (PasswordEncrypter.encypted(password, " ").equals(user.getPassword())) { //
 			return user.getRoles();
 		}
