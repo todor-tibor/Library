@@ -53,7 +53,7 @@ public class BorrowManagementBusiness {
 	}
 
 	/**
-	 * Verifies if a the given user is currently having a publication borrowed.
+	 * Verifies if the given user is currently having a publication borrowed.
 	 *
 	 * @param user
 	 *            user to verify
@@ -71,6 +71,13 @@ public class BorrowManagementBusiness {
 		return false;
 	}
 
+	/**
+	 * Searches for a borrowing given by {@code searchText}
+	 *
+	 * @param searchText
+	 *            - the name or part of the name of the borrowing to search for
+	 * @return - List with all the borrows that match the search criteria
+	 */
 	public List<Borrow> search(final String searchText) {
 		final List<Borrow> tmpList = this.userDAO.getBorrow(searchText);
 		final Set<Borrow> tempSet = new HashSet<Borrow>(tmpList);
@@ -80,10 +87,23 @@ public class BorrowManagementBusiness {
 		return tmpList;
 	}
 
+	/**
+	 * Return the borrowing given by {@code id}
+	 *
+	 * @param id
+	 *            - the unique identifier of a borrow
+	 * @return - a borrow
+	 */
 	public Borrow getById(final String id) {
 		return this.borrowDAO.getById(id);
 	}
 
+	/**
+	 * Save the borrowing given by {@code author}
+	 *
+	 * @param id
+	 *            - the unique identifier of a borrow
+	 */
 	public void store(final Borrow id) {
 		// get current data of user
 		final User tmpUser = this.userDAO.getById(id.getUser().getUuid());
@@ -117,6 +137,12 @@ public class BorrowManagementBusiness {
 		}
 	}
 
+	/**
+	 * Update the borrowing given by {@code id}
+	 *
+	 * @param id
+	 *            - the unique identifier of a borrow
+	 */
 	public void update(final Borrow id) {
 		this.borrowDAO.getById(id.getUuid());
 		this.borrowDAO.update(id);
@@ -148,6 +174,15 @@ public class BorrowManagementBusiness {
 		this.borrowDAO.remove(tmpBorrow);
 	}
 
+	/**
+	 * Searches for all borrowings that match certain criteria given by
+	 * {@code filter}
+	 *
+	 * @param filter
+	 *            - a custom filter for borrowings, which represents the the
+	 *            fields that can be filtered
+	 * @return - list of borrows that match the search criteria
+	 */
 	public List<Borrow> filterBorrow(final BorrowFilter filter) {
 		return this.borrowDAO.filterBorrow(filter);
 	}
