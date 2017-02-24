@@ -7,8 +7,8 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the authors database table.
- * 
- * 
+ *
+ *
  * @author sipost
  * @author kiska
  *

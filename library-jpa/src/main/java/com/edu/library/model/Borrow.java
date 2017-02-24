@@ -15,13 +15,14 @@ import javax.persistence.TemporalType;
 
 /**
  * The persistent class for the borrows database table.
- * 
+ *
  */
 @Entity
 @Table(name = "borrows")
 @NamedQueries({ @NamedQuery(name = "Borrow.findAll", query = "SELECT b FROM Borrow b"),
 		@NamedQuery(name = "Borrow.findById", query = "SELECT b FROM Borrow b WHERE b.uuid = :uuid") })
 public class Borrow extends BaseEntity {
+
 	private static final long serialVersionUID = 1L;
 
 	@Temporal(TemporalType.DATE)

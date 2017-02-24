@@ -19,7 +19,7 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the users database table.
- * 
+ *
  * @author sipost
  * @author kiska
  */
@@ -29,17 +29,17 @@ import javax.persistence.Table;
 		@NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.userName = :user_name"),
 		@NamedQuery(name = "User.searchByUserName", query = "SELECT u FROM User u where u.userName like :user_name"),
 		@NamedQuery(name = "User.findById", query = "SELECT u FROM User u WHERE u.uuid= :uuid"),
-		@NamedQuery(name = "User.findBorrow", query = "SELECT DISTINCT b FROM Borrow b, User u JOIN b.user bUser JOIN u.borrows uUser WHERE bUser.uuid = uUser.user.uuid AND u.userName LIKE :userName")})
+		@NamedQuery(name = "User.findBorrow", query = "SELECT DISTINCT b FROM Borrow b, User u JOIN b.user bUser JOIN u.borrows uUser WHERE bUser.uuid = uUser.user.uuid AND u.userName LIKE :userName") })
 
 public class User extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
-	@Column(name = "loyalty_index")
 	/**
 	 * @param loyaltyIndex
 	 *            - The loyalty index of a user used to check eligibility for
 	 *            book borrowing. It's maximum value is 10, minimum 0.
 	 */
+	@Column(name = "loyalty_index")
 	private int loyaltyIndex;
 
 	/**
@@ -48,27 +48,28 @@ public class User extends BaseEntity {
 	 */
 	private String password;
 
-	@Column(name = "user_name")
 	/**
 	 * @param userName
 	 *            - The user name of the user
 	 */
+	@Column(name = "user_name")
 	private String userName;
 
-	// bi-directional many-to-one association to Borrow
-	@OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
 	/**
 	 * @param borrows
 	 *            - List of already borrowed publications for a given user
+	 *            bi-directional many-to-one association to Borrow
 	 */
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private List<Borrow> borrows;
 
-	@ManyToMany (fetch = FetchType.EAGER)
-	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "uuid"))
 	/**
 	 * @param roles
-	 *            - The roles the user has
+	 *            - Set of roles the user has. -uni-directional many-to-many
+	 *            association to Borrow
 	 */
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "uuid"))
 	private Set<Role> roles;
 
 	public User() {
@@ -127,8 +128,8 @@ public class User extends BaseEntity {
 	public void setRoles(final List<Role> roles) {
 		this.roles = new HashSet<Role>(roles);
 	}
-	
-	public boolean isLate(){
+
+	public boolean isLate() {
 		Date today = new Date();
 		for (int i = 0; i < this.borrows.size(); i++) {
 			if (today.after(this.borrows.get(i).getBorrowUntil())) {

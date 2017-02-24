@@ -12,7 +12,7 @@ import javax.persistence.ManyToMany;
 /**
  * The persistent subclass for the publication database table, with
  * discriminator value Book.
- * 
+ *
  * @author sipost
  * @author kiska
  *
@@ -21,9 +21,6 @@ import javax.persistence.ManyToMany;
 @DiscriminatorValue("Book")
 public class Book extends Publication {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7358930538078727479L;
 
 	// uni-directional many-to-many association to Author

@@ -37,25 +37,52 @@ import javax.persistence.TemporalType;
 		@NamedQuery(name = "Publication.getById", query = "SELECT a FROM Publication a WHERE a.uuid = :uuid"),
 		@NamedQuery(name = "Publication.findBorrow", query = "SELECT DISTINCT b FROM Borrow b, Publication p JOIN b.publication bPublication JOIN p.borrows pPublication WHERE bPublication.uuid = pPublication.publication.uuid AND p.title LIKE :title") })
 public abstract class Publication extends BaseEntity {
+
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * @param nrOfCopys
+	 *            -Represents the number of a publication copies that can be in
+	 *            the library
+	 */
 	@Column(name = "nr_of_copys")
 	private int nrOfCopys;
 
+	/**
+	 * @param onStock
+	 *            -Represents the available number of a publication copies in
+	 *            the library
+	 */
 	@Column(name = "on_stock")
 	private int onStock;
 
+	/**
+	 * @param publicationDate
+	 *            -Represents the date when the publication was published
+	 */
 	@Temporal(TemporalType.DATE)
 	@Column(name = "publication_date")
 	private Date publicationDate;
 
+	/**
+	 * @param title
+	 *            -Title of the publication
+	 */
 	private String title;
 
-	// bi-directional many-to-one association to Borrow
+	/**
+	 * @param borrows
+	 *            - List of borrows for a given publications -bi-directional
+	 *            many-to-one association to Borrow
+	 */
 	@OneToMany(mappedBy = "publication", fetch = FetchType.EAGER)
 	private Set<Borrow> borrows;
 
-	// bi-directional many-to-one association to Publisher
+	/**
+	 * @param publisher
+	 *            - The publisher of publications -bi-directional many-to-one
+	 *            association to Publisher
+	 */
 	@ManyToOne
 	@JoinColumn(name = "publisher_id")
 	private Publisher publisher;

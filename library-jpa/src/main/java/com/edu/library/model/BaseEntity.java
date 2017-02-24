@@ -8,7 +8,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 
 /**
- * 
+ *
  * @author sipost
  * @author gallb
  * @author kiska
@@ -29,7 +29,7 @@ public abstract class BaseEntity implements Serializable {
 		return this.uuid;
 	}
 
-	public void setUuid(String uuid) {
+	public void setUuid(final String uuid) {
 		this.uuid = uuid;
 	}
 

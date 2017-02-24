@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 /**
  * The persistent class for the roles database table.
- * 
+ *
  * @author sipost
  * @author kiska
  */
@@ -33,7 +33,7 @@ public class Role extends BaseEntity {
 		return this.role;
 	}
 
-	public void setRole(String role) {
+	public void setRole(final String role) {
 		this.role = role;
 	}
 
@@ -41,17 +41,17 @@ public class Role extends BaseEntity {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((role == null) ? 0 : role.hashCode());
+		result = prime * result + ((this.role == null) ? 0 : this.role.hashCode());
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		Role other = (Role) obj;
-		if (role == null) {
+		if (this.role == null) {
 			if (other.role != null)
 				return false;
-		} else if (!role.equals(other.role))
+		} else if (!this.role.equals(other.role))
 			return false;
 		return true;
 	}
