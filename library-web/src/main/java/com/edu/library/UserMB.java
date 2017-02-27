@@ -155,7 +155,6 @@ public class UserMB implements Serializable {
 			return;
 		}
 		this.currentUser.setUserName(newName);
-		}
 		if (!email.isEmpty()) {
 			currentUser.setEmail(email);
 		}
