@@ -13,9 +13,9 @@ import com.edu.library.filter.PublicationFilter;
 import com.edu.library.model.Publication;
 
 /**
- * Implements basic business logic for publication management. 
- * (same functions as in the IPublicationService interface)
- * 
+ * Implements basic business logic for publication management. (same functions
+ * as in the IPublicationService interface)
+ *
  * @author sipost
  */
 
@@ -26,39 +26,85 @@ public class PublicationManagementBusiness {
 	@EJB
 	private PublicationBean dataAcces;
 
+	/**
+	 * Returns all publications.
+	 *
+	 * @return - List of publications
+	 */
 	public List<Publication> getAll() {
-		return dataAcces.getAll();
+		return this.dataAcces.getAll();
 	}
 
-	public List<Publication> search(String p_searchTxt) {
-		return dataAcces.search(p_searchTxt);
+	/**
+	 * Searches for a publication given by {@code searchText}
+	 *
+	 * @param searchText
+	 *            - the title or part of the title of the publication to search
+	 *            for
+	 * @return - List with all the publications that match the search criteria
+	 */
+	public List<Publication> search(final String searchText) {
+		return this.dataAcces.search(searchText);
 	}
 
-	public Publication getById(String p_id) {
-		return dataAcces.getById(p_id);
+	/**
+	 * Return the publication given by {@code id}
+	 *
+	 * @param id
+	 *            - the unique identifier of a publication
+	 * @return - a publication
+	 */
+	public Publication getById(final String id) {
+		return this.dataAcces.getById(id);
 	}
 
-	public void store(Publication p_value) {
-		dataAcces.store(p_value);
+	/**
+	 * Save the publication given by {@code publication}
+	 *
+	 * @param publication
+	 *            - a Publication type object containing all the necessary
+	 *            information for saving a publication to the DB.
+	 */
+	public void store(final Publication publication) {
+		this.dataAcces.store(publication);
 	}
 
-	public void update(Publication p_user) {
-		dataAcces.getById(p_user.getUuid());
-		dataAcces.update(p_user);
+	/**
+	 * Update the publication given in {@code publication}
+	 *
+	 * @param publication
+	 *            - the publication object on which the update will be done
+	 */
+	public void update(final Publication publication) {
+		this.dataAcces.getById(publication.getUuid());
+		this.dataAcces.update(publication);
 	}
 
-	public void remove(String p_id) {
-		Publication pub = dataAcces.getById(p_id);
+	/**
+	 * Remove the publication given by {@code id}
+	 *
+	 * @param id
+	 *            - the unique identifier of the publication
+	 */
+	public void remove(final String id) {
+		final Publication pub = this.dataAcces.getById(id);
 		if (pub.getBorrows().isEmpty()) {
-			dataAcces.remove(pub);
+			this.dataAcces.remove(pub);
 		} else {
 			throw new BusinessException(ErrorMessages.ERROR_BOUND);
 		}
 	}
-	
-	public List<Publication> filterPublication(PublicationFilter filter) {
-		return dataAcces.filterPublication(filter);
+
+	/**
+	 * Searches for all publications that match certain criteria given by
+	 * {@code filter}
+	 *
+	 * @param filter
+	 *            - a custom filter for publications, which represents the
+	 *            fields that can be filtered
+	 * @return - list of publications that match the search criteria
+	 */
+	public List<Publication> filterPublication(final PublicationFilter filter) {
+		return this.dataAcces.filterPublication(filter);
 	}
-
-
 }

@@ -12,10 +12,11 @@ import org.jboss.logging.Logger;
 
 import com.edu.library.model.Author;
 import com.edu.library.util.ExceptionHandler;
+import com.edu.library.util.MessageService;
 
 /**
  * Author manager.
- * 
+ *
  * @author sipost
  * @author kiska
  */
@@ -23,7 +24,7 @@ import com.edu.library.util.ExceptionHandler;
 @SessionScoped
 public class AuthorMB implements Serializable {
 
-	private Logger oLogger = Logger.getLogger(AuthorMB.class);
+	private final Logger logger = Logger.getLogger(AuthorMB.class);
 	private static final long serialVersionUID = -4702598250751689454L;
 
 	@Inject
@@ -31,116 +32,100 @@ public class AuthorMB implements Serializable {
 
 	@Inject
 	private ExceptionHandler exceptionHandler;
-	
+
 	@Inject
 	MessageService message;
+
 	/**
 	 * Currently displayed authors.
 	 */
 	private List<Author> authorList = new ArrayList<>();
+
 	/**
 	 * Currently selected author.
 	 */
 	private Author currentAuthor = null;
 
 	/**
-	 * Getters and setters for private variables
-	 * 
-	 */
-	public List<Author> getAuthorList() {
-		return authorList;
-	}
-
-	public Author getCurrentAuthor() {
-		return currentAuthor;
-	}
-
-	public void setCurrentAuthor(Author currentAuthor) {
-		this.currentAuthor = currentAuthor;
-	}
-
-	/**
 	 * Requests all author objects and stores them in authorList.
-	 * 
+	 *
 	 * @return List of all authors from database.
 	 */
 	public List<Author> getAll() {
-		authorList.clear();
+		this.authorList.clear();
 		try {
-			authorList = oAuthorBean.getAll();
-		} catch (Exception e) {
-			oLogger.error(e);
-			exceptionHandler.showMessage(e);
+			this.authorList = this.oAuthorBean.getAll();
+		} catch (final Exception e) {
+			this.logger.error(e);
+			this.exceptionHandler.showMessage(e);
 		}
-		return authorList;
+		return this.authorList;
 	}
 
 	/**
 	 * Search for author by author name and stores them in authorList.
-	 * 
-	 * @param p_searchTxt
+	 *
+	 * @param searchTxt
 	 *            author's name.
 	 * @return List of author objects found.
 	 */
-	public List<Author> search(String p_searchTxt) {
-		if (p_searchTxt.length() >= 3) {
-			authorList.clear();
+	public List<Author> search(final String searchTxt) {
+		if (searchTxt.length() >= 3) {
+			this.authorList.clear();
 			try {
-				authorList = oAuthorBean.search(p_searchTxt);
+				this.authorList = this.oAuthorBean.search(searchTxt);
 
-			} catch (Exception e) {
-				oLogger.error(e);
-				exceptionHandler.showMessage(e);
+			} catch (final Exception e) {
+				this.logger.error(e);
+				this.exceptionHandler.showMessage(e);
 
 			}
 		} else {
-			message.error("managedbean.string");
+			this.message.error("managedbean.string");
 		}
-		return authorList;
+		return this.authorList;
 	}
 
 	/**
 	 * Stores new author with author name.
-	 * 
-	 * @param p_value
+	 *
+	 * @param value
 	 *            - author's name
 	 */
 
-	public void store(String p_value) {
-		if (p_value.isEmpty() || p_value == "") {
-			message.warn("managedbean.empty");
+	public void store(final String value) {
+		if (value.isEmpty() || value == "") {
+			this.message.warn("managedbean.empty");
 		}
 		try {
-			Author tmpAuthor = new Author();
-			tmpAuthor.setName(p_value);
-			oAuthorBean.store(tmpAuthor);
-			authorList.add(tmpAuthor);
-			message.info("managedBean.storeSuccess");
-		} catch (Exception e) {
-			oLogger.error(e);
-			exceptionHandler.showMessage(e);
+			final Author tmpAuthor = new Author();
+			tmpAuthor.setName(value);
+			this.oAuthorBean.store(tmpAuthor);
+			this.authorList.add(tmpAuthor);
+		} catch (final Exception e) {
+			this.logger.error(e);
+			this.exceptionHandler.showMessage(e);
 		}
 	}
 
 	/**
 	 * Renames currently selected author.
-	 * 
-	 * @param p_newTxt
+	 *
+	 * @param newValue
 	 *            - new author name.
 	 */
-	public void update(String p_newTxt) {
-		if ((currentAuthor != null) && (p_newTxt.length() >= 3)) {
+	public void update(final String newValue) {
+		if ((this.currentAuthor != null) && (newValue.length() >= 3)) {
 			try {
-				currentAuthor.setName(p_newTxt);
-				oAuthorBean.update(currentAuthor);
-				authorList = oAuthorBean.getAll();
-				message.info("managedbean.updateSuccess");
-			} catch (Exception e) {
-				oLogger.error(e);
-				exceptionHandler.showMessage(e);
+				this.currentAuthor.setName(newValue);
+				this.oAuthorBean.update(this.currentAuthor);
+				this.authorList = this.oAuthorBean.getAll();
+			} catch (final Exception e) {
+				this.logger.error(e);
+				this.exceptionHandler.showMessage(e);
 			}
 		} else {
-			message.error("managedbean.string");
+			this.message.error("managedbean.string");
 		}
 	}
 
@@ -148,23 +133,22 @@ public class AuthorMB implements Serializable {
 	 * Deletes currently selected author from database.
 	 */
 	public void remove() {
-		if (currentAuthor == null) {
-			message.error("managedbean.empty");
+		if (this.currentAuthor == null) {
+			this.message.error("managedbean.empty");
 		} else {
 			try {
-				oAuthorBean.remove(currentAuthor.getUuid());
-				authorList = oAuthorBean.getAll();
-				message.info("managedbean.deleteSuccess");
-			} catch (Exception e) {
-				oLogger.error(e);
-				exceptionHandler.showMessage(e);
+				this.oAuthorBean.remove(this.currentAuthor.getUuid());
+				this.authorList = this.oAuthorBean.getAll();
+			} catch (final Exception e) {
+				this.logger.error(e);
+				this.exceptionHandler.showMessage(e);
 			}
 		}
 	}
 
 	/**
 	 * Checks whether the current author is selected.
-	 * 
+	 *
 	 * @return - Returns true if it is, false otherwise.
 	 */
 	public Boolean isSelected() {
@@ -173,5 +157,21 @@ public class AuthorMB implements Serializable {
 		} else {
 			return true;
 		}
+	}
+
+	/**
+	 * Getters and setters for private variables
+	 *
+	 */
+	public List<Author> getAuthorList() {
+		return this.authorList;
+	}
+
+	public Author getCurrentAuthor() {
+		return this.currentAuthor;
+	}
+
+	public void setCurrentAuthor(final Author currentAuthor) {
+		this.currentAuthor = currentAuthor;
 	}
 }

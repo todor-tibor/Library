@@ -6,7 +6,6 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
-import com.edu.library.LibraryException;
 import com.edu.library.business.exception.BusinessException;
 import com.edu.library.business.exception.ErrorMessages;
 import com.edu.library.data.userManagement.UserDao;
@@ -15,7 +14,7 @@ import com.edu.library.model.User;
 /**
  * Business implementation of user management. * (same functions as in the
  * IPublisherService interface)
- * 
+ *
  * @author kiska
  */
 
@@ -25,44 +24,82 @@ public class UserManagementBusiness {
 	@EJB
 	private UserDao dataAcces;
 
+	/**
+	 * Returns all users.
+	 *
+	 * @return - List of users
+	 */
 	public List<User> getAll() {
-		return dataAcces.getAll();
+		return this.dataAcces.getAll();
 	}
 
-	public List<User> search(String userName) {
-		return dataAcces.search(userName);
+	/**
+	 * Searches for a user given by {@code userName}
+	 *
+	 * @param userName
+	 *            - the name or part of the name of the user to search for
+	 * @return - List with all the users that match the search criteria
+	 */
+	public List<User> search(final String userName) {
+		return this.dataAcces.search(userName);
 	}
 
-	public User getById(String userId) {
-		return dataAcces.getById(userId);
+	/**
+	 * Return the user given by {@code userId}
+	 *
+	 * @param userId
+	 *            - the unique identifier of a user
+	 * @return - an author
+	 */
+	public User getById(final String userId) {
+		return this.dataAcces.getById(userId);
 	}
 
-	public void store(User user) {
-		// if
-		// (dataAcces.getByUserName(user.getUserName()).getUserName().isEmpty())
-		// {
-		dataAcces.store(user);
-		// } else {
-		// throw new
-		// BusinessException(ErrorMessages.ERROR_CONSTRAINT_VIOLATION);
-		// }
+	/**
+	 * Save the user given by {@code user}
+	 *
+	 * @param user
+	 *            - a User type object containing all the necessary information
+	 *            for saving a user to the DB.
+	 */
+	public void store(final User user) {
+		this.dataAcces.store(user);
 	}
 
-	public void update(User user) {
-		dataAcces.update(user);
+	/**
+	 * Update the user given in {@code user}
+	 *
+	 * @param user
+	 *            - the user object on which the update will be done
+	 */
+	public void update(final User user) {
+		this.dataAcces.update(user);
 	}
 
-	public void remove(String userId) {
-		User pub = dataAcces.getById(userId);
+	/**
+	 * Remove the user given by {@code userId}. Throws an exception if the user
+	 * has no borrowings.
+	 *
+	 * @param userId
+	 *            - the unique identifier of the user
+	 */
+	public void remove(final String userId) {
+		final User pub = this.dataAcces.getById(userId);
 		if (pub.getBorrows().isEmpty()) {
-			dataAcces.remove(pub);
+			this.dataAcces.remove(pub);
 		} else {
 			throw new BusinessException(ErrorMessages.ERROR_BOUND);
 		}
 	}
 
-	public User searchForUserName(String userName) {
-		return dataAcces.getByUserName(userName);
+	/**
+	 * Search for user by an exact name.
+	 * 
+	 * @param userName
+	 *            - the exact user name to search for
+	 * @return - the found user
+	 */
+	public User searchForUserName(final String userName) {
+		return this.dataAcces.getByUserName(userName);
 	}
-
 }

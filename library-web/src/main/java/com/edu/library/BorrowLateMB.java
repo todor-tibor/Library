@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.edu.library;
 
@@ -15,10 +15,11 @@ import org.jboss.logging.Logger;
 
 import com.edu.library.model.Borrow;
 import com.edu.library.util.ExceptionHandler;
+import com.edu.library.util.MessageService;
 
 /**
  * Handles borrowlate.xhtml
- * 
+ *
  * @author nagys, gallb
  *
  */
@@ -28,7 +29,7 @@ import com.edu.library.util.ExceptionHandler;
 @SessionScoped
 public class BorrowLateMB implements Serializable {
 
-	private Logger oLogger = Logger.getLogger(BorrowLateMB.class);
+	private final Logger oLogger = Logger.getLogger(BorrowLateMB.class);
 	private static final long serialVersionUID = -5489087837842352975L;
 
 	@Inject
@@ -43,26 +44,26 @@ public class BorrowLateMB implements Serializable {
 	private Borrow borrow = null;
 
 	public Borrow getCurrentBorrow() {
-		return borrow;
+		return this.borrow;
 	}
 
-	public void setCurrentBorrow(Borrow borrow) {
+	public void setCurrentBorrow(final Borrow borrow) {
 		this.borrow = borrow;
 	}
 
 	public Borrow getBorrow() {
-		return borrow;
+		return this.borrow;
 	}
 
-	public void setBorrow(Borrow borrow) {
+	public void setBorrow(final Borrow borrow) {
 		this.borrow = borrow;
 	}
 
 	public List<Borrow> getBorrows() {
-		return borrows;
+		return this.borrows;
 	}
 
-	public void setBorrows(List<Borrow> borrows) {
+	public void setBorrows(final List<Borrow> borrows) {
 		this.borrows = borrows;
 	}
 
@@ -70,14 +71,14 @@ public class BorrowLateMB implements Serializable {
 	 * Returns expired borrows
 	 */
 	public List<Borrow> getBorrowLate() {
-		borrows.clear();
+		this.borrows.clear();
 		try {
-			borrows = oBorrowBean.getBorrowLate();
+			this.borrows = this.oBorrowBean.getBorrowLate();
 		} catch (Exception e) {
-			oLogger.error(e);
-			exceptionHandler.showMessage(e);
+			this.oLogger.error(e);
+			this.exceptionHandler.showMessage(e);
 		}
-		return borrows;
+		return this.borrows;
 	}
 
 	/*
@@ -96,11 +97,11 @@ public class BorrowLateMB implements Serializable {
 	 */
 	public void mailNotifySelected() {
 		try {
-			oBorrowBean.mailOneLateUser(borrow);
-			message.info("Notification sent to: " + borrow.getUser().getUserName());
+			this.oBorrowBean.mailOneLateUser(this.borrow);
+			this.message.info("Notification sent to: " + this.borrow.getUser().getUserName());
 		} catch (Exception e) {
-			oLogger.error(e);
-			exceptionHandler.showMessage(e);
+			this.oLogger.error(e);
+			this.exceptionHandler.showMessage(e);
 		}
 	}
 }

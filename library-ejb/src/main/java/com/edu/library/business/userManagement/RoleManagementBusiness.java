@@ -13,7 +13,7 @@ import com.edu.library.model.Role;
 /**
  * Implements basic business logic for publisher management. (same functions as
  * in the IRoleService interface)
- * 
+ *
  * @author kiska
  * @author sipost
  */
@@ -24,30 +24,68 @@ public class RoleManagementBusiness {
 	@EJB
 	private RoleBean dataAcces;
 
+	/**
+	 * Returns all roles.
+	 *
+	 * @return - List of roles
+	 */
 	public List<Role> getAll() {
-		return dataAcces.getAll();
+		return this.dataAcces.getAll();
 	}
 
-	public List<Role> search(String p_searchTxt) {
-		return dataAcces.search(p_searchTxt);
+	/**
+	 * Searches for a role given by {@code searchText}
+	 *
+	 * @param searchText
+	 *            - the name or part of the name of the role to search for
+	 * @return - List with all the authors that match the search criteria
+	 */
+	public List<Role> search(final String searchText) {
+		return this.dataAcces.search(searchText);
 	}
 
-	public Role getById(String p_id) {
-		return dataAcces.getById(p_id);
+	/**
+	 * Return the role given by {@code id}
+	 *
+	 * @param id
+	 *            - the unique identifier of a role
+	 * @return - a role
+	 */
+	public Role getById(final String id) {
+		return this.dataAcces.getById(id);
 	}
 
-	public void store(Role p_value) {
-		dataAcces.store(p_value);
+	/**
+	 * Save the role given by {@code role}
+	 *
+	 * @param role
+	 *            - a Role type object containing all the necessary information
+	 *            for saving a role to the DB.
+	 */
+	public void store(final Role role) {
+		this.dataAcces.store(role);
 	}
 
-	public void update(Role p_user) {
-		dataAcces.update(p_user);
+	/**
+	 * Update the role given in {@code role}
+	 *
+	 * @param role
+	 *            - the role object on which the update will be done
+	 */
+	public void update(final Role role) {
+		this.dataAcces.update(role);
 	}
 
-	public void remove(String p_id) {
-		Role r = dataAcces.getById(p_id);
+	/**
+	 * Remove the role given by {@code id}
+	 *
+	 * @param id
+	 *            - the unique identifier of the role
+	 */
+	public void remove(final String id) {
+		final Role r = this.dataAcces.getById(id);
 		ServiceValidation.checkNotNull(r);
-		dataAcces.remove(r);
+		this.dataAcces.remove(r);
 	}
 
 }

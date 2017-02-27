@@ -28,35 +28,35 @@ public class AuthorManagementFacade implements IAuthorService {
 	}
 
 	@Override
-	public List<Author> search(String p_searchTxt) {
-		ServiceValidation.checkString(p_searchTxt);
-		return authorBussines.search(p_searchTxt);
+	public List<Author> search(String searchText) {
+		ServiceValidation.checkString(searchText);
+		return authorBussines.search(searchText);
 	}
 
 	@Override
-	public Author getById(String p_id) {
-		ServiceValidation.checkUuid(p_id);
-		return authorBussines.getById(p_id);
+	public Author getById(String id) {
+		ServiceValidation.checkUuid(id);
+		return authorBussines.getById(id);
 	}
 
 	@Override
-	public void store(Author p_value) {
-		ServiceValidation.checkNotNull(p_value);
-		ServiceValidation.checkString(p_value.getName());
-		authorBussines.store(p_value);
+	public void store(Author author) {
+		ServiceValidation.checkNotNull(author);
+		ServiceValidation.checkString(author.getName());
+		authorBussines.store(author);
 	}
 
 	@Override
-	public void update(Author p_user) {
-		ServiceValidation.checkNotNull(p_user);
-		ServiceValidation.checkString(p_user.getName());
-		authorBussines.update(p_user);
+	public void update(Author author) {
+		ServiceValidation.checkNotNull(author);
+		ServiceValidation.checkString(author.getName());
+		authorBussines.update(author);
 	}
 
 	@Override
-	public void remove(String p_id) {
-		ServiceValidation.checkUuid(p_id);
-		authorBussines.remove(p_id);
+	public void remove(String id) {
+		ServiceValidation.checkUuid(id);
+		authorBussines.remove(id);
 	}
 
 }

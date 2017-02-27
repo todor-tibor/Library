@@ -5,10 +5,12 @@ import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 
-import com.edu.library.LibraryException;
-import com.edu.library.MessageService;
+import com.edu.library.exception.ErrorLevel;
+import com.edu.library.exception.LibraryException;
+
 /**
  * ExceptionHandler to handle exceptions and show it using MessageService
+ *
  * @author sipost
  *
  */
@@ -18,24 +20,29 @@ public class ExceptionHandler implements Serializable {
 	@Inject
 	MessageService message;
 
-	public void showMessage(Exception e) {
+	/**
+	 * Shows info, warning or error messages based on {@code e}
+	 * 
+	 * @param e
+	 */
+	public void showMessage(final Exception e) {
 		Throwable t = e;
 
 		while ((t != null) && !(t instanceof LibraryException) && !(t instanceof IllegalArgumentException)) {
 			t = t.getCause();
 		}
 		if (t instanceof LibraryException) {
-			int level = ((LibraryException) t).getLevel();
-			if (level == 1) {
-				message.error(t.getMessage());
+			final ErrorLevel level = ((LibraryException) t).getLevel();
+			if (ErrorLevel.ERROR.equals(level)) {
+				this.message.error(t.getMessage());
 			}
-			if (level == 2) {
-				message.warn(t.getMessage());
+			if (ErrorLevel.WARNING.equals(level)) {
+				this.message.warn(t.getMessage());
 			}
 		} else if (t instanceof IllegalArgumentException) {
-			message.warn(t.getMessage());
+			this.message.warn(t.getMessage());
 		} else {
-			message.error(e.getMessage());
+			this.message.error(e.getMessage());
 		}
-	}	
+	}
 }

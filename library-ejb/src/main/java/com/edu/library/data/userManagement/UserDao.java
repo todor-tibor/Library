@@ -10,111 +10,158 @@ import javax.persistence.PersistenceException;
 
 import org.jboss.logging.Logger;
 
-import com.edu.library.PasswordEncrypter;
 import com.edu.library.data.exception.TechnicalException;
 import com.edu.library.model.Borrow;
 import com.edu.library.model.User;
+import com.edu.library.util.PasswordEncrypter;
 
 /**
  * Invokes the CRUD methods for a user
- * 
- * @author kiska 
+ *
+ * @author kiska
  */
 @Stateless
 @LocalBean
 public class UserDao {
 	@PersistenceContext(unitName = "WildflyUsers")
-	private EntityManager oEntityManager;
-	private Logger oLogger = Logger.getLogger(UserDao.class);
+	private EntityManager entityManager;
+	private final Logger logger = Logger.getLogger(UserDao.class);
 
+	/**
+	 * Returns all users in the database.
+	 *
+	 * @return - List of users
+	 */
 	public List<User> getAll() {
 		try {
-			return oEntityManager.createNamedQuery("User.findAll", User.class).getResultList();
-		} catch (PersistenceException e) {
-			oLogger.error(e);
+			return this.entityManager.createNamedQuery("User.findAll", User.class).getResultList();
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 	}
 
-	public User getById(String id) {
+	/**
+	 * Return the user in the database by the given parameter {@code id}
+	 *
+	 * @param id
+	 *            - the unique identifier of a user
+	 * @return - a user
+	 */
+	public User getById(final String id) {
 		try {
-			return oEntityManager.createNamedQuery("User.findById", User.class).setParameter("uuid", id)
+			return this.entityManager.createNamedQuery("User.findById", User.class).setParameter("uuid", id)
 					.getSingleResult();
-		} catch (PersistenceException e) {
-			oLogger.error(e);
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 	}
 
-	public void store(User user) {
+	/**
+	 * Save the user in the database by the given parameter {@code user}
+	 *
+	 * @param user
+	 *            - a user type object containing all the necessary information
+	 *            for saving a user to the DB.
+	 */
+	public void store(final User user) {
 		try {
 			user.setPassword(PasswordEncrypter.encypted(user.getPassword(), " "));
-			oEntityManager.persist(user);
-			oEntityManager.flush();
-		} catch (PersistenceException e) {
-			oLogger.error(e);
+			this.entityManager.persist(user);
+			this.entityManager.flush();
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 	}
 
-	public void remove(User user) {
+	/**
+	 * Remove the user from the database by the given parameter {@code id}
+	 *
+	 * @param id
+	 *            - the unique identifier of the user
+	 */
+	public void remove(final User user) {
 		try {
-			oEntityManager.remove(user);
-			oEntityManager.flush();
-		} catch (PersistenceException e) {
-			oLogger.error(e);
+			this.entityManager.remove(user);
+			this.entityManager.flush();
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 	}
 
-	public void update(User user) {
+	/**
+	 * Update the user in the database by the given parameter {@code user}
+	 *
+	 * @param user
+	 *            - the user object on which the update will be done
+	 */
+	public void update(final User user) {
 		try {
-			oEntityManager.merge(user);
-			oEntityManager.flush();
-		} catch (PersistenceException e) {
-			oLogger.error(e);
+			this.entityManager.merge(user);
+			this.entityManager.flush();
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 	}
 
-	public List<User> search(String userName) {
+	/**
+	 * Searches for a user in the database by the given parameter
+	 * {@code userName}
+	 *
+	 * @param userName
+	 *            - the name or part of the name of the user to search for
+	 * @return - List with all the users that match the search criteria
+	 */
+	public List<User> search(final String userName) {
 		try {
-			return oEntityManager.createNamedQuery("User.searchByUserName", User.class)
+			return this.entityManager.createNamedQuery("User.searchByUserName", User.class)
 					.setParameter("user_name", "%" + userName + "%").getResultList();
-		} catch (PersistenceException e) {
-			oLogger.error(e);
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 	}
 
 	/**
 	 * Returns the user of {@code userName}
-	 * 
+	 *
 	 * @param userName
 	 *            - the user name of the user for which to search for
 	 * @return - a User object
 	 * @throws TechnicalException
 	 */
-	public User getByUserName(String userName) {
+	public User getByUserName(final String userName) {
 
 		try {
-			User u = oEntityManager.createNamedQuery("User.findByName", User.class).setParameter("user_name", userName)
-					.getSingleResult();
+			final User u = this.entityManager.createNamedQuery("User.findByName", User.class)
+					.setParameter("user_name", userName).getSingleResult();
 			return u;
-		} catch (PersistenceException e) {
-			oLogger.error(e);
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 	}
-	
-	public List<Borrow> getBorrow(String userName){
+
+	/**
+	 * Lists all borrowings from the database that a user has, given by the
+	 * {@code userName}
+	 *
+	 * @param userName
+	 *            - the user name of the publication
+	 * @return - list of borrowings
+	 */
+	public List<Borrow> getBorrow(final String userName) {
 
 		try {
-			List<Borrow> u = oEntityManager.createNamedQuery("User.findBorrow", Borrow.class).setParameter("userName", "%" +  userName + "%")
-					.getResultList();
+			final List<Borrow> u = this.entityManager.createNamedQuery("User.findBorrow", Borrow.class)
+					.setParameter("userName", "%" + userName + "%").getResultList();
 			return u;
-		} catch (PersistenceException e) {
-			oLogger.error(e);
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 	}

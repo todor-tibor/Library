@@ -12,10 +12,11 @@ import org.jboss.logging.Logger;
 
 import com.edu.library.model.Publisher;
 import com.edu.library.util.ExceptionHandler;
+import com.edu.library.util.MessageService;
 
 /**
  * Publisher manager. Invokes the CRUD methods of the server
- * 
+ *
  * @author kiska
  *
  */
@@ -23,14 +24,14 @@ import com.edu.library.util.ExceptionHandler;
 @SessionScoped
 public class PublisherMB implements Serializable {
 
-	private Logger oLogger = Logger.getLogger(PublisherMB.class);
+	private final Logger logger = Logger.getLogger(PublisherMB.class);
 	private static final long serialVersionUID = -4702598250751689454L;
 
 	@Inject
 	private IPublisherService oPublisherBean;
 	@Inject
 	ExceptionHandler exceptionHandler;
-	
+
 	@Inject
 	MessageService message;
 
@@ -38,110 +39,97 @@ public class PublisherMB implements Serializable {
 	 * List containing all publishers
 	 */
 	private List<Publisher> publishersList = new ArrayList<>();
+
 	/**
 	 * Object containing the currently selected publisher
 	 */
 	private Publisher currentPublisher = null;
 
-	public List<Publisher> getPublishersList() {
-		return publishersList;
-	}
-
-	public Publisher getCurrentPublisher() {
-		return currentPublisher;
-	}
-
-	public void setCurrentPublisher(Publisher currentPublisher) {
-		this.currentPublisher = currentPublisher;
-	}
-
 	/**
 	 * Returns all publishers
-	 * 
+	 *
 	 * @return - a publisher list if database is not empty
 	 */
 	public List<Publisher> getAll() {
-		publishersList.clear();
+		this.publishersList.clear();
 		try {
-			publishersList = oPublisherBean.getAll();
-		} catch (Exception e) {
-			oLogger.error(e);
-			exceptionHandler.showMessage(e);
+			this.publishersList = this.oPublisherBean.getAll();
+		} catch (final Exception e) {
+			this.logger.error(e);
+			this.exceptionHandler.showMessage(e);
 		}
-		return publishersList;
+		return this.publishersList;
 	}
 
 	/**
-	 * Searches for all publishers whose name contain the {@code p_searchTxt}
+	 * Searches for all publishers whose name contain the {@code searchTxt}
 	 * input data
-	 * 
-	 * @param p_searchTxt
+	 *
+	 * @param searchTxt
 	 *            - a string containing the search term
 	 * @return - a list of publisher objects if any matches were found
 	 */
-	public List<Publisher> search(String p_searchTxt) {
-		if (p_searchTxt.length() >= 3) {
-			publishersList.clear();
+	public List<Publisher> search(final String searchTxt) {
+		if (searchTxt.length() >= 3) {
+			this.publishersList.clear();
 			try {
-				publishersList = oPublisherBean.search(p_searchTxt);
-			} catch (Exception e) {
-				oLogger.error(e);
-				exceptionHandler.showMessage(e);
+				this.publishersList = this.oPublisherBean.search(searchTxt);
+			} catch (final Exception e) {
+				this.logger.error(e);
+				this.exceptionHandler.showMessage(e);
 			}
 		} else {
-			message.error("managedbean.string");
+			this.message.error("managedbean.string");
 		}
-		return publishersList;
+		return this.publishersList;
 	}
 
 	/**
-	 * Stores the new publisher given by {@code p_value} name into the database
-	 * 
-	 * @param p_value
+	 * Stores the new publisher given by {@code value} name into the database
+	 *
+	 * @param value
 	 *            - a string representation of the name the publisher will be
 	 *            stored
 	 */
 
-	public void store(String p_value) {
-		if (p_value.isEmpty()) {
-			message.error("managedbean.empty");
+	public void store(final String value) {
+		if (value.isEmpty()) {
+			this.message.error("managedbean.empty");
 		}
-		if (p_value == "") {
-			message.error("managedbean.empty");
+		if (value == "") {
+			this.message.error("managedbean.empty");
 		}
 		try {
-			Publisher tmpPublisher = new Publisher();
-			tmpPublisher.setName(p_value);
-			oPublisherBean.store(tmpPublisher);
-			publishersList.add(tmpPublisher);
-			message.info("managedBean.storeSuccess");
-		} catch (Exception e) {
-			oLogger.error(e);
-			exceptionHandler.showMessage(e);
+			final Publisher tmpPublisher = new Publisher();
+			tmpPublisher.setName(value);
+			this.oPublisherBean.store(tmpPublisher);
+			this.publishersList.add(tmpPublisher);
+		} catch (final Exception e) {
+			this.logger.error(e);
+			this.exceptionHandler.showMessage(e);
 		}
 	}
 
 	/**
 	 * Updates an existing publisher, setting it's name to the new name given as
-	 * {@code p_newTxt}
-	 * 
-	 * @param p_newTxt
+	 * {@code newTxt}
+	 *
+	 * @param newTxt
 	 *            - a string representation of the new name
 	 */
-	public void update(String p_newTxt) {
-		if ((currentPublisher != null) && (p_newTxt.length() >= 3)) {
+	public void update(final String newTxt) {
+		if ((this.currentPublisher != null) && (newTxt.length() >= 3)) {
 			try {
-				currentPublisher.setName(p_newTxt);
-				oPublisherBean.update(currentPublisher);
-				publishersList = oPublisherBean.getAll();
-				message.info("managedbean.updateSuccess");
-			} catch (Exception e) {
-				oLogger.error(e);
-				exceptionHandler.showMessage(e);
+				this.currentPublisher.setName(newTxt);
+				this.oPublisherBean.update(this.currentPublisher);
+				this.publishersList = this.oPublisherBean.getAll();
+			} catch (final Exception e) {
+				this.logger.error(e);
+				this.exceptionHandler.showMessage(e);
 
 			}
 		} else {
-			message.error("managedbean.string");
+			this.message.error("managedbean.string");
 		}
 	}
 
@@ -149,23 +137,22 @@ public class PublisherMB implements Serializable {
 	 * Removes the currently selected publisher
 	 */
 	public void remove() {
-		if (currentPublisher == null) {
-			message.error("managedbean.empty");
+		if (this.currentPublisher == null) {
+			this.message.error("managedbean.empty");
 		} else {
 			try {
-				oPublisherBean.remove(currentPublisher.getUuid());
-				publishersList = oPublisherBean.getAll();
-				message.info("managedbean.deleteSuccess");
-			} catch (Exception e) {
-				oLogger.error(e);
-				exceptionHandler.showMessage(e);
+				this.oPublisherBean.remove(this.currentPublisher.getUuid());
+				this.publishersList = this.oPublisherBean.getAll();
+			} catch (final Exception e) {
+				this.logger.error(e);
+				this.exceptionHandler.showMessage(e);
 			}
 		}
 	}
 
 	/**
 	 * Checks whether a publisher is selected.
-	 * 
+	 *
 	 * @return - true if it is, false otherwise
 	 */
 	public Boolean isSelected() {
@@ -174,5 +161,21 @@ public class PublisherMB implements Serializable {
 		} else {
 			return true;
 		}
+	}
+
+	/*
+	 * Getters and setters for private attributes
+	 */
+
+	public List<Publisher> getPublishersList() {
+		return this.publishersList;
+	}
+
+	public Publisher getCurrentPublisher() {
+		return this.currentPublisher;
+	}
+
+	public void setCurrentPublisher(final Publisher currentPublisher) {
+		this.currentPublisher = currentPublisher;
 	}
 }

@@ -1,7 +1,7 @@
 package com.edu.library.model;
 
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -23,7 +23,7 @@ import javax.persistence.TemporalType;
 
 /**
  * The persistent abstract class for the publications database table.
- * 
+ *
  * @author sipost
  * @author kiska
  */
@@ -37,25 +37,52 @@ import javax.persistence.TemporalType;
 		@NamedQuery(name = "Publication.getById", query = "SELECT a FROM Publication a WHERE a.uuid = :uuid"),
 		@NamedQuery(name = "Publication.findBorrow", query = "SELECT DISTINCT b FROM Borrow b, Publication p JOIN b.publication bPublication JOIN p.borrows pPublication WHERE bPublication.uuid = pPublication.publication.uuid AND p.title LIKE :title") })
 public abstract class Publication extends BaseEntity {
+
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * @param nrOfCopys
+	 *            -Represents the number of a publication copies that can be in
+	 *            the library
+	 */
 	@Column(name = "nr_of_copys")
 	private int nrOfCopys;
 
+	/**
+	 * @param onStock
+	 *            -Represents the available number of a publication copies in
+	 *            the library
+	 */
 	@Column(name = "on_stock")
 	private int onStock;
-	
+
+	/**
+	 * @param publicationDate
+	 *            -Represents the date when the publication was published
+	 */
 	@Temporal(TemporalType.DATE)
 	@Column(name = "publication_date")
 	private Date publicationDate;
 
+	/**
+	 * @param title
+	 *            -Title of the publication
+	 */
 	private String title;
 
-	// bi-directional many-to-one association to Borrow
+	/**
+	 * @param borrows
+	 *            - List of borrows for a given publications -bi-directional
+	 *            many-to-one association to Borrow
+	 */
 	@OneToMany(mappedBy = "publication", fetch = FetchType.EAGER)
 	private Set<Borrow> borrows;
 
-	// bi-directional many-to-one association to Publisher
+	/**
+	 * @param publisher
+	 *            - The publisher of publications -bi-directional many-to-one
+	 *            association to Publisher
+	 */
 	@ManyToOne
 	@JoinColumn(name = "publisher_id")
 	private Publisher publisher;
@@ -67,7 +94,7 @@ public abstract class Publication extends BaseEntity {
 		return this.nrOfCopys;
 	}
 
-	public void setNrOfCopys(int nrOfCopys) {
+	public void setNrOfCopys(final int nrOfCopys) {
 		this.nrOfCopys = nrOfCopys;
 	}
 
@@ -75,7 +102,7 @@ public abstract class Publication extends BaseEntity {
 		return this.onStock;
 	}
 
-	public void setOnStock(int onStock) {
+	public void setOnStock(final int onStock) {
 		this.onStock = onStock;
 	}
 
@@ -83,7 +110,7 @@ public abstract class Publication extends BaseEntity {
 		return this.publicationDate;
 	}
 
-	public void setPublicationDate(Date publicationDate) {
+	public void setPublicationDate(final Date publicationDate) {
 		this.publicationDate = publicationDate;
 	}
 
@@ -91,7 +118,7 @@ public abstract class Publication extends BaseEntity {
 		return this.title;
 	}
 
-	public void setTitle(String title) {
+	public void setTitle(final String title) {
 		this.title = title;
 	}
 
@@ -99,18 +126,18 @@ public abstract class Publication extends BaseEntity {
 		return new ArrayList<>(this.borrows);
 	}
 
-	public void setBorrows(Set<Borrow> borrows) {
+	public void setBorrows(final Set<Borrow> borrows) {
 		this.borrows = borrows;
 	}
 
-	public Borrow addBorrow(Borrow borrow) {
+	public Borrow addBorrow(final Borrow borrow) {
 		getBorrows().add(borrow);
 		borrow.setPublication(this);
 
 		return borrow;
 	}
 
-	public Borrow removeBorrow(Borrow borrow) {
+	public Borrow removeBorrow(final Borrow borrow) {
 		getBorrows().remove(borrow);
 		borrow.setPublication(null);
 
@@ -121,7 +148,7 @@ public abstract class Publication extends BaseEntity {
 		return this.publisher;
 	}
 
-	public void setPublisher(Publisher publisher) {
+	public void setPublisher(final Publisher publisher) {
 		this.publisher = publisher;
 	}
 
