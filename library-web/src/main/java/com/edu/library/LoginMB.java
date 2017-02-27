@@ -70,7 +70,7 @@ public class LoginMB implements Serializable {
 	public String isReader() {
 		final Role tmp = new Role();
 		tmp.setRole(RoleType.READER.toString());
-		if (this.roles.contains(tmp)) {
+		if (this.roles != null && this.roles.contains(tmp)) {
 			return "";
 		} else {
 			return "index";
