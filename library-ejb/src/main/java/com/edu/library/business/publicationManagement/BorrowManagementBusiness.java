@@ -15,8 +15,7 @@ import javax.ejb.Stateless;
 import org.jboss.logging.Logger;
 
 import com.edu.library.access.util.ServiceValidation;
-import com.edu.library.business.exception.BusinessException;
-import com.edu.library.business.exception.ErrorMessages;
+import com.edu.library.business.uitl.BorrowRestriction;
 import com.edu.library.data.publicationManagement.BorrowDAO;
 import com.edu.library.data.publicationManagement.PublicationBean;
 import com.edu.library.data.userManagement.UserDao;
@@ -50,25 +49,6 @@ public class BorrowManagementBusiness {
 	 */
 	public List<Borrow> getAll() {
 		return this.borrowDAO.getAll();
-	}
-
-	/**
-	 * Verifies if the given user is currently having a publication borrowed.
-	 *
-	 * @param user
-	 *            user to verify
-	 * @param publication
-	 *            publication to verify
-	 * @return true if the publication is already borrowed, false if not
-	 */
-	private boolean currentlyHasItBorrowed(final User user, final Publication publication) {
-		final List<Borrow> borrows = user.getBorrows();
-		for (int i = 0; i < borrows.size(); i++) {
-			if (borrows.get(i).getPublication().getUuid().equals(publication.getUuid())) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	/**
@@ -107,34 +87,8 @@ public class BorrowManagementBusiness {
 	public void store(final Borrow id) {
 		// get current data of user
 		final User tmpUser = this.userDAO.getById(id.getUser().getUuid());
-		// check if trust index is OK
-		if (tmpUser.getLoyaltyIndex() > 0) {
-			// check if user reached the allowed maximum number of borrowings
-			if (tmpUser.getBorrows().size() < 3) {
-				// user is not currently late with borrowing
-				if (!tmpUser.isLate()) {
-					final Publication tmpPub = this.pubDAO.getById(id.getPublication().getUuid());
-					// and the user doesn't have it currently borrowed
-					if (!this.currentlyHasItBorrowed(tmpUser, tmpPub)) {
-						// check if publication is on stock
-						if (tmpPub.getOnStock() > 0) {
-							tmpPub.setOnStock(tmpPub.getOnStock() - 1);
-							this.borrowDAO.store(id);
-						} else {
-							throw new BusinessException(ErrorMessages.ERROR_STOCK);
-						}
-					} else {
-						throw new BusinessException(ErrorMessages.ERROR_CURRENTLY_BORROWED);
-					}
-				} else {
-					throw new BusinessException(ErrorMessages.ERROR_LATE);
-				}
-			} else {
-				throw new BusinessException(ErrorMessages.ERROR_TOOMUCH_BORROW);
-			}
-		} else {
-			throw new BusinessException(ErrorMessages.ERROR_LOYALTY);
-		}
+
+		BorrowRestriction.checkBorrowRestriction(tmpUser, this.pubDAO, this.borrowDAO, id);
 	}
 
 	/**
