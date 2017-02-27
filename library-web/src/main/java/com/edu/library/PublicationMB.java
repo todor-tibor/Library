@@ -34,7 +34,7 @@ import com.edu.library.util.MessageService;
 @SessionScoped
 public class PublicationMB implements Serializable {
 
-	private final Logger oLogger = Logger.getLogger(PublicationMB.class);
+	private final Logger logger = Logger.getLogger(PublicationMB.class);
 	private static final long serialVersionUID = -4702598250751689454L;
 
 	@Inject
@@ -48,20 +48,20 @@ public class PublicationMB implements Serializable {
 	PublicationFilter filter = new PublicationFilter();
 	private Date date = new Date();
 
-	/*
-	 * variables to select publication type, authors or publisher for update and
+	/**
+	 * Variables to select publication type, authors or publisher for update and
 	 * insert
 	 */
 	private List<Author> authors, currentAuthors;
 	private Publisher currentPublisher;
 	private String type;
 
-	/*
+	/**
 	 * Currently displayed publications.
 	 */
 	private List<Publication> publicationList = new ArrayList<>();
 
-	/*
+	/**
 	 * Currently selected publication.
 	 */
 	private Publication currentPublication = null;
@@ -76,8 +76,8 @@ public class PublicationMB implements Serializable {
 		this.publicationList.clear();
 		try {
 			this.publicationList = this.oPublicationBean.getAll();
-		} catch (Exception e) {
-			this.oLogger.error(e);
+		} catch (final Exception e) {
+			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		}
 		return this.publicationList;
@@ -99,8 +99,8 @@ public class PublicationMB implements Serializable {
 				if (this.publicationList.isEmpty()) {
 					this.message.warn("ejb.message.noEntity");
 				}
-			} catch (Exception e) {
-				this.oLogger.error(e);
+			} catch (final Exception e) {
+				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
 			}
 		} else {
@@ -126,7 +126,7 @@ public class PublicationMB implements Serializable {
 		int nrOfCopies;
 		try {
 			nrOfCopies = Integer.parseInt(pNrOfCopies);
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			this.message.warn("managedbean.numberFormatExeption");
 			return;
 		}
@@ -156,7 +156,7 @@ public class PublicationMB implements Serializable {
 		publication.setNrOfCopys(nrOfCopies);
 		publication.setOnStock(nrOfCopies);
 		publication.setPublisher(this.currentPublisher);
-		Calendar c = Calendar.getInstance();
+		final Calendar c = Calendar.getInstance();
 		c.setTime(this.date);
 		c.add(Calendar.DATE, 1);
 		this.date = c.getTime();
@@ -165,9 +165,8 @@ public class PublicationMB implements Serializable {
 		try {
 			this.oPublicationBean.store(publication);
 			this.publicationList.add(publication);
-			this.message.info("managedBean.storeSuccess");
-		} catch (Exception e) {
-			this.oLogger.error(e);
+		} catch (final Exception e) {
+			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		}
 	}
@@ -179,26 +178,27 @@ public class PublicationMB implements Serializable {
 	public void update() {
 		if ((this.currentPublication != null) && this.currentPublication.getTitle() != null
 				&& this.currentPublication.getPublisher() != null) {
-			if (this.currentPublication instanceof Book)
+			if (this.currentPublication instanceof Book) {
 				if (this.authors != null && !this.authors.isEmpty()) {
 					((Book) this.currentPublication).setAuthors(this.authors);
 				} else {
 					this.message.warn("managedbean.required");
 					return;
 				}
-			if ("Magazine".equals(this.currentPublication.getClass().getSimpleName()))
+			}
+			if ("Magazine".equals(this.currentPublication.getClass().getSimpleName())) {
 				if (this.authors != null && !this.authors.isEmpty()) {
 					((Magazine) this.currentPublication).setAuthors(this.authors);
 				} else {
 					this.message.warn("managedbean.required");
 					return;
 				}
+			}
 			try {
 				this.oPublicationBean.update(this.currentPublication);
 				this.publicationList = this.oPublicationBean.getAll();
-				this.message.info("managedbean.updateSuccess");
-			} catch (Exception e) {
-				this.oLogger.error(e);
+			} catch (final Exception e) {
+				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
 			}
 		} else {
@@ -216,9 +216,8 @@ public class PublicationMB implements Serializable {
 			try {
 				this.oPublicationBean.remove(this.currentPublication.getUuid());
 				this.publicationList = this.oPublicationBean.getAll();
-				this.message.info("managedbean.deleteSuccess");
-			} catch (Exception e) {
-				this.oLogger.error(e);
+			} catch (final Exception e) {
+				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
 			}
 		}
@@ -226,7 +225,7 @@ public class PublicationMB implements Serializable {
 	}
 
 	/**
-	 * filter publication
+	 * Filter publication
 	 *
 	 * @return
 	 */
@@ -237,17 +236,17 @@ public class PublicationMB implements Serializable {
 			if (this.publicationList.isEmpty()) {
 				this.message.warn("ejb.message.noEntity");
 			}
-		} catch (Exception e) {
-			this.oLogger.error(e);
+		} catch (final Exception e) {
+			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		}
 		return this.publicationList;
 	}
 
 	/**
-	 * Check if has selected publication
+	 * Check if there is selected publication
 	 *
-	 * @return - true if it has, false otherwise
+	 * @return - true if it is, false otherwise
 	 */
 	public Boolean isSelected() {
 		if (this.currentPublication == null) {
@@ -261,7 +260,7 @@ public class PublicationMB implements Serializable {
 	 * Check if the Publication selected has authors property(the Newspaper
 	 * can't have any authors)
 	 *
-	 * @return - true if it has, false otherwise
+	 * @return - true if it is, false otherwise
 	 */
 	public Boolean hasAuthor() {
 		if (this.currentPublication == null) {
@@ -292,7 +291,7 @@ public class PublicationMB implements Serializable {
 		return this.authors;
 	}
 
-	/*
+	/**
 	 * Getters and setters for private variables
 	 */
 

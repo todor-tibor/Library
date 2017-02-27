@@ -26,7 +26,7 @@ import com.edu.library.util.MessageService;
 @SessionScoped
 public class RoleMB implements Serializable {
 
-	private final Logger oLogger = Logger.getLogger(RoleMB.class);
+	private final Logger logger = Logger.getLogger(RoleMB.class);
 	private static final long serialVersionUID = -4702598250751689454L;
 
 	@Inject
@@ -57,8 +57,8 @@ public class RoleMB implements Serializable {
 		this.roleList.clear();
 		try {
 			this.roleList = this.oRoleBean.getAll();
-		} catch (Exception e) {
-			this.oLogger.error(e);
+		} catch (final Exception e) {
+			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		}
 		return this.roleList;
@@ -76,8 +76,8 @@ public class RoleMB implements Serializable {
 			this.roleList.clear();
 			try {
 				this.roleList = this.oRoleBean.search(searchTxt);
-			} catch (Exception e) {
-				this.oLogger.error(e.getMessage());
+			} catch (final Exception e) {
+				this.logger.error(e.getMessage());
 				this.exceptionHandler.showMessage(e);
 			}
 		} else {
@@ -98,14 +98,13 @@ public class RoleMB implements Serializable {
 			this.message.error("managedbean.empty");
 			return;
 		}
-		Role tmpRole = new Role();
+		final Role tmpRole = new Role();
 		tmpRole.setRole(name);
 		try {
 			this.oRoleBean.store(tmpRole);
 			this.roleList.add(tmpRole);
-			this.message.info("managedBean.storeSuccess");
-		} catch (Exception e) {
-			this.oLogger.error(e);
+		} catch (final Exception e) {
+			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		}
 	}
@@ -122,9 +121,8 @@ public class RoleMB implements Serializable {
 			try {
 				this.oRoleBean.update(this.currentRole);
 				this.roleList = getAll();
-				this.message.info("managedbean.updateSuccess");
-			} catch (Exception e) {
-				this.oLogger.error(e);
+			} catch (final Exception e) {
+				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
 			}
 		} else {
@@ -142,9 +140,8 @@ public class RoleMB implements Serializable {
 			try {
 				this.oRoleBean.remove(this.currentRole.getUuid());
 				this.roleList.remove(this.currentRole);
-				this.message.info("managedbean.deleteSuccess");
-			} catch (Exception e) {
-				this.oLogger.error(e);
+			} catch (final Exception e) {
+				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
 			}
 		}

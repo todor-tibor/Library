@@ -31,7 +31,7 @@ import com.edu.library.util.MessageService;
 @SessionScoped
 public class UserMB implements Serializable {
 
-	private final Logger oLogger = Logger.getLogger(UserMB.class);
+	private final Logger logger = Logger.getLogger(UserMB.class);
 	private static final long serialVersionUID = -4702598250751689454L;
 
 	@Inject
@@ -50,7 +50,7 @@ public class UserMB implements Serializable {
 	LoginMB loginMB;
 
 	public void change() {
-		this.oLogger.info("--tab changed--");
+		this.logger.info("--tab changed--");
 	}
 
 	/**
@@ -77,8 +77,8 @@ public class UserMB implements Serializable {
 		this.userList.clear();
 		try {
 			this.userList = this.oUserBean.getAll();
-		} catch (Exception e) {
-			this.oLogger.error(e);
+		} catch (final Exception e) {
+			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		}
 		return this.userList;
@@ -96,8 +96,8 @@ public class UserMB implements Serializable {
 			this.userList.clear();
 			try {
 				this.userList = this.oUserBean.search(p_searchTxt);
-			} catch (Exception e) {
-				this.oLogger.error(e);
+			} catch (final Exception e) {
+				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
 			}
 		} else {
@@ -128,7 +128,7 @@ public class UserMB implements Serializable {
 			return;
 		}
 
-		User tmpUser = new User();
+		final User tmpUser = new User();
 		tmpUser.setUserName(name);
 		tmpUser.setLoyaltyIndex(loyaltyIndex);
 		tmpUser.setPassword(password);
@@ -136,9 +136,8 @@ public class UserMB implements Serializable {
 		try {
 			this.oUserBean.store(tmpUser);
 			this.userList.add(tmpUser);
-			this.message.info("managedBean.storeSuccess");
-		} catch (Exception e) {
-			this.oLogger.error(e);
+		} catch (final Exception e) {
+			this.logger.error(e);
 			this.message.error(e.getMessage());
 		}
 	}
@@ -158,9 +157,8 @@ public class UserMB implements Serializable {
 		try {
 			this.oUserBean.update(this.currentUser);
 			this.userList = this.oUserBean.getAll();
-			this.message.info("managedbean.updateSuccess");
-		} catch (Exception e) {
-			this.oLogger.error(e);
+		} catch (final Exception e) {
+			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		}
 	}
@@ -175,9 +173,8 @@ public class UserMB implements Serializable {
 			try {
 				this.oUserBean.remove(this.currentUser.getUuid());
 				this.userList.remove(this.currentUser);
-				this.message.info("managedbean.deleteSuccess");
-			} catch (Exception e) {
-				this.oLogger.error(e);
+			} catch (final Exception e) {
+				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
 			}
 		}
@@ -193,8 +190,8 @@ public class UserMB implements Serializable {
 		}
 		try {
 			this.loggedInUser = this.oUserBean.getByUserName(this.loginMB.getUserName());
-		} catch (Exception e) {
-			this.oLogger.error(e);
+		} catch (final Exception e) {
+			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		}
 	}

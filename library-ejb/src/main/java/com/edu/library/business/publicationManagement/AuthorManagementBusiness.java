@@ -24,7 +24,7 @@ public class AuthorManagementBusiness {
 	private AuthorBean dataAccess;
 
 	/**
-	 * Returns all authors.
+	 * Lists all authors.
 	 *
 	 * @return - List of authors
 	 */

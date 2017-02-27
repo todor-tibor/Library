@@ -24,7 +24,7 @@ import com.edu.library.util.MessageService;
 @SessionScoped
 public class AuthorMB implements Serializable {
 
-	private final Logger oLogger = Logger.getLogger(AuthorMB.class);
+	private final Logger logger = Logger.getLogger(AuthorMB.class);
 	private static final long serialVersionUID = -4702598250751689454L;
 
 	@Inject
@@ -55,8 +55,8 @@ public class AuthorMB implements Serializable {
 		this.authorList.clear();
 		try {
 			this.authorList = this.oAuthorBean.getAll();
-		} catch (Exception e) {
-			this.oLogger.error(e);
+		} catch (final Exception e) {
+			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		}
 		return this.authorList;
@@ -75,8 +75,8 @@ public class AuthorMB implements Serializable {
 			try {
 				this.authorList = this.oAuthorBean.search(searchTxt);
 
-			} catch (Exception e) {
-				this.oLogger.error(e);
+			} catch (final Exception e) {
+				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
 
 			}
@@ -98,13 +98,12 @@ public class AuthorMB implements Serializable {
 			this.message.warn("managedbean.empty");
 		}
 		try {
-			Author tmpAuthor = new Author();
+			final Author tmpAuthor = new Author();
 			tmpAuthor.setName(value);
 			this.oAuthorBean.store(tmpAuthor);
 			this.authorList.add(tmpAuthor);
-			this.message.info("managedBean.storeSuccess");
-		} catch (Exception e) {
-			this.oLogger.error(e);
+		} catch (final Exception e) {
+			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		}
 	}
@@ -121,9 +120,8 @@ public class AuthorMB implements Serializable {
 				this.currentAuthor.setName(newValue);
 				this.oAuthorBean.update(this.currentAuthor);
 				this.authorList = this.oAuthorBean.getAll();
-				this.message.info("managedbean.updateSuccess");
-			} catch (Exception e) {
-				this.oLogger.error(e);
+			} catch (final Exception e) {
+				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
 			}
 		} else {
@@ -141,9 +139,8 @@ public class AuthorMB implements Serializable {
 			try {
 				this.oAuthorBean.remove(this.currentAuthor.getUuid());
 				this.authorList = this.oAuthorBean.getAll();
-				this.message.info("managedbean.deleteSuccess");
-			} catch (Exception e) {
-				this.oLogger.error(e);
+			} catch (final Exception e) {
+				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
 			}
 		}
