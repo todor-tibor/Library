@@ -16,6 +16,10 @@
 		<p:panel header="#{msg['publication.button']}">
 			<h:form id="publication_actions_form">
 
+				<p:commandButton value="#{msg['filter.button']}"
+					update="publicationDT"
+					action="#{publicationBean.filterPublication}">
+				</p:commandButton>
 				<p:inputText id="publication_searchTextBox"
 					binding="#{srch_publication}" />
 				<p:commandButton value="#{msg['search.button']}"
@@ -29,21 +33,77 @@
 					selection="#{publicationBean.currentPublication}"
 					rowKey="#{publication.uuid}">
 
-					<p:ajax event="rowSelect" listener="#{publicationBean.isSelected}"
-						update="publicationDT" />
 					<f:facet name="header">
             			#{pubMan['publications.text']}
         			</f:facet>
-					<f:facet name="header">
-					</f:facet>
-					<p:column headerText="#{pubMan['publication.name']}">
+
+					<p:column>
+						<f:facet name="header">
+							<p:outputLabel value="#{pubMan['publication.title']}" />
+							<br />
+							<p:inputText value="#{publicationBean.filter.title}"
+								onkeypress="if (event.keyCode == 13) {e.preventDefault(); inputEnter.onchange(); return false; }">
+								<f:ajax event="change"
+									listener="#{publicationBean.filterPublication}"
+									update="publicationDT" />
+							</p:inputText>
+						</f:facet>
 						<h:outputText value="#{publication.title}" />
 					</p:column>
-					<p:column headerText="#{pubMan['publication.publisher']}">
+
+					<p:column>
+						<f:facet name="header">
+							<p:outputLabel value="#{pubMan['publication.publisher']}" />
+							<br />
+							<p:inputText value="#{publicationBean.filter.publisher}"
+								onkeypress="if (event.keyCode == 13) {e.preventDefault(); inputEnter.onchange(); return false; }">
+								<f:ajax event="change"
+									listener="#{publicationBean.filterPublication}"
+									update="publicationDT" />
+							</p:inputText>
+						</f:facet>
 						<h:outputText value="#{publication.publisher.name}" />
+
 					</p:column>
-					<p:column headerText="#{pubMan['publication.onStock']}">
+					<p:column>
+						<f:facet name="header">
+							<p:outputLabel value="#{pubMan['publication.onStock']}" />
+							<br />
+							<p:selectBooleanCheckbox
+								value="#{publicationBean.filter.onStock}"
+								onkeypress="if (event.keyCode == 13) {e.preventDefault(); inputEnter.onchange(); return false; }">
+								<f:ajax event="change"
+									listener="#{publicationBean.filterPublication}"
+									update="publicationDT" />
+							</p:selectBooleanCheckbox>
+						</f:facet>
 						<h:outputText value="#{publication.onStock}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<p:outputLabel value="#{pubMan['publication.publicationDate']}" />
+							<br />
+							<p:outputLabel value="#{pubMan['publication.dateFrom']}" />
+							<p:inputText value="#{publicationBean.filter.from}"
+								onkeypress="if (event.keyCode == 13) {e.preventDefault(); inputEnter.onchange(); return false; }">
+								<f:ajax event="change"
+									listener="#{publicationBean.filterPublication}"
+									update="publicationDT" />
+								<f:convertDateTime pattern="yyyy-MM-dd" />
+							</p:inputText>
+							<br />
+							<p:outputLabel value="#{pubMan['publication.dateUntil']}" />
+							<p:inputText value="#{publicationBean.filter.until}"
+								onkeypress="if (event.keyCode == 13) {e.preventDefault(); inputEnter.onchange(); return false; }">
+								<f:ajax event="change"
+									listener="#{publicationBean.filterPublication}"
+									update="publicationDT" />
+								<f:convertDateTime pattern="yyyy-MM-dd" />
+							</p:inputText>
+						</f:facet>
+						<h:outputText value="#{publication.publicationDate}">
+							<f:convertDateTime pattern="yyyy-MM-dd" />
+						</h:outputText>
 					</p:column>
 					<p:column headerText="#{pubMan['publication.authors']}">
 						<h:outputText value="#{publication.authors}"
