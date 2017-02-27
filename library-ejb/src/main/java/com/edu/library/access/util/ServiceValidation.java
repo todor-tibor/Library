@@ -9,7 +9,6 @@ import org.jboss.logging.Logger;
 
 import com.edu.library.model.BaseEntity;
 
-
 /**
  * Serves as a Singleton data validator class for different data input types.
  *
@@ -45,7 +44,7 @@ public class ServiceValidation {
 	private static final String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#.$%]).{6,20})";
 
 	/**
-	 * 
+	 *
 	 */
 	private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
 			+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -166,11 +165,11 @@ public class ServiceValidation {
 		}
 	}
 
-	public static void checEmail(String email) {
+	public static void checEmail(final String email) {
 		Pattern pattern = Pattern.compile(EMAIL_PATTERN);
 		Matcher matcher = pattern.matcher(email);
 		if (!matcher.matches()) {
-			oLogger.error(ERROR_MESSAGE);
+			logger.error(ERROR_MESSAGE);
 			throw new IllegalArgumentException(ERROR_MESSAGE);
 		}
 	}

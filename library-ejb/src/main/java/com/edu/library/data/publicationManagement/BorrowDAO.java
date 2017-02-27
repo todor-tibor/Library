@@ -1,6 +1,7 @@
 package com.edu.library.data.publicationManagement;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -24,6 +25,7 @@ import com.edu.library.model.User;
 
 /**
  * CRUD operations of Borrow Entity
+ *
  * @author nagys, gallb, kiska
  *
  */
@@ -165,15 +167,17 @@ public class BorrowDAO {
 		try {
 			return this.entityManager.createQuery(cq).getResultList();
 		} catch (final PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 	}
 
-	public List<Borrow> getBorrwUntilDate(Date p_date){
-		try{
-			return oEntityManager.createNamedQuery("Borrow.findByUntilDate", Borrow.class).setParameter("p_date",p_date ).getResultList();
-		}catch (PersistenceException e) {
-			oLogger.error(e);
+	public List<Borrow> getBorrwUntilDate(final Date p_date) {
+		try {
+			return this.entityManager.createNamedQuery("Borrow.findByUntilDate", Borrow.class)
+					.setParameter("p_date", p_date).getResultList();
+		} catch (PersistenceException e) {
+			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
 	}
