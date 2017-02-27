@@ -63,6 +63,9 @@ public class User extends BaseEntity {
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private List<Borrow> borrows;
 
+
+	private String email;
+	
 	/**
 	 * @param roles
 	 *            - Set of roles the user has. -uni-directional many-to-many
@@ -74,7 +77,7 @@ public class User extends BaseEntity {
 
 	public User() {
 	}
-
+	
 	public int getLoyaltyIndex() {
 		return this.loyaltyIndex;
 	}
@@ -128,8 +131,16 @@ public class User extends BaseEntity {
 	public void setRoles(final List<Role> roles) {
 		this.roles = new HashSet<Role>(roles);
 	}
+	
+	public String getEmail() {
+		return email;
+	}
 
-	public boolean isLate() {
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public boolean isLate(){
 		Date today = new Date();
 		for (int i = 0; i < this.borrows.size(); i++) {
 			if (today.after(this.borrows.get(i).getBorrowUntil())) {

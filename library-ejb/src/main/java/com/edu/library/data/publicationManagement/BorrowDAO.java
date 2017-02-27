@@ -23,6 +23,7 @@ import com.edu.library.model.Publication;
 import com.edu.library.model.User;
 
 /**
+ * CRUD operations of Borrow Entity
  * @author nagys, gallb, kiska
  *
  */
@@ -150,7 +151,6 @@ public class BorrowDAO {
 		}
 		if (filter.getUserName() != null && filter.getUserName().length() >= 3) {
 			final List<User> users = this.userBean.search(filter.getUserName());
-			// publication.get("authors").in(filter.getAuthor());
 			predicates.add(borrow.get("user").in(users));
 		}
 		if (filter.getBorrowedFrom() != null) {
@@ -165,6 +165,15 @@ public class BorrowDAO {
 		try {
 			return this.entityManager.createQuery(cq).getResultList();
 		} catch (final PersistenceException e) {
+			throw new TechnicalException(e);
+		}
+	}
+
+	public List<Borrow> getBorrwUntilDate(Date p_date){
+		try{
+			return oEntityManager.createNamedQuery("Borrow.findByUntilDate", Borrow.class).setParameter("p_date",p_date ).getResultList();
+		}catch (PersistenceException e) {
+			oLogger.error(e);
 			throw new TechnicalException(e);
 		}
 	}

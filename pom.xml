@@ -89,6 +89,13 @@
 				<artifactId>junit</artifactId>
 				<version>4.12</version>
 			</dependency>
+			
+			<dependency>
+    			<groupId>javax.mail</groupId>
+   			    <artifactId>mail</artifactId>
+   			    <version>1.4</version>
+   			    <scope>provided</scope>
+			</dependency>
 
 			<!-- Internal dependencies -->
 			<dependency>

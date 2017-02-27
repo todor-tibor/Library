@@ -52,7 +52,7 @@ public class UserMB implements Serializable {
 	public void change() {
 		this.logger.info("--tab changed--");
 	}
-
+  
 	/**
 	 * Currently displayed users.
 	 */
@@ -107,14 +107,14 @@ public class UserMB implements Serializable {
 	}
 
 	/**
-	 * Stores new user with user name.
+	 * Stores new user.
 	 *
 	 * @param name
-	 *            - username, password - password, loyaltyIndex - loyalty index
+	 *            - username, password - password, loyaltyIndex - loyalty index, enail- e-mail
 	 *
 	 */
 
-	public void store(final String name, final String password, final int loyaltyIndex) {
+	public void store(final String name, final String password, final int loyaltyIndex, final String email) {
 		if (name.isEmpty() || "".equals(name)) {
 			this.message.warn("managedbean.empty");
 			return;
@@ -133,6 +133,7 @@ public class UserMB implements Serializable {
 		tmpUser.setLoyaltyIndex(loyaltyIndex);
 		tmpUser.setPassword(password);
 		tmpUser.setRoles(this.currentRoles);
+		tmpUser.setEmail(email);
 		try {
 			this.oUserBean.store(tmpUser);
 			this.userList.add(tmpUser);
@@ -146,14 +147,18 @@ public class UserMB implements Serializable {
 	 * Renames currently selected user.
 	 *
 	 * @param newName
-	 *            - new user name.
+	 *            - new user name., email - e-mail
 	 */
-	public void update(final String newName) {
+	public void update(final String newName, final String email) {
 		if ((this.currentUser == null) || (newName.length() <= 3)) {
 			this.message.warn("managedbean.string");
 			return;
 		}
 		this.currentUser.setUserName(newName);
+		}
+		if (!email.isEmpty()) {
+			currentUser.setEmail(email);
+		}
 		try {
 			this.oUserBean.update(this.currentUser);
 			this.userList = this.oUserBean.getAll();

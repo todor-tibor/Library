@@ -9,6 +9,7 @@ import org.jboss.logging.Logger;
 
 import com.edu.library.model.BaseEntity;
 
+
 /**
  * Serves as a Singleton data validator class for different data input types.
  *
@@ -42,6 +43,12 @@ public class ServiceValidation {
 	 * characters, but can't be longer than 20 character
 	 */
 	private static final String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#.$%]).{6,20})";
+
+	/**
+	 * 
+	 */
+	private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+			+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
 	/**
 	 * Check whether the given string matches a set of constraints defined in
@@ -155,6 +162,15 @@ public class ServiceValidation {
 	public static void checDateOrder(final Date from, final Date until) {
 		if (from.after(until)) {
 			logger.error(ERROR_MESSAGE);
+			throw new IllegalArgumentException(ERROR_MESSAGE);
+		}
+	}
+
+	public static void checEmail(String email) {
+		Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+		Matcher matcher = pattern.matcher(email);
+		if (!matcher.matches()) {
+			oLogger.error(ERROR_MESSAGE);
 			throw new IllegalArgumentException(ERROR_MESSAGE);
 		}
 	}

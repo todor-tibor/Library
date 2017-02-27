@@ -16,6 +16,9 @@ import org.jboss.logging.Logger;
 
 import com.edu.library.access.util.ServiceValidation;
 import com.edu.library.business.util.BorrowRestriction;
+import com.edu.library.business.exception.BusinessException;
+import com.edu.library.business.exception.ErrorMessages;
+import com.edu.library.business.util.Mail;
 import com.edu.library.data.publicationManagement.BorrowDAO;
 import com.edu.library.data.publicationManagement.PublicationBean;
 import com.edu.library.data.userManagement.UserDao;
@@ -43,6 +46,8 @@ public class BorrowManagementBusiness {
 	private UserDao userDAO;
 	@EJB
 	private PublicationBean pubDAO;
+	@EJB
+	private Mail mailSensingService;
 
 	/**
 	 * @return List containing all entities.
@@ -139,5 +144,21 @@ public class BorrowManagementBusiness {
 	 */
 	public List<Borrow> filterBorrow(final BorrowFilter filter) {
 		return this.borrowDAO.filterBorrow(filter);
+	}
+
+	public List<Borrow> getBorrwLate() {
+		Date date = new Date();
+		return borrowDAO.getBorrwUntilDate(date);
+
+	}
+
+	public void mailOneLateUser(final Borrow borrow) {
+		String text = "Dear " + borrow.getUser().getUserName() + ",\n\n"
+				+ "We would like to remind you, that you have an outdated publication borrowing from msglibrary.\n"
+				+ "You borrowed the publication: " + borrow.getPublication().getTitle() + " until: "
+				+ borrow.getBorrowUntil().toString()
+				+ "\n Please return the publication immediatly.\n\nBest regards,\nmsglibrary team.";
+
+		mailSensingService.send(borrow.getUser().getEmail(), "msglibrary NOTIFICATIN - Borrowing out of date.", text);
 	}
 }

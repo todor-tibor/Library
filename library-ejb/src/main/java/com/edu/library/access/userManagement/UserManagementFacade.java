@@ -44,6 +44,7 @@ public class UserManagementFacade implements IUserService {
 		ServiceValidation.checkNotEmpty(user.getRoles());
 		ServiceValidation.checkString(user.getUserName());
 		ServiceValidation.checkPassword(user.getPassword());
+    ServiceValidation.checEmail(user.getEmail());
 		this.userManagementBusiness.store(user);
 	}
 
@@ -52,6 +53,7 @@ public class UserManagementFacade implements IUserService {
 		ServiceValidation.checkNotNull(user);
 		ServiceValidation.checkNotEmpty(user.getRoles());
 		ServiceValidation.checkString(user.getUserName());
+		ServiceValidation.checEmail(user.getEmail());
 		this.userManagementBusiness.update(user);
 	}
 

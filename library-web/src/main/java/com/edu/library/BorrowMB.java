@@ -31,10 +31,11 @@ import com.edu.library.util.MessageService;
 public class BorrowMB implements Serializable {
 
 	private final Logger logger = Logger.getLogger(BorrowMB.class);
+
 	private static final long serialVersionUID = 1479586528417507035L;
 
 	@Inject
-	private IBorrowService oBorrowBean;
+	private IBorrowService borrowService;
 	@Inject
 	ExceptionHandler exceptionHandler;
 
@@ -68,6 +69,7 @@ public class BorrowMB implements Serializable {
 	private Date date1 = new Date();
 	private Date date2 = null;
 	private Date date3 = null;
+
 
 	/**
 	 * Get all borrows.
@@ -123,6 +125,7 @@ public class BorrowMB implements Serializable {
 			} catch (final Exception e) {
 				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
+
 			}
 		}
 	}
@@ -185,6 +188,7 @@ public class BorrowMB implements Serializable {
 		this.borrows.clear();
 		try {
 			this.borrows = this.oBorrowBean.filterBorrow(this.filter);
+
 			if (this.borrows.isEmpty()) {
 				this.message.warn("ejb.message.noEntity");
 			}
