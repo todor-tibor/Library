@@ -19,6 +19,8 @@ import com.edu.library.model.Magazine;
 import com.edu.library.model.Newspaper;
 import com.edu.library.model.Publication;
 import com.edu.library.model.Publisher;
+import com.edu.library.model.util.ReadXMLFile;
+import com.edu.library.model.util.WriteXMLFile;
 import com.edu.library.util.ExceptionHandler;
 import com.edu.library.util.MessageService;
 
@@ -349,5 +351,14 @@ public class PublicationMB implements Serializable {
 
 	public void setDate(final Date date) {
 		this.date = date;
+	}
+
+	public void exportPublication() {
+		WriteXMLFile.exportData(getAll(), "publications");
+	}
+
+	public List<Publication> importPublication() {
+		this.publicationList = ReadXMLFile.importData("publications");
+		return this.publicationList;
 	}
 }
