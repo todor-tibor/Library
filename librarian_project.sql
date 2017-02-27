@@ -59,8 +59,10 @@ CREATE TABLE `users` (
   `user_name` varchar(50) NOT NULL,
   `loyalty_index` int(11) NOT NULL,
   `password` varchar(80) NOT NULL,
+  `email` varchar(35) NOT NULL,
   PRIMARY KEY (`uuid`),
-  CONSTRAINT uk_name UNIQUE (`user_name`)
+  CONSTRAINT uk_name UNIQUE (`user_name`),
+  CONSTRAINT uk_email UNIQUE (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -124,11 +126,11 @@ INSERT INTO `library2`.`publishers` (`uuid`, `name`) VALUES ('2', 'Corvin');
 INSERT INTO `library2`.`publishers` (`uuid`, `name`) VALUES ('3', 'Scientia');
 
 
-INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`) VALUES ('1', 'Kis Katalin', '10', '�IpýÊde£"(h—ÙÄrcz?');
-INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`) VALUES ('2', 'Gall Barna', '0', '�IpýÊde£"(h—ÙÄrcz?');
-INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`) VALUES ('3', 'Sipos Terez', '10', '�IpýÊde£"(h—ÙÄrcz?');
-INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`) VALUES ('4', 'Szilard Nagy', '5', '�IpýÊde£"(h—ÙÄrcz?');
-INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`) VALUES ('5', 'Admin', '10', '�IpýÊde£"(h—ÙÄrcz?');
+INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`,`email`) VALUES ('1', 'Kis Katalin', '10', '�IpýÊde£"(h—ÙÄrcz?','KatalinKis@yahoo.com');
+INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`,`email`) VALUES ('2', 'Gall Barna', '0', '�IpýÊde£"(h—ÙÄrcz?','barnimedve@gmail.com');
+INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`,`email`) VALUES ('3', 'Sipos Terez', '10', '�IpýÊde£"(h—ÙÄrcz?','terez_sps3@yahoo.com');
+INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`,`email`) VALUES ('4', 'Szilard Nagy', '5', '�IpýÊde£"(h—ÙÄrcz?','nagy_szilardsandor@yahoo.com');
+INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`,`email`) VALUES ('5', 'Admin', '10', '�IpýÊde£"(h—ÙÄrcz?','Admin@gamil.com');
 
 INSERT INTO `library2`.`roles` (`uuid`, `role`) VALUES ('1', 'LIBRARIAN');
 INSERT INTO `library2`.`roles` (`uuid`, `role`) VALUES ('2', 'READER');

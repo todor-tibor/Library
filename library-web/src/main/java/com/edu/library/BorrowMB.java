@@ -27,11 +27,11 @@ import com.edu.library.util.ExceptionHandler;
 @SessionScoped
 public class BorrowMB implements Serializable {
 
-	private Logger oLogger = Logger.getLogger(BorrowMB.class);
+	private Logger logger = Logger.getLogger(BorrowMB.class);
 	private static final long serialVersionUID = 1479586528417507035L;
 
 	@Inject
-	private IBorrowService oBorrowBean;
+	private IBorrowService borrowService;
 	@Inject
 	ExceptionHandler exceptionHandler;
 
@@ -53,7 +53,7 @@ public class BorrowMB implements Serializable {
 		return date3;
 	}
 
-	public void setDate3(Date date3) {
+	public void setDate3(final Date date3) {
 		this.date3 = date3;
 	}
 
@@ -61,7 +61,7 @@ public class BorrowMB implements Serializable {
 		return date1;
 	}
 
-	public void setDate1(Date date1) {
+	public void setDate1(final Date date1) {
 		this.date1 = date1;
 	}
 
@@ -69,7 +69,7 @@ public class BorrowMB implements Serializable {
 		return date2;
 	}
 
-	public void setDate2(Date date2) {
+	public void setDate2(final Date date2) {
 		this.date2 = date2;
 	}
 
@@ -81,7 +81,7 @@ public class BorrowMB implements Serializable {
 		return borrow;
 	}
 
-	public void setCurrentBorrow(Borrow borrow) {
+	public void setCurrentBorrow(final Borrow borrow) {
 		this.borrow = borrow;
 	}
 
@@ -89,7 +89,7 @@ public class BorrowMB implements Serializable {
 		return currentUser;
 	}
 
-	public void setCurrentUser(User curentUser) {
+	public void setCurrentUser(final User curentUser) {
 		this.currentUser = curentUser;
 	}
 
@@ -97,7 +97,7 @@ public class BorrowMB implements Serializable {
 		return currentPublication;
 	}
 
-	public void setCurrentPublication(Publication curentPublication) {
+	public void setCurrentPublication(final Publication curentPublication) {
 		this.currentPublication = curentPublication;
 	}
 
@@ -107,9 +107,9 @@ public class BorrowMB implements Serializable {
 	public List<Borrow> getAll() {
 		borrows.clear();
 		try {
-			borrows = oBorrowBean.getAll();
+			borrows = borrowService.getAll();
 		} catch (Exception e) {
-			oLogger.error(e);
+			logger.error(e);
 			exceptionHandler.showMessage(e);
 		}
 		return borrows;
@@ -128,11 +128,11 @@ public class BorrowMB implements Serializable {
 			p_Borrow.setBorrowFrom(date1);
 			p_Borrow.setBorrowUntil(date2);
 			try {
-				oBorrowBean.store(p_Borrow);
+				borrowService.store(p_Borrow);
 				borrows.add(p_Borrow);
 				message.info("managedBean.storeSuccess");
 			} catch (Exception e) {
-				oLogger.error(e.getMessage());
+				logger.error(e.getMessage());
 				exceptionHandler.showMessage(e);
 			}
 		}
@@ -143,11 +143,11 @@ public class BorrowMB implements Serializable {
 			message.error("managedbean.empty");
 		} else {
 			try {
-				oBorrowBean.remove(borrow.getUuid());
+				borrowService.remove(borrow.getUuid());
 				getAll();
 				message.info("managedbean.deleteSuccess");
 			} catch (Exception e) {
-				oLogger.error(e);
+				logger.error(e);
 				exceptionHandler.showMessage(e);
 			}
 		}
@@ -156,11 +156,11 @@ public class BorrowMB implements Serializable {
 	public void update() {
 		borrow.setBorrowUntil(date3);
 		try {
-			oBorrowBean.update(borrow);
+			borrowService.update(borrow);
 			getAll();
 			message.info("managedbean.updateSuccess");
 		} catch (Exception e) {
-			oLogger.error(e);
+			logger.error(e);
 			exceptionHandler.showMessage(e);
 		}
 
@@ -170,9 +170,9 @@ public class BorrowMB implements Serializable {
 		if (p_searchTxt.length() >= 3) {
 			borrows.clear();
 			try {
-				borrows = oBorrowBean.search(p_searchTxt);
+				borrows = borrowService.search(p_searchTxt);
 			} catch (Exception e) {
-				oLogger.error(e);
+				logger.error(e);
 				exceptionHandler.showMessage(e);
 			}
 		} else {
@@ -198,15 +198,15 @@ public class BorrowMB implements Serializable {
 	 * @return
 	 */
 	public List<Borrow> filterBorrow() {
-		oLogger.info("filter publication " + filter.getTitle());
+		logger.info("filter publication " + filter.getTitle());
 		this.borrows.clear();
 		try {
-			this.borrows = oBorrowBean.filterBorrow(filter);
+			this.borrows = borrowService.filterBorrow(filter);
 			if (this.borrows.isEmpty()) {
 				message.warn("ejb.message.noEntity");
 			}
 		} catch (Exception e) {
-			oLogger.error(e);
+			logger.error(e);
 			exceptionHandler.showMessage(e);
 		}
 		return this.borrows;
@@ -219,5 +219,4 @@ public class BorrowMB implements Serializable {
 	public void setFilter(BorrowFilter filter) {
 		this.filter = filter;
 	}
-
 }

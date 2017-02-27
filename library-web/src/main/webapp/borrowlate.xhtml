@@ -1,0 +1,63 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<f:view locale="#{localeBean.userLocale}" />
+<h:head>
+	<p:messages id="messagesBrwLate" showDetail="true" autoUpdate="true"
+		closable="true" />
+</h:head>
+<h:body>
+	<h:panelGrid columns="3" cellpadding="10">
+		<p:panel header="#{delayMan['header']}">
+			<h:form id="borrowLate_actions_form">
+
+
+
+				<p:dataTable id="borrowlateDT" var="borrow"
+					value="#{borrowlateBean.borrows}" selectionMode="single"
+					selection="#{borrowlateBean.borrow}" rowKey="#{borrow.uuid}">
+					<p:ajax event="rowSelect" listener="#{borrowlateBean.isSelected}"
+						update="borrowlateDT" />
+
+					<f:facet name="header">
+						#{borrowMan['header.borrows']}
+					</f:facet>
+					<f:facet name="header">
+					</f:facet>
+					<p:column headerText="#{borrowMan['column.username']}">
+						<h:outputText value="#{borrow.user.userName}" />
+					</p:column>
+					<p:column headerText="#{borrowMan['column.publication']}">
+						<h:outputText value="#{borrow.publication.title}" />
+					</p:column>
+					<p:column headerText="#{borrowMan['column.from']}">
+						<h:outputText value="#{borrow.borrowFrom}" />
+					</p:column>
+					<p:column headerText="#{borrowMan['column.until']}">
+						<h:outputText value="#{borrow.borrowUntil}" />
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton icon="fa-remove"
+							value="#{delayMan['button.notify']}"
+							action="#{borrowlateBean.mailNotifySelected()}" update="borrowlateDT"
+							disabled="#{borrowlateBean.currentBorrow == null}" />
+					</f:facet>
+
+				</p:dataTable>
+
+				<p:commandButton value="#{delayMan['button.listAll']}"
+					icon="ui-icon-search" update="borrowlateDT"
+					action="#{borrowlateBean.getBorrowLate()}">
+				</p:commandButton>
+
+
+
+
+			</h:form>
+		</p:panel>
+	</h:panelGrid>
+</h:body>
+</html>

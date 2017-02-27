@@ -11,9 +11,10 @@ import com.edu.library.model.BaseEntity;
 
 /***
  * Serves as a data validator class for different data input types.
+ * 
  * @author kiska
  *
- *       
+ * 
  */
 public class ServiceValidation {
 
@@ -52,6 +53,12 @@ public class ServiceValidation {
 	 */
 
 	public static final String UUID_PATTERN = "^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$";
+
+	/**
+	 * 
+	 */
+	private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+			+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
 	/**
 	 * Check whether the given string matches a set of constraints defined in
@@ -164,6 +171,15 @@ public class ServiceValidation {
 	 */
 	public static void checDateOrder(Date from, Date until) {
 		if (from.after(until)) {
+			oLogger.error(ERROR_MESSAGE);
+			throw new IllegalArgumentException(ERROR_MESSAGE);
+		}
+	}
+
+	public static void checEmail(String email) {
+		Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+		Matcher matcher = pattern.matcher(email);
+		if (!matcher.matches()) {
 			oLogger.error(ERROR_MESSAGE);
 			throw new IllegalArgumentException(ERROR_MESSAGE);
 		}

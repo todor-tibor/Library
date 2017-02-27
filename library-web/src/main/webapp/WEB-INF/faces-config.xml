@@ -33,6 +33,10 @@
 			<base-name>gallb.wildfly.users.web.borrowMan</base-name>
 			<var>borrowMan</var>
 		</resource-bundle>
+		<resource-bundle>
+			<base-name>gallb.wildfly.users.web.borrowlateMan</base-name>
+			<var>delayMan</var>
+		</resource-bundle>
 	</application>
 </faces-config>
 

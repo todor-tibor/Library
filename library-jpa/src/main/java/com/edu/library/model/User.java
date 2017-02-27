@@ -63,6 +63,8 @@ public class User extends BaseEntity {
 	 */
 	private List<Borrow> borrows;
 
+	private String email;
+	
 	@ManyToMany (fetch = FetchType.EAGER)
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "uuid"))
 	/**
@@ -73,7 +75,7 @@ public class User extends BaseEntity {
 
 	public User() {
 	}
-
+	
 	public int getLoyaltyIndex() {
 		return this.loyaltyIndex;
 	}
@@ -128,6 +130,16 @@ public class User extends BaseEntity {
 		this.roles = new HashSet<Role>(roles);
 	}
 	
+	
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public boolean isLate(){
 		Date today = new Date();
 		for (int i = 0; i < borrows.size(); i++) {

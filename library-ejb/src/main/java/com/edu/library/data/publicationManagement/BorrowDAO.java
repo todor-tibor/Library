@@ -4,8 +4,7 @@ package com.edu.library.data.publicationManagement;
  * 
  */
 
-import java.sql.Date;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,10 +23,8 @@ import org.jboss.logging.Logger;
 import com.edu.library.data.exception.TechnicalException;
 import com.edu.library.data.userManagement.UserDao;
 import com.edu.library.filter.BorrowFilter;
-import com.edu.library.filter.PublicationFilter;
 import com.edu.library.model.Borrow;
 import com.edu.library.model.Publication;
-import com.edu.library.model.Publisher;
 import com.edu.library.model.User;
 
 /**
@@ -114,7 +111,7 @@ public class BorrowDAO {
 		if (filter.getTitle() != null && filter.getTitle().length() >= 3) {
 			List<Publication> publications = publicationBean.search(filter.getTitle());
 			oLogger.warn("-----title: " + filter.getTitle());
-			//search pub
+			// search pub
 			predicates.add(borrow.get("publication").in(publications));
 		}
 		if (filter.getUserName() != null && filter.getUserName().length() >= 3) {
@@ -142,6 +139,15 @@ public class BorrowDAO {
 		try {
 			return oEntityManager.createQuery(cq).getResultList();
 		} catch (PersistenceException e) {
+			throw new TechnicalException(e);
+		}
+	}
+
+	public List<Borrow> getBorrwUntilDate(Date p_date){
+		try{
+			return oEntityManager.createNamedQuery("Borrow.findByUntilDate", Borrow.class).setParameter("p_date",p_date ).getResultList();
+		}catch (PersistenceException e) {
+			oLogger.error(e);
 			throw new TechnicalException(e);
 		}
 	}
