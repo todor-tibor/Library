@@ -13,6 +13,15 @@ import com.edu.library.model.Publication;
  *
  */
 public interface IPublicationService extends IService<Publication> {
+
+	public List<Publication> getAll(final int start, final int fin);
+
+	public List<Publication> search(final String text, final int start, final int fin);
+
+	public long countAll();
+
+	public long countSearch(final String title);
+
 	/**
 	 * Filters the data specified by the {@code filter} object. This can have
 	 * one or more filters set. For example: publication title, publisher etc.
@@ -22,5 +31,7 @@ public interface IPublicationService extends IService<Publication> {
 	 *            filtered of a publication object.
 	 * @return List of Publications
 	 */
-	public List<Publication> filterPublication(PublicationFilter filter);
+	public List<Publication> filterPublication(PublicationFilter filter, final int start, final int fin);
+
+	public long countFilter(PublicationFilter filter);
 }
