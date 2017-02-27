@@ -14,6 +14,7 @@ import org.jdom2.Element;
 import org.jdom2.input.DOMBuilder;
 import org.xml.sax.SAXException;
 
+import com.edu.library.model.Author;
 import com.edu.library.model.Book;
 import com.edu.library.model.Magazine;
 import com.edu.library.model.Newspaper;
@@ -33,21 +34,33 @@ public class ReadXMLFile {
 			final Element root = jdomDoc.getRootElement();
 			final List<Element> publicationListElements = root.getChildren("Magazine");
 			final List<Publication> publicationsList = new ArrayList<>();
+
 			for (final Element publicationElement : publicationListElements) {
-				final Publication publication = new Magazine();
+				final Magazine publication = new Magazine();
 				publication.setUuid(publicationElement.getAttributeValue("uuid"));
 				publication.setTitle(publicationElement.getChildText("title"));
 				publication.setNrOfCopys(Integer.parseInt(publicationElement.getChildText("nrOfCopies")));
 				publication.setOnStock(Integer.parseInt(publicationElement.getChildText("onStock")));
+
 				final Publisher publisher = new Publisher();
 				publisher.setName(publicationElement.getChildText("publisher"));
 				// for (Element )
 				publication.setPublisher(publisher);
+				final List<Element> authorList = publicationElement.getChildren("author");
+				final List<Author> authors = new ArrayList<>();
+				for (final Element element : authorList) {
+					final Author author = new Author();
+
+					author.setUuid(element.getAttributeValue("uuid"));
+					author.setName(element.getChildText("name"));
+					authors.add(author);
+				}
+				publication.setAuthors(authors);
 				publicationsList.add(publication);
 			}
 
 			final List<Element> bookListElements = root.getChildren("Book");
-			new ArrayList<>();
+
 			for (final Element bookElement : bookListElements) {
 				final Book book = new Book();
 				book.setUuid(bookElement.getAttributeValue("uuid"));
@@ -56,26 +69,35 @@ public class ReadXMLFile {
 				book.setOnStock(Integer.parseInt(bookElement.getChildText("onStock")));
 				final Publisher publisher = new Publisher();
 				publisher.setName(bookElement.getChildText("publisher"));
-				// for (Element )
 				book.setPublisher(publisher);
+
+				final List<Element> authorList = bookElement.getChildren("author");
+				final List<Author> authors = new ArrayList<>();
+				for (final Element element : authorList) {
+					final Author author = new Author();
+
+					author.setUuid(element.getAttributeValue("uuid"));
+					author.setName(element.getChildText("name"));
+					authors.add(author);
+				}
+				book.setAuthors(authors);
 				publicationsList.add(book);
 			}
 
 			final List<Element> newsListElements = root.getChildren("Newspaper");
 			new ArrayList<>();
 			for (final Element newsElement : newsListElements) {
-				final Publication news = new Newspaper();
+				final Newspaper news = new Newspaper();
 				news.setUuid(newsElement.getAttributeValue("uuid"));
 				news.setTitle(newsElement.getChildText("title"));
 				news.setNrOfCopys(Integer.parseInt(newsElement.getChildText("nrOfCopies")));
 				news.setOnStock(Integer.parseInt(newsElement.getChildText("onStock")));
 				final Publisher publisher = new Publisher();
 				publisher.setName(newsElement.getChildText("publisher"));
-				// for (Element )
 				news.setPublisher(publisher);
+
 				publicationsList.add(news);
 			}
-			// lets print Employees list information
 			return publicationsList;
 		} catch (final Exception e) {
 			e.printStackTrace();

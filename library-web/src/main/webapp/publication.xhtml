@@ -216,11 +216,7 @@
 				<p:commandButton process="publication_actions_form"
 					value="#{pubMan['listPublications.button']}" update="publicationDT"
 					icon="ui-icon-search" action="#{publicationBean.getAll()}">
-				</p:commandButton>
-				<p:commandButton process="publication_actions_form"
-					value="Export/Import" update="publicationDT"
-					icon="ui-icon-search" action="#{publicationBean.exportPublication()}">
-				</p:commandButton>
+				</p:commandButton>				
 				<p:commandButton process="publication_actions_form" icon="fa-remove"
 					value="#{pubMan['add.newspaper']}" update="addDialog"
 					oncomplete="PF('addDialog').show()"

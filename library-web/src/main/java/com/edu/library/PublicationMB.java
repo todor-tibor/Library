@@ -355,16 +355,10 @@ public class PublicationMB implements Serializable {
 
 	public void exportPublication() {
 		WriteXMLFile.exportData(getAll(), "publications");
-		this.logger.info("Export successful");
-		importPublication();
 	}
 
-	public void importPublication() {
-		final List<Publication> pubs = ReadXMLFile.importData("publications");
-		this.logger.info(pubs.size());
-		for (final Publication publication : pubs) {
-			this.logger.info(publication.getTitle() + " " + publication.getNrOfCopys() + " "
-					+ publication.getPublisher().getName());
-		}
+	public List<Publication> importPublication() {
+		this.publicationList = ReadXMLFile.importData("publications");
+		return this.publicationList;
 	}
 }
