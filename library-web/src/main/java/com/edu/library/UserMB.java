@@ -45,7 +45,7 @@ public class UserMB implements Serializable {
 
 	@Inject
 	ExceptionHandler exceptionHandler;
-	
+
 	@Inject
 	LoginMB loginMB;
 
@@ -55,7 +55,8 @@ public class UserMB implements Serializable {
 
 	private List<User> userList = new ArrayList<>();// Currently displayed
 													// users.
-	private User loggedInUser=null, currentUser = null;// Currently selected user.
+	private User loggedInUser = null, currentUser = null;// Currently selected
+															// user.
 
 	private List<Role> currentRoles = new ArrayList<>();
 
@@ -117,7 +118,7 @@ public class UserMB implements Serializable {
 	 * 
 	 */
 
-	public void store(String p_name, String p_pass, int p_idx) {
+	public void store(String p_name, String p_pass, int p_idx, String email) {
 		if (p_name.isEmpty() || "".equals(p_name)) {
 			message.warn("managedbean.empty");
 			return;
@@ -135,6 +136,7 @@ public class UserMB implements Serializable {
 		tmpUser.setUserName(p_name);
 		tmpUser.setLoyaltyIndex(p_idx);
 		tmpUser.setPassword(p_pass);
+		tmpUser.setEmail(email);
 		tmpUser.setRoles(currentRoles);
 		try {
 			oUserBean.store(tmpUser);
@@ -152,12 +154,18 @@ public class UserMB implements Serializable {
 	 * @param p_newTxt
 	 *            - new user name.
 	 */
-	public void update(String p_newTxt) {
-		if ((currentUser == null) || (p_newTxt.length() <= 3)) {
-			message.warn("managedbean.string");
-			return;
+	public void update(String p_newTxt, String email) {
+		if (!p_newTxt.isEmpty()) {
+			if ((currentUser == null) || (p_newTxt.length() <= 3)) {
+				message.warn("managedbean.string");
+				return;
+			}
+			currentUser.setUserName(p_newTxt);
 		}
-		currentUser.setUserName(p_newTxt);
+		if (!email.isEmpty()) {
+			currentUser.setEmail(email);
+		}
+
 		try {
 			oUserBean.update(currentUser);
 			userList = oUserBean.getAll();
@@ -234,7 +242,7 @@ public class UserMB implements Serializable {
 			return true;
 		}
 	}
- 
+
 	public User getLoggedInUser() {
 		return loggedInUser;
 	}

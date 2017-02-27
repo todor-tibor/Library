@@ -74,4 +74,19 @@ public class BorrowManagementFacade implements IBorrowService {
 		}
 		return borrowBusiness.filterBorrow(filter);
 	}
+
+	@Override
+	public List<Borrow> getBorrowLate() {
+		return borrowBusiness.getBorrwLate();
+	}
+
+	@Override
+	public void mailOneLateUser(final Borrow borrow) {
+		ServiceValidation.checkNotNull(borrow);
+		ServiceValidation.checkNotNull(borrow.getUser());
+		// Validate e-mail address
+		// @ToDo
+
+		borrowBusiness.mailOneLateUser(borrow);
+	}
 }
