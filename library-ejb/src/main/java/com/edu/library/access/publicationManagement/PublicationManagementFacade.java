@@ -16,7 +16,7 @@ import com.edu.library.model.Publication;
 /**
  * Implements the basics of publication management. Validates the given input
  * data and calls the business layer if params are valid.
- * 
+ *
  * @author sipost
  */
 @Stateless
@@ -27,63 +27,63 @@ public class PublicationManagementFacade implements IPublicationService {
 
 	@Override
 	public List<Publication> getAll() {
-		return publicationBusiness.getAll();
+		return this.publicationBusiness.getAll();
 	}
 
 	@Override
-	public List<Publication> search(String p_searchTxt) {
-		ServiceValidation.checkString(p_searchTxt);
-		return publicationBusiness.search(p_searchTxt);
+	public List<Publication> search(final String searchText) {
+		ServiceValidation.checkString(searchText);
+		return this.publicationBusiness.search(searchText);
 	}
 
 	@Override
-	public Publication getById(String p_id) {
-		ServiceValidation.checkUuid(p_id);
-		return publicationBusiness.getById(p_id);
+	public Publication getById(final String id) {
+		ServiceValidation.checkUuid(id);
+		return this.publicationBusiness.getById(id);
 	}
 
 	@Override
-	public void store(Publication p_value) {
-		ServiceValidation.checkNotNull(p_value);
-		checkCopies(p_value);
-		authorCheck(p_value);
+	public void store(final Publication publication) {
+		ServiceValidation.checkNotNull(publication);
+		checkCopies(publication);
+		authorCheck(publication);
 
-		publicationBusiness.store(p_value);
+		this.publicationBusiness.store(publication);
 	}
 
 	@Override
-	public void update(Publication p_user) {
-		ServiceValidation.checkNotNull(p_user);
-		checkCopies(p_user);
-		authorCheck(p_user);
+	public void update(final Publication publication) {
+		ServiceValidation.checkNotNull(publication);
+		checkCopies(publication);
+		authorCheck(publication);
 
-		publicationBusiness.update(p_user);
+		this.publicationBusiness.update(publication);
 	}
 
 	@Override
-	public void remove(String p_id) {
-		ServiceValidation.checkUuid(p_id);
-		publicationBusiness.remove(p_id);
+	public void remove(final String id) {
+		ServiceValidation.checkUuid(id);
+		this.publicationBusiness.remove(id);
 
 	}
 
 	@Override
-	public List<Publication> filterPublication(PublicationFilter filter) {
-		return publicationBusiness.filterPublication(filter);
+	public List<Publication> filterPublication(final PublicationFilter filter) {
+		return this.publicationBusiness.filterPublication(filter);
 	}
 
-	private void authorCheck(Publication p_value) {
-		if (p_value instanceof Book) {
-			ServiceValidation.checkNotEmpty(((Book) p_value).getAuthors());
+	private void authorCheck(final Publication publication) {
+		if (publication instanceof Book) {
+			ServiceValidation.checkNotEmpty(((Book) publication).getAuthors());
 		}
-		if (p_value instanceof Magazine) {
-			ServiceValidation.checkNotEmpty(((Magazine) p_value).getAuthors());
+		if (publication instanceof Magazine) {
+			ServiceValidation.checkNotEmpty(((Magazine) publication).getAuthors());
 		}
 	}
 
-	private void checkCopies(Publication p_value) {
-		ServiceValidation.checkIfNumberInRange(p_value.getNrOfCopys(), 0, Integer.MAX_VALUE);
-		ServiceValidation.checkIfNumberInRange(p_value.getOnStock(), 0, p_value.getNrOfCopys());
+	private void checkCopies(final Publication publication) {
+		ServiceValidation.checkIfNumberInRange(publication.getNrOfCopys(), 0, Integer.MAX_VALUE);
+		ServiceValidation.checkIfNumberInRange(publication.getOnStock(), 0, publication.getNrOfCopys());
 	}
 
 }

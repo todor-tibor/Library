@@ -15,18 +15,19 @@
 		<p:panel header="#{msg['publication.button']}">
 			<h:form id="publication_actions_form">
 
+				<p:commandButton value="#{msg['filter.button']}"
+					update="publicationDT"
+					action="#{publicationBean.filterPublication}">
+				</p:commandButton>
+
 				<p:inputText id="publication_searchTextBox"
 					binding="#{srch_publication}" />
 				<p:commandButton value="#{msg['search.button']}"
 					update="publicationDT"
 					action="#{publicationBean.search(srch_publication.value)}">
-					<f:param name="p_value" value="#{srch_publication.value}" />
+					<f:param name="searchTxt" value="#{srch_publication.value}" />
 				</p:commandButton>
 
-				<p:commandButton value="#{msg['filter.button']}"
-					update="publicationDT"
-					action="#{publicationBean.filterPublication}">
-				</p:commandButton>
 
 				<p:dataTable id="publicationDT" var="publication"
 					value="#{publicationBean.publicationList}" selectionMode="single"
@@ -34,7 +35,7 @@
 					rowKey="#{publication.uuid}">
 
 					<p:ajax event="rowSelect" listener="#{publicationBean.isSelected}"
-						update="publicationDT" />
+						update="deleteButton detailsButton updateButton" />
 					<f:facet name="header">
             			#{pubMan['publications.text']}
         			</f:facet>
@@ -43,7 +44,12 @@
 						<f:facet name="header">
 							<p:outputLabel value="#{pubMan['publication.title']}" />
 							<br />
-							<p:inputText value="#{publicationBean.filter.title}" />
+							<p:inputText value="#{publicationBean.filter.title}"
+								onkeypress="if (event.keyCode == 13) {e.preventDefault(); inputEnter.onchange(); return false; }">
+								<f:ajax event="change"
+									listener="#{publicationBean.filterPublication}"
+									update="publicationDT" />
+							</p:inputText>
 						</f:facet>
 						<h:outputText value="#{publication.title}" />
 					</p:column>
@@ -52,7 +58,12 @@
 						<f:facet name="header">
 							<p:outputLabel value="#{pubMan['publication.publisher']}" />
 							<br />
-							<p:inputText value="#{publicationBean.filter.publisher}" />
+							<p:inputText value="#{publicationBean.filter.publisher}"
+							onkeypress="if (event.keyCode == 13) {e.preventDefault(); inputEnter.onchange(); return false; }">
+								<f:ajax event="change"
+									listener="#{publicationBean.filterPublication}"
+									update="publicationDT" />
+							</p:inputText>
 						</f:facet>
 						<h:outputText value="#{publication.publisher.name}" />
 
@@ -62,7 +73,12 @@
 							<p:outputLabel value="#{pubMan['publication.onStock']}" />
 							<br />
 							<p:selectBooleanCheckbox
-								value="#{publicationBean.filter.onStock}" />
+								value="#{publicationBean.filter.onStock}"
+								onkeypress="if (event.keyCode == 13) {e.preventDefault(); inputEnter.onchange(); return false; }">
+								<f:ajax event="change"
+									listener="#{publicationBean.filterPublication}"
+									update="publicationDT" />
+							</p:selectBooleanCheckbox>
 						</f:facet>
 						<h:outputText value="#{publication.onStock}" />
 					</p:column>
@@ -71,12 +87,18 @@
 							<p:outputLabel value="#{pubMan['publication.publicationDate']}" />
 							<br />
 							<p:outputLabel value="#{pubMan['publication.dateFrom']}" />
-							<p:inputText value="#{publicationBean.filter.from}">
+							<p:inputText value="#{publicationBean.filter.from}" onkeypress="if (event.keyCode == 13) {e.preventDefault(); inputEnter.onchange(); return false; }">
+								<f:ajax event="change"
+									listener="#{publicationBean.filterPublication}"
+									update="publicationDT" />
 								<f:convertDateTime pattern="yyyy-MM-dd" />
 							</p:inputText>
 							<br />
 							<p:outputLabel value="#{pubMan['publication.dateUntil']}" />
-							<p:inputText value="#{publicationBean.filter.until}">
+							<p:inputText value="#{publicationBean.filter.until}" onkeypress="if (event.keyCode == 13) {e.preventDefault(); inputEnter.onchange(); return false; }">
+								<f:ajax event="change"
+									listener="#{publicationBean.filterPublication}"
+									update="publicationDT" />
 								<f:convertDateTime pattern="yyyy-MM-dd" />
 							</p:inputText>
 						</f:facet>
@@ -92,19 +114,19 @@
 					</p:column>
 
 					<f:facet name="footer">
-						<p:commandButton process="publicationDT" icon="ui-icon-search"
-							value="#{msg['details.button']}" update="first"
-							oncomplete="PF('publicationDialog').show()"
+						<p:commandButton id="detailsButton" process="publicationDT"
+							icon="ui-icon-search" value="#{msg['details.button']}"
+							update="first" oncomplete="PF('publicationDialog').show()"
 							disabled="#{publicationBean.currentPublication == null}" />
 
-						<p:commandButton process="publicationDT" icon="fa-remove"
-							value="#{msg['delete.button']}"
+						<p:commandButton id="deleteButton" process="publicationDT"
+							icon="fa-remove" value="#{msg['delete.button']}"
 							action="#{publicationBean.remove()}" update="publicationDT"
 							disabled="#{publicationBean.currentPublication == null}" />
 
-						<p:commandButton process="publicationDT" icon="fa-remove"
-							value="#{pubMan['publication.update']}" update="updateDialog"
-							oncomplete="PF('updateDialog').show()"
+						<p:commandButton id="updateButton" process="publicationDT"
+							icon="fa-remove" value="#{pubMan['publication.update']}"
+							update="updateDialog" oncomplete="PF('updateDialog').show()"
 							disabled="#{publicationBean.currentPublication == null}" />
 
 						<p:dialog id="first" modal="true" showEffect="fade"
@@ -190,20 +212,22 @@
 							</c:if>
 						</p:dialog>
 					</f:facet>
-
 				</p:dataTable>
-				<p:commandButton value="#{pubMan['listPublications.button']}"
-					update="publicationDT" icon="ui-icon-search"
-					action="#{publicationBean.getAll()}">
+				<p:commandButton process="publication_actions_form"
+					value="#{pubMan['listPublications.button']}" update="publicationDT"
+					icon="ui-icon-search" action="#{publicationBean.getAll()}">
 				</p:commandButton>
-				<p:commandButton process="publication_actions_form" icon="fa-remove" value="#{pubMan['add.newspaper']}"
-					update="addDialog" oncomplete="PF('addDialog').show()"
+				<p:commandButton process="publication_actions_form" icon="fa-remove"
+					value="#{pubMan['add.newspaper']}" update="addDialog"
+					oncomplete="PF('addDialog').show()"
 					action="#{publicationBean.setType('Newspaper')}" />
-				<p:commandButton process="publication_actions_form" icon="fa-remove" value="#{pubMan['add.magazine']}"
-					update="addDialog" action="#{publicationBean.setType('Magazine')}"
+				<p:commandButton process="publication_actions_form" icon="fa-remove"
+					value="#{pubMan['add.magazine']}" update="addDialog"
+					action="#{publicationBean.setType('Magazine')}"
 					oncomplete="PF('addDialog').show()" />
-				<p:commandButton process="publication_actions_form" icon="fa-remove" value="#{pubMan['add.book']}"
-					update="addDialog" oncomplete="PF('addDialog').show()"
+				<p:commandButton process="publication_actions_form" icon="fa-remove"
+					value="#{pubMan['add.book']}" update="addDialog"
+					oncomplete="PF('addDialog').show()"
 					action="#{publicationBean.setType('Book')}" />
 
 				<p:dialog id="addDialog" modal="true" showEffect="fade"
@@ -239,9 +263,9 @@
 						<p:outputLabel value="#{pubMan['publication.publicationDate']}" />
 						<p:calendar id="calendrierDateDebut"
 							value="#{publicationBean.date}" pattern="yyyy-MM-dd"
-							effect="slideDown" navigator="true" mode="inline" lang="#{localeBean.userLocale.language}"
-							locale="#{localeBean.userLocale}" style="moisAnSeul"/>
-
+							effect="slideDown" navigator="true" mode="inline"
+							lang="#{localeBean.userLocale.language}"
+							locale="#{localeBean.userLocale}" style="moisAnSeul" />
 					</h:panelGrid>
 					<p:commandButton value="#{msg['add.label']}"
 						update="publication_actions_form" icon="fa-user-plu"

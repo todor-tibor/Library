@@ -12,9 +12,11 @@ import com.edu.library.filter.BorrowFilter;
 import com.edu.library.model.Borrow;
 
 /**
+ * Implements the basics of borrowing. Validates the given input data and calls
+ * the business layer if params are valid
+ *
  * @author gallb
- * @author kiska Implements the basics of user login. Validates the given the
- *         input data.
+ * @author kiska
  */
 @Stateless
 public class BorrowManagementFacade implements IBorrowService {
@@ -24,54 +26,55 @@ public class BorrowManagementFacade implements IBorrowService {
 
 	@Override
 	public List<Borrow> getAll() {
-		return borrowBusiness.getAll();
+		return this.borrowBusiness.getAll();
 	}
 
 	@Override
-	public List<Borrow> search(String p_searchTxt) {
-		ServiceValidation.checkString(p_searchTxt);
-		return borrowBusiness.search(p_searchTxt);
+	public List<Borrow> search(final String searchText) {
+		ServiceValidation.checkString(searchText);
+		return this.borrowBusiness.search(searchText);
 	}
 
 	@Override
-	public Borrow getById(String p_id) {
-		ServiceValidation.checkUuid(p_id);
-		return borrowBusiness.getById(p_id);
+	public Borrow getById(final String id) {
+		ServiceValidation.checkUuid(id);
+		return this.borrowBusiness.getById(id);
 	}
 
 	@Override
-	public void store(Borrow p_value) {
+	public void store(final Borrow borrow) {
 		// Data validation.
-		ServiceValidation.checkNotNull(p_value);
-		ServiceValidation.checkNotNull(p_value.getPublication());
-		ServiceValidation.checkNotNull(p_value.getUser());
-		ServiceValidation.checDateOrder(p_value.getBorrowFrom(), p_value.getBorrowUntil());
+		ServiceValidation.checkNotNull(borrow);
+		ServiceValidation.checkNotNull(borrow.getPublication());
+		ServiceValidation.checkNotNull(borrow.getUser());
+		ServiceValidation.checDateOrder(borrow.getBorrowFrom(), borrow.getBorrowUntil());
 
-		borrowBusiness.store(p_value);
+		this.borrowBusiness.store(borrow);
 	}
 
 	@Override
-	public void update(Borrow p_value) {
+	public void update(final Borrow borrow) {
 		// Data validation.
-		ServiceValidation.checkNotNull(p_value);
-		ServiceValidation.checkNotNull(p_value.getPublication());
-		ServiceValidation.checkNotNull(p_value.getUser());
-		ServiceValidation.checDateOrder(p_value.getBorrowFrom(), p_value.getBorrowUntil());
+		ServiceValidation.checkNotNull(borrow);
+		ServiceValidation.checkNotNull(borrow.getPublication());
+		ServiceValidation.checkNotNull(borrow.getUser());
+		ServiceValidation.checDateOrder(borrow.getBorrowFrom(), borrow.getBorrowUntil());
 
-		borrowBusiness.update(p_value);
+		this.borrowBusiness.update(borrow);
 
 	}
 
 	@Override
-	public void remove(String p_id) {
-		ServiceValidation.checkUuid(p_id);
-		borrowBusiness.remove(p_id);
+	public void remove(final String id) {
+		ServiceValidation.checkUuid(id);
+		this.borrowBusiness.remove(id);
 	}
 
-	public List<Borrow> filterBorrow(BorrowFilter filter) {
+	@Override
+	public List<Borrow> filterBorrow(final BorrowFilter filter) {
 		if (filter.getBorrowedFrom() != null && filter.getBorrowedUntil() != null) {
 			ServiceValidation.checDateOrder(filter.getBorrowedFrom(), filter.getBorrowedUntil());
 		}
-		return borrowBusiness.filterBorrow(filter);
+		return this.borrowBusiness.filterBorrow(filter);
 	}
 }

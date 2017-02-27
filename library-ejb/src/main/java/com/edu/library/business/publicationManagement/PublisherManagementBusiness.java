@@ -8,10 +8,11 @@ import javax.ejb.Stateless;
 
 import com.edu.library.data.publicationManagement.PublisherManager;
 import com.edu.library.model.Publisher;
+
 /**
- *  Implements basic business logic for publisher management. 
- * (same functions as in the IPublisherService interface)
- 
+ * Implements basic business logic for publisher management. (same functions as
+ * in the IPublisherService interface)
+ *
  * @author nagys
  *
  */
@@ -22,28 +23,66 @@ public class PublisherManagementBusiness {
 	@EJB
 	private PublisherManager publisherManager;
 
+	/**
+	 * Returns all publishers.
+	 *
+	 * @return - List of publishers
+	 */
 	public List<Publisher> getAll() {
-		return publisherManager.getAll();
+		return this.publisherManager.getAll();
 	}
 
-	public List<Publisher> search(String p_searchText) {
-		return publisherManager.search(p_searchText);
+	/**
+	 * Searches for a publisher given by {@code searchText}
+	 *
+	 * @param searchText
+	 *            - the name or part of the name of the publisher to search for
+	 * @return - List with all the publishers that match the search criteria
+	 */
+	public List<Publisher> search(final String searchText) {
+		return this.publisherManager.search(searchText);
 	}
 
-	public Publisher getById(String p_id) {
-		return publisherManager.getById(p_id);
+	/**
+	 * Return the publisher given by {@code id}
+	 *
+	 * @param id
+	 *            - the unique identifier of a publisher
+	 * @return - a publication
+	 */
+	public Publisher getById(final String id) {
+		return this.publisherManager.getById(id);
 	}
 
-	public void store(Publisher p_value) {
-		publisherManager.store(p_value);
+	/**
+	 * Save the publisher given by {@code publisher}
+	 *
+	 * @param publisher
+	 *            - a Publisher type object containing all the necessary
+	 *            information for saving a publisher to the DB.
+	 */
+	public void store(final Publisher publisher) {
+		this.publisherManager.store(publisher);
 	}
 
-	public void update(Publisher p_value) {
-		publisherManager.update(p_value);
+	/**
+	 * Update the publisher given in {@code publisher}
+	 *
+	 * @param publisher
+	 *            - the publisher object on which the update will be done
+	 */
+	public void update(final Publisher publisher) {
+		this.publisherManager.update(publisher);
 	}
 
-	public void remove(String p_id) {
-		publisherManager.remove(publisherManager.getById(p_id));
+	/**
+	 * Remove the publisher given by {@code id}
+	 *
+	 * @param id
+	 *            - the unique identifier of the publisher
+	 */
+	public void remove(final String id) {
+		this.publisherManager.remove(this.publisherManager.getById(id));
 	}
 
 }

@@ -15,13 +15,14 @@ import javax.persistence.TemporalType;
 
 /**
  * The persistent class for the borrows database table.
- * 
+ *
  */
 @Entity
 @Table(name = "borrows")
 @NamedQueries({ @NamedQuery(name = "Borrow.findAll", query = "SELECT b FROM Borrow b"),
 		@NamedQuery(name = "Borrow.findById", query = "SELECT b FROM Borrow b WHERE b.uuid = :uuid") })
 public class Borrow extends BaseEntity {
+
 	private static final long serialVersionUID = 1L;
 
 	@Temporal(TemporalType.DATE)
@@ -49,7 +50,7 @@ public class Borrow extends BaseEntity {
 		return this.borrowFrom;
 	}
 
-	public void setBorrowFrom(Date borrowFrom) {
+	public void setBorrowFrom(final Date borrowFrom) {
 		this.borrowFrom = borrowFrom;
 	}
 
@@ -57,7 +58,7 @@ public class Borrow extends BaseEntity {
 		return this.borrowUntil;
 	}
 
-	public void setBorrowUntil(Date borrowUntil) {
+	public void setBorrowUntil(final Date borrowUntil) {
 		this.borrowUntil = borrowUntil;
 	}
 
@@ -65,7 +66,7 @@ public class Borrow extends BaseEntity {
 		return this.publication;
 	}
 
-	public void setPublication(Publication publication) {
+	public void setPublication(final Publication publication) {
 		this.publication = publication;
 	}
 
@@ -73,7 +74,7 @@ public class Borrow extends BaseEntity {
 		return this.user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(final User user) {
 		this.user = user;
 	}
 

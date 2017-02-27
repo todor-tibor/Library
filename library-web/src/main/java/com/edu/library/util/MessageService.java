@@ -1,7 +1,7 @@
 /**
- * 
+ *
  */
-package com.edu.library;
+package com.edu.library.util;
 
 import java.io.Serializable;
 
@@ -10,11 +10,10 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
-import com.edu.library.util.PropertyProvider;
-
 /**
- * MessageService for ManagedBeans
- * 
+ * MessageService for ManagedBeans, using PropertyProvider to get value of the
+ * message key
+ *
  * @author sipost
  */
 @SessionScoped
@@ -27,42 +26,42 @@ public class MessageService implements Serializable {
 
 	/**
 	 * Sets faces context error message.
-	 * 
+	 *
 	 * @param message
 	 */
-	public void error(String message) {
+	public void error(final String message) {
 		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", provider.getProperty(message)));
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", this.provider.getProperty(message)));
 	}
 
 	/**
 	 * Sets faces context info message.
-	 * 
+	 *
 	 * @param message
 	 */
-	public void info(String message) {
+	public void info(final String message) {
 		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", provider.getProperty(message)));
+				new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", this.provider.getProperty(message)));
 	}
 
 	/**
 	 * Sets faces context warning message.
-	 * 
+	 *
 	 * @param message
 	 */
-	public void warn(String message) {
+	public void warn(final String message) {
 		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning!", provider.getProperty(message)));
+				new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning!", this.provider.getProperty(message)));
 	}
 
 	/**
 	 * Sets faces context fatal error message.
-	 * 
+	 *
 	 * @param message
 	 */
-	public void fatal(String message) {
+	public void fatal(final String message) {
 		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_FATAL, "Fatal!", provider.getProperty(message)));
+				new FacesMessage(FacesMessage.SEVERITY_FATAL, "Fatal!", this.provider.getProperty(message)));
 	}
 
 }

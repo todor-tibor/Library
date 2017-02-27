@@ -16,8 +16,11 @@ import com.edu.library.model.Borrow;
 import com.edu.library.model.Publication;
 import com.edu.library.model.User;
 import com.edu.library.util.ExceptionHandler;
+import com.edu.library.util.MessageService;
 
 /**
+ * Borrow manager.
+ *
  * @author nagys, gallb, kiska
  *
  */
@@ -27,7 +30,7 @@ import com.edu.library.util.ExceptionHandler;
 @SessionScoped
 public class BorrowMB implements Serializable {
 
-	private Logger oLogger = Logger.getLogger(BorrowMB.class);
+	private final Logger logger = Logger.getLogger(BorrowMB.class);
 	private static final long serialVersionUID = 1479586528417507035L;
 
 	@Inject
@@ -38,148 +41,133 @@ public class BorrowMB implements Serializable {
 	@Inject
 	MessageService message;
 
+	/**
+	 * Filter for Borrow List
+	 */
 	BorrowFilter filter = new BorrowFilter();
 
+	/**
+	 * List of displayed borrows
+	 */
 	private List<Borrow> borrows = new ArrayList<>();
+
+	/**
+	 * Selected user
+	 */
 	private User currentUser = null;
+
+	/**
+	 * Selected publication
+	 */
 	private Publication currentPublication = null;
 
+	/**
+	 * Selected borrow
+	 */
 	private Borrow borrow = null;
 	private Date date1 = new Date();
 	private Date date2 = null;
 	private Date date3 = null;
 
-	public Date getDate3() {
-		return date3;
-	}
-
-	public void setDate3(Date date3) {
-		this.date3 = date3;
-	}
-
-	public Date getDate1() {
-		return date1;
-	}
-
-	public void setDate1(Date date1) {
-		this.date1 = date1;
-	}
-
-	public Date getDate2() {
-		return date2;
-	}
-
-	public void setDate2(Date date2) {
-		this.date2 = date2;
-	}
-
-	public List<Borrow> getBorrowsList() {
-		return borrows;
-	}
-
-	public Borrow getCurrentBorrow() {
-		return borrow;
-	}
-
-	public void setCurrentBorrow(Borrow borrow) {
-		this.borrow = borrow;
-	}
-
-	public User getCurrentUser() {
-		return currentUser;
-	}
-
-	public void setCurrentUser(User curentUser) {
-		this.currentUser = curentUser;
-	}
-
-	public Publication getCurrentPublication() {
-		return currentPublication;
-	}
-
-	public void setCurrentPublication(Publication curentPublication) {
-		this.currentPublication = curentPublication;
+	/**
+	 * Get all borrows.
+	 *
+	 * @return List of borrows
+	 */
+	public List<Borrow> getAll() {
+		this.borrows.clear();
+		try {
+			this.borrows = this.oBorrowBean.getAll();
+		} catch (final Exception e) {
+			this.logger.error(e);
+			this.exceptionHandler.showMessage(e);
+		}
+		return this.borrows;
 	}
 
 	/**
-	 * @return
+	 * Store the new borrow
 	 */
-	public List<Borrow> getAll() {
-		borrows.clear();
-		try {
-			borrows = oBorrowBean.getAll();
-		} catch (Exception e) {
-			oLogger.error(e);
-			exceptionHandler.showMessage(e);
-		}
-		return borrows;
-	}
-
 	public void store() {
 
 		Borrow p_Borrow;
 		p_Borrow = new Borrow();
-		if ((currentPublication == null) || (currentUser == null) || (date2 == null)) {
-			message.warn("managedbean.required");
+		if ((this.currentPublication == null) || (this.currentUser == null) || (this.date2 == null)) {
+			this.message.warn("managedbean.required");
 
 		} else {
-			p_Borrow.setUser(currentUser);
-			p_Borrow.setPublication(currentPublication);
-			p_Borrow.setBorrowFrom(date1);
-			p_Borrow.setBorrowUntil(date2);
+			p_Borrow.setUser(this.currentUser);
+			p_Borrow.setPublication(this.currentPublication);
+			p_Borrow.setBorrowFrom(this.date1);
+			p_Borrow.setBorrowUntil(this.date2);
 			try {
-				oBorrowBean.store(p_Borrow);
-				borrows.add(p_Borrow);
-				message.info("managedBean.storeSuccess");
-			} catch (Exception e) {
-				oLogger.error(e.getMessage());
-				exceptionHandler.showMessage(e);
+				this.oBorrowBean.store(p_Borrow);
+				this.borrows.add(p_Borrow);
+			} catch (final Exception e) {
+				this.logger.error(e.getMessage());
+				this.exceptionHandler.showMessage(e);
 			}
 		}
 	}
 
+	/**
+	 * Delete borrow (return publication)
+	 */
 	public void remove() {
-		if (borrow == null) {
-			message.error("managedbean.empty");
+		if (this.borrow == null) {
+			this.message.error("managedbean.empty");
 		} else {
 			try {
-				oBorrowBean.remove(borrow.getUuid());
+				this.oBorrowBean.remove(this.borrow.getUuid());
 				getAll();
-				message.info("managedbean.deleteSuccess");
-			} catch (Exception e) {
-				oLogger.error(e);
-				exceptionHandler.showMessage(e);
+			} catch (final Exception e) {
+				this.logger.error(e);
+				this.exceptionHandler.showMessage(e);
 			}
 		}
 	}
 
+	/**
+	 * Update the borrow until.
+	 */
 	public void update() {
-		borrow.setBorrowUntil(date3);
+		this.borrow.setBorrowUntil(this.date3);
 		try {
-			oBorrowBean.update(borrow);
+			this.oBorrowBean.update(this.borrow);
 			getAll();
-			message.info("managedbean.updateSuccess");
-		} catch (Exception e) {
-			oLogger.error(e);
-			exceptionHandler.showMessage(e);
+		} catch (final Exception e) {
+			this.logger.error(e);
+			this.exceptionHandler.showMessage(e);
 		}
 
 	}
 
-	public void search(String p_searchTxt) {
-		if (p_searchTxt.length() >= 3) {
-			borrows.clear();
+	/**
+	 * Search borrow by User_name and/or Publication_title given by
+	 * {@code searchTxt}
+	 *
+	 * @param searchTxt
+	 *            -user name or publication title
+	 */
+	public void search(final String searchTxt) {
+		if (searchTxt.length() >= 3) {
+			this.borrows.clear();
 			try {
-				borrows = oBorrowBean.search(p_searchTxt);
-			} catch (Exception e) {
-				oLogger.error(e);
-				exceptionHandler.showMessage(e);
+				this.borrows = this.oBorrowBean.search(searchTxt);
+			} catch (final Exception e) {
+				this.logger.error(e);
+				this.exceptionHandler.showMessage(e);
 			}
 		} else {
-			message.error("managedbean.string");
+			this.message.error("managedbean.string");
 		}
 	}
 
+	/**
+	 * Check if there is selected Borrow from data table.
+	 *
+	 * @return true if currently selected borrow not null
+	 */
 	public Boolean isSelected() {
 		if (this.borrow == null) {
 			return false;
@@ -188,36 +176,91 @@ public class BorrowMB implements Serializable {
 		}
 	}
 
-	public void setUntil() {
-		date3 = borrow.getBorrowUntil();
-	}
-
 	/**
-	 * filter publication
-	 * 
-	 * @return
+	 * Filter Borrow
+	 *
+	 * @return list of filtered borrows
 	 */
 	public List<Borrow> filterBorrow() {
-		oLogger.info("filter publication " + filter.getTitle());
 		this.borrows.clear();
 		try {
-			this.borrows = oBorrowBean.filterBorrow(filter);
+			this.borrows = this.oBorrowBean.filterBorrow(this.filter);
 			if (this.borrows.isEmpty()) {
-				message.warn("ejb.message.noEntity");
+				this.message.warn("ejb.message.noEntity");
 			}
-		} catch (Exception e) {
-			oLogger.error(e);
-			exceptionHandler.showMessage(e);
+		} catch (final Exception e) {
+			this.logger.error(e);
+			this.exceptionHandler.showMessage(e);
 		}
 		return this.borrows;
 	}
 
+	/*
+	 * getters and setters for private attributes
+	 */
+
 	public BorrowFilter getFilter() {
-		return filter;
+		return this.filter;
 	}
 
-	public void setFilter(BorrowFilter filter) {
+	public void setFilter(final BorrowFilter filter) {
 		this.filter = filter;
+	}
+
+	public Date getDate3() {
+		return this.date3;
+	}
+
+	public void setDate3(final Date date3) {
+		this.date3 = date3;
+	}
+
+	public Date getDate1() {
+		return this.date1;
+	}
+
+	public void setDate1(final Date date1) {
+		this.date1 = date1;
+	}
+
+	public Date getDate2() {
+		return this.date2;
+	}
+
+	public void setDate2(final Date date2) {
+		this.date2 = date2;
+	}
+
+	public void setUntil() {
+		this.date3 = this.borrow.getBorrowUntil();
+	}
+
+	public List<Borrow> getBorrowsList() {
+		return this.borrows;
+	}
+
+	public Borrow getCurrentBorrow() {
+		return this.borrow;
+	}
+
+	public void setCurrentBorrow(final Borrow borrow) {
+		this.borrow = borrow;
+	}
+
+	public User getCurrentUser() {
+		return this.currentUser;
+	}
+
+	public void setCurrentUser(final User curentUser) {
+		this.currentUser = curentUser;
+	}
+
+	public Publication getCurrentPublication() {
+		return this.currentPublication;
+	}
+
+	public void setCurrentPublication(final Publication curentPublication) {
+		this.currentPublication = curentPublication;
 	}
 
 }

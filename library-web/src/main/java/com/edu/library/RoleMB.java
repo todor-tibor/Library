@@ -12,23 +12,21 @@ import org.jboss.logging.Logger;
 
 import com.edu.library.model.Role;
 import com.edu.library.util.ExceptionHandler;
+import com.edu.library.util.MessageService;
 
 /**
  * Role manager.
- * 
+ *
  * @author kiska
  * @author sipost
- * 
+ *
  */
 @Named("rolebean")
 
 @SessionScoped
 public class RoleMB implements Serializable {
 
-	/**
-	 * 
-	 */
-	private Logger oLogger = Logger.getLogger(RoleMB.class);
+	private final Logger logger = Logger.getLogger(RoleMB.class);
 	private static final long serialVersionUID = -4702598250751689454L;
 
 	@Inject
@@ -36,102 +34,99 @@ public class RoleMB implements Serializable {
 
 	@Inject
 	private ExceptionHandler exceptionHandler;
-	
+
 	@Inject
 	MessageService message;
-		
-	
-	public void change(){
-		oLogger.info("-----tab changed");
-	}
-	
-	private List<Role> roleList = new ArrayList<>();// Currently displayed
-													// roles.
-	private Role currentRole = null;// Currently selected role.
 
-	
+	/**
+	 * Currently displayed roles.
+	 */
+	private List<Role> roleList = new ArrayList<>();
+
+	/**
+	 * Currently selected role.
+	 */
+	private Role currentRole = null;
 
 	/**
 	 * Requests all role objects and stores them in roleList.
-	 * 
-	 * @return List of all roles from persistency.
+	 *
+	 * @return List of all roles from database.
 	 */
-	public List<Role> getAll() {		
-		roleList.clear();
-		try {		
-			roleList = oRoleBean.getAll();
-		} catch (Exception e) {
-			oLogger.error(e);
-			exceptionHandler.showMessage(e);
+	public List<Role> getAll() {
+		this.roleList.clear();
+		try {
+			this.roleList = this.oRoleBean.getAll();
+		} catch (final Exception e) {
+			this.logger.error(e);
+			this.exceptionHandler.showMessage(e);
 		}
-		return roleList;
+		return this.roleList;
 	}
 
 	/**
-	 * Search for role by rolename and stores them in roleList.
-	 * 
-	 * @param p_searchTxt
+	 * Search for role by role name and stores them in roleList.
+	 *
+	 * @param searchTxt
 	 *            rolename.
 	 * @return List of role objects found.
 	 */
-	public List<Role> search(String p_searchTxt) {	
-		if (p_searchTxt.length() >= 3) {
-			roleList.clear();
+	public List<Role> search(final String searchTxt) {
+		if (searchTxt.length() >= 3) {
+			this.roleList.clear();
 			try {
-				roleList = oRoleBean.search(p_searchTxt);
-			} catch (Exception e) {
-				oLogger.error(e.getMessage());
-				exceptionHandler.showMessage(e);
+				this.roleList = this.oRoleBean.search(searchTxt);
+			} catch (final Exception e) {
+				this.logger.error(e.getMessage());
+				this.exceptionHandler.showMessage(e);
 			}
 		} else {
-			message.error("managedbean.string");
+			this.message.error("managedbean.string");
 		}
-		return roleList;
+		return this.roleList;
 	}
 
 	/**
 	 * Stores new role with rolename.
-	 * 
-	 * @param p_name - rolename, p_pass - password, p_idx - loyalty index
-	 *         
+	 *
+	 * @param name
+	 *            - rolename
 	 */
 
-	public void store(String p_name) {	
-		if (p_name.isEmpty() || "".equals(p_name)) {
-			message.error("managedbean.empty");
+	public void store(final String name) {
+		if (name.isEmpty() || "".equals(name)) {
+			this.message.error("managedbean.empty");
 			return;
 		}
+		final Role tmpRole = new Role();
+		tmpRole.setRole(name);
 		try {
-			Role tmpRole = new Role();
-			tmpRole.setRole(p_name);
-			oRoleBean.store(tmpRole);
-			roleList.add(tmpRole);
-			message.info("managedBean.storeSuccess");
-		} catch (Exception e) {
-			oLogger.error(e);
-			exceptionHandler.showMessage(e);
+			this.oRoleBean.store(tmpRole);
+			this.roleList.add(tmpRole);
+		} catch (final Exception e) {
+			this.logger.error(e);
+			this.exceptionHandler.showMessage(e);
 		}
 	}
 
 	/**
 	 * Renames currently selected role.
-	 * 
-	 * @param p_newTxt
+	 *
+	 * @param newRole
 	 *            - new rolename.
 	 */
-	public void update(String p_newTxt) {
-		if ((currentRole != null) && (p_newTxt.length() >= 3)) {
+	public void update(final String newRole) {
+		if ((this.currentRole != null) && (newRole.length() >= 3)) {
+			this.currentRole.setRole(newRole);
 			try {
-				currentRole.setRole(p_newTxt);
-				oRoleBean.update(currentRole);
-				roleList = getAll();			
-				message.info("managedbean.updateSuccess");
-			} catch (Exception e) {
-				oLogger.error(e);
-				exceptionHandler.showMessage(e);
+				this.oRoleBean.update(this.currentRole);
+				this.roleList = getAll();
+			} catch (final Exception e) {
+				this.logger.error(e);
+				this.exceptionHandler.showMessage(e);
 			}
 		} else {
-			message.error("managedbean.string");
+			this.message.error("managedbean.string");
 		}
 	}
 
@@ -139,30 +134,24 @@ public class RoleMB implements Serializable {
 	 * Deletes currently selected role from persistency.
 	 */
 	public void remove() {
-		if (currentRole == null) {		
-			message.error("managedbean.empty");
+		if (this.currentRole == null) {
+			this.message.error("managedbean.empty");
 		} else {
 			try {
-				oRoleBean.remove(currentRole.getUuid());
-				roleList.remove(currentRole);
-				message.info("managedbean.deleteSuccess");
-			} catch (Exception e) {
-				oLogger.error(e);
-				exceptionHandler.showMessage(e);
+				this.oRoleBean.remove(this.currentRole.getUuid());
+				this.roleList.remove(this.currentRole);
+			} catch (final Exception e) {
+				this.logger.error(e);
+				this.exceptionHandler.showMessage(e);
 			}
 		}
 	}
-	
-	
 
-	public Role getCurrentRole() {
-		return currentRole;
-	}
-
-	public void setCurrentRole(Role currentRole) {
-		this.currentRole = currentRole;
-	}
-
+	/**
+	 * Check if is role selected
+	 *
+	 * @return true if current role not null
+	 */
 	public Boolean isSelected() {
 		if (this.currentRole == null) {
 			return false;
@@ -171,12 +160,24 @@ public class RoleMB implements Serializable {
 		}
 	}
 
-	public List<Role> getRoleList() {
-		return roleList;
+	/*
+	 * Getters and setters for private attributes
+	 */
+
+	public Role getCurrentRole() {
+		return this.currentRole;
 	}
 
-	public void setRoleList(List<Role> roleList) {
+	public void setCurrentRole(final Role currentRole) {
+		this.currentRole = currentRole;
+	}
+
+	public List<Role> getRoleList() {
+		return this.roleList;
+	}
+
+	public void setRoleList(final List<Role> roleList) {
 		this.roleList = roleList;
 	}
-	
+
 }

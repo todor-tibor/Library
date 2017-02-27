@@ -25,7 +25,7 @@
 					selection="#{authorBean.currentAuthor}" rowKey="#{author.uuid}"
 					autoUpdate="true">
 					<p:ajax event="rowSelect" listener="#{authorBean.isSelected}"
-						update="authorDT" />
+						update="deletebuttonA renamebuttonA" />
 					<f:facet name="header">
             			#{authorMan['authors.text']}
         			</f:facet>
@@ -35,12 +35,12 @@
 						<h:outputText value="#{author.name}" />
 					</p:column>
 					<f:facet name="footer">
-						<p:commandButton process="authorDT" icon="ui-icon-search"
+						<p:commandButton id="renamebuttonA" process="authorDT" icon="ui-icon-search"
 							value="#{msg['rename.button']}" update="author_dialog"
 							oncomplete="PF('authorDialog').show()"
 							disabled="#{authorBean.currentAuthor == null}" />
 
-						<p:commandButton process="authorDT" icon="fa-remove"
+						<p:commandButton id="deletebuttonA" process="authorDT" icon="fa-remove"
 							value="#{msg['delete.button']}" action="#{authorBean.remove()}"
 							update="authorDT" disabled="#{authorBean.currentAuthor == null}" />
 

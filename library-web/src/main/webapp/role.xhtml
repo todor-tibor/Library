@@ -24,7 +24,7 @@
 					selection="#{rolebean.currentRole}" rowKey="#{role_list.uuid}">
 
 					<p:ajax event="rowSelect" listener="#{rolebean.isSelected}"
-						update="roleMNDT" />
+						update="renamebuttonR deletebuttonR" />
 
 					<f:facet name="header">
 						#{roleMan['role.text']}
@@ -34,11 +34,11 @@
 						<h:outputText value="#{role_list.role}" />
 					</p:column>
 					<f:facet name="footer">
-						<p:commandButton process="roleMNDT"
+						<p:commandButton id="renamebuttonR" process="roleMNDT"
 							value="#{msg['rename.button']}" update="role_dialog_details"
 							oncomplete="PF('roleDialog').show()"
 							disabled="#{rolebean.currentRole == null}" />
-						<p:commandButton process="roleMNDT" icon="fa-remove"
+						<p:commandButton id="deletebuttonR" process="roleMNDT" icon="fa-remove"
 							value="#{msg['delete.button']}" action="#{rolebean.remove()}"
 							update="roleMNDT" disabled="#{rolebean.currentRole == null}" />
 

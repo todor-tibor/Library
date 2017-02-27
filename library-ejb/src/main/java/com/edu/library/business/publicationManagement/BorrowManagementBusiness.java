@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.edu.library.business.publicationManagement;
 
@@ -15,8 +15,7 @@ import javax.ejb.Stateless;
 import org.jboss.logging.Logger;
 
 import com.edu.library.access.util.ServiceValidation;
-import com.edu.library.business.exception.BusinessException;
-import com.edu.library.business.exception.ErrorMessages;
+import com.edu.library.business.uitl.BorrowRestriction;
 import com.edu.library.data.publicationManagement.BorrowDAO;
 import com.edu.library.data.publicationManagement.PublicationBean;
 import com.edu.library.data.userManagement.UserDao;
@@ -26,14 +25,17 @@ import com.edu.library.model.Publication;
 import com.edu.library.model.User;
 
 /**
- * @author gallb, kiska Implements publication related business logic.
+ * Implements basic business logic for borrow management.
+ *
+ * @author gallb
+ * @author kiska
  */
 
 @Stateless
 @LocalBean
 public class BorrowManagementBusiness {
 
-	private Logger oLogger = Logger.getLogger(BorrowManagementBusiness.class);
+	private final Logger logger = Logger.getLogger(BorrowManagementBusiness.class);
 
 	@EJB
 	private BorrowDAO borrowDAO;
@@ -46,115 +48,96 @@ public class BorrowManagementBusiness {
 	 * @return List containing all entities.
 	 */
 	public List<Borrow> getAll() {
-		return borrowDAO.getAll();
+		return this.borrowDAO.getAll();
 	}
 
 	/**
-	 * Verifies if a the given user is currently having a publication borrowed.
-	 * 
-	 * @param p_user
-	 *            user to verify
-	 * @param p_pub
-	 *            publication to verify
-	 * @return true if the publication is already borrowed, false if not
+	 * Searches for a borrowing given by {@code searchText}
+	 *
+	 * @param searchText
+	 *            - the name or part of the name of the borrowing to search for
+	 * @return - List with all the borrows that match the search criteria
 	 */
-	private boolean currentlyHasItBorrowed(User p_user, Publication p_pub) {
-		List<Borrow> borrows = p_user.getBorrows();
-		for (int i = 0; i < borrows.size(); i++) {
-			if (borrows.get(i).getPublication().getUuid().equals(p_pub.getUuid())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public List<Borrow> search(String p_searchTxt) {
-		List<Borrow> tmpList = userDAO.getBorrow(p_searchTxt);
-		Set<Borrow> tempSet = new HashSet<Borrow>(tmpList);
-		tempSet.addAll(pubDAO.getBorrow(p_searchTxt));
+	public List<Borrow> search(final String searchText) {
+		final List<Borrow> tmpList = this.userDAO.getBorrow(searchText);
+		final Set<Borrow> tempSet = new HashSet<Borrow>(tmpList);
+		tempSet.addAll(this.pubDAO.getBorrow(searchText));
 		tmpList.clear();
 		tmpList.addAll(tempSet);
 		return tmpList;
 	}
 
-	public Borrow getById(String p_entity) {
-		return borrowDAO.getById(p_entity);
+	/**
+	 * Return the borrowing given by {@code id}
+	 *
+	 * @param id
+	 *            - the unique identifier of a borrow
+	 * @return - a borrow
+	 */
+	public Borrow getById(final String id) {
+		return this.borrowDAO.getById(id);
 	}
 
-	public void store(Borrow p_entity) {
+	/**
+	 * Save the borrowing given by {@code author}
+	 *
+	 * @param id
+	 *            - the unique identifier of a borrow
+	 */
+	public void store(final Borrow id) {
 		// get current data of user
-		User tmpUser = userDAO.getById(p_entity.getUser().getUuid());
-		// check if trust index is OK
-		if (tmpUser.getLoyaltyIndex() > 0) {
-			// check if user reached the allowed maximum number of borrowings
-			if (tmpUser.getBorrows().size() < 3) {
-				// user is not currently late with borrowing
-				if (!tmpUser.isLate()) {
-					Publication tmpPub = pubDAO.getById(p_entity.getPublication().getUuid());
-					// and the user doesn't have it currently borrowed
-					if (!this.currentlyHasItBorrowed(tmpUser, tmpPub)) {
-						// check if publication is on stock
-						if (tmpPub.getOnStock() > 0) {
-							tmpPub.setOnStock(tmpPub.getOnStock() - 1);
-							borrowDAO.store(p_entity);
-						} else {
-							oLogger.info("Not on stock.");
-							throw new BusinessException(ErrorMessages.ERROR_STOCK);
-						}
-					} else {
-						oLogger.info("Not allowed. One copy already borrowed.");
-						throw new BusinessException(ErrorMessages.ERROR_CURRENTLY_BORROWED);
-					}
-				} else {
-					oLogger.info("User is currently late with one or more publications.");
-					throw new BusinessException(ErrorMessages.ERROR_LATE);
-				}
-			} else {
-				oLogger.info("User reached the maximum number of borrows.");
-				throw new BusinessException(ErrorMessages.ERROR_TOOMUCH_BORROW);
-			}
-		} else {
-			oLogger.info("Trust index too low");
-			throw new BusinessException(ErrorMessages.ERROR_LOYALTY);
-		}
+		final User tmpUser = this.userDAO.getById(id.getUser().getUuid());
+
+		BorrowRestriction.checkBorrowRestriction(tmpUser, this.pubDAO, this.borrowDAO, id);
 	}
 
-	public void update(Borrow p_entity) {
-		borrowDAO.getById(p_entity.getUuid());
-		borrowDAO.update(p_entity);
-
+	/**
+	 * Update the borrowing given by {@code id}
+	 *
+	 * @param id
+	 *            - the unique identifier of a borrow
+	 */
+	public void update(final Borrow id) {
+		this.borrowDAO.getById(id.getUuid());
+		this.borrowDAO.update(id);
 	}
 
 	/**
 	 * Removes borrowing entity from persistence by ID. Handles stock and trust
 	 * index related changes for publication and user entities.
-	 * 
-	 * @param p_id
+	 *
+	 * @param id
 	 *            - id of borrowing entity.
 	 */
-	public void remove(String p_id) {
-		Borrow tmpBorrow = borrowDAO.getById(p_id);
+	public void remove(final String id) {
+		final Borrow tmpBorrow = this.borrowDAO.getById(id);
 		ServiceValidation.checkNotNull(tmpBorrow);
 
-		Date tmpDate = new Date();
+		final Date tmpDate = new Date();
 		// verify if user is late
 		if (tmpBorrow.getBorrowUntil().before(tmpDate)) {
-			oLogger.info("Return late decrease loyalty index.");
 			// decrease loyalty index
-			User tmpUser = tmpBorrow.getUser();
+			final User tmpUser = tmpBorrow.getUser();
 			tmpUser.setLoyaltyIndex(tmpUser.getLoyaltyIndex() - 1);
-			userDAO.update(tmpUser);
+			this.userDAO.update(tmpUser);
 		}
 		// increase stock
-		Publication tmpPub = pubDAO.getById(tmpBorrow.getPublication().getUuid());
+		final Publication tmpPub = this.pubDAO.getById(tmpBorrow.getPublication().getUuid());
 		tmpPub.setOnStock(tmpPub.getOnStock() + 1);
-		pubDAO.update(tmpPub);
-		oLogger.info("-------------" + tmpPub.getTitle());
-
-		borrowDAO.remove(tmpBorrow);
+		this.pubDAO.update(tmpPub);
+		this.borrowDAO.remove(tmpBorrow);
 	}
 
-	public List<Borrow> filterBorrow(BorrowFilter filter) {
-		return borrowDAO.filterBorrow(filter);
+	/**
+	 * Searches for all borrowings that match certain criteria given by
+	 * {@code filter}
+	 *
+	 * @param filter
+	 *            - a custom filter for borrowings, which represents the the
+	 *            fields that can be filtered
+	 * @return - list of borrows that match the search criteria
+	 */
+	public List<Borrow> filterBorrow(final BorrowFilter filter) {
+		return this.borrowDAO.filterBorrow(filter);
 	}
 }

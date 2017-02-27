@@ -10,13 +10,15 @@ import javax.inject.Inject;
 
 import com.edu.library.util.PropertyProvider;
 
+/**
+ * Session manager. Help to change language.
+ *
+ * @author gallB
+ */
 @ManagedBean(name = "amibeanunk")
 @SessionScoped
 public class SessionManagerMB implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5581520559417627350L;
 
 	@Inject
@@ -24,21 +26,22 @@ public class SessionManagerMB implements Serializable {
 	@Inject
 	PropertyProvider provider;
 
+	/**
+	 * Change Language to English.
+	 */
 	public void englishNow() {
-		System.out.println("Before: " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
 		FacesContext.getCurrentInstance().getViewRoot().setLocale(Locale.ENGLISH);
-		provider.setLocale(Locale.ENGLISH);
-		localeManager.setUserLocale(Locale.ENGLISH);
-		System.out.println("After english now: " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
+		this.provider.setLocale(Locale.ENGLISH);
+		this.localeManager.setUserLocale(Locale.ENGLISH);
 	}
 
+	/**
+	 * Change Language to hungarian.
+	 */
 	public void hungarianNow() {
-		System.out.println("Before: " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
 		Locale tmpLoc = new Locale("hu", "HU");
 		FacesContext.getCurrentInstance().getViewRoot().setLocale(tmpLoc);
-		provider.setLocale(tmpLoc);
-		localeManager.setUserLocale(tmpLoc);
-		System.out.println(
-				"After hungarian now: " + FacesContext.getCurrentInstance().getViewRoot().getLocale().getLanguage());
+		this.provider.setLocale(tmpLoc);
+		this.localeManager.setUserLocale(tmpLoc);
 	}
 }
