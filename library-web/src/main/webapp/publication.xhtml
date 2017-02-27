@@ -29,8 +29,10 @@
 				</p:commandButton>
 
 
-				<p:dataTable id="publicationDT" var="publication"
-					value="#{publicationBean.publicationList}" selectionMode="single"
+				<p:dataTable id="publicationDT" value="#{publicationBean.lazyModel}"
+					var="publication" paginator="true" rows="5"
+					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+					rowsPerPageTemplate="5,10,15" lazy="true" selectionMode="single"
 					selection="#{publicationBean.currentPublication}"
 					rowKey="#{publication.uuid}">
 
@@ -215,7 +217,7 @@
 				</p:dataTable>
 				<p:commandButton process="publication_actions_form"
 					value="#{pubMan['listPublications.button']}" update="publicationDT"
-					icon="ui-icon-search" action="#{publicationBean.getAll()}">
+					icon="ui-icon-search" action="#{publicationBean.getAllPagination()}">
 				</p:commandButton>
 				<p:commandButton process="publication_actions_form" icon="fa-remove"
 					value="#{pubMan['add.newspaper']}" update="addDialog"

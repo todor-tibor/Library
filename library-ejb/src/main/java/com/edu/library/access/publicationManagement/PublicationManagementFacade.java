@@ -68,8 +68,8 @@ public class PublicationManagementFacade implements IPublicationService {
 	}
 
 	@Override
-	public List<Publication> filterPublication(final PublicationFilter filter) {
-		return this.publicationBusiness.filterPublication(filter);
+	public List<Publication> filterPublication(final PublicationFilter filter, final int start, final int fin) {
+		return this.publicationBusiness.filterPublication(filter, start, fin);
 	}
 
 	private void authorCheck(final Publication publication) {
@@ -84,6 +84,36 @@ public class PublicationManagementFacade implements IPublicationService {
 	private void checkCopies(final Publication publication) {
 		ServiceValidation.checkIfNumberInRange(publication.getNrOfCopys(), 0, Integer.MAX_VALUE);
 		ServiceValidation.checkIfNumberInRange(publication.getOnStock(), 0, publication.getNrOfCopys());
+	}
+
+	@Override
+	public long countAll() {
+		return this.publicationBusiness.countAll();
+	}
+
+	@Override
+	public List<Publication> search(final String text, final int start, final int fin) {
+		ServiceValidation.checkIfNumberInRange(start, -1, Integer.MAX_VALUE);
+		ServiceValidation.checkIfNumberInRange(fin, 0, Integer.MAX_VALUE);
+		ServiceValidation.checkString(text);
+		return this.publicationBusiness.search(text, start, fin);
+	}
+
+	@Override
+	public long countSearch(final String title) {
+		return this.publicationBusiness.countSearch(title);
+	}
+
+	@Override
+	public long countFilter(final PublicationFilter filter) {
+		return this.publicationBusiness.countFilter(filter);
+	}
+
+	@Override
+	public List<Publication> getAll(final int start, final int fin) {
+		ServiceValidation.checkIfNumberInRange(start, -1, Integer.MAX_VALUE);
+		ServiceValidation.checkIfNumberInRange(fin, 0, Integer.MAX_VALUE);
+		return this.publicationBusiness.getAll(start, fin);
 	}
 
 }
