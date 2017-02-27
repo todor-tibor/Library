@@ -70,7 +70,6 @@ public class BorrowMB implements Serializable {
 	private Date date2 = null;
 	private Date date3 = null;
 
-
 	/**
 	 * Get all borrows.
 	 *
@@ -79,7 +78,7 @@ public class BorrowMB implements Serializable {
 	public List<Borrow> getAll() {
 		this.borrows.clear();
 		try {
-			this.borrows = this.oBorrowBean.getAll();
+			this.borrows = this.borrowService.getAll();
 		} catch (final Exception e) {
 			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
@@ -103,7 +102,7 @@ public class BorrowMB implements Serializable {
 			p_Borrow.setBorrowFrom(this.date1);
 			p_Borrow.setBorrowUntil(this.date2);
 			try {
-				this.oBorrowBean.store(p_Borrow);
+				this.borrowService.store(p_Borrow);
 				this.borrows.add(p_Borrow);
 			} catch (final Exception e) {
 				this.logger.error(e.getMessage());
@@ -120,7 +119,7 @@ public class BorrowMB implements Serializable {
 			this.message.error("managedbean.empty");
 		} else {
 			try {
-				this.oBorrowBean.remove(this.borrow.getUuid());
+				this.borrowService.remove(this.borrow.getUuid());
 				getAll();
 			} catch (final Exception e) {
 				this.logger.error(e);
@@ -136,7 +135,7 @@ public class BorrowMB implements Serializable {
 	public void update() {
 		this.borrow.setBorrowUntil(this.date3);
 		try {
-			this.oBorrowBean.update(this.borrow);
+			this.borrowService.update(this.borrow);
 			getAll();
 		} catch (final Exception e) {
 			this.logger.error(e);
@@ -156,7 +155,7 @@ public class BorrowMB implements Serializable {
 		if (searchTxt.length() >= 3) {
 			this.borrows.clear();
 			try {
-				this.borrows = this.oBorrowBean.search(searchTxt);
+				this.borrows = this.borrowService.search(searchTxt);
 			} catch (final Exception e) {
 				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
@@ -187,7 +186,7 @@ public class BorrowMB implements Serializable {
 	public List<Borrow> filterBorrow() {
 		this.borrows.clear();
 		try {
-			this.borrows = this.oBorrowBean.filterBorrow(this.filter);
+			this.borrows = this.borrowService.filterBorrow(this.filter);
 
 			if (this.borrows.isEmpty()) {
 				this.message.warn("ejb.message.noEntity");

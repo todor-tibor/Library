@@ -52,7 +52,7 @@ public class UserMB implements Serializable {
 	public void change() {
 		this.logger.info("--tab changed--");
 	}
-  
+
 	/**
 	 * Currently displayed users.
 	 */
@@ -110,7 +110,8 @@ public class UserMB implements Serializable {
 	 * Stores new user.
 	 *
 	 * @param name
-	 *            - username, password - password, loyaltyIndex - loyalty index, enail- e-mail
+	 *            - username, password - password, loyaltyIndex - loyalty index,
+	 *            enail- e-mail
 	 *
 	 */
 
@@ -155,9 +156,8 @@ public class UserMB implements Serializable {
 			return;
 		}
 		this.currentUser.setUserName(newName);
-		}
 		if (!email.isEmpty()) {
-			currentUser.setEmail(email);
+			this.currentUser.setEmail(email);
 		}
 		try {
 			this.oUserBean.update(this.currentUser);
