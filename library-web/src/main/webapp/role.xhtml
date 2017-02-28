@@ -19,7 +19,7 @@
 					<f:param name="p_searchTxt" value="#{srch_role.value}" />
 				</p:commandButton>
 
-				<p:dataTable id="roleMNDT" var="role_list"
+				<p:dataTable emptyMessage="#{msg['empty.list']}" id="roleMNDT" var="role_list"
 					value="#{rolebean.roleList}" selectionMode="single"
 					selection="#{rolebean.currentRole}" rowKey="#{role_list.uuid}">
 

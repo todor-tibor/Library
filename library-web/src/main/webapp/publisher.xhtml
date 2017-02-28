@@ -21,7 +21,7 @@
 					<f:param name="p_value" value="#{srch_publisher.value}" />
 				</p:commandButton>
 
-				<p:dataTable id="publisherDT" var="publisher"
+				<p:dataTable emptyMessage="#{msg['empty.list']}" id="publisherDT" var="publisher"
 					value="#{publisherbean.publishersList}" selectionMode="single"
 					selection="#{publisherbean.currentPublisher}"
 					rowKey="#{publisher.uuid}">

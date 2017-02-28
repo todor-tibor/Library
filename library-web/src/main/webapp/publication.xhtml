@@ -29,7 +29,7 @@
 				</p:commandButton>
 
 
-				<p:dataTable id="publicationDT" value="#{publicationBean.lazyModel}"
+				<p:dataTable emptyMessage="#{msg['empty.list']}" id="publicationDT" value="#{publicationBean.lazyModel}"
 					var="publication" paginator="true" rows="5"
 					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
 					rowsPerPageTemplate="5,10,15" lazy="true" selectionMode="single"
@@ -37,7 +37,7 @@
 					rowKey="#{publication.uuid}">
 
 					<p:ajax event="rowSelect" listener="#{publicationBean.isSelected}"
-						update="deleteButton detailsButton updateButton" />
+						update="publicationDT" />
 					<f:facet name="header">
             			#{pubMan['publications.text']}
         			</f:facet>
@@ -106,8 +106,7 @@
 								<f:convertDateTime pattern="yyyy-MM-dd" />
 							</p:inputText>
 						</f:facet>
-						<h:outputText value="#{publication.publicationDate}">
-							<f:convertDateTime pattern="yyyy-MM-dd" />
+						<h:outputText value="#{publicationBean.getDate(publication)}" >
 						</h:outputText>
 					</p:column>
 					<p:column headerText="#{pubMan['publication.authors']}">
@@ -220,7 +219,7 @@
 				<p:commandButton process="publication_actions_form"
 					value="#{pubMan['listPublications.button']}" update="publicationDT"
 					icon="ui-icon-search"
-					action="#{publicationBean.getAllPagination()}">
+					action="#{publicationBean.getAllPaginate()}">
 				</p:commandButton>
 				<p:commandButton process="publication_actions_form" icon="fa-remove"
 					value="#{pubMan['add.newspaper']}" update="addDialog"
@@ -274,7 +273,7 @@
 							</p:dataTable>
 						</c:if>
 						<p:outputLabel value="#{pubMan['publication.publicationDate']}" />
-						<p:calendar id="calendrierDateDebut"
+						<p:calendar maxdate="#{publicationBean.getToday()}" id="calendrierDateDebut"
 							value="#{publicationBean.date}" pattern="yyyy-MM-dd"
 							effect="slideDown" navigator="true" mode="inline"
 							lang="#{localeBean.userLocale.language}"

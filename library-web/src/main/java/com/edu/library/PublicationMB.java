@@ -1,6 +1,7 @@
 package com.edu.library;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -102,6 +103,8 @@ public class PublicationMB implements Serializable {
 
 	/**
 	 * Requests publication objects with pagination.
+	 *
+	 * @return List of all publications from database.
 	 */
 	public void getAllPaginate() {
 		try {
@@ -114,10 +117,12 @@ public class PublicationMB implements Serializable {
 	}
 
 	/**
-	 * Search for publication by title with pagination
+	 * Search for publication by title and stores them in
+	 * {@code publicationList}.
 	 *
 	 * @param searchTxt
 	 *            publication title.
+	 * @return List of publication objects found.
 	 */
 	public void search(final String searchTxt) {
 		if (searchTxt.length() >= 3) {
@@ -250,10 +255,11 @@ public class PublicationMB implements Serializable {
 	}
 
 	/**
-	 * Filter publication with pagination
+	 * Filter publication
 	 *
+	 * @return
 	 */
-	public void filterPublication() {
+	public List<Publication> filterPublication() {
 		try {
 			this.function = "filter";
 			this.lazyModel = new PublicationLazyModel();
@@ -261,6 +267,7 @@ public class PublicationMB implements Serializable {
 			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		}
+		return this.publicationList;
 	}
 
 	/**
@@ -401,12 +408,6 @@ public class PublicationMB implements Serializable {
 		}
 	}
 
-	/**
-	 * Lazy model for pagination
-	 *
-	 * @author sipost
-	 *
-	 */
 	private class PublicationLazyModel extends LazyDataModel<Publication> {
 		private static final long serialVersionUID = -7040989400223372462L;
 		private List<Publication> data = new ArrayList<>();
@@ -467,4 +468,19 @@ public class PublicationMB implements Serializable {
 		this.lazyModel = lazyModel;
 	}
 
+	public String getDate(final Book book) {
+		return new SimpleDateFormat("yyyy").format(book.getPublicationDate());
+	}
+
+	public String getDate(final Magazine magazine) {
+		return new SimpleDateFormat("yyyy-MM").format(magazine.getPublicationDate());
+	}
+
+	public String getDate(final Newspaper newspaper) {
+		return new SimpleDateFormat("yyyy-MM-dd").format(newspaper.getPublicationDate());
+	}
+
+	public Date getToday() {
+		return new Date();
+	}
 }

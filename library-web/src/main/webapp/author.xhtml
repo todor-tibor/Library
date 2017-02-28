@@ -20,7 +20,7 @@
 					<f:param name="p_value" value="#{srch_author.value}" />
 				</p:commandButton>
 
-				<p:dataTable id="authorDT" var="author"
+				<p:dataTable emptyMessage="#{msg['empty.list']}" id="authorDT" var="author"
 					value="#{authorBean.authorList}" selectionMode="single"
 					selection="#{authorBean.currentAuthor}" rowKey="#{author.uuid}"
 					autoUpdate="true">

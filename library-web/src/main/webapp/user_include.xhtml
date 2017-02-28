@@ -22,7 +22,7 @@
 					<f:param name="p_value" value="#{srch_user.value}" />
 				</p:commandButton>
 
-				<p:dataTable id="userDT" var="user" value="#{userbean.userList}"
+				<p:dataTable emptyMessage="#{msg['empty.list']}" id="userDT" var="user" value="#{userbean.userList}"
 					selectionMode="single" selection="#{userbean.currentUser}"
 					rowKey="#{user.uuid}">
 					<p:ajax event="rowSelect" listener="#{userbean.isSelected}"

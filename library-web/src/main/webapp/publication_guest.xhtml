@@ -28,11 +28,15 @@
 					<f:param name="p_value" value="#{srch_publication.value}" />
 				</p:commandButton>
 
-				<p:dataTable id="publicationDT" var="publication"
-					value="#{publicationBean.publicationList}" selectionMode="single"
+				<p:dataTable emptyMessage="#{msg['empty.list']}" id="publicationDT" value="#{publicationBean.lazyModel}"
+					var="publication" paginator="true" rows="5"
+					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+					rowsPerPageTemplate="5,10,15" lazy="true" selectionMode="single"
 					selection="#{publicationBean.currentPublication}"
 					rowKey="#{publication.uuid}">
 
+					<p:ajax event="rowSelect" listener="#{publicationBean.isSelected}"
+						update="publicationDT" />
 					<f:facet name="header">
             			#{pubMan['publications.text']}
         			</f:facet>
@@ -117,7 +121,7 @@
 				</p:dataTable>
 				<p:commandButton value="#{pubMan['listPublications.button']}"
 					update="publicationDT" icon="ui-icon-search"
-					action="#{publicationBean.getAll()}">
+					action="#{publicationBean.getAllPaginate()}">
 				</p:commandButton>
 
 			</h:form>
