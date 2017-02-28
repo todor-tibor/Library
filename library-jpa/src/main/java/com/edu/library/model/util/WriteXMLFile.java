@@ -81,11 +81,8 @@ public class WriteXMLFile {
 				doc.getRootElement().addContent(publicationElement);
 			}
 			final XMLOutputter xmlOutput = new XMLOutputter();
-
 			xmlOutput.setFormat(Format.getPrettyFormat());
-
 			xmlOutput.output(doc, new FileWriter("C:\\" + filename + ".xml"));
-
 			System.out.println("File Saved!");
 		} catch (final IOException io) {
 			io.printStackTrace();
