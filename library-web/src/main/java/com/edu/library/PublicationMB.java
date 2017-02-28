@@ -5,13 +5,17 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.NoResultException;
 
 import org.jboss.logging.Logger;
+import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortOrder;
 
 import com.edu.library.filter.PublicationFilter;
 import com.edu.library.model.Author;
@@ -58,7 +62,9 @@ public class PublicationMB implements Serializable {
 	private List<Author> authors, currentAuthors;
 	private Publisher currentPublisher;
 	private String type;
-
+	private String function = "all";
+	private String title;
+	private LazyDataModel<Publication> lazyModel;
 	/**
 	 * Currently displayed publications.
 	 */
@@ -68,6 +74,14 @@ public class PublicationMB implements Serializable {
 	 * Currently selected publication.
 	 */
 	private Publication currentPublication = null;
+
+	/**
+	 * Initialize dataTable with first page
+	 */
+	@PostConstruct
+	public void init() {
+		getAllPaginate();
+	}
 
 	/**
 	 * Requests all publication objects and stores them in
@@ -87,6 +101,21 @@ public class PublicationMB implements Serializable {
 	}
 
 	/**
+	 * Requests publication objects with pagination.
+	 *
+	 * @return List of all publications from database.
+	 */
+	public void getAllPaginate() {
+		try {
+			this.function = "all";
+			this.lazyModel = new PublicationLazyModel();
+		} catch (final Exception e) {
+			this.logger.error(e);
+			this.exceptionHandler.showMessage(e);
+		}
+	}
+
+	/**
 	 * Search for publication by title and stores them in
 	 * {@code publicationList}.
 	 *
@@ -94,14 +123,12 @@ public class PublicationMB implements Serializable {
 	 *            publication title.
 	 * @return List of publication objects found.
 	 */
-	public List<Publication> search(final String searchTxt) {
+	public void search(final String searchTxt) {
 		if (searchTxt.length() >= 3) {
-			this.publicationList.clear();
+			this.title = searchTxt;
 			try {
-				this.publicationList = this.oPublicationBean.search(searchTxt);
-				if (this.publicationList.isEmpty()) {
-					this.message.warn("ejb.message.noEntity");
-				}
+				this.function = "search";
+				this.lazyModel = new PublicationLazyModel();
 			} catch (final Exception e) {
 				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
@@ -109,7 +136,6 @@ public class PublicationMB implements Serializable {
 		} else {
 			this.message.warn("managedbean.string");
 		}
-		return this.publicationList;
 	}
 
 	/**
@@ -233,12 +259,9 @@ public class PublicationMB implements Serializable {
 	 * @return
 	 */
 	public List<Publication> filterPublication() {
-		this.publicationList.clear();
 		try {
-			this.publicationList = this.oPublicationBean.filterPublication(this.filter);
-			if (this.publicationList.isEmpty()) {
-				this.message.warn("ejb.message.noEntity");
-			}
+			this.function = "filter";
+			this.lazyModel = new PublicationLazyModel();
 		} catch (final Exception e) {
 			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
@@ -382,6 +405,67 @@ public class PublicationMB implements Serializable {
 			}
 		}
 		return this.publicationList;
+	}
+
+
+	private class PublicationLazyModel extends LazyDataModel<Publication> {
+		private static final long serialVersionUID = -7040989400223372462L;
+		private List<Publication> data = new ArrayList<>();
+
+		@Override
+		public Publication getRowData(final String rowKey) {
+			for (Publication Publication : this.data) {
+				if (Publication.getUuid().equals(rowKey))
+					return Publication;
+			}
+			return null;
+		}
+
+		@Override
+		public Object getRowKey(final Publication Publication) {
+			return Publication.getUuid();
+		}
+
+		@Override
+		public List<Publication> load(final int first, final int pageSize, final String sortField,
+				final SortOrder sortOrder, final Map<String, Object> filters) {
+			int dataSize = 0;
+			if ("search".equals(PublicationMB.this.function)) {
+				try {
+					dataSize = (int) (PublicationMB.this.oPublicationBean.countSearch(PublicationMB.this.title));
+				} catch (Exception e) {
+					return this.data;
+				}
+				this.setRowCount(dataSize);
+				this.data = PublicationMB.this.oPublicationBean.search(PublicationMB.this.title, first, pageSize);
+			} else if ("filter".equals(PublicationMB.this.function)) {
+				try {
+					dataSize = (int) (PublicationMB.this.oPublicationBean.countFilter(PublicationMB.this.filter));
+				} catch (Exception e) {
+					return this.data;
+				}
+				this.setRowCount(dataSize);
+				this.data = PublicationMB.this.oPublicationBean.filterPublication(PublicationMB.this.filter, first,
+						pageSize);
+			} else {
+				try {
+					dataSize = (int) (PublicationMB.this.oPublicationBean.countAll());
+				} catch (Exception e) {
+					return this.data;
+				}
+				this.setRowCount(dataSize);
+				this.data = PublicationMB.this.oPublicationBean.getAll(first, pageSize);
+			}
+			return this.data;
+		}
+	}
+
+	public LazyDataModel<Publication> getLazyModel() {
+		return this.lazyModel;
+	}
+
+	public void setLazyModel(final LazyDataModel<Publication> lazyModel) {
+		this.lazyModel = lazyModel;
 	}
 
 }

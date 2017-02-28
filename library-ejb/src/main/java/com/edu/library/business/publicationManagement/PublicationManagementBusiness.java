@@ -35,6 +35,10 @@ public class PublicationManagementBusiness {
 		return this.dataAcces.getAll();
 	}
 
+	public List<Publication> getAll(final int start, final int fin) {
+		return this.dataAcces.getAll(start, fin);
+	}
+
 	/**
 	 * Searches for a publication given by {@code searchText}
 	 *
@@ -104,7 +108,23 @@ public class PublicationManagementBusiness {
 	 *            fields that can be filtered
 	 * @return - list of publications that match the search criteria
 	 */
-	public List<Publication> filterPublication(final PublicationFilter filter) {
-		return this.dataAcces.filterPublication(filter);
+	public List<Publication> filterPublication(final PublicationFilter filter, final int start, final int fin) {
+		return this.dataAcces.filterPublication(filter, start, fin);
+	}
+
+	public long countAll() {
+		return this.dataAcces.countAll();
+	}
+
+	public List<Publication> search(final String text, final int start, final int fin) {
+		return this.dataAcces.search(text, start, fin);
+	}
+
+	public long countSearch(final String text) {
+		return this.dataAcces.countSearch(text);
+	}
+
+	public long countFilter(final PublicationFilter filter) {
+		return this.dataAcces.countFilter(filter);
 	}
 }

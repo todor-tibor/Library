@@ -69,11 +69,21 @@ public class PublicationBean {
 	 * @return - List with all the publications that match the search criteria
 	 */
 
-	public List<Publication> search(final String searchText) {
+	public List<Publication> search(final String title, final int start, final int fin) {
 		try {
 			return this.entityManager.createNamedQuery("Publication.searchByName", Publication.class)
-					.setParameter("title", "%" + searchText + "%").getResultList();
-		} catch (final PersistenceException e) {
+					.setParameter("title", "%" + title + "%").setFirstResult(start).setMaxResults(fin).getResultList();
+		} catch (PersistenceException e) {
+			this.logger.error(e);
+			throw new TechnicalException(e);
+		}
+	}
+
+	public List<Publication> search(final String title) {
+		try {
+			return this.entityManager.createNamedQuery("Publication.searchByName", Publication.class)
+					.setParameter("title", "%" + title + "%").getResultList();
+		} catch (PersistenceException e) {
 			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
@@ -195,8 +205,54 @@ public class PublicationBean {
 	 *            fields that can be filtered
 	 * @return - list of publications that match the search criteria
 	 */
-	public List<Publication> filterPublication(final PublicationFilter filter) {
+	public List<Publication> filterPublication(final PublicationFilter filter, final int start, final int fin) {
+		CriteriaQuery<Publication> cq = makeFilter(filter);
+		try {
+			return this.entityManager.createQuery(cq).setFirstResult(start).setMaxResults(fin).getResultList();
+		} catch (PersistenceException e) {
+			throw new TechnicalException(e);
+		}
+	}
 
+	public List<Publication> getAll(final int start, final int fin) {
+		try {
+			return this.entityManager.createNamedQuery("Publication.findAll", Publication.class).setFirstResult(start)
+					.setMaxResults(fin).getResultList();
+		} catch (PersistenceException e) {
+			this.logger.error(e);
+			throw new TechnicalException(e);
+		}
+	}
+
+	public long countAll() {
+		try {
+			return this.entityManager.createNamedQuery("Publication.countAll", Long.class).getSingleResult();
+		} catch (PersistenceException e) {
+			this.logger.error(e);
+			throw new TechnicalException(e);
+		}
+	}
+
+	public long countSearch(final String title) {
+		try {
+			return this.entityManager.createNamedQuery("Publication.countSearch", Long.class)
+					.setParameter("title", "%" + title + "%").getSingleResult();
+		} catch (PersistenceException e) {
+			this.logger.error(e);
+			throw new TechnicalException(e);
+		}
+	}
+
+	public long countFilter(final PublicationFilter filter) {
+		CriteriaQuery<Publication> cq = makeFilter(filter);
+		try {
+			return this.entityManager.createQuery(cq).getResultList().size();
+		} catch (PersistenceException e) {
+			throw new TechnicalException(e);
+		}
+	}
+
+	private CriteriaQuery<Publication> makeFilter(final PublicationFilter filter) {
 		final CriteriaBuilder qb = this.entityManager.getCriteriaBuilder();
 		final CriteriaQuery<Publication> cq = qb.createQuery(Publication.class);
 		final Root<Publication> publication = cq.from(Publication.class);
@@ -225,11 +281,7 @@ public class PublicationBean {
 		// query itself
 		cq.select(publication).where(qb.and(predicates.toArray(new Predicate[] {})));
 		// execute query and do something with result
-		try {
-			return this.entityManager.createQuery(cq).getResultList();
-		} catch (final PersistenceException e) {
-			throw new TechnicalException(e);
-		}
+		return cq;
 	}
 
 }
