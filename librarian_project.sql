@@ -164,6 +164,9 @@ INSERT INTO `library2`.`publication_authors` (`publication_id`, `author_id`) VAL
 INSERT INTO `library2`.`publication_authors` (`publication_id`, `author_id`) VALUES ('9', '7');
 INSERT INTO `library2`.`publication_authors` (`publication_id`, `author_id`) VALUES ('6', '8');
 INSERT INTO `library2`.`publication_authors` (`publication_id`, `author_id`) VALUES ('11', '3');
+INSERT INTO `library2`.`publication_authors` (`publication_id`, `author_id`) VALUES ('5', '2');
+INSERT INTO `library2`.`publication_authors` (`publication_id`, `author_id`) VALUES ('7', '2');
+INSERT INTO `library2`.`publication_authors` (`publication_id`, `author_id`) VALUES ('7', '1');
 
 
 INSERT INTO `library2`.`borrows` (`uuid`, `user_id`, `publication_id`, `borrow_from`, `borrow_until`) VALUES ('1', '1', '1', '2017-02-01', '2017-03-21');
