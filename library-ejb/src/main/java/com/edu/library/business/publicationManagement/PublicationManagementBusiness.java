@@ -35,6 +35,15 @@ public class PublicationManagementBusiness {
 		return this.dataAcces.getAll();
 	}
 
+	/**
+	 * Lists Publications that are in the database.
+	 *
+	 * @param start
+	 *            - start row number
+	 * @param fin
+	 *            - number of data per page
+	 * @return List containing all entities.
+	 */
 	public List<Publication> getAll(final int start, final int fin) {
 		return this.dataAcces.getAll(start, fin);
 	}
@@ -100,30 +109,64 @@ public class PublicationManagementBusiness {
 	}
 
 	/**
-	 * Searches for all publications that match certain criteria given by
-	 * {@code filter}
+	 * Filters the data specified by the {@code filter} object. This can have
+	 * one or more filters set. For example: publication title, publisher etc.
 	 *
 	 * @param filter
-	 *            - a custom filter for publications, which represents the
-	 *            fields that can be filtered
-	 * @return - list of publications that match the search criteria
+	 *            - a custom class that represents all the fields that can be
+	 *            filtered of a publication object.
+	 * @param start
+	 *            -start row number
+	 * @param fin
+	 *            -number of data per page
+	 * @return List of Publications
 	 */
 	public List<Publication> filterPublication(final PublicationFilter filter, final int start, final int fin) {
 		return this.dataAcces.filterPublication(filter, start, fin);
 	}
 
+	/**
+	 * Count publications that is in the database.
+	 *
+	 * @return Number of Publications found
+	 */
 	public long countAll() {
 		return this.dataAcces.countAll();
 	}
 
+	/**
+	 * Lists of publications that is in the database and contains the
+	 * {@code searchTxt} input string
+	 *
+	 * @param searchTxt
+	 *            - String to search for
+	 * @return List of entities found, empty list if nothing found.
+	 */
 	public List<Publication> search(final String text, final int start, final int fin) {
 		return this.dataAcces.search(text, start, fin);
 	}
 
+	/**
+	 * Count publications that is in the database and contains the
+	 * {@code searchTxt} input string
+	 *
+	 * @param title
+	 *            - String to search for
+	 * @return Number of Publications found
+	 */
 	public long countSearch(final String text) {
 		return this.dataAcces.countSearch(text);
 	}
 
+	/**
+	 * Count the data specified by the {@code filter} object. This can have one
+	 * or more filters set. For example: publication title, publisher etc.
+	 *
+	 * @param filter
+	 *            - a custom class that represents all the fields that can be
+	 *            filtered of a publication object.
+	 * @return Number of Publications filtered
+	 */
 	public long countFilter(final PublicationFilter filter) {
 		return this.dataAcces.countFilter(filter);
 	}
