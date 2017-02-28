@@ -35,9 +35,9 @@ public class Notifier {
 	 */
 	@Schedule(minute = "33", hour = "11", persistent = false)
 	private void automaticDailyLateNotification() {
-		List<Borrow> brwLate = borrowHandler.getBorrwLate();
+		final List<Borrow> brwLate = this.borrowHandler.getBorrwLate();
 		for (int i = 0; i < brwLate.size(); i++) {
-			borrowHandler.mailOneLateUser(brwLate.get(i));
+			this.borrowHandler.mailOneLateUser(brwLate.get(i));
 			logger.info("Mailing late user: " + brwLate.get(i).getUser().getEmail());
 		}
 	}

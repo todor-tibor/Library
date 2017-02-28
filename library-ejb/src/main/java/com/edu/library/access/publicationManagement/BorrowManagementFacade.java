@@ -80,7 +80,7 @@ public class BorrowManagementFacade implements IBorrowService {
 
 	@Override
 	public List<Borrow> getBorrowLate() {
-		return borrowBusiness.getBorrwLate();
+		return this.borrowBusiness.getBorrwLate();
 	}
 
 	@Override
@@ -90,6 +90,6 @@ public class BorrowManagementFacade implements IBorrowService {
 		ServiceValidation.checkNotNull(borrow.getUser());
 		ServiceValidation.checEmail(borrow.getUser().getEmail());
 
-		borrowBusiness.mailOneLateUser(borrow);
+		this.borrowBusiness.mailOneLateUser(borrow);
 	}
 }

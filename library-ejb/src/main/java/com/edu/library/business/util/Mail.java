@@ -39,21 +39,21 @@ public class Mail {
 	 * @param textMessage
 	 *            - message body
 	 */
-	public void send(String addresses, String topic, String textMessage) {
+	public void send(final String addresses, final String topic, final String textMessage) {
 
 		try {
 
-			Message message = new MimeMessage(session);
+			final Message message = new MimeMessage(this.session);
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(addresses));
 			message.setSubject(topic);
 			message.setText(textMessage);
 
-			oLogger.info("Sending mail to: " + addresses);
+			this.oLogger.info("Sending mail to: " + addresses);
 
 			Transport.send(message);
 
-		} catch (MessagingException e) {
-			oLogger.error("Cannot send mail", e);
+		} catch (final MessagingException e) {
+			this.oLogger.error("Cannot send mail", e);
 			throw (new BusinessException("Cannot send mail"));
 
 		}

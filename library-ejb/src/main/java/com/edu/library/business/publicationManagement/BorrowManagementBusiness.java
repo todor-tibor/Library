@@ -67,9 +67,24 @@ public class BorrowManagementBusiness {
 		final List<Borrow> tmpList = this.userDAO.getBorrow(searchText);
 		final Set<Borrow> tempSet = new HashSet<Borrow>(tmpList);
 		tempSet.addAll(this.pubDAO.getBorrow(searchText));
-		tmpList.clear();
-		tmpList.addAll(tempSet);
-		return tmpList;
+	
+	/**
+	 * Verifies if a the given user is currently having a publication borrowed.
+	 * 
+	 * @param p_user
+	 *            user to verify
+	 * @param p_pub
+	 *            publication to verify
+	 * @return true if the publication is already borrowed, false if not
+	 */
+	private boolean currentlyHasItBorrowed(final User p_user, final Publication p_pub) {
+		final List<Borrow> borrows = p_user.getBorrows();
+		for (int i = 0; i < borrows.size(); i++) {
+			if (borrows.get(i).getPublication().getUuid().equals(p_pub.getUuid())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -165,12 +180,14 @@ public class BorrowManagementBusiness {
 	 *            - the borrow object that is late
 	 */
 	public void mailOneLateUser(final Borrow borrow) {
-		String text = "Dear " + borrow.getUser().getUserName() + ",\n\n"
+		final String text = "Dear " + borrow.getUser().getUserName() + ",\n\n"
 				+ "We would like to remind you, that you have an outdated publication borrowing from msglibrary.\n"
 				+ "You borrowed the publication: " + borrow.getPublication().getTitle() + " until: "
 				+ borrow.getBorrowUntil().toString()
 				+ "\n Please return the publication immediatly.\n\nBest regards,\nmsglibrary team.";
 
 		mailSendingService.send(borrow.getUser().getEmail(), "msglibrary NOTIFICATION - Borrowing out of date.", text);
+		this.mailSendingService.send(borrow.getUser().getEmail(), "msglibrary NOTIFICATION - Borrowing out of date.",
+				text);
 	}
 }
