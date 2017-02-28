@@ -1,0 +1,134 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<f:view locale="#{localeBean.userLocale}" />
+<h:head>
+	<p:messages id="messagesPub1" showDetail="true" autoUpdate="true"
+		closable="true" />
+</h:head>
+
+<h:body>
+	<h:panelGrid>
+		<p:panel header="#{msg['publication.button']}">
+			<h:form id="publication_actions_form">
+
+				<p:commandButton value="#{msg['filter.button']}"
+					update="publicationDT"
+					action="#{publicationBean.filterPublication}">
+				</p:commandButton>
+				<p:inputText id="publication_searchTextBox"
+					binding="#{srch_publication}" />
+				<p:commandButton value="#{msg['search.button']}"
+					update="publicationDT"
+					action="#{publicationBean.search(srch_publication.value)}">
+					<f:param name="p_value" value="#{srch_publication.value}" />
+				</p:commandButton>
+
+				<p:dataTable id="publicationDT" var="publication"
+					value="#{publicationBean.publicationList}" selectionMode="single"
+					selection="#{publicationBean.currentPublication}"
+					rowKey="#{publication.uuid}">
+
+					<f:facet name="header">
+            			#{pubMan['publications.text']}
+        			</f:facet>
+
+					<p:column>
+						<f:facet name="header">
+							<p:outputLabel value="#{pubMan['publication.title']}" />
+							<br />
+							<p:inputText value="#{publicationBean.filter.title}"
+								onkeypress="if (event.keyCode == 13) {e.preventDefault(); inputEnter.onchange(); return false; }">
+								<f:ajax event="change"
+									listener="#{publicationBean.filterPublication}"
+									update="publicationDT" />
+							</p:inputText>
+						</f:facet>
+						<h:outputText value="#{publication.title}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<p:outputLabel value="#{pubMan['publication.publisher']}" />
+							<br />
+							<p:inputText value="#{publicationBean.filter.publisher}"
+								onkeypress="if (event.keyCode == 13) {e.preventDefault(); inputEnter.onchange(); return false; }">
+								<f:ajax event="change"
+									listener="#{publicationBean.filterPublication}"
+									update="publicationDT" />
+							</p:inputText>
+						</f:facet>
+						<h:outputText value="#{publication.publisher.name}" />
+
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<p:outputLabel value="#{pubMan['publication.onStock']}" />
+							<br />
+							<p:selectBooleanCheckbox
+								value="#{publicationBean.filter.onStock}"
+								onkeypress="if (event.keyCode == 13) {e.preventDefault(); inputEnter.onchange(); return false; }">
+								<f:ajax event="change"
+									listener="#{publicationBean.filterPublication}"
+									update="publicationDT" />
+							</p:selectBooleanCheckbox>
+						</f:facet>
+						<h:outputText value="#{publication.onStock}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<p:outputLabel value="#{pubMan['publication.publicationDate']}" />
+							<br />
+							<p:outputLabel value="#{pubMan['publication.dateFrom']}" />
+							<p:inputText value="#{publicationBean.filter.from}"
+								onkeypress="if (event.keyCode == 13) {e.preventDefault(); inputEnter.onchange(); return false; }">
+								<f:ajax event="change"
+									listener="#{publicationBean.filterPublication}"
+									update="publicationDT" />
+								<f:convertDateTime pattern="yyyy-MM-dd" />
+							</p:inputText>
+							<br />
+							<p:outputLabel value="#{pubMan['publication.dateUntil']}" />
+							<p:inputText value="#{publicationBean.filter.until}"
+								onkeypress="if (event.keyCode == 13) {e.preventDefault(); inputEnter.onchange(); return false; }">
+								<f:ajax event="change"
+									listener="#{publicationBean.filterPublication}"
+									update="publicationDT" />
+								<f:convertDateTime pattern="yyyy-MM-dd" />
+							</p:inputText>
+						</f:facet>
+						<h:outputText value="#{publication.publicationDate}">
+							<f:convertDateTime pattern="yyyy-MM-dd" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{pubMan['publication.authors']}">
+						<h:outputText value="#{publication.authors}"
+							rendered="#{publication['class'].simpleName eq 'Book'}" />
+						<h:outputText value="#{publication.authors}"
+							rendered="#{publication['class'].simpleName eq 'Magazine'}" />
+					</p:column>
+					<f:facet name="footer">
+					</f:facet>
+
+				</p:dataTable>
+				<p:commandButton value="#{pubMan['listPublications.button']}"
+					update="publicationDT" icon="ui-icon-search"
+					action="#{publicationBean.getAll()}">
+				</p:commandButton>
+				<p:commandButton process="publication_actions_form"
+					value="Export" icon="ui-icon-search"
+					action="#{publicationBean.exportPublication()}">
+				</p:commandButton>
+				<p:commandButton process="publication_actions_form"
+					value="Import" update="publicationDT" icon="ui-icon-search"
+					action="#{publicationBean.importPublication()}">
+				</p:commandButton>
+			</h:form>
+		</p:panel>
+	</h:panelGrid>
+</h:body>
+</html>
