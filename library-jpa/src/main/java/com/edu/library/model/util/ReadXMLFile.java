@@ -59,10 +59,32 @@ public class ReadXMLFile {
 
 			for (final Element publicationElement : publicationListElements) {
 				final Magazine publication = new Magazine();
+<<<<<<< HEAD
 
 				setParameters(publicationElement, publication);
 				publication.setAuthors(addAuthorsParam(publicationElement));
 
+=======
+				publication.setUuid(publicationElement.getAttributeValue("uuid"));
+				publication.setTitle(publicationElement.getChildText("title"));
+				publication.setNrOfCopys(Integer.parseInt(publicationElement.getChildText("nrOfCopies")));
+				publication.setOnStock(Integer.parseInt(publicationElement.getChildText("onStock")));
+
+				final Publisher publisher = new Publisher();
+				publisher.setName(publicationElement.getChildText("publisher"));
+				// for (Element )
+				publication.setPublisher(publisher);
+				final List<Element> authorList = publicationElement.getChildren("author");
+				final List<Author> authors = new ArrayList<>();
+				for (final Element element : authorList) {
+					final Author author = new Author();
+
+					author.setUuid(element.getAttributeValue("uuid"));
+					author.setName(element.getChildText("name"));
+					authors.add(author);
+				}
+				publication.setAuthors(authors);
+>>>>>>> branch 'xml' of https://github.com/todor-tibor/Library.git
 				publicationsList.add(publication);
 			}
 
@@ -70,10 +92,31 @@ public class ReadXMLFile {
 
 			for (final Element bookElement : bookListElements) {
 				final Book book = new Book();
+<<<<<<< HEAD
 
 				setParameters(bookElement, book);
 				book.setAuthors(addAuthorsParam(bookElement));
 
+=======
+				book.setUuid(bookElement.getAttributeValue("uuid"));
+				book.setTitle(bookElement.getChildText("title"));
+				book.setNrOfCopys(Integer.parseInt(bookElement.getChildText("nrOfCopies")));
+				book.setOnStock(Integer.parseInt(bookElement.getChildText("onStock")));
+				final Publisher publisher = new Publisher();
+				publisher.setName(bookElement.getChildText("publisher"));
+				book.setPublisher(publisher);
+
+				final List<Element> authorList = bookElement.getChildren("author");
+				final List<Author> authors = new ArrayList<>();
+				for (final Element element : authorList) {
+					final Author author = new Author();
+
+					author.setUuid(element.getAttributeValue("uuid"));
+					author.setName(element.getChildText("name"));
+					authors.add(author);
+				}
+				book.setAuthors(authors);
+>>>>>>> branch 'xml' of https://github.com/todor-tibor/Library.git
 				publicationsList.add(book);
 			}
 
@@ -81,8 +124,18 @@ public class ReadXMLFile {
 			new ArrayList<>();
 			for (final Element newsElement : newsListElements) {
 				final Newspaper news = new Newspaper();
+<<<<<<< HEAD
 
 				setParameters(newsElement, news);
+=======
+				news.setUuid(newsElement.getAttributeValue("uuid"));
+				news.setTitle(newsElement.getChildText("title"));
+				news.setNrOfCopys(Integer.parseInt(newsElement.getChildText("nrOfCopies")));
+				news.setOnStock(Integer.parseInt(newsElement.getChildText("onStock")));
+				final Publisher publisher = new Publisher();
+				publisher.setName(newsElement.getChildText("publisher"));
+				news.setPublisher(publisher);
+>>>>>>> branch 'xml' of https://github.com/todor-tibor/Library.git
 
 				publicationsList.add(news);
 			}

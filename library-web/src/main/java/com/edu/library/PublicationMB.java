@@ -361,6 +361,7 @@ public class PublicationMB implements Serializable {
 		WriteXMLFile.exportData(getAll(), "publications");
 	}
 
+<<<<<<< HEAD
 	/**
 	 * Import publications from ".xml" extension file.
 	 * 
@@ -381,6 +382,10 @@ public class PublicationMB implements Serializable {
 				this.exceptionHandler.showMessage(e);
 			}
 		}
+=======
+	public List<Publication> importPublication() {
+		this.publicationList = ReadXMLFile.importData("publications");
+>>>>>>> branch 'xml' of https://github.com/todor-tibor/Library.git
 		return this.publicationList;
 	}
 }
