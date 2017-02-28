@@ -31,6 +31,8 @@ public class Mail {
 	private Logger oLogger = Logger.getLogger(Mail.class);
 
 	/**
+	 * Send an e-mail message with the given parameter, using the session
+	 * configured in Wildfly.
 	 * 
 	 * @param addresses
 	 *            - e-mail address

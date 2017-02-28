@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.edu.library.sheduled;
 
 import java.util.List;

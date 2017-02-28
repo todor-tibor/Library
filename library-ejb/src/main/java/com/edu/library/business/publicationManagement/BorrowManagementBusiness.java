@@ -71,25 +71,6 @@ public class BorrowManagementBusiness {
 	}
 
 	/**
-	 * Verifies if a the given user is currently having a publication borrowed.
-	 * 
-	 * @param p_user
-	 *            user to verify
-	 * @param p_pub
-	 *            publication to verify
-	 * @return true if the publication is already borrowed, false if not
-	 */
-	private boolean currentlyHasItBorrowed(final User p_user, final Publication p_pub) {
-		final List<Borrow> borrows = p_user.getBorrows();
-		for (int i = 0; i < borrows.size(); i++) {
-			if (borrows.get(i).getPublication().getUuid().equals(p_pub.getUuid())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
 	 * Return the borrowing given by {@code id}
 	 *
 	 * @param id
