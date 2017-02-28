@@ -60,15 +60,13 @@ public class PublicationBean {
 	}
 
 	/**
-	 * Searches for a publication in the database by the given parameter
-	 * {@code searchText}
+	 * Lists of publications that is in the database and contains the
+	 * {@code searchTxt} input string
 	 *
-	 * @param searchText
-	 *            - the title or part of the title of the publication to search
-	 *            for
-	 * @return - List with all the publications that match the search criteria
+	 * @param searchTxt
+	 *            - String to search for
+	 * @return List of entities found, empty list if nothing found.
 	 */
-
 	public List<Publication> search(final String title, final int start, final int fin) {
 		try {
 			return this.entityManager.createNamedQuery("Publication.searchByName", Publication.class)
@@ -79,6 +77,15 @@ public class PublicationBean {
 		}
 	}
 
+	/**
+	 * Searches for a publication in the database by the given parameter
+	 * {@code searchText}
+	 *
+	 * @param searchText
+	 *            - the title or part of the title of the publication to search
+	 *            for
+	 * @return - List with all the publications that match the search criteria
+	 */
 	public List<Publication> search(final String title) {
 		try {
 			return this.entityManager.createNamedQuery("Publication.searchByName", Publication.class)
@@ -197,13 +204,17 @@ public class PublicationBean {
 	}
 
 	/**
-	 * Searches for all publications in the database that match certain criteria
-	 * given by {@code filter}
+	 * Filters the data specified by the {@code filter} object. This can have
+	 * one or more filters set. For example: publication title, publisher etc.
 	 *
 	 * @param filter
-	 *            - a custom filter for publications, which represents the
-	 *            fields that can be filtered
-	 * @return - list of publications that match the search criteria
+	 *            - a custom class that represents all the fields that can be
+	 *            filtered of a publication object.
+	 * @param start
+	 *            -start row number
+	 * @param fin
+	 *            -number of data per page
+	 * @return List of Publications
 	 */
 	public List<Publication> filterPublication(final PublicationFilter filter, final int start, final int fin) {
 		CriteriaQuery<Publication> cq = makeFilter(filter);
@@ -214,6 +225,15 @@ public class PublicationBean {
 		}
 	}
 
+	/**
+	 * Lists Publications that are in the database.
+	 *
+	 * @param start
+	 *            - start row number
+	 * @param fin
+	 *            - number of data per page
+	 * @return List containing all entities.
+	 */
 	public List<Publication> getAll(final int start, final int fin) {
 		try {
 			return this.entityManager.createNamedQuery("Publication.findAll", Publication.class).setFirstResult(start)
@@ -224,6 +244,11 @@ public class PublicationBean {
 		}
 	}
 
+	/**
+	 * Count publications that is in the database.
+	 *
+	 * @return Number of Publications found
+	 */
 	public long countAll() {
 		try {
 			return this.entityManager.createNamedQuery("Publication.countAll", Long.class).getSingleResult();
@@ -233,6 +258,14 @@ public class PublicationBean {
 		}
 	}
 
+	/**
+	 * Count publications that is in the database and contains the
+	 * {@code searchTxt} input string
+	 *
+	 * @param title
+	 *            - String to search for
+	 * @return Number of Publications found
+	 */
 	public long countSearch(final String title) {
 		try {
 			return this.entityManager.createNamedQuery("Publication.countSearch", Long.class)
@@ -243,6 +276,15 @@ public class PublicationBean {
 		}
 	}
 
+	/**
+	 * Count the data specified by the {@code filter} object. This can have one
+	 * or more filters set. For example: publication title, publisher etc.
+	 *
+	 * @param filter
+	 *            - a custom class that represents all the fields that can be
+	 *            filtered of a publication object.
+	 * @return Number of Publications filtered
+	 */
 	public long countFilter(final PublicationFilter filter) {
 		CriteriaQuery<Publication> cq = makeFilter(filter);
 		try {
@@ -252,6 +294,12 @@ public class PublicationBean {
 		}
 	}
 
+	/**
+	 * Create query by filter
+	 * 
+	 * @param filter
+	 * @return
+	 */
 	private CriteriaQuery<Publication> makeFilter(final PublicationFilter filter) {
 		final CriteriaBuilder qb = this.entityManager.getCriteriaBuilder();
 		final CriteriaQuery<Publication> cq = qb.createQuery(Publication.class);

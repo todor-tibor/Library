@@ -102,8 +102,6 @@ public class PublicationMB implements Serializable {
 
 	/**
 	 * Requests publication objects with pagination.
-	 *
-	 * @return List of all publications from database.
 	 */
 	public void getAllPaginate() {
 		try {
@@ -116,12 +114,10 @@ public class PublicationMB implements Serializable {
 	}
 
 	/**
-	 * Search for publication by title and stores them in
-	 * {@code publicationList}.
+	 * Search for publication by title with pagination
 	 *
 	 * @param searchTxt
 	 *            publication title.
-	 * @return List of publication objects found.
 	 */
 	public void search(final String searchTxt) {
 		if (searchTxt.length() >= 3) {
@@ -254,11 +250,10 @@ public class PublicationMB implements Serializable {
 	}
 
 	/**
-	 * Filter publication
+	 * Filter publication with pagination
 	 *
-	 * @return
 	 */
-	public List<Publication> filterPublication() {
+	public void filterPublication() {
 		try {
 			this.function = "filter";
 			this.lazyModel = new PublicationLazyModel();
@@ -266,7 +261,6 @@ public class PublicationMB implements Serializable {
 			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		}
-		return this.publicationList;
 	}
 
 	/**
@@ -382,7 +376,7 @@ public class PublicationMB implements Serializable {
 	 */
 	public void exportPublication() {
 		WriteXMLFile.exportData(getAll(), "publications");
-		this.message.info("export done");
+		this.message.info("export.done");
 	}
 
 	/**
@@ -407,6 +401,12 @@ public class PublicationMB implements Serializable {
 		}
 	}
 
+	/**
+	 * Lazy model for pagination
+	 *
+	 * @author sipost
+	 *
+	 */
 	private class PublicationLazyModel extends LazyDataModel<Publication> {
 		private static final long serialVersionUID = -7040989400223372462L;
 		private List<Publication> data = new ArrayList<>();
