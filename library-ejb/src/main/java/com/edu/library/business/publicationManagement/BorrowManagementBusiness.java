@@ -16,8 +16,6 @@ import org.jboss.logging.Logger;
 
 import com.edu.library.access.util.ServiceValidation;
 import com.edu.library.business.util.BorrowRestriction;
-import com.edu.library.business.exception.BusinessException;
-import com.edu.library.business.exception.ErrorMessages;
 import com.edu.library.business.util.Mail;
 import com.edu.library.data.publicationManagement.BorrowDAO;
 import com.edu.library.data.publicationManagement.PublicationBean;
@@ -67,7 +65,11 @@ public class BorrowManagementBusiness {
 		final List<Borrow> tmpList = this.userDAO.getBorrow(searchText);
 		final Set<Borrow> tempSet = new HashSet<Borrow>(tmpList);
 		tempSet.addAll(this.pubDAO.getBorrow(searchText));
-	
+		tmpList.clear();
+		tmpList.addAll(tempSet);
+		return tmpList;
+	}
+
 	/**
 	 * Verifies if a the given user is currently having a publication borrowed.
 	 * 
@@ -167,8 +169,8 @@ public class BorrowManagementBusiness {
 	 * @return List of borrow objects that are currently late.
 	 */
 	public List<Borrow> getBorrwLate() {
-		Date date = new Date();
-		return borrowDAO.getBorrwUntilDate(date);
+		final Date date = new Date();
+		return this.borrowDAO.getBorrwUntilDate(date);
 
 	}
 
@@ -186,7 +188,8 @@ public class BorrowManagementBusiness {
 				+ borrow.getBorrowUntil().toString()
 				+ "\n Please return the publication immediatly.\n\nBest regards,\nmsglibrary team.";
 
-		mailSendingService.send(borrow.getUser().getEmail(), "msglibrary NOTIFICATION - Borrowing out of date.", text);
+		this.mailSendingService.send(borrow.getUser().getEmail(), "msglibrary NOTIFICATION - Borrowing out of date.",
+				text);
 		this.mailSendingService.send(borrow.getUser().getEmail(), "msglibrary NOTIFICATION - Borrowing out of date.",
 				text);
 	}
