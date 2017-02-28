@@ -37,7 +37,6 @@
 	  <message-bundle>
 			<base-name>gallb.wildfly.users.web.converter</base-name>		
 	  </message-bundle>
-
 	</application>
 </faces-config>
 

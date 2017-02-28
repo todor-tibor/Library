@@ -40,6 +40,8 @@ public class PropertyProvider implements Serializable {
 		} catch (final MissingResourceException e) {
 			this.logger.error("Missing Resource");
 			return "!" + property + "!";
+		} catch (final Exception e) {
+			return property;
 		}
 	}
 

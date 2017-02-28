@@ -9,6 +9,7 @@ import java.util.List;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.NoResultException;
 
 import org.jboss.logging.Logger;
 
@@ -19,6 +20,8 @@ import com.edu.library.model.Magazine;
 import com.edu.library.model.Newspaper;
 import com.edu.library.model.Publication;
 import com.edu.library.model.Publisher;
+import com.edu.library.model.util.ReadXMLFile;
+import com.edu.library.model.util.WriteXMLFile;
 import com.edu.library.util.ExceptionHandler;
 import com.edu.library.util.MessageService;
 
@@ -350,4 +353,35 @@ public class PublicationMB implements Serializable {
 	public void setDate(final Date date) {
 		this.date = date;
 	}
+
+	/**
+	 * Export publications to ".xml" extension.
+	 */
+	public void exportPublication() {
+		WriteXMLFile.exportData(getAll(), "publications");
+	}
+
+	/**
+	 * Import publications from ".xml" extension file.
+	 *
+	 * @return - list of publications imported from file.
+	 */
+	public List<Publication> importPublication() {
+		this.publicationList = ReadXMLFile.importData("publications");
+		for (final Publication p : this.publicationList) {
+			try {
+				this.oPublicationBean.getById(p.getUuid());
+			} catch (final Exception e) {
+				this.oPublicationBean.store(p);
+			}
+			try {
+				this.oPublicationBean.update(p);
+			} catch (final NoResultException e) {
+				this.logger.error(e);
+				this.exceptionHandler.showMessage(e);
+			}
+		}
+		return this.publicationList;
+	}
+
 }
