@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -86,7 +87,7 @@ public abstract class Publication extends BaseEntity {
 	 *            - The publisher of publications -bi-directional many-to-one
 	 *            association to Publisher
 	 */
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "publisher_id")
 	private Publisher publisher;
 
