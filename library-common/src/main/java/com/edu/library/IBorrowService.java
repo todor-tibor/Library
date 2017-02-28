@@ -28,6 +28,11 @@ public interface IBorrowService extends IService<Borrow> {
 	 */
 	public List<Borrow> filterBorrow(final BorrowFilter filter);
 
+	/**
+	 * Searches for borrow objects with borrow until before today.
+	 * 
+	 * @return List of borrow objects that are currently late.
+	 */
 	public List<Borrow> getBorrowLate();
 
 	/**

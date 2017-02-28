@@ -16,8 +16,6 @@ import org.jboss.logging.Logger;
 
 import com.edu.library.access.util.ServiceValidation;
 import com.edu.library.business.util.BorrowRestriction;
-import com.edu.library.business.exception.BusinessException;
-import com.edu.library.business.exception.ErrorMessages;
 import com.edu.library.business.util.Mail;
 import com.edu.library.data.publicationManagement.BorrowDAO;
 import com.edu.library.data.publicationManagement.PublicationBean;
@@ -47,7 +45,7 @@ public class BorrowManagementBusiness {
 	@EJB
 	private PublicationBean pubDAO;
 	@EJB
-	private Mail mailSensingService;
+	private Mail mailSendingService;
 
 	/**
 	 * @return List containing all entities.
@@ -146,19 +144,34 @@ public class BorrowManagementBusiness {
 		return this.borrowDAO.filterBorrow(filter);
 	}
 
+	/**
+	 * Searches for borrow objects with borrow until before today.
+	 * 
+	 * @return List of borrow objects that are currently late.
+	 */
 	public List<Borrow> getBorrwLate() {
-		Date date = new Date();
-		return borrowDAO.getBorrwUntilDate(date);
+		final Date date = new Date();
+		return this.borrowDAO.getBorrwUntilDate(date);
 
 	}
 
+	/**
+	 * Sends an e-mail message to the user of the given borrowing, with
+	 * notification text to return the specified publication.
+	 * 
+	 * @param borrow
+	 *            - the borrow object that is late
+	 */
 	public void mailOneLateUser(final Borrow borrow) {
-		String text = "Dear " + borrow.getUser().getUserName() + ",\n\n"
+		final String text = "Dear " + borrow.getUser().getUserName() + ",\n\n"
 				+ "We would like to remind you, that you have an outdated publication borrowing from msglibrary.\n"
 				+ "You borrowed the publication: " + borrow.getPublication().getTitle() + " until: "
 				+ borrow.getBorrowUntil().toString()
 				+ "\n Please return the publication immediatly.\n\nBest regards,\nmsglibrary team.";
 
-		mailSensingService.send(borrow.getUser().getEmail(), "msglibrary NOTIFICATIN - Borrowing out of date.", text);
+		this.mailSendingService.send(borrow.getUser().getEmail(), "msglibrary NOTIFICATION - Borrowing out of date.",
+				text);
+		this.mailSendingService.send(borrow.getUser().getEmail(), "msglibrary NOTIFICATION - Borrowing out of date.",
+				text);
 	}
 }
