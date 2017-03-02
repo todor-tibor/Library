@@ -2,7 +2,9 @@ package com.edu.library.model.util;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.jdom2.Attribute;
 import org.jdom2.Document;
@@ -23,8 +25,10 @@ import com.edu.library.model.Publication;
  *
  */
 public class WriteXMLFile {
+	private static String publicationType = "";
+	static final Document doc = new Document();
 
-	public WriteXMLFile() {
+	private WriteXMLFile() {
 	}
 
 	/**
@@ -39,56 +43,106 @@ public class WriteXMLFile {
 	 */
 	public static void exportData(final List<Publication> publications, final String filename) {
 
+		final Element allPublications = new Element("allPublications");
+
+		doc.setRootElement(allPublications);
+
+		writeBooks(publications);
+		writeNewspapers(publications);
+		writeMagazines(publications);
+
+		final XMLOutputter xmlOutput = new XMLOutputter();
+		xmlOutput.setFormat(Format.getPrettyFormat());
 		try {
-			final Element allPublications = new Element("allPublications");
-			final Document doc = new Document();
-			doc.setRootElement(allPublications);
-			Element publicationElement;
-			String publicationType = "";
-			for (final Publication publication : publications) {
-				if (publication instanceof Book) {
-					publicationType = "Book";
-				} else if (publication instanceof Magazine) {
-					publicationType = "Magazine";
-				} else if (publication instanceof Newspaper) {
-					publicationType = "Newspaper";
-				}
-				publicationElement = new Element(publicationType);
-				publicationElement.setAttribute(new Attribute("uuid", publication.getUuid()));
-				publicationElement.addContent(new Element("title").setText(publication.getTitle()));
-				publicationElement
-						.addContent(new Element("nrOfCopies").setText(Integer.toString(publication.getNrOfCopys())));
-				publicationElement
-						.addContent(new Element("onStock").setText(Integer.toString(publication.getOnStock())));
-
-				final Element publisher = new Element("publisher");
-				publisher.setAttribute(new Attribute("uuid", publication.getPublisher().getUuid()));
-				publisher.addContent(new Element("name").setText(publication.getPublisher().getName()));
-				publicationElement.addContent(publisher);
-
-				publicationElement.addContent(
-						new Element("publicationDate").setText(publication.getPublicationDate().toString()));
-				if (publication instanceof Book) {
-					for (final Author au : ((Book) publication).getAuthors()) {
-						publicationElement.addContent(addAuthorParam(au));
-					}
-
-				} else if (publication instanceof Magazine) {
-					for (final Author au : ((Magazine) publication).getAuthors()) {
-						publicationElement.addContent(addAuthorParam(au));
-					}
-				}
-				doc.getRootElement().addContent(publicationElement);
-			}
-			final XMLOutputter xmlOutput = new XMLOutputter();
-			xmlOutput.setFormat(Format.getPrettyFormat());
 			xmlOutput.output(doc, new FileWriter("C:\\" + filename + ".xml"));
-			System.out.println("File Saved!");
 		} catch (final IOException io) {
-			io.printStackTrace();
 			throw new RuntimeException("Cannot save to xml!");
 		}
 
+	}
+
+	/**
+	 * Write all the magazine given by {@code publications} to the XML file.
+	 *
+	 * @param publications
+	 *            - list of all the magazines
+	 */
+	private static void writeMagazines(final List<Publication> publications) {
+		final List<Magazine> magazines = publications.stream().filter(p -> p instanceof Magazine).map(p -> (Magazine) p)
+				.collect(Collectors.toList());
+		publicationType = "Magazine";
+		for (final Magazine magazine : magazines) {
+			addElements(magazine, publicationType);
+		}
+	}
+
+	/**
+	 * Write all the book given by {@code publications} to the XML file.
+	 *
+	 * @param publications
+	 *            - list of all the books
+	 */
+	private static void writeBooks(final List<Publication> publications) {
+		final List<Book> books = publications.stream().filter(p -> p instanceof Book).map(p -> (Book) p)
+				.collect(Collectors.toList());
+		publicationType = "Book";
+		for (final Book book : books) {
+			addElements(book, publicationType);
+		}
+	}
+
+	/**
+	 * Write all the newspaper given by {@code publications} to the XML file.
+	 *
+	 * @param publications
+	 *            - list of all the books
+	 */
+	private static void writeNewspapers(final List<Publication> publications) {
+		final List<Newspaper> newspapers = publications.stream().filter(p -> p instanceof Newspaper)
+				.map(p -> (Newspaper) p).collect(Collectors.toList());
+		publicationType = "Newspaper";
+		for (final Newspaper newspaper : newspapers) {
+			addElements(newspaper, publicationType);
+		}
+	}
+
+	/**
+	 * Writes the information given by {@code pub} of type {@code type} to an
+	 * XML file.
+	 *
+	 * @param pub
+	 *            - the publication to export
+	 * @param type
+	 *            - the type of the publication
+	 */
+	private static void addElements(final Publication pub, final String type) {
+		final Element publicationElement = new Element(type);
+
+		addParams(publicationElement, pub);
+
+		List<Author> authors = new ArrayList<>();
+		if (type.equals("Book")) {
+			authors = (((Book) pub).getAuthors().stream().collect(Collectors.toList()));
+		} else if (type.equals("Magazine")) {
+			authors = (((Magazine) pub).getAuthors().stream().collect(Collectors.toList()));
+		}
+		addAuthors(publicationElement, authors);
+		doc.getRootElement().addContent(publicationElement);
+	}
+
+	/**
+	 * Adds the authors given by {@code authors} to the XML element given by
+	 * {@code publicationElement}
+	 *
+	 * @param publicationElement
+	 *            - the XML element to which the author's data will be written
+	 * @param authors
+	 *            - list of a publication's authors
+	 */
+	private static void addAuthors(final Element publicationElement, final List<Author> authors) {
+		for (final Author au : authors) {
+			publicationElement.addContent(addAuthorParam(au));
+		}
 	}
 
 	/**
@@ -104,6 +158,30 @@ public class WriteXMLFile {
 		author.setAttribute(new Attribute("uuid", au.getUuid()));
 		author.addContent(new Element("name").setText(au.getName()));
 		return author;
+	}
+
+	/**
+	 * Adds the publication elements given by {@code publication} to the element
+	 * given by {@code publicationElement}
+	 *
+	 * @param publicationElement
+	 *            - the XML type element to which data will be added
+	 * @param publication
+	 *            - the publication from which the data will be written
+	 */
+	private static void addParams(final Element publicationElement, final Publication publication) {
+		publicationElement.setAttribute(new Attribute("uuid", publication.getUuid()));
+		publicationElement.addContent(new Element("title").setText(publication.getTitle()));
+		publicationElement.addContent(new Element("nrOfCopies").setText(Integer.toString(publication.getNrOfCopys())));
+		publicationElement.addContent(new Element("onStock").setText(Integer.toString(publication.getOnStock())));
+
+		final Element publisher = new Element("publisher");
+		publisher.setAttribute(new Attribute("uuid", publication.getPublisher().getUuid()));
+		publisher.addContent(new Element("name").setText(publication.getPublisher().getName()));
+		publicationElement.addContent(publisher);
+
+		publicationElement
+				.addContent(new Element("publicationDate").setText(publication.getPublicationDate().toString()));
 	}
 
 }

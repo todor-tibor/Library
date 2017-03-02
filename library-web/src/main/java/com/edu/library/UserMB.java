@@ -35,7 +35,7 @@ public class UserMB implements Serializable {
 	private static final long serialVersionUID = -4702598250751689454L;
 
 	@Inject
-	private IUserService oUserBean;
+	private IUserService userBean;
 
 	@Inject
 	LocaleManager localeManager;
@@ -76,7 +76,7 @@ public class UserMB implements Serializable {
 	public List<User> getAll() {
 		this.userList.clear();
 		try {
-			this.userList = this.oUserBean.getAll();
+			this.userList = this.userBean.getAll();
 		} catch (final Exception e) {
 			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
@@ -87,15 +87,15 @@ public class UserMB implements Serializable {
 	/**
 	 * Search for user by user name and stores them in userList.
 	 *
-	 * @param p_searchTxt
+	 * @param searchText
 	 *            username.
 	 * @return List of user objects found.
 	 */
-	public List<User> search(final String p_searchTxt) {
-		if (p_searchTxt.length() >= 3) {
+	public List<User> search(final String searchText) {
+		if (searchText.length() >= 3) {
 			this.userList.clear();
 			try {
-				this.userList = this.oUserBean.search(p_searchTxt);
+				this.userList = this.userBean.search(searchText);
 			} catch (final Exception e) {
 				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
@@ -136,7 +136,7 @@ public class UserMB implements Serializable {
 		tmpUser.setRoles(this.currentRoles);
 		tmpUser.setEmail(email);
 		try {
-			this.oUserBean.store(tmpUser);
+			this.userBean.store(tmpUser);
 			this.userList.add(tmpUser);
 		} catch (final Exception e) {
 			this.logger.error(e);
@@ -160,8 +160,8 @@ public class UserMB implements Serializable {
 			this.currentUser.setEmail(email);
 		}
 		try {
-			this.oUserBean.update(this.currentUser);
-			this.userList = this.oUserBean.getAll();
+			this.userBean.update(this.currentUser);
+			this.userList = this.userBean.getAll();
 		} catch (final Exception e) {
 			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
@@ -176,7 +176,7 @@ public class UserMB implements Serializable {
 			this.message.error("Empty field");
 		} else {
 			try {
-				this.oUserBean.remove(this.currentUser.getUuid());
+				this.userBean.remove(this.currentUser.getUuid());
 				this.userList.remove(this.currentUser);
 			} catch (final Exception e) {
 				this.logger.error(e);
@@ -194,7 +194,7 @@ public class UserMB implements Serializable {
 			return;
 		}
 		try {
-			this.loggedInUser = this.oUserBean.getByUserName(this.loginMB.getUserName());
+			this.loggedInUser = this.userBean.getByUserName(this.loginMB.getUserName());
 		} catch (final Exception e) {
 			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
