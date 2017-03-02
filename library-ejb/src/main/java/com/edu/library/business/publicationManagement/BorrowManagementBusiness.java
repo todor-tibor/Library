@@ -171,7 +171,5 @@ public class BorrowManagementBusiness {
 
 		this.mailSendingService.send(borrow.getUser().getEmail(), "msglibrary NOTIFICATION - Borrowing out of date.",
 				text);
-		this.mailSendingService.send(borrow.getUser().getEmail(), "msglibrary NOTIFICATION - Borrowing out of date.",
-				text);
 	}
 }
