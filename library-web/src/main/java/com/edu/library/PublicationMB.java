@@ -46,7 +46,7 @@ public class PublicationMB implements Serializable {
 	private static final long serialVersionUID = -4702598250751689454L;
 
 	@Inject
-	private IPublicationService publicationBean;
+	IPublicationService publicationBean;
 
 	@Inject
 	ExceptionHandler exceptionHandler;
@@ -406,7 +406,7 @@ public class PublicationMB implements Serializable {
 
 	/**
 	 * Inner class extend LazyDataModel for pagination
-	 * 
+	 *
 	 * @author sipost
 	 *
 	 */
