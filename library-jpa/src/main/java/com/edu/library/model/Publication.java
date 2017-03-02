@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -31,7 +32,10 @@ import javax.persistence.TemporalType;
 @Table(name = "publications")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
-@NamedQueries({ @NamedQuery(name = "Publication.findAll", query = "SELECT a FROM Publication a"),
+@NamedQueries({
+		@NamedQuery(name = "Publication.countSearch", query = "SELECT count(a) FROM Publication a WHERE a.title like :title"),
+		@NamedQuery(name = "Publication.countAll", query = "SELECT count(a) FROM Publication a"),
+		@NamedQuery(name = "Publication.findAll", query = "SELECT a FROM Publication a"),
 		@NamedQuery(name = "Publication.searchByName", query = "SELECT a FROM Publication a WHERE a.title like :title"),
 		@NamedQuery(name = "Publication.getByName", query = "SELECT a FROM Publication a WHERE a.title = :title"),
 		@NamedQuery(name = "Publication.getById", query = "SELECT a FROM Publication a WHERE a.uuid = :uuid"),
@@ -83,7 +87,7 @@ public abstract class Publication extends BaseEntity {
 	 *            - The publisher of publications -bi-directional many-to-one
 	 *            association to Publisher
 	 */
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "publisher_id")
 	private Publisher publisher;
 

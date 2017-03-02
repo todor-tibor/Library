@@ -13,19 +13,22 @@
 		<p:panel header="#{msg['borrow.button']}">
 			<h:form id="borrow_actions_form">
 
+				<p:commandButton value="#{msg['filter.button']}" update="borrowDT"
+					action="#{borrowBean.filterBorrow()}">
+				</p:commandButton>
+
 				<p:inputText id="borrow_searchTextBox" binding="#{srch_brw}" />
 				<p:commandButton value="#{msg['search.button']}" update="borrowDT"
 					action="#{borrowBean.search(srch_brw.value)}">
 					<f:param name="p_value" value="#{srch_brw.value}" />
 				</p:commandButton>
 
-				<p:commandButton value="#{msg['filter.button']}" update="borrowDT"
-					action="#{borrowBean.filterBorrow()}">
-				</p:commandButton>
 
-				<p:dataTable id="borrowDT" var="borrow"
-					value="#{borrowBean.borrowsList}" selectionMode="single"
-					selection="#{borrowBean.currentBorrow}" rowKey="#{borrow.uuid}">
+
+				<p:dataTable emptyMessage="#{msg['empty.list']}" id="borrowDT"
+					var="borrow" value="#{borrowBean.borrowsList}"
+					selectionMode="single" selection="#{borrowBean.currentBorrow}"
+					rowKey="#{borrow.uuid}">
 					<p:ajax event="rowSelect" listener="#{borrowBean.isSelected}"
 						update="borrowDT" />
 
@@ -57,7 +60,7 @@
 							<p:outputLabel value="#{borrowMan['column.from']}" />
 							<br />
 							<p:inputText value="#{borrowBean.filter.borrowedFrom}">
-							<f:convertDateTime pattern="yyyy-MM-dd" />
+								<f:convertDateTime pattern="yyyy-MM-dd" />
 							</p:inputText>
 						</f:facet>
 						<h:outputText value="#{borrow.borrowFrom}" />
@@ -93,7 +96,7 @@
 							<p:panel id="updateBrwdialog">
 								<p:outputLabel value="#{borrowMan['column.until']}"
 									readOnlyInputText="true" />
-								<p:calendar id="calendar4" value="#{borrowBean.date3}"
+								<p:calendar mindate="#{publicationBean.getToday()}" id="calendar4" value="#{borrowBean.date3}"
 									mode="inline" />
 								<p:commandButton value="#{borrowMan['button.renew']}"
 									update="borrowDT" icon="fa-user-plu"
@@ -141,11 +144,11 @@
 						</p:dataTable>
 
 						<p:outputLabel value="#{borrowMan['column.from']}" />
-						<p:calendar id="calendar1" value="#{borrowBean.date1}"
-							mode="inline" />
+						<p:calendar mindate="#{publicationBean.getToday()}" id="calendar1"
+							value="#{borrowBean.date1}" mode="inline" />
 						<p:outputLabel value="#{borrowMan['column.until']}" />
-						<p:calendar id="calendar2" value="#{borrowBean.date2}"
-							mode="inline" />
+						<p:calendar mindate="#{publicationBean.getToday()}" id="calendar2"
+							value="#{borrowBean.date2}" mode="inline" />
 						<p:commandButton value="#{borrowMan['button.add']}"
 							update="borrow_actions_form" icon="fa-user-plu"
 							action="#{borrowBean.store()}">

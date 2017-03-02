@@ -28,15 +28,11 @@
 					<f:param name="p_value" value="#{srch_publication.value}" />
 				</p:commandButton>
 
-				<p:dataTable emptyMessage="#{msg['empty.list']}" id="publicationDT" value="#{publicationBean.lazyModel}"
-					var="publication" paginator="true" rows="5"
-					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-					rowsPerPageTemplate="5,10,15" lazy="true" selectionMode="single"
+				<p:dataTable id="publicationDT" var="publication"
+					value="#{publicationBean.publicationList}" selectionMode="single"
 					selection="#{publicationBean.currentPublication}"
 					rowKey="#{publication.uuid}">
 
-					<p:ajax event="rowSelect" listener="#{publicationBean.isSelected}"
-						update="publicationDT" />
 					<f:facet name="header">
             			#{pubMan['publications.text']}
         			</f:facet>
@@ -105,7 +101,8 @@
 								<f:convertDateTime pattern="yyyy-MM-dd" />
 							</p:inputText>
 						</f:facet>
-						<h:outputText value="#{publicationBean.getDate(publication)}" >
+						<h:outputText value="#{publication.publicationDate}">
+							<f:convertDateTime pattern="yyyy-MM-dd" />
 						</h:outputText>
 					</p:column>
 					<p:column headerText="#{pubMan['publication.authors']}">
@@ -120,9 +117,16 @@
 				</p:dataTable>
 				<p:commandButton value="#{pubMan['listPublications.button']}"
 					update="publicationDT" icon="ui-icon-search"
-					action="#{publicationBean.getAllPaginate()}">
+					action="#{publicationBean.getAll()}">
 				</p:commandButton>
-
+				<p:commandButton process="publication_actions_form"
+					value="Export" icon="ui-icon-search"
+					action="#{publicationBean.exportPublication()}">
+				</p:commandButton>
+				<p:commandButton process="publication_actions_form"
+					value="Import" update="publicationDT" icon="ui-icon-search"
+					action="#{publicationBean.importPublication()}">
+				</p:commandButton>
 			</h:form>
 		</p:panel>
 	</h:panelGrid>

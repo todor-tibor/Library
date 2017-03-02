@@ -60,6 +60,24 @@ public class PublicationBean {
 	}
 
 	/**
+	 * Lists of publications that is in the database and contains the
+	 * {@code searchTxt} input string
+	 *
+	 * @param searchTxt
+	 *            - String to search for
+	 * @return List of entities found, empty list if nothing found.
+	 */
+	public List<Publication> search(final String title, final int start, final int fin) {
+		try {
+			return this.entityManager.createNamedQuery("Publication.searchByName", Publication.class)
+					.setParameter("title", "%" + title + "%").setFirstResult(start).setMaxResults(fin).getResultList();
+		} catch (PersistenceException e) {
+			this.logger.error(e);
+			throw new TechnicalException(e);
+		}
+	}
+
+	/**
 	 * Searches for a publication in the database by the given parameter
 	 * {@code searchText}
 	 *
@@ -68,12 +86,11 @@ public class PublicationBean {
 	 *            for
 	 * @return - List with all the publications that match the search criteria
 	 */
-
-	public List<Publication> search(final String searchText) {
+	public List<Publication> search(final String title) {
 		try {
 			return this.entityManager.createNamedQuery("Publication.searchByName", Publication.class)
-					.setParameter("title", "%" + searchText + "%").getResultList();
-		} catch (final PersistenceException e) {
+					.setParameter("title", "%" + title + "%").getResultList();
+		} catch (PersistenceException e) {
 			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
@@ -187,16 +204,103 @@ public class PublicationBean {
 	}
 
 	/**
-	 * Searches for all publications in the database that match certain criteria
-	 * given by {@code filter}
+	 * Filters the data specified by the {@code filter} object. This can have
+	 * one or more filters set. For example: publication title, publisher etc.
 	 *
 	 * @param filter
-	 *            - a custom filter for publications, which represents the
-	 *            fields that can be filtered
-	 * @return - list of publications that match the search criteria
+	 *            - a custom class that represents all the fields that can be
+	 *            filtered of a publication object.
+	 * @param start
+	 *            -start row number
+	 * @param fin
+	 *            -number of data per page
+	 * @return List of Publications
 	 */
-	public List<Publication> filterPublication(final PublicationFilter filter) {
+	public List<Publication> filterPublication(final PublicationFilter filter, final int start, final int fin) {
+		CriteriaQuery<Publication> cq = makeFilter(filter);
+		try {
+			return this.entityManager.createQuery(cq).setFirstResult(start).setMaxResults(fin).getResultList();
+		} catch (PersistenceException e) {
+			throw new TechnicalException(e);
+		}
+	}
 
+	/**
+	 * Lists Publications that are in the database.
+	 *
+	 * @param start
+	 *            - start row number
+	 * @param fin
+	 *            - number of data per page
+	 * @return List containing all entities.
+	 */
+	public List<Publication> getAll(final int start, final int fin) {
+		try {
+			return this.entityManager.createNamedQuery("Publication.findAll", Publication.class).setFirstResult(start)
+					.setMaxResults(fin).getResultList();
+		} catch (PersistenceException e) {
+			this.logger.error(e);
+			throw new TechnicalException(e);
+		}
+	}
+
+	/**
+	 * Count publications that is in the database.
+	 *
+	 * @return Number of Publications found
+	 */
+	public long countAll() {
+		try {
+			return this.entityManager.createNamedQuery("Publication.countAll", Long.class).getSingleResult();
+		} catch (PersistenceException e) {
+			this.logger.error(e);
+			throw new TechnicalException(e);
+		}
+	}
+
+	/**
+	 * Count publications that is in the database and contains the
+	 * {@code searchTxt} input string
+	 *
+	 * @param title
+	 *            - String to search for
+	 * @return Number of Publications found
+	 */
+	public long countSearch(final String title) {
+		try {
+			return this.entityManager.createNamedQuery("Publication.countSearch", Long.class)
+					.setParameter("title", "%" + title + "%").getSingleResult();
+		} catch (PersistenceException e) {
+			this.logger.error(e);
+			throw new TechnicalException(e);
+		}
+	}
+
+	/**
+	 * Count the data specified by the {@code filter} object. This can have one
+	 * or more filters set. For example: publication title, publisher etc.
+	 *
+	 * @param filter
+	 *            - a custom class that represents all the fields that can be
+	 *            filtered of a publication object.
+	 * @return Number of Publications filtered
+	 */
+	public long countFilter(final PublicationFilter filter) {
+		CriteriaQuery<Publication> cq = makeFilter(filter);
+		try {
+			return this.entityManager.createQuery(cq).getResultList().size();
+		} catch (PersistenceException e) {
+			throw new TechnicalException(e);
+		}
+	}
+
+	/**
+	 * Create query by filter
+	 * 
+	 * @param filter
+	 * @return
+	 */
+	private CriteriaQuery<Publication> makeFilter(final PublicationFilter filter) {
 		final CriteriaBuilder qb = this.entityManager.getCriteriaBuilder();
 		final CriteriaQuery<Publication> cq = qb.createQuery(Publication.class);
 		final Root<Publication> publication = cq.from(Publication.class);
@@ -225,11 +329,7 @@ public class PublicationBean {
 		// query itself
 		cq.select(publication).where(qb.and(predicates.toArray(new Predicate[] {})));
 		// execute query and do something with result
-		try {
-			return this.entityManager.createQuery(cq).getResultList();
-		} catch (final PersistenceException e) {
-			throw new TechnicalException(e);
-		}
+		return cq;
 	}
 
 }

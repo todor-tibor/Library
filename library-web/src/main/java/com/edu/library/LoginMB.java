@@ -98,7 +98,7 @@ public class LoginMB implements Serializable {
 			tmp.setRole("READER");
 			if (this.roles.contains(tmp)) {
 				try {
-					FacesContext.getCurrentInstance().getExternalContext().redirect("reader.xhtml");
+					FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
 				} catch (final IOException e) {
 					this.logger.error(e);
 					this.message.fatal(e.getMessage());

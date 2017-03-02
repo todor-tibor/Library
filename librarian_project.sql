@@ -113,20 +113,21 @@ CREATE TABLE `users_roles`
         ON DELETE CASCADE
 );
 
-
 INSERT INTO `library2`.`authors` (`uuid`, `name`) VALUES ('1', 'Arany Janos');
 INSERT INTO `library2`.`authors` (`uuid`, `name`) VALUES ('2', 'Jokai Mor');
 INSERT INTO `library2`.`authors` (`uuid`, `name`) VALUES ('3', 'Moricz Zsigmond');
 INSERT INTO `library2`.`authors` (`uuid`, `name`) VALUES ('4', 'Nora Roberts');
 INSERT INTO `library2`.`authors` (`uuid`, `name`) VALUES ('5', 'Stephenie Mayer');
-
+INSERT INTO `library2`.`authors` (`uuid`, `name`) VALUES ('6', 'Mikszath Kalman');
+INSERT INTO `library2`.`authors` (`uuid`, `name`) VALUES ('7', 'Fazekas Mihaly');
+INSERT INTO `library2`.`authors` (`uuid`, `name`) VALUES ('8', 'Gardonyi Geza');
 
 INSERT INTO `library2`.`publishers` (`uuid`, `name`) VALUES ('1', 'Mentor');
 INSERT INTO `library2`.`publishers` (`uuid`, `name`) VALUES ('2', 'Corvin');
 INSERT INTO `library2`.`publishers` (`uuid`, `name`) VALUES ('3', 'Scientia');
 
 
-INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`,`email`) VALUES ('1', 'Kis Katalin', '10', '�IpýÊde£"(h—ÙÄrcz?','KatalinKis@yahoo.com');
+INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`,`email`) VALUES ('1', 'Kis Katalin', '10', '�IpýÊde£"(h—ÙÄrcz?','annakatalin_kis@yahoo.com');
 INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`,`email`) VALUES ('2', 'Gall Barna', '0', '�IpýÊde£"(h—ÙÄrcz?','barnimedve@gmail.com');
 INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`,`email`) VALUES ('3', 'Sipos Terez', '10', '�IpýÊde£"(h—ÙÄrcz?','terez_sps3@yahoo.com');
 INSERT INTO `library2`.`users` (`uuid`, `user_name`, `loyalty_index`, `password`,`email`) VALUES ('4', 'Szilard Nagy', '5', '�IpýÊde£"(h—ÙÄrcz?','nagy_szilardsandor@yahoo.com');
@@ -142,16 +143,31 @@ INSERT INTO `library2`.`users_roles` (`user_id`, `role_id`) VALUES ('4', '2');
 INSERT INTO `library2`.`users_roles` (`user_id`, `role_id`) VALUES ('5', '1');
 
 
-INSERT INTO `library2`.`publications` (`uuid`, `title`, `publication_date`, `type`, `publisher_id`, `nr_of_copys`, `on_stock`) VALUES ('1', 'Arany ember', '2007-02-03', 'Book', '2', '5', '4');
+INSERT INTO `library2`.`publications` (`uuid`, `title`, `publication_date`, `type`, `publisher_id`, `nr_of_copys`, `on_stock`) VALUES ('1', 'Az arany ember', '2007-02-03', 'Book', '2', '5', '4');
 INSERT INTO `library2`.`publications` (`uuid`, `title`, `publication_date`, `type`, `publisher_id`, `nr_of_copys`, `on_stock`) VALUES ('2', 'Montana Sky', '2005-09-03', 'Book', '3', '10', '9');
 INSERT INTO `library2`.`publications` (`uuid`, `title`, `publication_date`, `type`, `publisher_id`, `nr_of_copys`, `on_stock`) VALUES ('3', 'Elso magazin', '2017-01-01', 'Magazine', '1', '100', '100');
 INSERT INTO `library2`.`publications` (`uuid`, `title`, `publication_date`, `type`, `publisher_id`, `nr_of_copys`, `on_stock`) VALUES ('4', 'Napilap', '2001-02-02', 'Newspaper', '1', '1', '1');
+INSERT INTO `library2`.`publications` (`uuid`, `title`, `publication_date`, `type`, `publisher_id`, `nr_of_copys`, `on_stock`) VALUES ('5', 'Koszivu ember fiai', '2007-02-03', 'Book', '2', '5', '4');
+INSERT INTO `library2`.`publications` (`uuid`, `title`, `publication_date`, `type`, `publisher_id`, `nr_of_copys`, `on_stock`) VALUES ('6', 'Egri csillagok', '2005-09-03', 'Book', '3', '10', '9');
+INSERT INTO `library2`.`publications` (`uuid`, `title`, `publication_date`, `type`, `publisher_id`, `nr_of_copys`, `on_stock`) VALUES ('7', 'Masodik magazin', '2017-01-01', 'Magazine', '1', '100', '100');
+INSERT INTO `library2`.`publications` (`uuid`, `title`, `publication_date`, `type`, `publisher_id`, `nr_of_copys`, `on_stock`) VALUES ('8', 'napi hirlap', '2001-02-02', 'Newspaper', '1', '1', '1');
+INSERT INTO `library2`.`publications` (`uuid`, `title`, `publication_date`, `type`, `publisher_id`, `nr_of_copys`, `on_stock`) VALUES ('9', 'Ludas Matyi', '2007-02-03', 'Book', '2', '5', '4');
+INSERT INTO `library2`.`publications` (`uuid`, `title`, `publication_date`, `type`, `publisher_id`, `nr_of_copys`, `on_stock`) VALUES ('10', 'Szent Peter esernyője', '2005-09-03', 'Book', '3', '10', '9');
+INSERT INTO `library2`.`publications` (`uuid`, `title`, `publication_date`, `type`, `publisher_id`, `nr_of_copys`, `on_stock`) VALUES ('11', 'Legy jo mindhalalig', '2017-01-01', 'Book', '1', '100', '100');
 
 
 INSERT INTO `library2`.`publication_authors` (`publication_id`, `author_id`) VALUES ('1', '2');
 INSERT INTO `library2`.`publication_authors` (`publication_id`, `author_id`) VALUES ('2', '3');
 INSERT INTO `library2`.`publication_authors` (`publication_id`, `author_id`) VALUES ('3', '1');
 INSERT INTO `library2`.`publication_authors` (`publication_id`, `author_id`) VALUES ('4', '4');
+INSERT INTO `library2`.`publication_authors` (`publication_id`, `author_id`) VALUES ('10', '6');
+INSERT INTO `library2`.`publication_authors` (`publication_id`, `author_id`) VALUES ('9', '7');
+INSERT INTO `library2`.`publication_authors` (`publication_id`, `author_id`) VALUES ('6', '8');
+INSERT INTO `library2`.`publication_authors` (`publication_id`, `author_id`) VALUES ('11', '3');
+INSERT INTO `library2`.`publication_authors` (`publication_id`, `author_id`) VALUES ('5', '2');
+INSERT INTO `library2`.`publication_authors` (`publication_id`, `author_id`) VALUES ('7', '2');
+INSERT INTO `library2`.`publication_authors` (`publication_id`, `author_id`) VALUES ('7', '1');
 
-INSERT INTO `library2`.`borrows` (`uuid`, `user_id`, `publication_id`, `borrow_from`, `borrow_until`) VALUES ('1', '1', '1', '2017-02-01', '2017-02-21');
+
+INSERT INTO `library2`.`borrows` (`uuid`, `user_id`, `publication_id`, `borrow_from`, `borrow_until`) VALUES ('1', '1', '1', '2017-02-01', '2017-03-21');
 INSERT INTO `library2`.`borrows` (`uuid`, `user_id`, `publication_id`, `borrow_from`, `borrow_until`) VALUES ('2', '3', '2', '2017-01-21', '2017-02-12');

@@ -1,16 +1,22 @@
 package com.edu.library;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.NoResultException;
 
 import org.jboss.logging.Logger;
+import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortOrder;
 
 import com.edu.library.filter.PublicationFilter;
 import com.edu.library.model.Author;
@@ -19,6 +25,8 @@ import com.edu.library.model.Magazine;
 import com.edu.library.model.Newspaper;
 import com.edu.library.model.Publication;
 import com.edu.library.model.Publisher;
+import com.edu.library.model.util.ReadXMLFile;
+import com.edu.library.model.util.WriteXMLFile;
 import com.edu.library.util.ExceptionHandler;
 import com.edu.library.util.MessageService;
 
@@ -38,7 +46,7 @@ public class PublicationMB implements Serializable {
 	private static final long serialVersionUID = -4702598250751689454L;
 
 	@Inject
-	private IPublicationService oPublicationBean;
+	private IPublicationService publicationBean;
 
 	@Inject
 	ExceptionHandler exceptionHandler;
@@ -55,7 +63,8 @@ public class PublicationMB implements Serializable {
 	private List<Author> authors, currentAuthors;
 	private Publisher currentPublisher;
 	private String type;
-
+	private String title;
+	private LazyDataModel<Publication> lazyModel;
 	/**
 	 * Currently displayed publications.
 	 */
@@ -67,6 +76,14 @@ public class PublicationMB implements Serializable {
 	private Publication currentPublication = null;
 
 	/**
+	 * Initialize dataTable with first page
+	 */
+	@PostConstruct
+	public void init() {
+		getAllPaginate();
+	}
+
+	/**
 	 * Requests all publication objects and stores them in
 	 * {@code publicationList}.
 	 *
@@ -75,12 +92,26 @@ public class PublicationMB implements Serializable {
 	public List<Publication> getAll() {
 		this.publicationList.clear();
 		try {
-			this.publicationList = this.oPublicationBean.getAll();
+			this.publicationList = this.publicationBean.getAll();
 		} catch (final Exception e) {
 			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		}
 		return this.publicationList;
+	}
+
+	/**
+	 * Requests publication objects with pagination.
+	 *
+	 * @return List of all publications from database.
+	 */
+	public void getAllPaginate() {
+		try {
+			this.lazyModel = new PublicationLazyModel("all");
+		} catch (final Exception e) {
+			this.logger.error(e);
+			this.exceptionHandler.showMessage(e);
+		}
 	}
 
 	/**
@@ -91,14 +122,11 @@ public class PublicationMB implements Serializable {
 	 *            publication title.
 	 * @return List of publication objects found.
 	 */
-	public List<Publication> search(final String searchTxt) {
+	public void search(final String searchTxt) {
 		if (searchTxt.length() >= 3) {
-			this.publicationList.clear();
+			this.title = searchTxt;
 			try {
-				this.publicationList = this.oPublicationBean.search(searchTxt);
-				if (this.publicationList.isEmpty()) {
-					this.message.warn("ejb.message.noEntity");
-				}
+				this.lazyModel = new PublicationLazyModel("search");
 			} catch (final Exception e) {
 				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
@@ -106,7 +134,6 @@ public class PublicationMB implements Serializable {
 		} else {
 			this.message.warn("managedbean.string");
 		}
-		return this.publicationList;
 	}
 
 	/**
@@ -163,7 +190,7 @@ public class PublicationMB implements Serializable {
 		publication.setPublicationDate(this.date);
 
 		try {
-			this.oPublicationBean.store(publication);
+			this.publicationBean.store(publication);
 			this.publicationList.add(publication);
 		} catch (final Exception e) {
 			this.logger.error(e);
@@ -195,8 +222,8 @@ public class PublicationMB implements Serializable {
 				}
 			}
 			try {
-				this.oPublicationBean.update(this.currentPublication);
-				this.publicationList = this.oPublicationBean.getAll();
+				this.publicationBean.update(this.currentPublication);
+				this.publicationList = this.publicationBean.getAll();
 			} catch (final Exception e) {
 				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
@@ -214,8 +241,8 @@ public class PublicationMB implements Serializable {
 			this.message.error("managedbean.empty");
 		} else {
 			try {
-				this.oPublicationBean.remove(this.currentPublication.getUuid());
-				this.publicationList = this.oPublicationBean.getAll();
+				this.publicationBean.remove(this.currentPublication.getUuid());
+				this.publicationList = this.publicationBean.getAll();
 			} catch (final Exception e) {
 				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
@@ -230,12 +257,8 @@ public class PublicationMB implements Serializable {
 	 * @return
 	 */
 	public List<Publication> filterPublication() {
-		this.publicationList.clear();
 		try {
-			this.publicationList = this.oPublicationBean.filterPublication(this.filter);
-			if (this.publicationList.isEmpty()) {
-				this.message.warn("ejb.message.noEntity");
-			}
+			this.lazyModel = new PublicationLazyModel("filter");
 		} catch (final Exception e) {
 			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
@@ -349,5 +372,138 @@ public class PublicationMB implements Serializable {
 
 	public void setDate(final Date date) {
 		this.date = date;
+	}
+
+	/**
+	 * Export publications to ".xml" extension.
+	 */
+	public void exportPublication() {
+		WriteXMLFile.exportData(getAll(), "publications");
+		this.message.info("export.done");
+	}
+
+	/**
+	 * Import publications from ".xml" extension file.
+	 *
+	 * @return - list of publications imported from file.
+	 */
+	public void importPublication() {
+		this.publicationList = ReadXMLFile.importData("publications");
+		for (final Publication p : this.publicationList) {
+			try {
+				this.publicationBean.getById(p.getUuid());
+			} catch (final Exception e) {
+				this.publicationBean.store(p);
+			}
+			try {
+				this.publicationBean.update(p);
+			} catch (final NoResultException e) {
+				this.logger.error(e);
+				this.exceptionHandler.showMessage(e);
+			}
+		}
+	}
+
+	/**
+	 * Inner class extend LazyDataModel for pagination
+	 * 
+	 * @author sipost
+	 *
+	 */
+	private class PublicationLazyModel extends LazyDataModel<Publication> {
+		private static final long serialVersionUID = -7040989400223372462L;
+		private List<Publication> data = new ArrayList<>();
+		private final String function;
+
+		public PublicationLazyModel(final String function) {
+			this.function = function;
+		}
+
+		@Override
+		public Publication getRowData(final String rowKey) {
+			for (Publication Publication : this.data) {
+				if (Publication.getUuid().equals(rowKey))
+					return Publication;
+			}
+			return null;
+		}
+
+		@Override
+		public Object getRowKey(final Publication Publication) {
+			return Publication.getUuid();
+		}
+
+		@Override
+		public List<Publication> load(final int first, final int pageSize, final String sortField,
+				final SortOrder sortOrder, final Map<String, Object> filters) {
+			this.data.clear();
+			switch (this.function) {
+			case "search":
+				search(first, pageSize);
+				break;
+			case "filter":
+				filter(first, pageSize);
+				break;
+			default:
+				all(first, pageSize);
+				break;
+			}
+			return this.data;
+		}
+
+		private void search(final int first, final int pageSize) {
+			try {
+				int dataSize = (int) (PublicationMB.this.publicationBean.countSearch(PublicationMB.this.title));
+				this.setRowCount(dataSize);
+				this.data = PublicationMB.this.publicationBean.search(PublicationMB.this.title, first, pageSize);
+			} catch (Exception e) {
+				PublicationMB.this.logger.error(e);
+			}
+		}
+
+		private void filter(final int first, final int pageSize) {
+			try {
+				int dataSize = (int) (PublicationMB.this.publicationBean.countFilter(PublicationMB.this.filter));
+				this.setRowCount(dataSize);
+				this.data = PublicationMB.this.publicationBean.filterPublication(PublicationMB.this.filter, first,
+						pageSize);
+			} catch (Exception e) {
+				PublicationMB.this.logger.error(e);
+			}
+		}
+
+		private void all(final int first, final int pageSize) {
+			try {
+				int dataSize = (int) (PublicationMB.this.publicationBean.countAll());
+				this.setRowCount(dataSize);
+				this.data = PublicationMB.this.publicationBean.getAll(first, pageSize);
+			} catch (Exception e) {
+				PublicationMB.this.logger.error(e);
+			}
+		}
+	}
+
+	public LazyDataModel<Publication> getLazyModel() {
+		return this.lazyModel;
+	}
+
+	public void setLazyModel(final LazyDataModel<Publication> lazyModel) {
+		this.lazyModel = lazyModel;
+	}
+
+	public String getDate(final Book book) {
+		return new SimpleDateFormat("yyyy").format(book.getPublicationDate());
+	}
+
+	public String getDate(final Magazine magazine) {
+		return new SimpleDateFormat("yyyy-MM").format(magazine.getPublicationDate());
+	}
+
+	public String getDate(final Newspaper newspaper) {
+		return new SimpleDateFormat("yyyy-MM-dd").format(newspaper.getPublicationDate());
+	}
+
+	public Date getToday() {
+		return new Date();
 	}
 }

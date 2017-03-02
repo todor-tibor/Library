@@ -22,9 +22,9 @@
 					<f:param name="p_value" value="#{srch_user.value}" />
 				</p:commandButton>
 
-				<p:dataTable id="userDT" var="user" value="#{userbean.userList}"
-					selectionMode="single" selection="#{userbean.currentUser}"
-					rowKey="#{user.uuid}">
+				<p:dataTable emptyMessage="#{msg['empty.list']}" id="userDT"
+					var="user" value="#{userbean.userList}" selectionMode="single"
+					selection="#{userbean.currentUser}" rowKey="#{user.uuid}">
 					<p:ajax event="rowSelect" listener="#{userbean.isSelected}"
 						update="userDT" />
 					<f:facet name="header">
@@ -52,11 +52,7 @@
 							<p:messages id="messages" showDetail="true" autoUpdate="true"
 								closable="true" />
 							<p:inputText id="renameTextBox" binding="#{renameuser}" />
-							<p:commandButton value="#{msg['rename.button']}" update=""
-								action="#{userbean.update(renameuser.value,changeEmail.value)}">
-								<f:param name="p_newTxt" value="#{renameuser.value}" />
-								<f:param name="email" value="#{chageEmail}"/>
-							</p:commandButton>
+
 							<p:dataList id="displayRoles"
 								value="#{userbean.currentUser.roles}" var="role" width="250">
 								<f:facet name="header">
@@ -73,7 +69,12 @@
 							<h:outputText value="#{userbean.currentUser.email}" />
 							<br />
 							<h:inputText id="changeEmail" binding="#{changeEmail}" />
-							
+							<p:commandButton value="#{msg['rename.button']}" update=""
+								action="#{userbean.update(renameuser.value,changeEmail.value)}">
+								<f:param name="p_newTxt" value="#{renameuser.value}" />
+								<f:param name="email" value="#{chageEmail}" />
+							</p:commandButton>
+
 						</p:dialog>
 
 

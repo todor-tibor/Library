@@ -29,13 +29,15 @@
 				</p:commandButton>
 
 
-				<p:dataTable id="publicationDT" var="publication"
-					value="#{publicationBean.publicationList}" selectionMode="single"
+				<p:dataTable emptyMessage="#{msg['empty.list']}" id="publicationDT" value="#{publicationBean.lazyModel}"
+					var="publication" paginator="true" rows="5"
+					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+					rowsPerPageTemplate="5,10,15" lazy="true" selectionMode="single"
 					selection="#{publicationBean.currentPublication}"
 					rowKey="#{publication.uuid}">
 
 					<p:ajax event="rowSelect" listener="#{publicationBean.isSelected}"
-						update="deleteButton detailsButton updateButton" />
+						update="publicationDT" />
 					<f:facet name="header">
             			#{pubMan['publications.text']}
         			</f:facet>
@@ -59,7 +61,7 @@
 							<p:outputLabel value="#{pubMan['publication.publisher']}" />
 							<br />
 							<p:inputText value="#{publicationBean.filter.publisher}"
-							onkeypress="if (event.keyCode == 13) {e.preventDefault(); inputEnter.onchange(); return false; }">
+								onkeypress="if (event.keyCode == 13) {e.preventDefault(); inputEnter.onchange(); return false; }">
 								<f:ajax event="change"
 									listener="#{publicationBean.filterPublication}"
 									update="publicationDT" />
@@ -87,7 +89,8 @@
 							<p:outputLabel value="#{pubMan['publication.publicationDate']}" />
 							<br />
 							<p:outputLabel value="#{pubMan['publication.dateFrom']}" />
-							<p:inputText value="#{publicationBean.filter.from}" onkeypress="if (event.keyCode == 13) {e.preventDefault(); inputEnter.onchange(); return false; }">
+							<p:inputText value="#{publicationBean.filter.from}"
+								onkeypress="if (event.keyCode == 13) {e.preventDefault(); inputEnter.onchange(); return false; }">
 								<f:ajax event="change"
 									listener="#{publicationBean.filterPublication}"
 									update="publicationDT" />
@@ -95,15 +98,15 @@
 							</p:inputText>
 							<br />
 							<p:outputLabel value="#{pubMan['publication.dateUntil']}" />
-							<p:inputText value="#{publicationBean.filter.until}" onkeypress="if (event.keyCode == 13) {e.preventDefault(); inputEnter.onchange(); return false; }">
+							<p:inputText value="#{publicationBean.filter.until}"
+								onkeypress="if (event.keyCode == 13) {e.preventDefault(); inputEnter.onchange(); return false; }">
 								<f:ajax event="change"
 									listener="#{publicationBean.filterPublication}"
 									update="publicationDT" />
 								<f:convertDateTime pattern="yyyy-MM-dd" />
 							</p:inputText>
 						</f:facet>
-						<h:outputText value="#{publication.publicationDate}">
-							<f:convertDateTime pattern="yyyy-MM-dd" />
+						<h:outputText value="#{publicationBean.getDate(publication)}" >
 						</h:outputText>
 					</p:column>
 					<p:column headerText="#{pubMan['publication.authors']}">
@@ -215,7 +218,8 @@
 				</p:dataTable>
 				<p:commandButton process="publication_actions_form"
 					value="#{pubMan['listPublications.button']}" update="publicationDT"
-					icon="ui-icon-search" action="#{publicationBean.getAll()}">
+					icon="ui-icon-search"
+					action="#{publicationBean.getAllPaginate()}">
 				</p:commandButton>
 				<p:commandButton process="publication_actions_form" icon="fa-remove"
 					value="#{pubMan['add.newspaper']}" update="addDialog"
@@ -229,6 +233,14 @@
 					value="#{pubMan['add.book']}" update="addDialog"
 					oncomplete="PF('addDialog').show()"
 					action="#{publicationBean.setType('Book')}" />
+				<p:commandButton process="publication_actions_form" value="#{pubMan['publication.export']}"
+					icon="ui-icon-search"
+					action="#{publicationBean.exportPublication()}">
+				</p:commandButton>
+				<p:commandButton process="publication_actions_form" value="#{pubMan['publication.import']}"
+					update="publicationDT" icon="ui-icon-search"
+					action="#{publicationBean.importPublication()}">
+				</p:commandButton>
 
 				<p:dialog id="addDialog" modal="true" showEffect="fade"
 					hideEffect="fade" widgetVar="addDialog"
@@ -261,7 +273,7 @@
 							</p:dataTable>
 						</c:if>
 						<p:outputLabel value="#{pubMan['publication.publicationDate']}" />
-						<p:calendar id="calendrierDateDebut"
+						<p:calendar maxdate="#{publicationBean.getToday()}" id="calendrierDateDebut"
 							value="#{publicationBean.date}" pattern="yyyy-MM-dd"
 							effect="slideDown" navigator="true" mode="inline"
 							lang="#{localeBean.userLocale.language}"

@@ -146,7 +146,7 @@ public class BorrowManagementBusiness {
 
 	/**
 	 * Searches for borrow objects with borrow until before today.
-	 * 
+	 *
 	 * @return List of borrow objects that are currently late.
 	 */
 	public List<Borrow> getBorrwLate() {
@@ -158,7 +158,7 @@ public class BorrowManagementBusiness {
 	/**
 	 * Sends an e-mail message to the user of the given borrowing, with
 	 * notification text to return the specified publication.
-	 * 
+	 *
 	 * @param borrow
 	 *            - the borrow object that is late
 	 */
@@ -167,10 +167,8 @@ public class BorrowManagementBusiness {
 				+ "We would like to remind you, that you have an outdated publication borrowing from msglibrary.\n"
 				+ "You borrowed the publication: " + borrow.getPublication().getTitle() + " until: "
 				+ borrow.getBorrowUntil().toString()
-				+ "\n Please return the publication immediatly.\n\nBest regards,\nmsglibrary team.";
+				+ "\n Please return the publication immediately.\n\nBest regards,\nmsglibrary team.";
 
-		this.mailSendingService.send(borrow.getUser().getEmail(), "msglibrary NOTIFICATION - Borrowing out of date.",
-				text);
 		this.mailSendingService.send(borrow.getUser().getEmail(), "msglibrary NOTIFICATION - Borrowing out of date.",
 				text);
 	}
