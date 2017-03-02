@@ -56,8 +56,6 @@ public class ServiceValidation {
 	 * @param inputString
 	 *            - a string representation of the input data (can be a user
 	 *            name, publication name, etc.)
-	 * @return - true if the input data satisfies the given constraints,
-	 *         otherwise returns false
 	 */
 	public static void checkString(final String inputString) {
 		final Pattern pattern = Pattern.compile(STRING_PATTERN);
@@ -74,8 +72,6 @@ public class ServiceValidation {
 	 *
 	 * @param password
 	 *            - the password the user gave
-	 * @return - true if the password satisfies the given constraints, otherwise
-	 *         returns false
 	 */
 	public static void checkPassword(final String password) {
 		final Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
@@ -92,7 +88,6 @@ public class ServiceValidation {
 	 *
 	 * @param uuid
 	 *            - the unique identification string of an object
-	 * @return - true if the two id match, false otherwise
 	 */
 	public static void checkUuid(final String uuid) {
 		if (uuid == null || uuid.length() == 0) {
@@ -158,13 +153,20 @@ public class ServiceValidation {
 	 * @param until
 	 *            - the end date
 	 */
-	public static void checDateOrder(final Date from, final Date until) {
+	public static void checkDateOrder(final Date from, final Date until) {
 		if (from.after(until)) {
 			logger.error(ERROR_MESSAGE);
 			throw new IllegalArgumentException(ERROR_MESSAGE);
 		}
 	}
 
+	/**
+	 * * Check whether the given email matches a set of constraints defined in
+	 * the EMAIL_PATTERN constant Throws exception if it doesn't match.
+	 *
+	 * @param email
+	 *            - the email of the user
+	 */
 	public static void checEmail(final String email) {
 		Pattern pattern = Pattern.compile(EMAIL_PATTERN);
 		Matcher matcher = pattern.matcher(email);
