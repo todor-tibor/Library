@@ -63,7 +63,6 @@ public class PublicationMB implements Serializable {
 	private List<Author> authors, currentAuthors;
 	private Publisher currentPublisher;
 	private String type;
-	private String function = "all";
 	private String title;
 	private LazyDataModel<Publication> lazyModel;
 	/**
@@ -108,8 +107,7 @@ public class PublicationMB implements Serializable {
 	 */
 	public void getAllPaginate() {
 		try {
-			this.function = "all";
-			this.lazyModel = new PublicationLazyModel();
+			this.lazyModel = new PublicationLazyModel("all");
 		} catch (final Exception e) {
 			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
@@ -128,8 +126,7 @@ public class PublicationMB implements Serializable {
 		if (searchTxt.length() >= 3) {
 			this.title = searchTxt;
 			try {
-				this.function = "search";
-				this.lazyModel = new PublicationLazyModel();
+				this.lazyModel = new PublicationLazyModel("search");
 			} catch (final Exception e) {
 				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
@@ -261,8 +258,7 @@ public class PublicationMB implements Serializable {
 	 */
 	public List<Publication> filterPublication() {
 		try {
-			this.function = "filter";
-			this.lazyModel = new PublicationLazyModel();
+			this.lazyModel = new PublicationLazyModel("filter");
 		} catch (final Exception e) {
 			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
@@ -408,9 +404,20 @@ public class PublicationMB implements Serializable {
 		}
 	}
 
+	/**
+	 * Inner class extend LazyDataModel for pagination
+	 * 
+	 * @author sipost
+	 *
+	 */
 	private class PublicationLazyModel extends LazyDataModel<Publication> {
 		private static final long serialVersionUID = -7040989400223372462L;
 		private List<Publication> data = new ArrayList<>();
+		private final String function;
+
+		public PublicationLazyModel(final String function) {
+			this.function = function;
+		}
 
 		@Override
 		public Publication getRowData(final String rowKey) {
@@ -429,34 +436,50 @@ public class PublicationMB implements Serializable {
 		@Override
 		public List<Publication> load(final int first, final int pageSize, final String sortField,
 				final SortOrder sortOrder, final Map<String, Object> filters) {
-			int dataSize = 0;
-			if ("search".equals(PublicationMB.this.function)) {
-				try {
-					dataSize = (int) (PublicationMB.this.publicationBean.countSearch(PublicationMB.this.title));
-				} catch (Exception e) {
-					return this.data;
-				}
+			this.data.clear();
+			switch (this.function) {
+			case "search":
+				search(first, pageSize);
+				break;
+			case "filter":
+				filter(first, pageSize);
+				break;
+			default:
+				all(first, pageSize);
+				break;
+			}
+			return this.data;
+		}
+
+		private void search(final int first, final int pageSize) {
+			try {
+				int dataSize = (int) (PublicationMB.this.publicationBean.countSearch(PublicationMB.this.title));
 				this.setRowCount(dataSize);
 				this.data = PublicationMB.this.publicationBean.search(PublicationMB.this.title, first, pageSize);
-			} else if ("filter".equals(PublicationMB.this.function)) {
-				try {
-					dataSize = (int) (PublicationMB.this.publicationBean.countFilter(PublicationMB.this.filter));
-				} catch (Exception e) {
-					return this.data;
-				}
+			} catch (Exception e) {
+				PublicationMB.this.logger.error(e);
+			}
+		}
+
+		private void filter(final int first, final int pageSize) {
+			try {
+				int dataSize = (int) (PublicationMB.this.publicationBean.countFilter(PublicationMB.this.filter));
 				this.setRowCount(dataSize);
 				this.data = PublicationMB.this.publicationBean.filterPublication(PublicationMB.this.filter, first,
 						pageSize);
-			} else {
-				try {
-					dataSize = (int) (PublicationMB.this.publicationBean.countAll());
-				} catch (Exception e) {
-					return this.data;
-				}
+			} catch (Exception e) {
+				PublicationMB.this.logger.error(e);
+			}
+		}
+
+		private void all(final int first, final int pageSize) {
+			try {
+				int dataSize = (int) (PublicationMB.this.publicationBean.countAll());
 				this.setRowCount(dataSize);
 				this.data = PublicationMB.this.publicationBean.getAll(first, pageSize);
+			} catch (Exception e) {
+				PublicationMB.this.logger.error(e);
 			}
-			return this.data;
 		}
 	}
 
