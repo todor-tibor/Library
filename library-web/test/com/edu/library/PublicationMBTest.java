@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.jboss.logging.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -13,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.edu.library.exception.ErrorLevel;
 import com.edu.library.exception.LibraryException;
 import com.edu.library.model.Author;
 import com.edu.library.model.Book;
@@ -23,6 +23,7 @@ import com.edu.library.model.Publication;
 import com.edu.library.model.Publisher;
 import com.edu.library.util.ExceptionHandler;
 import com.edu.library.util.MessageService;
+import com.edu.library.util.PublicationLazyModel;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PublicationMBTest {
@@ -34,10 +35,32 @@ public class PublicationMBTest {
 	IPublicationService publicationBean;
 
 	@Mock
+	Logger logger;
+
+	@Mock
 	ExceptionHandler exceptionHandler;
+
+	@Mock
+	PublicationLazyModel publicationLazyModel;
 
 	@InjectMocks
 	PublicationMB publicationMB;
+
+	@Test
+	public void testGetAll() {
+		Mockito.when(this.publicationBean.getAll()).thenReturn(new ArrayList<Publication>());
+		this.publicationMB.getAll();
+		Mockito.verify(this.publicationMB.publicationBean, times(1)).getAll();
+	}
+
+	@Test
+	public void testGetAll_Exception() {
+		Mockito.when(this.publicationBean.getAll()).thenThrow(new LibraryException());
+		Mockito.doNothing().when(this.logger).error(Mockito.any());
+		Mockito.doNothing().when(this.exceptionHandler).showMessage(Mockito.any());
+		this.publicationMB.getAll();
+		Mockito.verify(this.publicationMB.exceptionHandler, times(1)).showMessage(Mockito.any());
+	}
 
 	@Test
 	public void testStore_invalid() {
@@ -77,7 +100,9 @@ public class PublicationMBTest {
 		List<Author> listAuthor = new ArrayList<>();
 		listAuthor.add(new Author());
 		this.publicationMB.setCurrentAuthors(listAuthor);
-		Mockito.doThrow(new LibraryException("mess", ErrorLevel.ERROR)).when(this.publicationBean).store(Mockito.any());
+		Mockito.doThrow(new LibraryException()).when(this.publicationBean).store(Mockito.any());
+		Mockito.doNothing().when(this.logger).error(Mockito.any());
+		Mockito.doNothing().when(this.exceptionHandler).showMessage(Mockito.any());
 		this.publicationMB.store("test", "3");
 		Mockito.verify(this.publicationMB.exceptionHandler, times(1)).showMessage(Mockito.any());
 	}
@@ -138,6 +163,8 @@ public class PublicationMBTest {
 		this.publicationMB.setAuthors(listAuthor);
 		Mockito.doThrow(new LibraryException()).when(this.publicationBean).update(Mockito.any());
 		Mockito.when(this.publicationBean.getAll()).thenReturn(new ArrayList<Publication>());
+		Mockito.doNothing().when(this.logger).error(Mockito.any());
+		Mockito.doNothing().when(this.exceptionHandler).showMessage(Mockito.any());
 		this.publicationMB.update();
 		Mockito.verify(this.publicationMB.exceptionHandler, times(1)).showMessage(Mockito.any());
 	}
@@ -146,7 +173,32 @@ public class PublicationMBTest {
 	public void testUpdate_Magazine_noTitle() {
 		Magazine magazine = new Magazine();
 		magazine.setPublisher(new Publisher());
+		this.publicationMB.setCurrentPublication(magazine);
+		Mockito.doNothing().when(this.message).warn(Mockito.anyString());
 		this.publicationMB.update();
-		Mockito.verify(this.publicationMB.message, times(1)).warn(Mockito.any());
+		Mockito.verify(this.publicationMB.message, times(1)).warn(Mockito.anyString());
+	}
+
+	@Test
+	public void testRemove() {
+		Magazine magazine = new Magazine();
+		magazine.setUuid("123");
+		this.publicationMB.setCurrentPublication(magazine);
+		Mockito.doNothing().when(this.publicationBean).remove(Mockito.anyString());
+		Mockito.when(this.publicationBean.getAll()).thenReturn(new ArrayList<Publication>());
+		this.publicationMB.remove();
+		Mockito.verify(this.publicationMB.publicationBean, times(1)).remove(Mockito.anyString());
+	}
+
+	@Test
+	public void testRemove_Exception() {
+		Magazine magazine = new Magazine();
+		magazine.setUuid("123");
+		this.publicationMB.setCurrentPublication(magazine);
+		Mockito.doThrow(new LibraryException()).when(this.publicationBean).remove(Mockito.anyString());
+		Mockito.doNothing().when(this.logger).error(Mockito.any());
+		Mockito.doNothing().when(this.exceptionHandler).showMessage(Mockito.any());
+		this.publicationMB.remove();
+		Mockito.verify(this.publicationMB.exceptionHandler, times(1)).showMessage(Mockito.any());
 	}
 }
