@@ -16,7 +16,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.edu.library.model.Book;
 import com.edu.library.model.Borrow;
-import com.edu.library.model.Publication;
 import com.edu.library.model.User;
 import com.edu.library.util.MessageService;
 
@@ -39,43 +38,54 @@ public class BorrowingMBTest {
 		Assert.assertEquals(listB, borr);
 	}
 
-	@Mock
-	Publication currentPublication;
-	@Mock
-	User currentUser;
-	@Mock
-	Date date2;
+	// @Mock
+	// Publication currentPublication;
+	//
+	// @Mock
+	// User currentUser;
+	//
+	// @Mock
+	// Date date2;
+	//
 	@Mock
 	MessageService message;
 
 	@Test
 	public void testStoreNull() {
 		final Borrow bbb = new Borrow();
+		// Test nullcheck for publication
+		this.borrowingMB.setCurrentPublication(null);
+		this.borrowingMB.setCurrentUser(new User());
+		this.borrowingMB.setDate2(new Date());
 
-		this.currentPublication = null;
-		this.currentUser = new User();
-		this.date2 = new Date();
-		bbb.setPublication(this.currentPublication);
-		bbb.setUser(this.currentUser);
-		bbb.setBorrowUntil(this.date2);
 		this.borrowingMB.store();
+		// Test nullcheck for user
+		this.borrowingMB.setCurrentPublication(new Book());
+		this.borrowingMB.setCurrentUser(null);
+		this.borrowingMB.setDate2(new Date());
 
-		this.currentPublication = new Book();
-		this.currentUser = null;
-		this.date2 = new Date();
-		bbb.setPublication(this.currentPublication);
-		bbb.setUser(this.currentUser);
-		bbb.setBorrowUntil(this.date2);
 		this.borrowingMB.store();
+		// Test nullcheck for borrow until date
+		this.borrowingMB.setCurrentPublication(new Book());
+		this.borrowingMB.setCurrentUser(new User());
+		this.borrowingMB.setDate2(null);
 
-		this.currentPublication = new Book();
-		this.currentUser = new User();
-		this.date2 = null;
-		bbb.setPublication(this.currentPublication);
-		bbb.setUser(this.currentUser);
-		bbb.setBorrowUntil(this.date2);
 		this.borrowingMB.store();
 
 		Mockito.verify(this.borrowingMB.message, times(3)).warn("managedbean.required");
+
+	}
+
+	@Test
+	public void testStore() {
+		final Borrow bbb = new Borrow();
+
+		Mockito.doNothing().when(this.oBorrow).store(bbb);
+
+		this.borrowingMB.setCurrentPublication(new Book());
+		this.borrowingMB.setCurrentUser(new User());
+		this.borrowingMB.setDate2(new Date());
+
+		this.borrowingMB.store();
 	}
 }
