@@ -35,7 +35,7 @@ public class UserMB implements Serializable {
 	private static final long serialVersionUID = -4702598250751689454L;
 
 	@Inject
-	private IUserService userBean;
+	IUserService userBean;
 
 	@Inject
 	LocaleManager localeManager;

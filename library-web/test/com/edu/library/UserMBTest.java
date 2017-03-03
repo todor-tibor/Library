@@ -35,6 +35,9 @@ public class UserMBTest {
 	@Mock
 	MessageService message;
 
+	@Mock
+	LoginMB loginMB;
+
 	@Test
 	public void testGetAll() {
 		final List<User> users = new ArrayList<>();
@@ -200,6 +203,106 @@ public class UserMBTest {
 		Mockito.doNothing().when(this.userService).remove(tmpUser.getUuid());
 		this.userMB.remove();
 		Mockito.verify(this.userService, times(1)).remove(tmpUser.getUuid());
+	}
+
+	@Test
+	public void testRemove_NullCurrentUser() {
+		final LibraryException e = new LibraryException();
+		final String id = "123";
+		final User tmpUser = new User();
+		tmpUser.setUuid(id);
+		this.userMB.setCurrentUser(null);
+		Mockito.doThrow(e).when(this.userService).remove(tmpUser.getUuid());
+		this.userMB.remove();
+		Mockito.verify(this.userMB.message, times(1)).error("Empty field");
+	}
+
+	@Test
+	public void testRemove_InvalidUser() {
+		final LibraryException e = new LibraryException();
+		final String id = "123";
+		final User tmpUser = new User();
+		tmpUser.setUuid(id);
+		this.userMB.setCurrentUser(tmpUser);
+		Mockito.doThrow(e).when(this.userService).remove(Mockito.any());
+		this.userMB.remove();
+		Mockito.verify(this.userMB.exceptionHandler, times(1)).showMessage(e);
+	}
+
+	@Test
+	public void testGetByUsername() {
+		this.userMB.getByUserName();
+		Mockito.verify(this.userMB.userBean, times(1)).getByUserName(Mockito.anyString());
+	}
+
+	@Test
+	public void testIsSelected() {
+		final User user = new User();
+		user.setUserName("test");
+		user.setPassword("Almafa.123");
+		this.userMB.setCurrentUser(user);
+		final boolean result = this.userMB.isSelected();
+		Assert.assertEquals(true, result);
+	}
+
+	@Test
+	public void testIsSelected_ReturnFalse() {
+		this.userMB.setCurrentUser(null);
+		final boolean result = this.userMB.isSelected();
+		Assert.assertEquals(false, result);
+	}
+
+	@Test
+	public void testGetCurrentRoles() {
+		final User user = new User();
+		user.setUserName("test");
+		user.setPassword("Almafa.123");
+		final Role role = new Role();
+		role.setUuid("123");
+		role.setRole("READER");
+		final List<Role> roles = new ArrayList<>();
+		roles.add(role);
+		user.setRoles(roles);
+		this.userMB.setCurrentUser(user);
+		final List<Role> rolesFromMB = this.userMB.getCurrentRoles();
+		Assert.assertEquals(rolesFromMB, roles);
+	}
+
+	@Test
+	public void testUpdate() {
+		final User user = new User();
+		user.setUserName("test");
+		user.setPassword("Almafa.123");
+		user.setEmail("test@email.com");
+		this.userMB.setCurrentUser(user);
+		Mockito.doNothing().when(this.userService).update(user);
+		this.userMB.update("test", "test@email.com");
+		Mockito.verify(this.userService, times(1)).update(user);
+	}
+
+	@Test
+	public void testUpdate_CurrentUserNull() {
+		final User user = new User();
+		user.setUserName("test");
+		user.setPassword("Almafa.123");
+		user.setEmail("test@email.com");
+		this.userMB.setCurrentUser(null);
+		Mockito.doNothing().when(this.userService).update(user);
+		this.userMB.update("test", "test@email.com");
+		Mockito.verify(this.userMB.message, times(1)).warn("managedbean.string");
+	}
+
+	@Test
+	public void testUpdate_InvalidUser() {
+		final LibraryException e = new LibraryException();
+		final User user = new User();
+		user.setUserName("test");
+		user.setPassword("Almafa.123");
+		user.setEmail("test@email.com");
+		this.userMB.setCurrentUser(user);
+		Mockito.doThrow(e).when(this.userService).update(Mockito.any());
+		this.userMB.update("test", "test@email.com");
+		Mockito.verify(this.userMB.exceptionHandler, times(1)).showMessage(e);
 	}
 
 }
