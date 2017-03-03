@@ -109,7 +109,7 @@ public class UserManagementBusinessTest {
 
 	@Test
 	public void testRemove() {
-		new ArrayList<>();
+
 		final User user = new User();
 		user.setUuid("123");
 		final List<Borrow> borrows = new ArrayList<>();
@@ -123,7 +123,7 @@ public class UserManagementBusinessTest {
 	@Test(expected = BusinessException.class)
 	public void testRemove_ThrowError() {
 		final BusinessException e = new BusinessException(ErrorMessages.ERROR_BOUND);
-		new ArrayList<>();
+
 		final User user = new User();
 		user.setUuid("123");
 		final List<Borrow> borrows = new ArrayList<>();
@@ -138,7 +138,7 @@ public class UserManagementBusinessTest {
 
 	@Test
 	public void testSearchForUserName() {
-		new ArrayList<>();
+
 		final User user = new User();
 		user.setUserName("test");
 
