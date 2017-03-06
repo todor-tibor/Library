@@ -9,8 +9,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.edu.library.PublicationMB;
-import com.edu.library.model.Borrow;
 import com.edu.library.model.Publication;
+import com.edu.library.model.UnifiedModel;
 import com.itextpdf.text.Anchor;
 import com.itextpdf.text.Chapter;
 import com.itextpdf.text.Document;
@@ -48,9 +48,13 @@ public class PdfExporter implements Serializable {
 
 		final java.util.List<Publication> pubs = getPublications();
 
+		final DataExctractor de = new DataExctractor();
+		System.out.println("************---------------------Data out -----------****************");
+		final java.util.List<UnifiedModel> listOfConvertedPublications = de.publicationExtractor(pubs);
+
 		final Document document = new Document(PageSize.A4, 50, 50, 50, 50);
 		try {
-			PdfWriter.getInstance(document, new FileOutputStream("../welcome-content/library.pdf"));
+			PdfWriter.getInstance(document, new FileOutputStream("../welcome-content/library2.pdf"));
 
 			document.open();
 			/** Create paragraph */
@@ -58,21 +62,28 @@ public class PdfExporter implements Serializable {
 			/** End paragraph */
 			Chapter chapter1 = null;
 			Section section1 = null;
-			for (final Publication publication : pubs) {
+			for (final UnifiedModel unifiedModel : listOfConvertedPublications) {
 
 				/** Create chapter */
-				chapter1 = createChapter(publication.getTitle());
+				chapter1 = createChapter(unifiedModel.getDescriptor());
 				/** End chapter */
 
 				/** Section object */
-				final String publicationInfo = "Nr of copies: " + Integer.toString(publication.getNrOfCopys())
-						+ ", on stock are: " + Integer.toString(publication.getOnStock()) + ", published on: "
-						+ publication.getPublicationDate().toString() + ", by: " + publication.getPublisher().getName();
-				section1 = createSection(chapter1, publicationInfo);
+				/*
+				 * final String publicationInfo = "Nr of copies: " +
+				 * Integer.toString(publication.getNrOfCopys()) +
+				 * ", on stock are: " +
+				 * Integer.toString(publication.getOnStock()) +
+				 * ", published on: " +
+				 * publication.getPublicationDate().toString() + ", by: " +
+				 * publication.getPublisher().getName();
+				 */
+				section1 = createSection(chapter1, unifiedModel.getDetails().toString());
 				/** End section */
 
 				/** Table object */
-				createTable(section1, publication.getBorrows());
+
+				createTable(section1, unifiedModel.getAdditionalDetails());
 				/** End table */
 
 				/** List object */
@@ -130,21 +141,14 @@ public class PdfExporter implements Serializable {
 		/** End list */
 	}
 
-	private void createTable(final Section section, final java.util.List<Borrow> list) {
+	private void createTable(final Section section, final java.util.List<String> list) {
 		/** Table object */
-		final PdfPTable t = new PdfPTable(3);
+		final PdfPTable t = new PdfPTable(1);
 		t.setSpacingBefore(5);
 		t.setSpacingAfter(15);
-		for (final Borrow borrow : list) {
-			final PdfPCell c1 = new PdfPCell(new Phrase("Borrowed by:"));
+		for (final String string : list) {
+			final PdfPCell c1 = new PdfPCell(new Phrase(string));
 			t.addCell(c1);
-			final PdfPCell c2 = new PdfPCell(new Phrase("from"));
-			t.addCell(c2);
-			final PdfPCell c3 = new PdfPCell(new Phrase("until"));
-			t.addCell(c3);
-			t.addCell(borrow.getUser().getUserName());
-			t.addCell(borrow.getBorrowFrom().toString());
-			t.addCell(borrow.getBorrowUntil().toString());
 		}
 		section.add(t);
 		/** End table */
