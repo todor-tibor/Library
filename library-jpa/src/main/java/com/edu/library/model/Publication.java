@@ -2,6 +2,7 @@ package com.edu.library.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -21,6 +22,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * The persistent abstract class for the publications database table.
@@ -28,6 +31,8 @@ import javax.persistence.TemporalType;
  * @author sipost
  * @author kiska
  */
+
+@XmlRootElement(name = "Publication")
 @Entity
 @Table(name = "publications")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -79,6 +84,7 @@ public abstract class Publication extends BaseEntity {
 	 *            - List of borrows for a given publications -bi-directional
 	 *            many-to-one association to Borrow
 	 */
+	@XmlTransient
 	@OneToMany(mappedBy = "publication", fetch = FetchType.EAGER)
 	private Set<Borrow> borrows;
 
@@ -130,8 +136,12 @@ public abstract class Publication extends BaseEntity {
 		return new ArrayList<>(this.borrows);
 	}
 
-	public void setBorrows(final Set<Borrow> borrows) {
-		this.borrows = borrows;
+	public void setBorrows(final List<Borrow> borrows) {
+		if (borrows == null) {
+			this.borrows = null;
+		} else {
+			this.borrows = new HashSet<Borrow>(borrows);
+		}
 	}
 
 	public Borrow addBorrow(final Borrow borrow) {

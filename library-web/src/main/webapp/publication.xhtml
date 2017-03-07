@@ -235,11 +235,11 @@
 					action="#{publicationBean.setType('Book')}" />
 				<p:commandButton process="publication_actions_form" value="#{pubMan['publication.export']}"
 					icon="ui-icon-search"
-					action="#{publicationBean.exportPublication()}">
+					action="#{publicationBean.getAllAndSave()}">
 				</p:commandButton>
 				<p:commandButton process="publication_actions_form" value="#{pubMan['publication.import']}"
 					update="publicationDT" icon="ui-icon-search"
-					action="#{publicationBean.importPublication()}">
+					action="#{publicationBean.importPublications()}">
 				</p:commandButton>
 
 				<p:dialog id="addDialog" modal="true" showEffect="fade"
