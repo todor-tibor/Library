@@ -4,6 +4,10 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * The persistent class for the authors database table.
@@ -19,9 +23,12 @@ import javax.persistence.Table;
 		@NamedQuery(name = "Author.searchByName", query = "SELECT a FROM Author a WHERE a.name like :name"),
 		@NamedQuery(name = "Author.getById", query = "SELECT a FROM Author a WHERE a.uuid = :uuid"),
 		@NamedQuery(name = "Author.getByName", query = "SELECT a FROM Author a WHERE a.name = :name") })
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "Author")
 public class Author extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
+	@XmlElement
 	private String name;
 
 	public Author() {
