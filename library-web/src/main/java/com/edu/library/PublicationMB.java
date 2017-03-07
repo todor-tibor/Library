@@ -25,6 +25,7 @@ import com.edu.library.model.Magazine;
 import com.edu.library.model.Newspaper;
 import com.edu.library.model.Publication;
 import com.edu.library.model.Publisher;
+import com.edu.library.model.util.JAXB;
 import com.edu.library.model.util.ReadXMLFile;
 import com.edu.library.model.util.WriteXMLFile;
 import com.edu.library.util.ExceptionHandler;
@@ -115,12 +116,10 @@ public class PublicationMB implements Serializable {
 	}
 
 	/**
-	 * Search for publication by title and stores them in
-	 * {@code publicationList}.
+	 * Search for publication by title with pagination
 	 *
 	 * @param searchTxt
 	 *            publication title.
-	 * @return List of publication objects found.
 	 */
 	public void search(final String searchTxt) {
 		if (searchTxt.length() >= 3) {
@@ -134,6 +133,39 @@ public class PublicationMB implements Serializable {
 		} else {
 			this.message.warn("managedbean.string");
 		}
+	}
+
+	/**
+	 * Search for publication by title, stores them in {@code publicationList}
+	 * and save them to xml.
+	 *
+	 * @param searchTxt
+	 *            publication title.
+	 */
+	public void searchAndSave(final String searchTxt) {
+		if (searchTxt.length() >= 3) {
+			this.title = searchTxt;
+			try {
+				this.lazyModel = new PublicationLazyModel("search");
+				this.publicationList = this.publicationBean.search(searchTxt);
+				JAXB.marshall(this.publicationList, Publication.class);
+			} catch (final Exception e) {
+				this.logger.error(e);
+				this.exceptionHandler.showMessage(e);
+			}
+		} else {
+			this.message.warn("managedbean.string");
+		}
+	}
+
+	/**
+	 * Get all publication and save them to xml.
+	 *
+	 */
+	public void getAllAndSave() {
+		getAllPaginate();
+		getAll();
+		JAXB.marshall(this.publicationList, Publication.class);
 	}
 
 	/**
@@ -385,7 +417,6 @@ public class PublicationMB implements Serializable {
 	/**
 	 * Import publications from ".xml" extension file.
 	 *
-	 * @return - list of publications imported from file.
 	 */
 	public void importPublication() {
 		this.publicationList = ReadXMLFile.importData("publications");
@@ -405,8 +436,32 @@ public class PublicationMB implements Serializable {
 	}
 
 	/**
+	 * Import publications from ".xml" extension file using JAXB.
+	 *
+	 * @return - list of publications imported from file.
+	 */
+	public void importPublications() {
+		this.publicationList = JAXB.unmarshallList();
+		this.logger.info("beolvasas sikeres: " + this.publicationList.size());
+		for (final Publication p : this.publicationList) {
+			System.out.println(p);
+			try {
+				this.publicationBean.getById(p.getUuid());
+			} catch (final Exception e) {
+				this.publicationBean.store(p);
+			}
+			try {
+				this.publicationBean.update(p);
+			} catch (final NoResultException e) {
+				this.logger.error(e);
+				this.exceptionHandler.showMessage(e);
+			}
+		}
+	}
+
+	/**
 	 * Inner class extend LazyDataModel for pagination
-	 * 
+	 *
 	 * @author sipost
 	 *
 	 */

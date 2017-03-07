@@ -2,6 +2,7 @@ package com.edu.library.model;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * The persistent subclass for the publication database table, with
@@ -11,6 +12,7 @@ import javax.persistence.Entity;
  * @author kiska
  *
  */
+@XmlRootElement(name = "Newspaper")
 @Entity
 @DiscriminatorValue("Newspaper")
 public class Newspaper extends Publication {

@@ -6,6 +6,10 @@ import java.util.UUID;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -13,10 +17,13 @@ import javax.persistence.PrePersist;
  * @author gallb
  * @author kiska
  */
+@XmlRootElement(name = "BaseEntity")
+@XmlAccessorType(XmlAccessType.FIELD)
 @MappedSuperclass
 public abstract class BaseEntity implements Serializable {
 	private static final long serialVersionUID = 3333408811149331428L;
 
+	@XmlElement
 	@Id
 	/**
 	 * @param uuid
