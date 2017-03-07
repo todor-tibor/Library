@@ -47,7 +47,7 @@ public class BorrowManagementFacade implements IBorrowService {
 		ServiceValidation.checkNotNull(borrow);
 		ServiceValidation.checkNotNull(borrow.getPublication());
 		ServiceValidation.checkNotNull(borrow.getUser());
-		ServiceValidation.checDateOrder(borrow.getBorrowFrom(), borrow.getBorrowUntil());
+		ServiceValidation.checkDateOrder(borrow.getBorrowFrom(), borrow.getBorrowUntil());
 
 		this.borrowBusiness.store(borrow);
 	}
@@ -58,7 +58,7 @@ public class BorrowManagementFacade implements IBorrowService {
 		ServiceValidation.checkNotNull(borrow);
 		ServiceValidation.checkNotNull(borrow.getPublication());
 		ServiceValidation.checkNotNull(borrow.getUser());
-		ServiceValidation.checDateOrder(borrow.getBorrowFrom(), borrow.getBorrowUntil());
+		ServiceValidation.checkDateOrder(borrow.getBorrowFrom(), borrow.getBorrowUntil());
 
 		this.borrowBusiness.update(borrow);
 
@@ -73,7 +73,7 @@ public class BorrowManagementFacade implements IBorrowService {
 	@Override
 	public List<Borrow> filterBorrow(final BorrowFilter filter) {
 		if (filter.getBorrowedFrom() != null && filter.getBorrowedUntil() != null) {
-			ServiceValidation.checDateOrder(filter.getBorrowedFrom(), filter.getBorrowedUntil());
+			ServiceValidation.checkDateOrder(filter.getBorrowedFrom(), filter.getBorrowedUntil());
 		}
 		return this.borrowBusiness.filterBorrow(filter);
 	}
