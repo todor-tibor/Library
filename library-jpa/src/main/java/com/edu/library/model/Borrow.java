@@ -21,7 +21,7 @@ import javax.persistence.TemporalType;
 @Table(name = "borrows")
 @NamedQueries({ @NamedQuery(name = "Borrow.findAll", query = "SELECT b FROM Borrow b"),
 		@NamedQuery(name = "Borrow.findById", query = "SELECT b FROM Borrow b WHERE b.uuid = :uuid"),
-		@NamedQuery(name = "Borrow.findByUntilDate",query = "SELECT b FROM Borrow b WHERE b.borrowUntil < :p_date")})
+		@NamedQuery(name = "Borrow.findByUntilDate", query = "SELECT b FROM Borrow b WHERE b.borrowUntil < :p_date") })
 public class Borrow extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
@@ -77,6 +77,12 @@ public class Borrow extends BaseEntity {
 
 	public void setUser(final User user) {
 		this.user = user;
+	}
+
+	@Override
+	public String toString() {
+		return "Borrowed by '" + this.user.getUserName() + "' the publication '" + this.publication.getTitle() + "' on "
+				+ this.borrowFrom + " until " + this.borrowUntil + ".";
 	}
 
 }

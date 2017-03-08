@@ -37,7 +37,7 @@ public class Author extends BaseEntity {
 
 	@Override
 	public String toString() {
-		return "--" + this.name + "--";
+		return "'" + this.name + "'";
 	}
 
 }

@@ -234,14 +234,14 @@
 					action="#{publicationBean.setType('Book')}" />
 				<p:commandButton process="publication_actions_form"
 					value="PDF export" update="publication_actions_form" icon="ui-icon-save"
-					action="#{pdfExporterBean.writeToPdf()}">
+					action="#{pdfExporterBean.writePublications()}">
 				</p:commandButton>
 				<c:if test="${pdfExporterBean.isWritten()}">
 					<h3>PDF</h3>
 				
-					<object type="application/pdf" data="http://localhost:8080/library.pdf"
+					<object type="application/pdf" data="http://localhost:8080/msgLibrary_publication.pdf"
 						height="700px" width="100%"  >
-						Your browser can't display pdf, <a href="http://localhost:8080/library.pdf">click</a> to
+						Your browser can't display pdf, <a href="http://localhost:8080/msgLibrary_publication.pdf">click</a> to
 						download pdf instead.
 					</object>
 					
