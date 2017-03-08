@@ -48,10 +48,15 @@ public class ImportExportMB implements Serializable {
 	private IBorrowService borrowBean;
 
 	/**
-	 * Type of entities for marshall or unmarshall
+	 * Class of entities for marshall or unmarshall
 	 */
 	@SuppressWarnings("rawtypes")
-	private Class type = Role.class;
+	private Class clazz = Role.class;
+
+	/**
+	 * Active tab define the list for marshall or unmarshall
+	 */
+	private String activeTab = "Role";
 
 	/**
 	 * Import list of entities (specified by type) from ".xml" extension file
@@ -63,8 +68,8 @@ public class ImportExportMB implements Serializable {
 	public <T extends BaseEntity> List<T> importList() {
 		List<T> list = new ArrayList<>();
 		try {
-			System.out.println("import type: " + this.type);
-			list = JAXB.unmarshallList(this.type, this.type.getSimpleName());
+			System.out.println("import type: " + this.clazz);
+			list = JAXB.unmarshallList(this.clazz, this.activeTab);
 			saveEntities(list);
 			this.message.info("import.done");
 			this.logger.info("imported " + list.size() + " element");
@@ -83,7 +88,7 @@ public class ImportExportMB implements Serializable {
 	public <T extends BaseEntity> void exportList() {
 		try {
 			List<T> entities = getEntities();
-			JAXB.marshall(entities, this.type, this.type.getSimpleName());
+			JAXB.marshall(entities, this.clazz, this.activeTab);
 			this.message.info("export.done");
 			this.logger.info("exported " + entities.size() + " element");
 		} catch (IllegalArgumentException e) {
@@ -101,7 +106,7 @@ public class ImportExportMB implements Serializable {
 	@SuppressWarnings("unchecked")
 	private <T extends BaseEntity> List<T> getEntities() {
 		List<T> list = new ArrayList<>();
-		switch (this.type.getSimpleName()) {
+		switch (this.activeTab) {
 		case "Publication":
 			list = (List<T>) this.publicationBean.getAll();
 			break;
@@ -120,6 +125,9 @@ public class ImportExportMB implements Serializable {
 		case "Borrow":
 			list = (List<T>) this.borrowBean.getAll();
 			break;
+		case "BorrowLate":
+			list = (List<T>) this.borrowBean.getBorrowLate();
+			break;
 		default:
 			break;
 		}
@@ -134,7 +142,7 @@ public class ImportExportMB implements Serializable {
 	 */
 	@SuppressWarnings("unchecked")
 	private <T extends BaseEntity> void saveEntities(final List<T> list) {
-		switch (this.type.getSimpleName()) {
+		switch (this.clazz.getSimpleName()) {
 		case "Publication":
 			saveEntitiList((IService<T>) this.publicationBean, list);
 			break;
@@ -156,7 +164,7 @@ public class ImportExportMB implements Serializable {
 		default:
 			break;
 		}
-		System.out.println("type: " + this.type + "size: " + list.size());
+		System.out.println("type: " + this.clazz + "size: " + list.size());
 	}
 
 	/**
@@ -188,12 +196,24 @@ public class ImportExportMB implements Serializable {
 	}
 
 	private <T extends BaseEntity> void setType(final String type) {
-		System.out.println(type);
+		if (type == null) {
+			this.clazz = null;
+			return;
+		}
 		try {
-			this.type = Class.forName(type);
+			this.clazz = Class.forName(type);
 		} catch (ClassNotFoundException e) {
 			this.logger.warn(e.getLocalizedMessage());
 		}
+	}
+
+	public String getType() {
+		if (this.clazz == null) {
+			return null;
+		} else {
+			return this.clazz.getSimpleName();
+		}
+
 	}
 
 	/**
@@ -203,8 +223,13 @@ public class ImportExportMB implements Serializable {
 	 * @param event
 	 */
 	public void changeTab(final TabChangeEvent event) {
-		String typeName = "com.edu.library.model." + event.getTab().getId();
-		setType(typeName);
+		this.activeTab = event.getTab().getId();
+		if ("Delay".equals(this.activeTab)) {
+			setType("com.edu.library.model.Borrow");
+		} else {
+			final String typeName = "com.edu.library.model." + this.activeTab;
+			setType(typeName);
+		}
 	}
 
 }

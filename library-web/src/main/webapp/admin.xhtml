@@ -94,19 +94,21 @@
 		<p:tab title="#{msg['borrow.button']} " id="Borrow">
 			<ui:include src="borrow.xhtml" />
 		</p:tab>
-		<p:tab title="#{msg['delay.button']}">
+		<p:tab title="#{msg['delay.button']}" id="Delay">
 			<ui:include src="borrowlate.xhtml" />
 		</p:tab>
 	</p:tabView>
-	<h:form id="form_foother">
-		<p:panel>
-			<p:commandButton value="#{pubMan['publication.export']}"
-				icon="ui-icon-search" action="#{importExportBean.exportList()}">
-			</p:commandButton>
-			<p:commandButton value="#{pubMan['publication.import']}"
-				icon="ui-icon-search" action="#{importExportBean.importList()}">
-			</p:commandButton>
-		</p:panel>
-	</h:form>
+	<p:panel id="foother" rendered="#{importExportBean.getType() != null}">
+		<h:form id="form_foother">
+			<p:panel>
+				<p:commandButton value="#{pubMan['publication.export']}"
+					icon="ui-icon-search" action="#{importExportBean.exportList()}">
+				</p:commandButton>
+				<p:commandButton value="#{pubMan['publication.import']}"
+					icon="ui-icon-search" action="#{importExportBean.importList()}">
+				</p:commandButton>
+			</p:panel>
+		</h:form>
+	</p:panel>
 </h:body>
 </html>
