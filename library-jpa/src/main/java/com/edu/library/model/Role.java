@@ -4,6 +4,10 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * The persistent class for the roles database table.
@@ -17,6 +21,9 @@ import javax.persistence.Table;
 		@NamedQuery(name = "Role.findById", query = "SELECT r FROM Role r WHERE r.uuid= :uuid"),
 		@NamedQuery(name = "Role.getByName", query = "SELECT r FROM Role r WHERE r.role = :role"),
 		@NamedQuery(name = "Role.search", query = "SELECT  r FROM Role r WHERE r.role like :role") })
+
+@XmlRootElement(name = "Role")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Role extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
@@ -24,6 +31,7 @@ public class Role extends BaseEntity {
 	 * @param role
 	 *            - The name of the role
 	 */
+	@XmlElement
 	private String role;
 
 	public Role() {

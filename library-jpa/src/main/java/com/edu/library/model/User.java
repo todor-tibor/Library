@@ -16,6 +16,12 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * The persistent class for the users database table.
@@ -23,6 +29,8 @@ import javax.persistence.Table;
  * @author sipost
  * @author kiska
  */
+@XmlRootElement(name = "User")
+@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "users")
 @NamedQueries({ @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
@@ -39,6 +47,7 @@ public class User extends BaseEntity {
 	 *            - The loyalty index of a user used to check eligibility for
 	 *            book borrowing. It's maximum value is 10, minimum 0.
 	 */
+	@XmlElement
 	@Column(name = "loyalty_index")
 	private int loyaltyIndex;
 
@@ -46,12 +55,14 @@ public class User extends BaseEntity {
 	 * @param password
 	 *            - The password of the user
 	 */
+	@XmlTransient
 	private String password;
 
 	/**
 	 * @param userName
 	 *            - The user name of the user
 	 */
+	@XmlElement
 	@Column(name = "user_name")
 	private String userName;
 
@@ -60,24 +71,28 @@ public class User extends BaseEntity {
 	 *            - List of already borrowed publications for a given user
 	 *            bi-directional many-to-one association to Borrow
 	 */
+
+	@XmlTransient
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private List<Borrow> borrows;
 
-
+	@XmlElement
 	private String email;
-	
+
 	/**
 	 * @param roles
 	 *            - Set of roles the user has. -uni-directional many-to-many
 	 *            association to Borrow
 	 */
+	@XmlElement(name = "Role")
+	@XmlElementWrapper(name = "Roles")
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "uuid"))
 	private Set<Role> roles;
 
 	public User() {
 	}
-	
+
 	public int getLoyaltyIndex() {
 		return this.loyaltyIndex;
 	}
@@ -129,18 +144,22 @@ public class User extends BaseEntity {
 	}
 
 	public void setRoles(final List<Role> roles) {
-		this.roles = new HashSet<Role>(roles);
-	}
-	
-	public String getEmail() {
-		return email;
+		if (roles == null) {
+			this.roles = null;
+		} else {
+			this.roles = new HashSet<Role>(roles);
+		}
 	}
 
-	public void setEmail(String email) {
+	public String getEmail() {
+		return this.email;
+	}
+
+	public void setEmail(final String email) {
 		this.email = email;
 	}
 
-	public boolean isLate(){
+	public boolean isLate() {
 		Date today = new Date();
 		for (int i = 0; i < this.borrows.size(); i++) {
 			if (today.after(this.borrows.get(i).getBorrowUntil())) {

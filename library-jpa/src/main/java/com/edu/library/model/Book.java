@@ -9,6 +9,9 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * The persistent subclass for the publication database table, with
@@ -18,6 +21,7 @@ import javax.persistence.ManyToMany;
  * @author kiska
  *
  */
+@XmlRootElement(name = "Book")
 @Entity
 @DiscriminatorValue("Book")
 public class Book extends Publication {
@@ -25,6 +29,8 @@ public class Book extends Publication {
 	private static final long serialVersionUID = -7358930538078727479L;
 
 	// uni-directional many-to-many association to Author
+	@XmlElement(name = "Author")
+	@XmlElementWrapper(name = "Authors")
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinTable(name = "publication_authors", joinColumns = @JoinColumn(name = "publication_id", referencedColumnName = "uuid"), inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "uuid"))
 	private List<Author> authors;

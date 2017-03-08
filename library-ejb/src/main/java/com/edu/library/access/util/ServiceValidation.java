@@ -74,6 +74,10 @@ public class ServiceValidation {
 	 *            - the password the user gave
 	 */
 	public static void checkPassword(final String password) {
+		if (password == null) {
+			logger.error(ERROR_MESSAGE);
+			throw new IllegalArgumentException(ERROR_MESSAGE);
+		}
 		final Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
 		final Matcher matcher = pattern.matcher(password);
 		if (!matcher.matches()) {

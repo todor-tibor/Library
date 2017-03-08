@@ -233,14 +233,6 @@
 					value="#{pubMan['add.book']}" update="addDialog"
 					oncomplete="PF('addDialog').show()"
 					action="#{publicationBean.setType('Book')}" />
-				<p:commandButton process="publication_actions_form" value="#{pubMan['publication.export']}"
-					icon="ui-icon-search"
-					action="#{publicationBean.exportPublication()}">
-				</p:commandButton>
-				<p:commandButton process="publication_actions_form" value="#{pubMan['publication.import']}"
-					update="publicationDT" icon="ui-icon-search"
-					action="#{publicationBean.importPublication()}">
-				</p:commandButton>
 
 				<p:dialog id="addDialog" modal="true" showEffect="fade"
 					hideEffect="fade" widgetVar="addDialog"

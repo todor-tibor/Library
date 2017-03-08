@@ -12,16 +12,18 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * The persistent class for the borrows database table.
  *
  */
+@XmlRootElement(name = "Borrow")
 @Entity
 @Table(name = "borrows")
 @NamedQueries({ @NamedQuery(name = "Borrow.findAll", query = "SELECT b FROM Borrow b"),
 		@NamedQuery(name = "Borrow.findById", query = "SELECT b FROM Borrow b WHERE b.uuid = :uuid"),
-		@NamedQuery(name = "Borrow.findByUntilDate",query = "SELECT b FROM Borrow b WHERE b.borrowUntil < :p_date")})
+		@NamedQuery(name = "Borrow.findByUntilDate", query = "SELECT b FROM Borrow b WHERE b.borrowUntil < :p_date") })
 public class Borrow extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
@@ -63,11 +65,12 @@ public class Borrow extends BaseEntity {
 		this.borrowUntil = borrowUntil;
 	}
 
-	public Publication getPublication() {
-		return this.publication;
+	@SuppressWarnings("unchecked")
+	public <T extends Publication> T getPublication() {
+		return (T) this.publication;
 	}
 
-	public void setPublication(final Publication publication) {
+	public <T extends Publication> void setPublication(final T publication) {
 		this.publication = publication;
 	}
 
