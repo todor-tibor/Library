@@ -47,13 +47,20 @@ public class Role extends BaseEntity {
 
 	@Override
 	public boolean equals(final Object obj) {
-		Role other = (Role) obj;
+		final Role other = (Role) obj;
 		if (this.role == null) {
-			if (other.role != null)
+			if (other.role != null) {
 				return false;
-		} else if (!this.role.equals(other.role))
+			}
+		} else if (!this.role.equals(other.role)) {
 			return false;
+		}
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return this.role;
 	}
 
 }
