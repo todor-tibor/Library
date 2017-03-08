@@ -63,8 +63,6 @@ public class DataExctractor {
 			final UnifiedModel unifiedModel = new UnifiedModel(descriptor, description, details, additionalDetails);
 			listOfConvertedPublications.add(unifiedModel);
 		}
-
-		listOfConvertedPublications.forEach(u -> System.out.println(u.toString()));
 		return listOfConvertedPublications;
 	}
 
@@ -99,8 +97,6 @@ public class DataExctractor {
 			final UnifiedModel unifiedModel = new UnifiedModel(descriptor, description, details, additionalDetails);
 			listOfConvertedPublications.add(unifiedModel);
 		}
-
-		listOfConvertedPublications.forEach(u -> System.out.println(u.toString()));
 		return listOfConvertedPublications;
 	}
 
@@ -126,8 +122,6 @@ public class DataExctractor {
 			final UnifiedModel unifiedModel = new UnifiedModel(descriptor, description, details, additionalDetails);
 			listOfConvertedPublications.add(unifiedModel);
 		}
-
-		listOfConvertedPublications.forEach(u -> System.out.println(u.toString()));
 		return listOfConvertedPublications;
 	}
 
@@ -153,8 +147,6 @@ public class DataExctractor {
 			final UnifiedModel unifiedModel = new UnifiedModel(descriptor, description, details, additionalDetails);
 			listOfConvertedPublications.add(unifiedModel);
 		}
-
-		listOfConvertedPublications.forEach(u -> System.out.println(u.toString()));
 		return listOfConvertedPublications;
 	}
 
@@ -180,8 +172,6 @@ public class DataExctractor {
 			final UnifiedModel unifiedModel = new UnifiedModel(descriptor, description, details, additionalDetails);
 			listOfConvertedPublications.add(unifiedModel);
 		}
-
-		listOfConvertedPublications.forEach(u -> System.out.println(u.toString()));
 		return listOfConvertedPublications;
 	}
 
@@ -207,8 +197,6 @@ public class DataExctractor {
 			final UnifiedModel unifiedModel = new UnifiedModel(descriptor, description, details, additionalDetails);
 			listOfConvertedPublications.add(unifiedModel);
 		}
-
-		listOfConvertedPublications.forEach(u -> System.out.println(u.toString()));
 		return listOfConvertedPublications;
 	}
 }

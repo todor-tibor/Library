@@ -49,7 +49,7 @@ import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 /**
  * Implements a universal data exporter to PDF format, using the UnifiedModel as
  * the object to export.
- * 
+ *
  * @author kiska
  *
  */
@@ -241,10 +241,6 @@ public class PdfExporterMB implements Serializable {
 			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		}
-
-		this.pageByTitle.entrySet().stream().sorted(Map.Entry.<String, Integer>comparingByValue().reversed()).limit(10)
-				.forEach(System.out::println);
-
 		final Paragraph paragraph = new Paragraph();
 
 		this.pageByTitle.entrySet().stream().sorted(Map.Entry.<String, Integer>comparingByValue()).limit(10)

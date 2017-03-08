@@ -33,15 +33,26 @@ public class UnifiedModel {
 	 */
 	List<String> additionalDetails = new ArrayList<>();
 
+	/**
+	 * Creates a UnifiedModel object, sets it's fields to the values provided as
+	 * parameters
+	 * 
+	 * @param descriptor
+	 *            - the descriptor of the data, usually name or title, rarely it
+	 *            is the name of the class
+	 * @param description
+	 *            - specifies what the data represents
+	 * @param details
+	 *            - some properties of the data given by key-value elements
+	 * @param additionalDetails
+	 *            - more information in the form of list (list of borrowings)
+	 */
 	public UnifiedModel(final String descriptor, final String description, final Map<String, String> details,
 			final List<String> additionalDetails) {
 		this.descriptor = descriptor;
 		this.description = description;
 		this.details = details;
 		this.additionalDetails = additionalDetails;
-	}
-
-	public UnifiedModel() {
 	}
 
 	@Override
