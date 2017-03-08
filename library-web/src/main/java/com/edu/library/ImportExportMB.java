@@ -14,6 +14,7 @@ import org.primefaces.event.TabChangeEvent;
 import com.edu.library.model.BaseEntity;
 import com.edu.library.model.Role;
 import com.edu.library.model.util.JAXB;
+import com.edu.library.model.util.JaxbException;
 import com.edu.library.util.ExceptionHandler;
 import com.edu.library.util.MessageService;
 
@@ -68,12 +69,11 @@ public class ImportExportMB implements Serializable {
 	public <T extends BaseEntity> List<T> importList() {
 		List<T> list = new ArrayList<>();
 		try {
-			System.out.println("import type: " + this.clazz);
 			list = JAXB.unmarshallList(this.clazz, this.activeTab);
 			saveEntities(list);
 			this.message.info("import.done");
 			this.logger.info("imported " + list.size() + " element");
-		} catch (IllegalArgumentException e) {
+		} catch (JaxbException e) {
 			this.logger.error(e.getMessage());
 			this.exceptionHandler.showMessage(e);
 		}
@@ -91,10 +91,9 @@ public class ImportExportMB implements Serializable {
 			JAXB.marshall(entities, this.clazz, this.activeTab);
 			this.message.info("export.done");
 			this.logger.info("exported " + entities.size() + " element");
-		} catch (IllegalArgumentException e) {
+		} catch (JaxbException e) {
 			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
-			return;
 		}
 	}
 
@@ -164,7 +163,6 @@ public class ImportExportMB implements Serializable {
 		default:
 			break;
 		}
-		System.out.println("type: " + this.clazz + "size: " + list.size());
 	}
 
 	/**

@@ -11,6 +11,8 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamSource;
 
+import org.jboss.logging.Logger;
+
 import com.edu.library.model.BaseEntity;
 import com.edu.library.model.Book;
 import com.edu.library.model.Magazine;
@@ -24,6 +26,8 @@ import com.edu.library.model.Newspaper;
  */
 public class JAXB {
 
+	private static final Logger logger = Logger.getLogger(JAXB.class);
+
 	private JAXB() {
 
 	}
@@ -35,20 +39,17 @@ public class JAXB {
 	 */
 	public static <T extends BaseEntity> List<T> unmarshallList(final Class<T> type, final String filename) {
 		try {
-			System.out.println(type);
 			JAXBContext context = JAXBContext.newInstance(EntityList.class, type, Book.class, Magazine.class,
 					Newspaper.class);
 
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			StreamSource xml = new StreamSource("C:\\" + filename + ".xml");
-			System.out.println(xml.getClass());
 			@SuppressWarnings("unchecked")
 			EntityList<T> wrapper = unmarshaller.unmarshal(xml, EntityList.class).getValue();
-			System.out.println(wrapper.getClass());
 			return wrapper.getEntities();
 		} catch (JAXBException e) {
-			e.printStackTrace();
-			throw new IllegalArgumentException("import.fail");
+			logger.error(e);
+			throw new JaxbException("import.fail");
 		}
 	}
 
@@ -74,7 +75,8 @@ public class JAXB {
 			JAXBElement<EntityList> jaxbElement = new JAXBElement<EntityList>(qName, EntityList.class, wrapper);
 			marshaller.marshal(jaxbElement, new File("C:\\" + filename + ".xml"));
 		} catch (Exception e) {
-			throw new IllegalArgumentException("export.fail");
+			logger.error(e);
+			throw new JaxbException("export.fail");
 		}
 	}
 }
