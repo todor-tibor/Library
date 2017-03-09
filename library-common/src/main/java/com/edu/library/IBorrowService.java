@@ -3,6 +3,7 @@
  */
 package com.edu.library;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.edu.library.filter.BorrowFilter;
@@ -30,7 +31,7 @@ public interface IBorrowService extends IService<Borrow> {
 
 	/**
 	 * Searches for borrow objects with borrow until before today.
-	 * 
+	 *
 	 * @return List of borrow objects that are currently late.
 	 */
 	public List<Borrow> getBorrowLate();
@@ -38,10 +39,18 @@ public interface IBorrowService extends IService<Borrow> {
 	/**
 	 * Sends an e-mail message to the user of the given borrowing, with
 	 * notification text to return the specified publication.
-	 * 
+	 *
 	 * @param borrow
 	 *            - the borrow object that is late
 	 */
 	public void mailOneLateUser(final Borrow borrow);
+
+	/**
+	 * Provides data for a statistic chart of late borrowings
+	 *
+	 * @return key value elements that represents the number of current
+	 *         borrowings and the number of late borrowings
+	 */
+	public HashMap<String, Integer> borrowLateStatistic();
 
 }

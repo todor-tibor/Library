@@ -22,7 +22,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "borrows")
 @NamedQueries({ @NamedQuery(name = "Borrow.findAll", query = "SELECT b FROM Borrow b"),
+		@NamedQuery(name = "Borrow.countAll", query = "SELECT count(b) FROM Borrow b"),
 		@NamedQuery(name = "Borrow.findById", query = "SELECT b FROM Borrow b WHERE b.uuid = :uuid"),
+		@NamedQuery(name = "Borrow.countByUntilDate", query = "SELECT count(b) FROM Borrow b WHERE b.borrowUntil < :p_date"),
 		@NamedQuery(name = "Borrow.findByUntilDate", query = "SELECT b FROM Borrow b WHERE b.borrowUntil < :p_date") })
 public class Borrow extends BaseEntity {
 
