@@ -243,20 +243,19 @@ public class PdfExporterMB implements Serializable {
 		}
 		final Paragraph paragraph = new Paragraph();
 
-		this.pageByTitle.entrySet().stream().sorted(Map.Entry.<String, Integer>comparingByValue()).limit(10)
-				.forEach(entry -> {
+		this.pageByTitle.entrySet().stream().sorted(Map.Entry.<String, Integer>comparingByValue()).forEach(entry -> {
 
-					final Chunk glue = new Chunk(new VerticalPositionMark());
-					final Anchor anchor2 = new Anchor(entry.getKey());
+			final Chunk glue = new Chunk(new VerticalPositionMark());
+			final Anchor anchor2 = new Anchor(entry.getKey());
 
-					anchor2.setReference("#" + entry.getKey());
-					paragraph.add(anchor2);
-					paragraph.add(new Chunk(glue));
-					paragraph.add(Integer.toString(entry.getValue()));
+			anchor2.setReference("#" + entry.getKey());
+			paragraph.add(anchor2);
+			paragraph.add(new Chunk(glue));
+			paragraph.add(Integer.toString(entry.getValue()));
 
-					paragraph.add(Chunk.NEWLINE);
-				});
-
+			paragraph.add(Chunk.NEWLINE);
+		});
+		this.pageByTitle.clear();
 		try {
 			document.add(paragraph);
 		} catch (final DocumentException e) {

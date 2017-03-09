@@ -3,9 +3,7 @@ package com.edu.library.business.publicationManagement;
 import static org.mockito.Mockito.times;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -93,7 +91,7 @@ public class PublicationManagementBusinessTest {
 	public void testRemove() {
 		Publication publication = new Book();
 		publication.setUuid("123");
-		publication.setBorrows(new HashSet<>());
+		publication.setBorrows(new ArrayList<>());
 		Mockito.when(this.dataAcces.getById("123")).thenReturn(publication);
 		Mockito.doNothing().when(this.dataAcces).remove(publication);
 		this.publicationManagementBusiness.remove(publication.getUuid());
@@ -105,7 +103,7 @@ public class PublicationManagementBusinessTest {
 		Publication publication = new Book();
 		publication.setUuid("123");
 		Borrow borrow = new Borrow();
-		Set<Borrow> borrows = new HashSet<>();
+		List<Borrow> borrows = new ArrayList<Borrow>();
 		borrows.add(borrow);
 		publication.setBorrows(borrows);
 		Mockito.when(this.dataAcces.getById("123")).thenReturn(publication);
