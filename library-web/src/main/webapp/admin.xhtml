@@ -30,8 +30,9 @@
 			<p:commandButton style="float:right;" value="#{msg['logout.text']}"
 				action="#{loginbean.logout()}">
 			</p:commandButton>
-			<p:commandButton style="float:right;" value="#{msg['user.myAccount']}"
-				update="myAccount" oncomplete="PF('myAccount').show()"
+			<p:commandButton style="float:right;"
+				value="#{msg['user.myAccount']}" update="myAccount"
+				oncomplete="PF('myAccount').show()"
 				action="#{userbean.getByUserName()}">
 				<f:param name="pTitle" value="#{title.value}" />
 			</p:commandButton>
@@ -73,29 +74,41 @@
 
 	<p:tabView id="tabViewId" cache="false" dynamic="false">
 
-		<!-- <p:ajax event="tabChange" listener="#{userbean.change()}"/> -->
-		<p:tab title="#{roleMan['role.button']}">
+		<p:ajax event="tabChange" listener="#{importExportBean.changeTab}" />
+		<p:tab title="#{roleMan['role.button']}" id="Role">
 			<ui:include src="role.xhtml" />
 		</p:tab>
-		<p:tab title="#{userMan['user.button']}">
+		<p:tab title="#{userMan['user.button']}" id="User">
 			<ui:include src="user_include.xhtml" />
 		</p:tab>
 
-		<p:tab title="#{msg['author.button']}">
+		<p:tab title="#{msg['author.button']}" id="Author">
 			<ui:include src="author.xhtml" />
 		</p:tab>
-		<p:tab title="#{msg['publisher.button']}">
+		<p:tab title="#{msg['publisher.button']}" id="Publisher">
 			<ui:include src="publisher.xhtml" />
 		</p:tab>
-		<p:tab title="#{msg['publication.button']}">
+		<p:tab title="#{msg['publication.button']}" id="Publication">
 			<ui:include src="publication.xhtml" />
 		</p:tab>
- 		<p:tab title="#{msg['borrow.button']}"> 
- 			<ui:include src="borrow.xhtml" /> 
- 		</p:tab>
- 		<p:tab title="#{msg['delay.button']}"> 
- 			<ui:include src="borrowlate.xhtml" /> 
- 		</p:tab>
+		<p:tab title="#{msg['borrow.button']} " id="Borrow">
+			<ui:include src="borrow.xhtml" />
+		</p:tab>
+		<p:tab title="#{msg['delay.button']}" id="Delay">
+			<ui:include src="borrowlate.xhtml" />
+		</p:tab>
 	</p:tabView>
+	<p:panel id="foother" rendered="#{importExportBean.getType() != null}">
+		<h:form id="form_foother">
+			<p:panel>
+				<p:commandButton value="#{pubMan['publication.export']}"
+					icon="ui-icon-search" action="#{importExportBean.exportList()}">
+				</p:commandButton>
+				<p:commandButton value="#{pubMan['publication.import']}"
+					icon="ui-icon-search" action="#{importExportBean.importList()}">
+				</p:commandButton>
+			</p:panel>
+		</h:form>
+	</p:panel>
 </h:body>
 </html>

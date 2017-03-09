@@ -73,6 +73,10 @@ public class UserManagementBusiness {
 	 *            - the user object on which the update will be done
 	 */
 	public void update(final User user) {
+		if (user.getPassword() == null) {
+			User tmpUser = this.dataAcces.getById(user.getUuid());
+			user.setPassword(tmpUser.getPassword());
+		}
 		this.dataAcces.update(user);
 	}
 
@@ -94,7 +98,7 @@ public class UserManagementBusiness {
 
 	/**
 	 * Search for user by an exact name.
-	 * 
+	 *
 	 * @param userName
 	 *            - the exact user name to search for
 	 * @return - the found user

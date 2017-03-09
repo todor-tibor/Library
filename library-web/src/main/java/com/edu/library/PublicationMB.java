@@ -11,7 +11,6 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.NoResultException;
 
 import org.jboss.logging.Logger;
 import org.primefaces.model.LazyDataModel;
@@ -23,8 +22,6 @@ import com.edu.library.model.Magazine;
 import com.edu.library.model.Newspaper;
 import com.edu.library.model.Publication;
 import com.edu.library.model.Publisher;
-import com.edu.library.model.util.ReadXMLFile;
-import com.edu.library.model.util.WriteXMLFile;
 import com.edu.library.util.ExceptionHandler;
 import com.edu.library.util.MessageService;
 import com.edu.library.util.PublicationLazyModel;
@@ -100,8 +97,6 @@ public class PublicationMB implements Serializable {
 
 	/**
 	 * Requests publication objects with pagination.
-	 *
-	 * @return List of all publications from database.
 	 */
 	public void getAllPaginate() {
 		try {
@@ -118,7 +113,6 @@ public class PublicationMB implements Serializable {
 	 *
 	 * @param searchTxt
 	 *            publication title.
-	 * @return List of publication objects found.
 	 */
 	public void search(final String searchTxt) {
 		if (searchTxt.length() >= 3) {
@@ -369,36 +363,6 @@ public class PublicationMB implements Serializable {
 
 	public void setDate(final Date date) {
 		this.date = date;
-	}
-
-	/**
-	 * Export publications to ".xml" extension.
-	 */
-	public void exportPublication() {
-		WriteXMLFile.exportData(getAll(), "publications");
-		this.message.info("export.done");
-	}
-
-	/**
-	 * Import publications from ".xml" extension file.
-	 *
-	 * @return - list of publications imported from file.
-	 */
-	public void importPublication() {
-		this.publicationList = ReadXMLFile.importData("publications");
-		for (final Publication p : this.publicationList) {
-			try {
-				this.publicationBean.getById(p.getUuid());
-			} catch (final Exception e) {
-				this.publicationBean.store(p);
-			}
-			try {
-				this.publicationBean.update(p);
-			} catch (final NoResultException e) {
-				this.logger.error(e);
-				this.exceptionHandler.showMessage(e);
-			}
-		}
 	}
 
 	public LazyDataModel<Publication> getLazyModel() {

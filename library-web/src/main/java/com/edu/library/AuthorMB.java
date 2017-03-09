@@ -74,7 +74,6 @@ public class AuthorMB implements Serializable {
 			this.authorList.clear();
 			try {
 				this.authorList = this.oAuthorBean.search(searchTxt);
-
 			} catch (final Exception e) {
 				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
