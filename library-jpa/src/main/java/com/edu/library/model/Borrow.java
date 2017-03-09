@@ -82,4 +82,10 @@ public class Borrow extends BaseEntity {
 		this.user = user;
 	}
 
+	@Override
+	public String toString() {
+		return "Borrowed by '" + this.user.getUserName() + "' the publication '" + this.publication.getTitle() + "' on "
+				+ this.borrowFrom + " until " + this.borrowUntil + ".";
+	}
+
 }
