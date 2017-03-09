@@ -1,6 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui">
 <f:view locale="#{localeBean.userLocale}" />
 <h:head>
@@ -21,8 +22,9 @@
 					<f:param name="p_value" value="#{srch_publisher.value}" />
 				</p:commandButton>
 
-				<p:dataTable emptyMessage="#{msg['empty.list']}" id="publisherDT" var="publisher"
-					value="#{publisherbean.publishersList}" selectionMode="single"
+				<p:dataTable emptyMessage="#{msg['empty.list']}" id="publisherDT"
+					var="publisher" value="#{publisherbean.publishersList}"
+					selectionMode="single"
 					selection="#{publisherbean.currentPublisher}"
 					rowKey="#{publisher.uuid}">
 					<p:ajax event="rowSelect" listener="#{publisherbean.isSelected}"
@@ -36,13 +38,13 @@
 						<h:outputText value="#{publisher.name}" />
 					</p:column>
 					<f:facet name="footer">
-						<p:commandButton id="renamebuttonP" process="publisherDT" icon="ui-icon-search"
-							value="#{msg['rename.button']}" update="first"
-							oncomplete="PF('publisherDialog').show()"
-							disabled="#{publisherbean.currentPublisher == null}"/>
+						<p:commandButton id="renamebuttonP" process="publisherDT"
+							icon="ui-icon-search" value="#{msg['rename.button']}"
+							update="first" oncomplete="PF('publisherDialog').show()"
+							disabled="#{publisherbean.currentPublisher == null}" />
 
-						<p:commandButton id="deletebuttonP" process="publisherDT" icon="fa-remove"
-							value="#{msg['delete.button']}"
+						<p:commandButton id="deletebuttonP" process="publisherDT"
+							icon="fa-remove" value="#{msg['delete.button']}"
 							action="#{publisherbean.remove()}" update="publisherDT"
 							disabled="#{publisherbean.currentPublisher == null}" />
 
@@ -75,6 +77,26 @@
 					oncomplete="PF('add_publisherDialog').show()">
 
 				</p:commandButton>
+
+
+
+
+				<p:commandButton process="publisher_actions_form" value="PDF export"
+					update="publisher_actions_form" icon="ui-icon-save"
+					action="#{pdfExporterBean.writePublishers()}">
+				</p:commandButton>
+				<c:if test="${pdfExporterBean.isWritten()}">
+					<h3>PDF</h3>
+
+					<object type="application/pdf"
+						data="http://localhost:8080/msgLibrary_publisher.pdf" height="700px"
+						width="100%">
+						Your browser can't display pdf, <a
+							href="http://localhost:8080/msgLibrary_publisher.pdf">click</a> to download
+						pdf instead.
+					</object>
+
+				</c:if>
 
 
 				<p:dialog id="add_publisher_dialog" modal="true" showEffect="fade"
