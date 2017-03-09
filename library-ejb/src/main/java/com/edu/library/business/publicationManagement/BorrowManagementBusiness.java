@@ -184,10 +184,6 @@ public class BorrowManagementBusiness {
 		int lateNr = this.borrowDAO.countBorrwUntilDate(new Date()).intValue();
 		map.put(this.inTime, this.borrowDAO.getBorrowCount().intValue() - lateNr);
 		map.put(this.late, lateNr);
-		map.entrySet().stream().forEach(entry -> {
-			System.out.println(entry.getKey());
-			System.out.println(entry.getValue());
-		});
 		return map;
 	}
 }
