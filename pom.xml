@@ -12,6 +12,7 @@
 		<module>library-ejb</module>
 		<module>library-web</module>
 		<module>library-ear</module>
+		<module>RCP</module>
 	</modules>
 
 	<properties>
