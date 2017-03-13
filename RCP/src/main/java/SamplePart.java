@@ -8,7 +8,6 @@ import javax.inject.Inject;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
-import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -42,8 +41,7 @@ public class SamplePart {
 
 		this.tableViewer = new TableViewer(parent);
 
-		this.tableViewer.setContentProvider(ArrayContentProvider.getInstance());
-		;
+		// this.tableViewer.setContentProvider(ArrayContentProvider));
 		this.tableViewer.setInput(createInitialDataModel());
 		this.tableViewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
