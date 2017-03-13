@@ -9,4 +9,5 @@ import com.edu.library.model.Author;
  *
  */
 public interface IAuthorService extends IService<Author> {
+	public static final String jndiNAME = "java:global/library-ear-0.0.1-SNAPSHOT/library-ejb-0.0.1-SNAPSHOT/AuthorBean";
 }

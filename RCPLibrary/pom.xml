@@ -1,13 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>gallb</groupId>
-		<artifactId>library</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</parent>
-	<artifactId>RCP</artifactId>
-	<dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>gallb</groupId>
+    <artifactId>library</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>RCPLibrary</artifactId>
+  <dependencies>
 		<dependency>
 			<groupId>org.eclipse.tycho</groupId>
 			<artifactId>org.eclipse.osgi</artifactId>
@@ -30,12 +29,6 @@
 			<artifactId>jface</artifactId>
 			<version>3.2.1-M20060908-1000</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.eclipse.platform/org.eclipse.e4.ui.workbench -->
-		<dependency>
-			<groupId>org.eclipse.platform</groupId>
-			<artifactId>org.eclipse.e4.ui.workbench</artifactId>
-			<version>1.4.0</version>
-		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/javax.inject/javax.inject -->
 		<dependency>
@@ -54,10 +47,13 @@
 			<artifactId>org.eclipse.e4.ui.di</artifactId>
 			<version>1.1.100</version>
 		</dependency>
-
-
-
-
+		<!-- module dependencies -->
+		
+		<dependency>
+			<groupId>gallb</groupId>
+			<artifactId>library-common</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
