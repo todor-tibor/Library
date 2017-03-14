@@ -1,12 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>gallb</groupId>
-    <artifactId>library</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>RCPLibrary</artifactId>
-  <dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>gallb</groupId>
+		<artifactId>library</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>RCPLibrary</artifactId>
+	<dependencies>
 		<dependency>
 			<groupId>org.eclipse.tycho</groupId>
 			<artifactId>org.eclipse.osgi</artifactId>
@@ -47,20 +48,42 @@
 			<artifactId>org.eclipse.e4.ui.di</artifactId>
 			<version>1.1.100</version>
 		</dependency>
-		<!-- module dependencies -->
 		
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
+			<version>5.0.0</version>
+		</dependency>
+		<!-- module dependencies -->
+
 		<dependency>
 			<groupId>gallb</groupId>
 			<artifactId>library-common</artifactId>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
+
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-packaging-plugin</artifactId>
-				<version>1.0.0</version>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<archive>
+						<index>true</index>
+					</archive>
+					<instructions>
+						<Import-Package>
+							com.edu.library;-split-package:=error,
+							org.osgi.framework;version="[1.6,2.0)",
+							org.osgi.util.tracker;version="[1.1,2.0)"
+						</Import-Package>
+						<Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
+						<Bundle-Activator>rcplibrary.Activator</Bundle-Activator>
+						<Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
+					</instructions>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

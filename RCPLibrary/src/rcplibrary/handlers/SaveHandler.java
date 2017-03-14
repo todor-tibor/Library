@@ -7,7 +7,7 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService;
 public class SaveHandler {
 
 	@CanExecute
-	public boolean canExecute(EPartService partService) {
+	public boolean canExecute(final EPartService partService) {
 		if (partService != null) {
 			return !partService.getDirtyParts().isEmpty();
 		}
@@ -15,7 +15,7 @@ public class SaveHandler {
 	}
 
 	@Execute
-	public void execute(EPartService partService) {
+	public void execute(final EPartService partService) {
 		partService.saveAll(false);
 	}
 }
