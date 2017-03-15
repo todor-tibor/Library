@@ -4,6 +4,7 @@
 package com.edu.library.business.publicationManagement;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,8 +12,6 @@ import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-
-import org.jboss.logging.Logger;
 
 import com.edu.library.access.util.ServiceValidation;
 import com.edu.library.business.util.BorrowRestriction;
@@ -36,7 +35,8 @@ import com.edu.library.model.User;
 @LocalBean
 public class BorrowManagementBusiness {
 
-	private final Logger logger = Logger.getLogger(BorrowManagementBusiness.class);
+	private final String late = "Late";
+	private final String inTime = "In time";
 
 	@EJB
 	private BorrowDAO borrowDAO;
@@ -171,5 +171,19 @@ public class BorrowManagementBusiness {
 
 		this.mailSendingService.send(borrow.getUser().getEmail(), "msglibrary NOTIFICATION - Borrowing out of date.",
 				text);
+	}
+
+	/**
+	 * Provides data for a statistic chart of late borrowings
+	 *
+	 * @return key value elements that represents the number of current
+	 *         borrowings and the number of late borrowings
+	 */
+	public HashMap<String, Integer> borrowLateStatistic() {
+		HashMap<String, Integer> map = new HashMap<>();
+		int lateNr = this.borrowDAO.countBorrwUntilDate(new Date()).intValue();
+		map.put(this.inTime, this.borrowDAO.getBorrowCount().intValue() - lateNr);
+		map.put(this.late, lateNr);
+		return map;
 	}
 }

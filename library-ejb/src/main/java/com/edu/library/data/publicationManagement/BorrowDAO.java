@@ -171,11 +171,37 @@ public class BorrowDAO {
 			throw new TechnicalException(e);
 		}
 	}
-
+/**
+ * Select all borrows where borrow until is less then today 
+ */
 	public List<Borrow> getBorrwUntilDate(final Date p_date) {
 		try {
 			return this.entityManager.createNamedQuery("Borrow.findByUntilDate", Borrow.class)
 					.setParameter("p_date", p_date).getResultList();
+		} catch (PersistenceException e) {
+			this.logger.error(e);
+			throw new TechnicalException(e);
+		}
+	}
+/**
+ * Returns the number of all borrowings.
+ */
+	public Long getBorrowCount() {
+		try {
+			return this.entityManager.createNamedQuery("Borrow.countAll", Long.class).getSingleResult();
+		} catch (PersistenceException e) {
+			this.logger.error(e);
+			throw new TechnicalException(e);
+		}
+	}
+
+	/**
+	 * Count all borrows where borrow until is less then today 
+	 */
+	public Long countBorrwUntilDate(final Date p_date) {
+		try {
+			return this.entityManager.createNamedQuery("Borrow.countByUntilDate", Long.class)
+					.setParameter("p_date", p_date).getSingleResult();
 		} catch (PersistenceException e) {
 			this.logger.error(e);
 			throw new TechnicalException(e);

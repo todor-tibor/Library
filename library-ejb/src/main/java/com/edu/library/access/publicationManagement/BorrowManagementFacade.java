@@ -1,5 +1,6 @@
 package com.edu.library.access.publicationManagement;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -91,5 +92,10 @@ public class BorrowManagementFacade implements IBorrowService {
 		ServiceValidation.checEmail(borrow.getUser().getEmail());
 
 		this.borrowBusiness.mailOneLateUser(borrow);
+	}
+
+	@Override
+	public HashMap<String, Integer> borrowLateStatistic() {
+		return this.borrowBusiness.borrowLateStatistic();
 	}
 }

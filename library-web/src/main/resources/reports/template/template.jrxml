@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-03-07T14:06:41 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="jasper_test" pageWidth="595" pageHeight="842" whenNoDataType="NoPages" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="30" bottomMargin="30" uuid="403e0f7e-29cc-4e12-80d7-2ddd3342f7d9">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<field name="userName" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<field name="loyaltyIndex" class="java.lang.Integer"/>
+	<title>
+		<band height="70" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="15" uuid="0e3c3c75-8d83-436a-bb2e-f864a76a8818"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Users's loyalties]]></text>
+			</staticText>
+			<textField pattern="MM/dd/yyyy">
+				<reportElement x="0" y="20" width="555" height="30" uuid="2e65285e-c357-4529-a00d-aa38c19af9bf"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement x="20" y="0" width="150" height="20" uuid="975ca89a-92a7-405b-b65b-d7d9a090e37d"/>
+				<textElement>
+					<font isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[USERNAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="170" y="0" width="180" height="20" uuid="ed3ebee5-6a2d-47b0-823c-4bb6ace5800a"/>
+				<textElement>
+					<font isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[EMAIL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="350" y="0" width="180" height="20" uuid="bcc4bfaf-672f-4fd9-8487-52e89e2efca9"/>
+				<textElement>
+					<font isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Loyalty]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement x="20" y="10" width="180" height="15" uuid="d48f434b-ed4e-44fc-959b-2649e95b7faf"/>
+				<textFieldExpression><![CDATA[$F{userName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="170" y="10" width="180" height="15" uuid="ecbc78ee-7a70-4df5-b52d-79bc7205ce9d"/>
+				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="350" y="10" width="180" height="15" uuid="f23be143-785f-47bd-a3b1-87810e91e962"/>
+				<textFieldExpression><![CDATA[$F{loyaltyIndex}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="15" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="40" height="15" uuid="6bb4c483-5b17-4689-864d-d383ad5a473e"/>
+				<text><![CDATA[Page:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="40" y="0" width="100" height="15" uuid="3f977da3-5baf-4437-a435-9438c692b937"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
