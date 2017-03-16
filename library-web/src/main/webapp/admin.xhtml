@@ -103,27 +103,29 @@
 		<h:form id="form_foother">
 			<p:panel>
 				<p:commandButton value="#{pubMan['publication.export']}"
-					icon="ui-icon-search" action="#{importExportBean.exportList()}">
-				</p:commandButton>
-				<p:commandButton value="#{pubMan['publication.import']}"
-					icon="ui-icon-search" action="#{importExportBean.importList()}">
+					icon="ui-icon-search" action="#{importExportBean.exportList()}"
+					ajax="false">
 				</p:commandButton>
 				<p:commandButton value="#{msg['PDF.export']}" icon="ui-icon-save"
-					action="#{importExportBean.savePDF()}" update="foother" >
+					action="#{importExportBean.savePDF()}" update="foother">
 				</p:commandButton>
 				<c:if test="${pdfExporterBean.isWritten()}">
 					<h3>PDF</h3>
 
-					<object type="application/pdf"
-						data="#{pdfExporterBean.data}" height="700px"
-						width="100%">
-						Your browser can't display pdf, <a
-							href="#{pdfExporterBean.data}">click</a> to
-						download pdf instead.
+					<object type="application/pdf" data="#{pdfExporterBean.data}"
+						height="700px" width="100%">
+						Your browser can't display pdf, <a href="#{pdfExporterBean.data}">click</a>
+						to download pdf instead.
 					</object>
 
 				</c:if>
 			</p:panel>
+		</h:form>
+		<h:form id="chooseFile" enctype="multipart/form-data">
+			<p:fileUpload value="#{importExportBean.file}" mode="simple" />
+
+			<p:commandButton value="#{pubMan['publication.import']}"
+				action="#{importExportBean.upload}" ajax="false" />
 		</h:form>
 	</p:panel>
 </h:body>

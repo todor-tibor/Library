@@ -1,5 +1,6 @@
 package com.edu.library;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,12 +11,13 @@ import javax.inject.Named;
 
 import org.jboss.logging.Logger;
 import org.primefaces.event.TabChangeEvent;
+import org.primefaces.model.UploadedFile;
 
 import com.edu.library.model.BaseEntity;
 import com.edu.library.model.Role;
-import com.edu.library.model.util.JAXB;
 import com.edu.library.model.util.JaxbException;
 import com.edu.library.util.ExceptionHandler;
+import com.edu.library.util.JAXB;
 import com.edu.library.util.MessageService;
 import com.edu.library.util.PdfExporterMB;
 
@@ -261,6 +263,33 @@ public class ImportExportMB implements Serializable {
 			break;
 		default:
 			break;
+		}
+	}
+
+	private UploadedFile file;
+
+	public UploadedFile getFile() {
+		return this.file;
+	}
+
+	public void setFile(final UploadedFile file) {
+		this.file = file;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends BaseEntity> void upload() {
+		System.out.println(this.file.getFileName() + " is uploaded.");
+		if (this.file != null) {
+			try {
+				List<T> list = JAXB.unmarshallList(this.clazz, this.file.getInputstream());
+				saveEntities(list);
+				this.message.info("import.done");
+				this.logger.info("imported " + list.size() + " element");
+				// FacesContext.getCurrentInstance().getExternalContext().redirect("admin.xhtml");
+			} catch (JaxbException | IOException e) {
+				this.logger.error(e.getMessage());
+				this.exceptionHandler.showMessage(e);
+			}
 		}
 	}
 
