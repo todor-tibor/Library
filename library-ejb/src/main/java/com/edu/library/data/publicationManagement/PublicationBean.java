@@ -71,7 +71,7 @@ public class PublicationBean {
 		try {
 			return this.entityManager.createNamedQuery("Publication.searchByName", Publication.class)
 					.setParameter("title", "%" + title + "%").setFirstResult(start).setMaxResults(fin).getResultList();
-		} catch (PersistenceException e) {
+		} catch (final PersistenceException e) {
 			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
@@ -90,7 +90,17 @@ public class PublicationBean {
 		try {
 			return this.entityManager.createNamedQuery("Publication.searchByName", Publication.class)
 					.setParameter("title", "%" + title + "%").getResultList();
-		} catch (PersistenceException e) {
+		} catch (final PersistenceException e) {
+			this.logger.error(e);
+			throw new TechnicalException(e);
+		}
+	}
+
+	public List<Publication> searchContent(final String content) {
+		try {
+			return this.entityManager.createNamedQuery("Publication.searchContent", Publication.class)
+					.setParameter("content", "%" + content + "%").getResultList();
+		} catch (final PersistenceException e) {
 			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
@@ -217,10 +227,10 @@ public class PublicationBean {
 	 * @return List of Publications
 	 */
 	public List<Publication> filterPublication(final PublicationFilter filter, final int start, final int fin) {
-		CriteriaQuery<Publication> cq = makeFilter(filter);
+		final CriteriaQuery<Publication> cq = makeFilter(filter);
 		try {
 			return this.entityManager.createQuery(cq).setFirstResult(start).setMaxResults(fin).getResultList();
-		} catch (PersistenceException e) {
+		} catch (final PersistenceException e) {
 			throw new TechnicalException(e);
 		}
 	}
@@ -238,7 +248,7 @@ public class PublicationBean {
 		try {
 			return this.entityManager.createNamedQuery("Publication.findAll", Publication.class).setFirstResult(start)
 					.setMaxResults(fin).getResultList();
-		} catch (PersistenceException e) {
+		} catch (final PersistenceException e) {
 			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
@@ -252,7 +262,7 @@ public class PublicationBean {
 	public long countAll() {
 		try {
 			return this.entityManager.createNamedQuery("Publication.countAll", Long.class).getSingleResult();
-		} catch (PersistenceException e) {
+		} catch (final PersistenceException e) {
 			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
@@ -270,7 +280,7 @@ public class PublicationBean {
 		try {
 			return this.entityManager.createNamedQuery("Publication.countSearch", Long.class)
 					.setParameter("title", "%" + title + "%").getSingleResult();
-		} catch (PersistenceException e) {
+		} catch (final PersistenceException e) {
 			this.logger.error(e);
 			throw new TechnicalException(e);
 		}
@@ -286,17 +296,17 @@ public class PublicationBean {
 	 * @return Number of Publications filtered
 	 */
 	public long countFilter(final PublicationFilter filter) {
-		CriteriaQuery<Publication> cq = makeFilter(filter);
+		final CriteriaQuery<Publication> cq = makeFilter(filter);
 		try {
 			return this.entityManager.createQuery(cq).getResultList().size();
-		} catch (PersistenceException e) {
+		} catch (final PersistenceException e) {
 			throw new TechnicalException(e);
 		}
 	}
 
 	/**
 	 * Create query by filter
-	 * 
+	 *
 	 * @param filter
 	 * @return
 	 */

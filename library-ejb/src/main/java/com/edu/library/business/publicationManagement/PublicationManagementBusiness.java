@@ -60,6 +60,10 @@ public class PublicationManagementBusiness {
 		return this.dataAcces.search(searchText);
 	}
 
+	public List<Publication> searchContent(final String searchText) {
+		return this.dataAcces.searchContent(searchText);
+	}
+
 	/**
 	 * Return the publication given by {@code id}
 	 *

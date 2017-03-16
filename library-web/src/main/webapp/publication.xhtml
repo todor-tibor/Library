@@ -122,7 +122,10 @@
 							icon="ui-icon-search" value="#{msg['details.button']}"
 							update="first" oncomplete="PF('publicationDialog').show()"
 							disabled="#{publicationBean.currentPublication == null}" />
-
+<p:commandButton id="showContentButton" process="publicationDT"
+							icon="ui-icon-search" value="Show content" update="contentD"
+							oncomplete="PF('publicationContentDialog').show()"
+							disabled="#{publicationBean.currentPublication == null}" />
 						<p:commandButton id="deleteButton" process="publicationDT"
 							icon="fa-remove" value="#{msg['delete.button']}"
 							action="#{publicationBean.remove()}" update="publicationDT"
@@ -214,6 +217,18 @@
 								</p:commandButton>
 
 							</c:if>
+						</p:dialog>
+						<p:dialog id="contentD" modal="true" showEffect="fade"
+							hideEffect="fade" widgetVar="publicationContentDialog"
+							header="#{publicationBean.currentPublication.title}" width="1000"
+							height="500">
+							<p:messages id="contentMessages" showDetail="true"
+								autoUpdate="true" closable="true" />
+							<br />
+							<h:outputText
+								value="#{publicationBean.currentPublication.content}"
+								style="width: 950px; height: 450px; overflow-x: scroll; display:block;" />
+							<br />
 						</p:dialog>
 					</f:facet>
 				</p:dataTable>

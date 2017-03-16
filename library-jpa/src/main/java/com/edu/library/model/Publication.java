@@ -15,6 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -42,6 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
 		@NamedQuery(name = "Publication.countAll", query = "SELECT count(a) FROM Publication a"),
 		@NamedQuery(name = "Publication.findAll", query = "SELECT a FROM Publication a"),
 		@NamedQuery(name = "Publication.searchByName", query = "SELECT a FROM Publication a WHERE a.title like :title"),
+		@NamedQuery(name = "Publication.searchContent", query = "SELECT a FROM Publication a WHERE a.content like :content"),
 		@NamedQuery(name = "Publication.getByName", query = "SELECT a FROM Publication a WHERE a.title = :title"),
 		@NamedQuery(name = "Publication.getById", query = "SELECT a FROM Publication a WHERE a.uuid = :uuid"),
 		@NamedQuery(name = "Publication.findBorrow", query = "SELECT DISTINCT b FROM Borrow b, Publication p JOIN b.publication bPublication JOIN p.borrows pPublication WHERE bPublication.uuid = pPublication.publication.uuid AND p.title LIKE :title") })
@@ -49,6 +51,8 @@ public abstract class Publication extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
+	@Lob
+	private String content;
 	/**
 	 * @param nrOfCopys
 	 *            -Represents the number of a publication copies that can be in
@@ -98,6 +102,14 @@ public abstract class Publication extends BaseEntity {
 	private Publisher publisher;
 
 	public Publication() {
+	}
+
+	public String getContent() {
+		return this.content;
+	}
+
+	public void setContent(final String content) {
+		this.content = content;
 	}
 
 	public int getNrOfCopys() {
