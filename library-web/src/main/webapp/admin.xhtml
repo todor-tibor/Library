@@ -2,7 +2,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
 <f:view locale="#{localeBean.userLocale}" />
 <h:head>
 	<f:metadata>
@@ -107,6 +108,21 @@
 				<p:commandButton value="#{pubMan['publication.import']}"
 					icon="ui-icon-search" action="#{importExportBean.importList()}">
 				</p:commandButton>
+				<p:commandButton value="#{msg['PDF.export']}" icon="ui-icon-save"
+					action="#{importExportBean.savePDF()}" update="foother" >
+				</p:commandButton>
+				<c:if test="${pdfExporterBean.isWritten()}">
+					<h3>PDF</h3>
+
+					<object type="application/pdf"
+						data="#{pdfExporterBean.data}" height="700px"
+						width="100%">
+						Your browser can't display pdf, <a
+							href="#{pdfExporterBean.data}">click</a> to
+						download pdf instead.
+					</object>
+
+				</c:if>
 			</p:panel>
 		</h:form>
 	</p:panel>

@@ -17,6 +17,7 @@ import com.edu.library.model.util.JAXB;
 import com.edu.library.model.util.JaxbException;
 import com.edu.library.util.ExceptionHandler;
 import com.edu.library.util.MessageService;
+import com.edu.library.util.PdfExporterMB;
 
 /**
  * ImportExport manager.
@@ -34,6 +35,8 @@ public class ImportExportMB implements Serializable {
 	private ExceptionHandler exceptionHandler;
 	@Inject
 	private MessageService message;
+	@Inject
+	private PdfExporterMB pdfExporter;
 
 	@Inject
 	private IPublicationService publicationBean;
@@ -227,6 +230,37 @@ public class ImportExportMB implements Serializable {
 		} else {
 			final String typeName = "com.edu.library.model." + this.activeTab;
 			setType(typeName);
+		}
+	}
+
+	/**
+	 * Invoke PDF exporter method for corresponding class
+	 */
+	public void savePDF() {
+		switch (this.activeTab) {
+		case "Publication":
+			this.pdfExporter.writePublications();
+			break;
+		case "User":
+			this.pdfExporter.writeUsers();
+			break;
+		case "Role":
+			this.pdfExporter.writeRole();
+			break;
+		case "Publisher":
+			this.pdfExporter.writePublishers();
+			break;
+		case "Author":
+			this.pdfExporter.writeAuthors();
+			break;
+		case "Borrow":
+			this.pdfExporter.writeBorrows();
+			break;
+		case "BorrowLate":
+			// list = (List<T>) this.borrowBean.getBorrowLate();
+			break;
+		default:
+			break;
 		}
 	}
 

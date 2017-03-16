@@ -12,15 +12,17 @@ import javax.inject.Named;
 
 import org.jboss.logging.Logger;
 
-import com.edu.library.AuthorMB;
-import com.edu.library.BorrowMB;
-import com.edu.library.PublicationMB;
-import com.edu.library.PublisherMB;
-import com.edu.library.UserMB;
+import com.edu.library.IAuthorService;
+import com.edu.library.IBorrowService;
+import com.edu.library.IPublicationService;
+import com.edu.library.IPublisherService;
+import com.edu.library.IRoleService;
+import com.edu.library.IUserService;
 import com.edu.library.model.Author;
 import com.edu.library.model.Borrow;
 import com.edu.library.model.Publication;
 import com.edu.library.model.Publisher;
+import com.edu.library.model.Role;
 import com.edu.library.model.UnifiedModel;
 import com.edu.library.model.User;
 import com.itextpdf.text.Anchor;
@@ -56,17 +58,17 @@ import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 public class PdfExporterMB implements Serializable {
 	private static final long serialVersionUID = -1976534651096934980L;
 	@Inject
-	PublicationMB publicationMB;
-
+	IPublicationService publicationMB;
 	@Inject
-	UserMB userMB;
-
+	IUserService userMB;
 	@Inject
-	BorrowMB borrowMB;
+	IBorrowService borrowMB;
 	@Inject
-	PublisherMB publisherMB;
+	IPublisherService publisherMB;
 	@Inject
-	AuthorMB authorMB;
+	IAuthorService authorMB;
+	@Inject
+	IRoleService roleMB;
 
 	@Inject
 	MessageService message;
@@ -74,9 +76,10 @@ public class PdfExporterMB implements Serializable {
 	@Inject
 	ExceptionHandler exceptionHandler;
 
+	private String pdfName;
+
 	final DataExctractor de = new DataExctractor();
 
-	private static boolean written = false;
 	private final Logger logger = Logger.getLogger(PdfExporterMB.class);
 
 	private final Map<String, Integer> pageByTitle = new HashMap<>();
@@ -106,72 +109,89 @@ public class PdfExporterMB implements Serializable {
 		}
 	}
 
-	public java.util.List<Publication> getPublications() {
+	private java.util.List<Publication> getPublications() {
 		return this.publicationMB.getAll();
 	}
 
-	public java.util.List<User> getUsers() {
+	private java.util.List<User> getUsers() {
 		return this.userMB.getAll();
 	}
 
-	public java.util.List<Borrow> getBorrowings() {
+	private java.util.List<Borrow> getBorrowings() {
 		return this.borrowMB.getAll();
 	}
 
-	public java.util.List<Publisher> getPublishers() {
+	private java.util.List<Publisher> getPublishers() {
 		return this.publisherMB.getAll();
 	}
 
-	public java.util.List<Author> getAuthors() {
+	private java.util.List<Author> getAuthors() {
 		return this.authorMB.getAll();
+	}
+
+	private java.util.List<Role> getRoles() {
+		return this.roleMB.getAll();
 	}
 
 	/**
 	 * Write all users existent in the database to the PDF file.
 	 */
 	public void writeUsers() {
-		writeToPdf(this.de.userExtractor(getUsers()), "msgLibrary_user");
-		written = true;
+		this.pdfName = "msgLibrary_user";
+		writeToPdf(this.de.userExtractor(getUsers()), this.pdfName);
 	}
 
 	/**
 	 * Write all publications existent in the database to the PDF file.
 	 */
 	public void writePublications() {
-		writeToPdf(this.de.publicationExtractor(getPublications()), "msgLibrary_publication");
-		written = true;
+		this.pdfName = "msgLibrary_publication";
+		writeToPdf(this.de.publicationExtractor(getPublications()), this.pdfName);
 	}
 
 	/**
 	 * Write all publishers existent in the database to the PDF file.
 	 */
 	public void writePublishers() {
-		writeToPdf(this.de.publisherExtractor(getPublishers()), "msgLibrary_publisher");
-		written = true;
+		this.pdfName = "msgLibrary_publisher";
+		writeToPdf(this.de.publisherExtractor(getPublishers()), this.pdfName);
 	}
 
 	/**
 	 * Write all authors existent in the database to the PDF file.
 	 */
 	public void writeAuthors() {
-		writeToPdf(this.de.authorExtractor(getAuthors()), "msgLibrary_author");
-		written = true;
+		this.pdfName = "msgLibrary_author";
+		writeToPdf(this.de.authorExtractor(getAuthors()), this.pdfName);
 	}
 
 	/**
-	 * Writes the list given by {@code listOfConvertedPublications} to a PDF
-	 * with the filename given by {@code filename}.
+	 * Write all roles existent in the database to the PDF file.
+	 */
+	public void writeRole() {
+		this.pdfName = "msgLibrary_role";
+		writeToPdf(this.de.roleExtractor(getRoles()), this.pdfName);
+	}
+
+	/**
+	 * Write all borrows existent in the database to the PDF file.
+	 */
+	public void writeBorrows() {
+		this.pdfName = "msgLibrary_borrow";
+		writeToPdf(this.de.borrowExtractor(getBorrowings()), this.pdfName);
+	}
+
+	/**
+	 * Writes the list given by {@code listOfConvertedEntities} to a PDF with
+	 * the filename given by {@code filename}.
 	 *
-	 * @param listOfConvertedPublications
+	 * @param listOfConvertedEntities
 	 *            - a list of UnifiedModel objects (it can be user, publication,
 	 *            etc.)
 	 * @param filename
 	 *            - the filename which the PDF will have
 	 */
-	public void writeToPdf(final java.util.List<UnifiedModel> listOfConvertedPublications, final String filename) {
-
-		written = false;
-
+	public void writeToPdf(final java.util.List<UnifiedModel> listOfConvertedEntities, final String filename) {
 		final String coverText = ".msg library";
 		final Document document = new Document(PageSize.A4, 50, 50, 50, 50);
 		try {
@@ -183,12 +203,12 @@ public class PdfExporterMB implements Serializable {
 			document.open();
 			document.setPageCount(0);
 			/** Create paragraph */
-			createParagraph(document, coverText, listOfConvertedPublications.get(0).getDescription());
+			createParagraph(document, coverText, listOfConvertedEntities.get(0).getDescription());
 			/** End paragraph */
 
 			Chapter chapter1 = null;
 			Section section1 = null;
-			for (final UnifiedModel unifiedModel : listOfConvertedPublications) {
+			for (final UnifiedModel unifiedModel : listOfConvertedEntities) {
 
 				/** Create chapter */
 				chapter1 = createChapter(unifiedModel.getDescriptor());
@@ -391,6 +411,7 @@ public class PdfExporterMB implements Serializable {
 			document.add(new Paragraph(paragraphText,
 					FontFactory.getFont(FontFactory.COURIER, 14, Font.BOLD, new CMYKColor(0, 255, 0, 0))));
 		} catch (final DocumentException e) {
+			this.pdfName = null;
 			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		}
@@ -403,6 +424,15 @@ public class PdfExporterMB implements Serializable {
 	 * @return - true if the PDF file was created.
 	 */
 	public boolean isWritten() {
-		return written;
+		return this.pdfName != null;
+	}
+
+	/**
+	 * Returns the name of the PDF file that was written.
+	 *
+	 * @return -String name
+	 */
+	public String getData() {
+		return "http://localhost:8080/" + this.pdfName + ".pdf";
 	}
 }
