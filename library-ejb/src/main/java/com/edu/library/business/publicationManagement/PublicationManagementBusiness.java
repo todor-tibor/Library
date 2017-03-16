@@ -60,8 +60,8 @@ public class PublicationManagementBusiness {
 		return this.dataAcces.search(searchText);
 	}
 
-	public List<Publication> searchContent(final String searchText) {
-		return this.dataAcces.searchContent(searchText);
+	public List<Publication> searchContent(final String searchText, final int start, final int fin) {
+		return this.dataAcces.searchContent(searchText, start, fin);
 	}
 
 	/**

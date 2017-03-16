@@ -96,10 +96,11 @@ public class PublicationBean {
 		}
 	}
 
-	public List<Publication> searchContent(final String content) {
+	public List<Publication> searchContent(final String content, final int start, final int fin) {
 		try {
 			return this.entityManager.createNamedQuery("Publication.searchContent", Publication.class)
-					.setParameter("content", "%" + content + "%").getResultList();
+					.setParameter("title", "%" + content + "%").setFirstResult(start).setMaxResults(fin)
+					.getResultList();
 		} catch (final PersistenceException e) {
 			this.logger.error(e);
 			throw new TechnicalException(e);

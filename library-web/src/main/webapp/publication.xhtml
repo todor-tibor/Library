@@ -122,7 +122,7 @@
 							icon="ui-icon-search" value="#{msg['details.button']}"
 							update="first" oncomplete="PF('publicationDialog').show()"
 							disabled="#{publicationBean.currentPublication == null}" />
-<p:commandButton id="showContentButton" process="publicationDT"
+						<p:commandButton id="showContentButton" process="publicationDT"
 							icon="ui-icon-search" value="Show content" update="contentD"
 							oncomplete="PF('publicationContentDialog').show()"
 							disabled="#{publicationBean.currentPublication == null}" />

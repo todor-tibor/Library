@@ -35,7 +35,7 @@ public interface IPublicationService extends IService<Publication> {
 	 */
 	public List<Publication> search(final String text, final int start, final int fin);
 
-	public List<Publication> searchContent(final String searchText);
+	public List<Publication> searchContent(final String searchText, final int start, final int fin);
 
 	/**
 	 * Count publications that is in the database.

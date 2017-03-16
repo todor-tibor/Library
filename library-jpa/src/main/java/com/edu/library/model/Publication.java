@@ -39,11 +39,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
-		@NamedQuery(name = "Publication.countSearch", query = "SELECT count(a) FROM Publication a WHERE a.title like :title"),
+		@NamedQuery(name = "Publication.countSearch", query = "SELECT count(a) FROM Publication a WHERE a.content like :title or a.title like :title"),
 		@NamedQuery(name = "Publication.countAll", query = "SELECT count(a) FROM Publication a"),
 		@NamedQuery(name = "Publication.findAll", query = "SELECT a FROM Publication a"),
 		@NamedQuery(name = "Publication.searchByName", query = "SELECT a FROM Publication a WHERE a.title like :title"),
-		@NamedQuery(name = "Publication.searchContent", query = "SELECT a FROM Publication a WHERE a.content like :content"),
+		@NamedQuery(name = "Publication.searchContent", query = "SELECT a FROM Publication a WHERE a.content like :title or a.title like :title"),
 		@NamedQuery(name = "Publication.getByName", query = "SELECT a FROM Publication a WHERE a.title = :title"),
 		@NamedQuery(name = "Publication.getById", query = "SELECT a FROM Publication a WHERE a.uuid = :uuid"),
 		@NamedQuery(name = "Publication.findBorrow", query = "SELECT DISTINCT b FROM Borrow b, Publication p JOIN b.publication bPublication JOIN p.borrows pPublication WHERE bPublication.uuid = pPublication.publication.uuid AND p.title LIKE :title") })

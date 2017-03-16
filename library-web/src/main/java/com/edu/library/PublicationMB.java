@@ -119,18 +119,19 @@ public class PublicationMB implements Serializable {
 	public void search(final String searchTxt) {
 		if (searchTxt.length() >= 3) {
 			try {
-				// this.lazyModel = new PublicationLazyModel(searchTxt,
-				// this.publicationBean);
-				this.publicationList.clear();
-				this.publicationList = this.publicationBean.search(searchTxt);
-				final List<Publication> temp = this.publicationBean.searchContent(searchTxt);
-				temp.forEach(p -> {
-					if (!this.publicationList.contains(p)) {
-						this.publicationList.add(p);
-					}
-				});
-				System.out.println("Searchtetxt ------" + searchTxt);
-				System.out.println(this.publicationList.size());
+				this.lazyModel = new PublicationLazyModel(searchTxt, this.publicationBean);
+				// this.publicationList.clear();
+				// this.publicationList =
+				// this.publicationBean.search(searchTxt);
+				// final List<Publication> temp =
+				// this.publicationBean.searchContent(searchTxt);
+				// temp.forEach(p -> {
+				// if (!this.publicationList.contains(p)) {
+				// this.publicationList.add(p);
+				// }
+				// });
+				// System.out.println("Searchtetxt ------" + searchTxt);
+				// System.out.println(this.publicationList.size());
 			} catch (final Exception e) {
 				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
@@ -140,21 +141,21 @@ public class PublicationMB implements Serializable {
 		}
 	}
 
-	public void searchContent(final String searchTxt) {
-		if (searchTxt.length() >= 3) {
-			try {
-				this.publicationList.clear();
-				this.publicationList = this.publicationBean.searchContent(searchTxt);
-				System.out.println("Searchtetxt ------" + searchTxt);
-				System.out.println(this.publicationList.size());
-			} catch (final Exception e) {
-				this.logger.error(e);
-				this.exceptionHandler.showMessage(e);
-			}
-		} else {
-			this.message.warn("managedbean.string");
-		}
-	}
+	// public void searchContent(final String searchTxt) {
+	// if (searchTxt.length() >= 3) {
+	// try {
+	// this.publicationList.clear();
+	// this.publicationList = this.publicationBean.searchContent(searchTxt);
+	// System.out.println("Searchtetxt ------" + searchTxt);
+	// System.out.println(this.publicationList.size());
+	// } catch (final Exception e) {
+	// this.logger.error(e);
+	// this.exceptionHandler.showMessage(e);
+	// }
+	// } else {
+	// this.message.warn("managedbean.string");
+	// }
+	// }
 
 	/**
 	 * Insert new Book, Magazine or Newspaper uses {@code currentAuthors} and
