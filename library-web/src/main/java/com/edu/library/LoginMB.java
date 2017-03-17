@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -22,7 +22,8 @@ import com.edu.library.util.MessageService;
  * @author kiska
  */
 @Named("loginbean")
-@ApplicationScoped
+@SessionScoped
+
 public class LoginMB implements Serializable {
 
 	private final Logger logger = Logger.getLogger(LoginMB.class);
