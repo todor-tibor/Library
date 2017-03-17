@@ -104,7 +104,12 @@ public abstract class Publication extends BaseEntity {
 	public Publication() {
 	}
 
+	public String getSubcontent(final int beginIndex, final int endIndex) {
+		return this.content.subSequence(beginIndex, endIndex).toString();
+	}
+
 	public String getContent() {
+
 		return this.content;
 	}
 

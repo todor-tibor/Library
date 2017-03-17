@@ -227,8 +227,12 @@
 							<br />
 							<h:outputText
 								value="#{publicationBean.currentPublication.content}"
-								style="width: 950px; height: 450px; overflow-x: scroll; display:block;" />
+								style="width: auto; height: auto; overflow-x: scroll; display:block;"/>
 							<br />
+							<p:commandButton value="Previous"
+					update=""
+					action="#{publicationBean.filterPublication}">
+				</p:commandButton>
 						</p:dialog>
 					</f:facet>
 				</p:dataTable>
