@@ -20,12 +20,12 @@
 			</h2>
 
 			<p:commandButton value="#{msg['lang.hungarian']}"
-				action="#{amibeanunk.hungarianNow()}" update="@form tabViewId">
+				action="#{amibeanunk.hungarianNow()}" update="@form tabViewId foother">
 
 			</p:commandButton>
 
 			<p:commandButton value="#{msg['lang.english']}"
-				action="#{amibeanunk.englishNow()}" update="@form tabViewId">
+				action="#{amibeanunk.englishNow()}" update="@form tabViewId foother">
 			</p:commandButton>
 
 			<p:commandButton style="float:right;" value="#{msg['logout.text']}"
@@ -115,7 +115,7 @@
 					<object type="application/pdf" data="#{pdfExporterBean.data}"
 						height="700px" width="100%">
 						Your browser can't display pdf, <a href="#{pdfExporterBean.data}">click</a>
-						to download pdf instead.
+						to download pdf instead. 
 					</object>
 
 				</c:if>

@@ -1,4 +1,4 @@
-package com.edu.library.access.publicationManagement;
+package com.edu.library.access.util;
 
 import java.util.ArrayList;
 import java.util.Date;
