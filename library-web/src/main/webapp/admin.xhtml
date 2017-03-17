@@ -109,12 +109,12 @@
 				<p:commandButton value="#{msg['PDF.export']}" icon="ui-icon-save"
 					action="#{importExportBean.savePDF()}" update="foother">
 				</p:commandButton>
-				<c:if test="${pdfExporterBean.isWritten()}">
+				<c:if test="${importExportBean.isWritten()}">
 					<h3>PDF</h3>
 
-					<object type="application/pdf" data="#{pdfExporterBean.data}"
+					<object type="application/pdf" data="#{importExportBean.data}"
 						height="700px" width="100%">
-						Your browser can't display pdf, <a href="#{pdfExporterBean.data}">click</a>
+						Your browser can't display pdf, <a href="#{importExportBean.data}">click</a>
 						to download pdf instead. 
 					</object>
 

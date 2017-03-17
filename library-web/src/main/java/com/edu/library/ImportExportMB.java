@@ -19,7 +19,6 @@ import com.edu.library.model.util.JaxbException;
 import com.edu.library.util.ExceptionHandler;
 import com.edu.library.util.JAXB;
 import com.edu.library.util.MessageService;
-import com.edu.library.util.PdfExporterMB;
 
 /**
  * ImportExport manager.
@@ -38,7 +37,7 @@ public class ImportExportMB implements Serializable {
 	@Inject
 	private MessageService message;
 	@Inject
-	private PdfExporterMB pdfExporter;
+	private IPdfExporter pdfExporter;
 
 	@Inject
 	private IPublicationService publicationBean;
@@ -53,6 +52,7 @@ public class ImportExportMB implements Serializable {
 	@Inject
 	private IBorrowService borrowBean;
 
+	private String pdfName;
 	/**
 	 * Class of entities for marshall or unmarshall
 	 */
@@ -78,7 +78,7 @@ public class ImportExportMB implements Serializable {
 			saveEntities(list);
 			this.message.info("import.done");
 			this.logger.info("imported " + list.size() + " element");
-		} catch (JaxbException e) {
+		} catch (final JaxbException e) {
 			this.logger.error(e.getMessage());
 			this.exceptionHandler.showMessage(e);
 		}
@@ -92,11 +92,11 @@ public class ImportExportMB implements Serializable {
 	@SuppressWarnings("unchecked")
 	public <T extends BaseEntity> void exportList() {
 		try {
-			List<T> entities = getEntities();
+			final List<T> entities = getEntities();
 			JAXB.marshall(entities, this.clazz, this.activeTab);
 			this.message.info("export.done");
 			this.logger.info("exported " + entities.size() + " element");
-		} catch (JaxbException e) {
+		} catch (final JaxbException e) {
 			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		}
@@ -183,7 +183,7 @@ public class ImportExportMB implements Serializable {
 			try {
 				service.getById(entity.getUuid());
 				service.update(entity);
-			} catch (IllegalArgumentException e) {
+			} catch (final IllegalArgumentException e) {
 				this.logger.error(e.getMessage());
 				this.exceptionHandler.showMessage(e);
 				return;
@@ -205,7 +205,7 @@ public class ImportExportMB implements Serializable {
 		}
 		try {
 			this.clazz = Class.forName(type);
-		} catch (ClassNotFoundException e) {
+		} catch (final ClassNotFoundException e) {
 			this.logger.warn(e.getLocalizedMessage());
 		}
 	}
@@ -264,6 +264,7 @@ public class ImportExportMB implements Serializable {
 		default:
 			break;
 		}
+		this.pdfName = this.pdfExporter.getPdfName();
 	}
 
 	private UploadedFile file;
@@ -281,7 +282,7 @@ public class ImportExportMB implements Serializable {
 		System.out.println(this.file.getFileName() + " is uploaded.");
 		if (this.file != null) {
 			try {
-				List<T> list = JAXB.unmarshallList(this.clazz, this.file.getInputstream());
+				final List<T> list = JAXB.unmarshallList(this.clazz, this.file.getInputstream());
 				saveEntities(list);
 				this.message.info("import.done");
 				this.logger.info("imported " + list.size() + " element");
@@ -293,4 +294,20 @@ public class ImportExportMB implements Serializable {
 		}
 	}
 
+	/**
+	 * Checks whether the PDF file was written.
+	 *
+	 */
+	public boolean isWritten() {
+		return this.pdfName != null;
+	}
+
+	/**
+	 * Returns the name of the PDF file that was written.
+	 *
+	 * @return -String name
+	 */
+	public String getData() {
+		return "http://localhost:8080/" + this.pdfName + ".pdf";
+	}
 }
