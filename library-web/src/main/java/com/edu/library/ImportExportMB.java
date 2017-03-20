@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletResponse;
 
 import org.jboss.logging.Logger;
 import org.primefaces.event.TabChangeEvent;
@@ -15,9 +17,10 @@ import org.primefaces.model.UploadedFile;
 
 import com.edu.library.model.BaseEntity;
 import com.edu.library.model.Role;
+import com.edu.library.model.util.JAXB;
 import com.edu.library.model.util.JaxbException;
+import com.edu.library.porting.IPdfExporter;
 import com.edu.library.util.ExceptionHandler;
-import com.edu.library.util.JAXB;
 import com.edu.library.util.MessageService;
 
 /**
@@ -65,27 +68,6 @@ public class ImportExportMB implements Serializable {
 	private String activeTab = "Role";
 
 	/**
-	 * Import list of entities (specified by type) from ".xml" extension file
-	 * using JAXB and store them in database
-	 *
-	 * @return - list of entities imported from file.
-	 */
-	@SuppressWarnings("unchecked")
-	public <T extends BaseEntity> List<T> importList() {
-		List<T> list = new ArrayList<>();
-		try {
-			list = JAXB.unmarshallList(this.clazz, this.activeTab);
-			saveEntities(list);
-			this.message.info("import.done");
-			this.logger.info("imported " + list.size() + " element");
-		} catch (final JaxbException e) {
-			this.logger.error(e.getMessage());
-			this.exceptionHandler.showMessage(e);
-		}
-		return list;
-	}
-
-	/**
 	 * Export entities from database (specified by type) to ".xml" extension
 	 * file using JAXB.
 	 */
@@ -93,12 +75,22 @@ public class ImportExportMB implements Serializable {
 	public <T extends BaseEntity> void exportList() {
 		try {
 			final List<T> entities = getEntities();
-			JAXB.marshall(entities, this.clazz, this.activeTab);
+			// JAXB.marshall(entities, this.clazz, this.activeTab);
+			HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance()
+					.getExternalContext().getResponse();
+			httpServletResponse.setHeader("Content-disposition", "attachment; filename=" + this.activeTab + ".xml");
+			httpServletResponse.setContentType("text/xml");
+			JAXB.marshall(entities, this.clazz, httpServletResponse.getOutputStream());
 			this.message.info("export.done");
 			this.logger.info("exported " + entities.size() + " element");
 		} catch (final JaxbException e) {
 			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
+		} catch (IOException e) {
+			this.logger.error(e);
+			this.exceptionHandler.showMessage(e);
+		} finally {
+			FacesContext.getCurrentInstance().responseComplete();
 		}
 	}
 
@@ -277,8 +269,14 @@ public class ImportExportMB implements Serializable {
 		this.file = file;
 	}
 
+	/**
+	 * Import list of entities (specified by type) from ".xml" extension file
+	 * using JAXB and store them in database
+	 *
+	 * @return - list of entities imported from file.
+	 */
 	@SuppressWarnings("unchecked")
-	public <T extends BaseEntity> void upload() {
+	public <T extends BaseEntity> void importList() {
 		System.out.println(this.file.getFileName() + " is uploaded.");
 		if (this.file != null) {
 			try {

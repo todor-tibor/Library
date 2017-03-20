@@ -11,7 +11,6 @@ import javax.ejb.Stateless;
 
 import org.jboss.logging.Logger;
 
-import com.edu.library.IPdfExporter;
 import com.edu.library.business.exception.BusinessException;
 import com.edu.library.business.publicationManagement.AuthorManagementBusiness;
 import com.edu.library.business.publicationManagement.BorrowManagementBusiness;
@@ -26,6 +25,7 @@ import com.edu.library.model.Publisher;
 import com.edu.library.model.Role;
 import com.edu.library.model.UnifiedModel;
 import com.edu.library.model.User;
+import com.edu.library.porting.IPdfExporter;
 import com.itextpdf.text.Anchor;
 import com.itextpdf.text.Chapter;
 import com.itextpdf.text.Chunk;
