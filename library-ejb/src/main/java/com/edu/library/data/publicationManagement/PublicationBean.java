@@ -96,6 +96,19 @@ public class PublicationBean {
 		}
 	}
 
+	/**
+	 * Searches the publication's content in the database by the given parameter
+	 * {@code searchText}
+	 *
+	 * @param searchText
+	 *            - the text to search for in the content
+	 * @param start
+	 *            - start row number
+	 * @param fin
+	 *            - number of data per page
+	 * @return List of publications that match the criteria, empty list if there
+	 *         was no match
+	 */
 	public List<Publication> searchContent(final String content, final int start, final int fin) {
 		try {
 			return this.entityManager.createNamedQuery("Publication.searchContent", Publication.class)
