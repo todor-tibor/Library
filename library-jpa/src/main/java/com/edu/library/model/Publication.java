@@ -117,7 +117,7 @@ public abstract class Publication extends BaseEntity {
 	/**
 	 * Retrieve a substring of the actual string, given by the @{code
 	 * beginIndex}, {@code endIndex} bounds
-	 * 
+	 *
 	 * @param beginIndex
 	 *            - the first character from which to start the retrieving
 	 * @param endIndex
@@ -154,6 +154,13 @@ public abstract class Publication extends BaseEntity {
 	}
 
 	public String getPageContent() {
+		/**
+		 * if content length doesn't exceed the page character limit, then show
+		 * characters from start until content length
+		 */
+		if (this.pageCharCount >= this.content.length() - 1) {
+			this.pageCharCount = this.content.length() - 1;
+		}
 		/**
 		 * inside the text bounds
 		 */
