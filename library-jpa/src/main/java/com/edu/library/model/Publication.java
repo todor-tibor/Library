@@ -23,6 +23,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -101,15 +102,90 @@ public abstract class Publication extends BaseEntity {
 	@JoinColumn(name = "publisher_id")
 	private Publisher publisher;
 
+	@Transient
+	private int startIndex = 0;
+	@Transient
+	private int endingIndex = 0;
+	@Transient
+	private int pageCharCount = 2000;
+	@Transient
+	String returnString;
+
 	public Publication() {
 	}
 
-	public String getContent() {
-		return this.content;
+	/**
+	 * Retrieve a substring of the actual string, given by the @{code
+	 * beginIndex}, {@code endIndex} bounds
+	 * 
+	 * @param beginIndex
+	 *            - the first character from which to start the retrieving
+	 * @param endIndex
+	 *            - the last character until which to do the retrieving
+	 * @return
+	 */
+	public String getSubcontent(final int beginIndex, final int endIndex) {
+		return this.content.substring(beginIndex, endIndex);
+	}
+
+	public int getPageCharCount() {
+		return this.pageCharCount;
+	}
+
+	/**
+	 * Go to the next page, retrieve the next {@code pageCharCount} number
+	 * characters
+	 */
+	public void nextPage() {
+		this.startIndex = this.endingIndex;
+		this.endingIndex = this.startIndex + this.pageCharCount;
+		getPageContent();
+
+	}
+
+	/**
+	 * Go to the previous page, retrieve the previous {@code pageCharCount}
+	 * number characters
+	 */
+	public void previousPage() {
+		this.endingIndex = this.startIndex;
+		this.startIndex = this.endingIndex - this.pageCharCount;
+		getPageContent();
+	}
+
+	public String getPageContent() {
+		/**
+		 * inside the text bounds
+		 */
+		if ((this.startIndex < this.content.length() - 1) && (this.endingIndex > 0) && (this.startIndex >= 0)
+				&& (this.endingIndex < this.content.length() - 1)) {
+			this.returnString = getSubcontent(this.startIndex, this.endingIndex);
+		}
+		/**
+		 * starting point is less than the minimal character number of the text
+		 */
+		else if (this.startIndex < 0) {
+			this.returnString = getSubcontent(0, this.pageCharCount);
+			this.startIndex = this.endingIndex;
+			this.endingIndex = this.startIndex + this.pageCharCount;
+		}
+		/**
+		 * it was the first time the method was invoked, show the first page
+		 */
+		else {
+			this.returnString = getSubcontent(this.startIndex, this.endingIndex + this.pageCharCount);
+			this.startIndex = this.endingIndex;
+			this.endingIndex = this.startIndex + this.pageCharCount;
+		}
+		return this.returnString;
 	}
 
 	public void setContent(final String content) {
 		this.content = content;
+	}
+
+	public String getContent() {
+		return this.content;
 	}
 
 	public int getNrOfCopys() {
@@ -176,6 +252,14 @@ public abstract class Publication extends BaseEntity {
 
 	public void setPublisher(final Publisher publisher) {
 		this.publisher = publisher;
+	}
+
+	public void setPageCharCount(final int pageCharCount) {
+		this.pageCharCount = pageCharCount;
+	}
+
+	public String getReturnString() {
+		return this.returnString;
 	}
 
 }
