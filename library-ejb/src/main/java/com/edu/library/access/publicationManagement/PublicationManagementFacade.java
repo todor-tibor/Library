@@ -37,6 +37,12 @@ public class PublicationManagementFacade implements IPublicationService {
 	}
 
 	@Override
+	public List<Publication> searchContent(final String searchText, final int start, final int fin) {
+		ServiceValidation.checkString(searchText);
+		return this.publicationBusiness.searchContent(searchText, start, fin);
+	}
+
+	@Override
 	public Publication getById(final String id) {
 		ServiceValidation.checkUuid(id);
 		return this.publicationBusiness.getById(id);

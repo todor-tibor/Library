@@ -1,5 +1,6 @@
 package com.edu.library;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,12 +11,13 @@ import javax.inject.Named;
 
 import org.jboss.logging.Logger;
 import org.primefaces.event.TabChangeEvent;
+import org.primefaces.model.UploadedFile;
 
 import com.edu.library.model.BaseEntity;
 import com.edu.library.model.Role;
-import com.edu.library.model.util.JAXB;
 import com.edu.library.model.util.JaxbException;
 import com.edu.library.util.ExceptionHandler;
+import com.edu.library.util.JAXB;
 import com.edu.library.util.MessageService;
 
 /**
@@ -34,6 +36,8 @@ public class ImportExportMB implements Serializable {
 	private ExceptionHandler exceptionHandler;
 	@Inject
 	private MessageService message;
+	@Inject
+	private IPdfExporter pdfExporter;
 
 	@Inject
 	private IPublicationService publicationBean;
@@ -48,6 +52,7 @@ public class ImportExportMB implements Serializable {
 	@Inject
 	private IBorrowService borrowBean;
 
+	private String pdfName;
 	/**
 	 * Class of entities for marshall or unmarshall
 	 */
@@ -73,7 +78,7 @@ public class ImportExportMB implements Serializable {
 			saveEntities(list);
 			this.message.info("import.done");
 			this.logger.info("imported " + list.size() + " element");
-		} catch (JaxbException e) {
+		} catch (final JaxbException e) {
 			this.logger.error(e.getMessage());
 			this.exceptionHandler.showMessage(e);
 		}
@@ -87,11 +92,11 @@ public class ImportExportMB implements Serializable {
 	@SuppressWarnings("unchecked")
 	public <T extends BaseEntity> void exportList() {
 		try {
-			List<T> entities = getEntities();
+			final List<T> entities = getEntities();
 			JAXB.marshall(entities, this.clazz, this.activeTab);
 			this.message.info("export.done");
 			this.logger.info("exported " + entities.size() + " element");
-		} catch (JaxbException e) {
+		} catch (final JaxbException e) {
 			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		}
@@ -178,7 +183,7 @@ public class ImportExportMB implements Serializable {
 			try {
 				service.getById(entity.getUuid());
 				service.update(entity);
-			} catch (IllegalArgumentException e) {
+			} catch (final IllegalArgumentException e) {
 				this.logger.error(e.getMessage());
 				this.exceptionHandler.showMessage(e);
 				return;
@@ -200,7 +205,7 @@ public class ImportExportMB implements Serializable {
 		}
 		try {
 			this.clazz = Class.forName(type);
-		} catch (ClassNotFoundException e) {
+		} catch (final ClassNotFoundException e) {
 			this.logger.warn(e.getLocalizedMessage());
 		}
 	}
@@ -230,4 +235,79 @@ public class ImportExportMB implements Serializable {
 		}
 	}
 
+	/**
+	 * Invoke PDF exporter method for corresponding class
+	 */
+	public void savePDF() {
+		switch (this.activeTab) {
+		case "Publication":
+			this.pdfExporter.writePublications();
+			break;
+		case "User":
+			this.pdfExporter.writeUsers();
+			break;
+		case "Role":
+			this.pdfExporter.writeRole();
+			break;
+		case "Publisher":
+			this.pdfExporter.writePublishers();
+			break;
+		case "Author":
+			this.pdfExporter.writeAuthors();
+			break;
+		case "Borrow":
+			this.pdfExporter.writeBorrows();
+			break;
+		case "BorrowLate":
+			// list = (List<T>) this.borrowBean.getBorrowLate();
+			break;
+		default:
+			break;
+		}
+		this.pdfName = this.pdfExporter.getPdfName();
+	}
+
+	private UploadedFile file;
+
+	public UploadedFile getFile() {
+		return this.file;
+	}
+
+	public void setFile(final UploadedFile file) {
+		this.file = file;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends BaseEntity> void upload() {
+		System.out.println(this.file.getFileName() + " is uploaded.");
+		if (this.file != null) {
+			try {
+				final List<T> list = JAXB.unmarshallList(this.clazz, this.file.getInputstream());
+				saveEntities(list);
+				this.message.info("import.done");
+				this.logger.info("imported " + list.size() + " element");
+				// FacesContext.getCurrentInstance().getExternalContext().redirect("admin.xhtml");
+			} catch (JaxbException | IOException e) {
+				this.logger.error(e.getMessage());
+				this.exceptionHandler.showMessage(e);
+			}
+		}
+	}
+
+	/**
+	 * Checks whether the PDF file was written.
+	 *
+	 */
+	public boolean isWritten() {
+		return this.pdfName != null;
+	}
+
+	/**
+	 * Returns the name of the PDF file that was written.
+	 *
+	 * @return -String name
+	 */
+	public String getData() {
+		return "http://localhost:8080/" + this.pdfName + ".pdf";
+	}
 }
