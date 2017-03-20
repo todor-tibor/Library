@@ -120,8 +120,8 @@
 					<f:facet name="footer">
 						<p:commandButton id="detailsButton" process="publicationDT"
 							icon="ui-icon-search" value="#{msg['details.button']}"
-							ajax="true"							
-							update="first" oncomplete="PF('publicationDialog').show()"
+							ajax="true" update="first"
+							oncomplete="PF('publicationDialog').show()"
 							disabled="#{publicationBean.currentPublication == null}" />
 						<p:commandButton id="showContentButton" process="publicationDT"
 							icon="ui-icon-search" value="Show content" update="contentD"
@@ -219,30 +219,40 @@
 
 							</c:if>
 						</p:dialog>
-						
-							<p:dialog id="contentD" modal="true" showEffect="fade"
-								hideEffect="fade" widgetVar="publicationContentDialog"
-								header="#{publicationBean.currentPublication.title}" width="75%"
-								height="100%" rendered="#{publicationBean.currentPublication.content.length() gt 0}">
-								<p:messages id="contentMessages" showDetail="true"
-									autoUpdate="true" closable="true" />
-								<br />
-								<h:panelGrid id="pageText">
-									<h:outputText
-										value="#{publicationBean.currentPublication.getPageContent()}"
-										style="width: 100%; height: 100%; overflow-x: scroll; display:block;" />
-								</h:panelGrid>
 
-								<br />
-								<p:commandButton value="Previous" update="pageText"
-									action="#{publicationBean.currentPublication.previousPage()}">
-								</p:commandButton>
-								<p:commandButton value="Next" update="pageText"
-									action="#{publicationBean.currentPublication.nextPage()}">
-								</p:commandButton>
-							</p:dialog>
-					
-					</f:facet>	
+						<p:dialog id="contentD" modal="true" showEffect="fade"
+							hideEffect="fade" widgetVar="publicationContentDialog"
+							header="#{publicationBean.currentPublication.title}" width="75%"
+							height="100%">
+							<p:messages id="contentMessages" showDetail="true"
+								autoUpdate="true" closable="true" />
+							<br />
+							<h:panelGrid id="pageText">
+
+								<c:choose>
+									<c:when
+										test="#{publicationBean.currentPublication.content.length() gt 0}">
+										<h:outputText
+											value="#{publicationBean.currentPublication.getPageContent()}"
+											style="width: 100%; height: 100%; overflow-x: scroll; display:block;" />
+									</c:when>
+									<c:otherwise>
+										<h:outputText value="No content to show"
+											style="width: 100%; height: 100%; overflow-x: scroll; display:block;" />
+									</c:otherwise>
+								</c:choose>
+							</h:panelGrid>
+
+							<br />
+							<p:commandButton value="Previous" update="pageText"
+								action="#{publicationBean.currentPublication.previousPage()}">
+							</p:commandButton>
+							<p:commandButton value="Next" update="pageText"
+								action="#{publicationBean.currentPublication.nextPage()}">
+							</p:commandButton>
+						</p:dialog>
+
+					</f:facet>
 				</p:dataTable>
 				<p:commandButton process="publication_actions_form"
 					value="#{pubMan['listPublications.button']}" update="publicationDT"
@@ -260,7 +270,7 @@
 					value="#{pubMan['add.book']}" update="addDialog"
 					oncomplete="PF('addDialog').show()"
 					action="#{publicationBean.setType('Book')}" />
-				
+
 				<p:dialog id="addDialog" modal="true" showEffect="fade"
 					hideEffect="fade" widgetVar="addDialog"
 					header="#{pubMan['add.newPublication']}" width="500" height="500">
