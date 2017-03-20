@@ -120,6 +120,7 @@
 					<f:facet name="footer">
 						<p:commandButton id="detailsButton" process="publicationDT"
 							icon="ui-icon-search" value="#{msg['details.button']}"
+							ajax="true"							
 							update="first" oncomplete="PF('publicationDialog').show()"
 							disabled="#{publicationBean.currentPublication == null}" />
 						<p:commandButton id="showContentButton" process="publicationDT"
@@ -218,23 +219,30 @@
 
 							</c:if>
 						</p:dialog>
-						<p:dialog id="contentD" modal="true" showEffect="fade"
-							hideEffect="fade" widgetVar="publicationContentDialog"
-							header="#{publicationBean.currentPublication.title}" width="1000"
-							height="500">
-							<p:messages id="contentMessages" showDetail="true"
-								autoUpdate="true" closable="true" />
-							<br />
-							<h:outputText
-								value="#{publicationBean.currentPublication.content}"
-								style="width: auto; height: auto; overflow-x: scroll; display:block;"/>
-							<br />
-							<p:commandButton value="Previous"
-					update=""
-					action="#{publicationBean.filterPublication}">
-				</p:commandButton>
-						</p:dialog>
-					</f:facet>
+						
+							<p:dialog id="contentD" modal="true" showEffect="fade"
+								hideEffect="fade" widgetVar="publicationContentDialog"
+								header="#{publicationBean.currentPublication.title}" width="75%"
+								height="100%" rendered="#{publicationBean.currentPublication.content.length() gt 0}">
+								<p:messages id="contentMessages" showDetail="true"
+									autoUpdate="true" closable="true" />
+								<br />
+								<h:panelGrid id="pageText">
+									<h:outputText
+										value="#{publicationBean.currentPublication.getPageContent()}"
+										style="width: 100%; height: 100%; overflow-x: scroll; display:block;" />
+								</h:panelGrid>
+
+								<br />
+								<p:commandButton value="Previous" update="pageText"
+									action="#{publicationBean.currentPublication.previousPage()}">
+								</p:commandButton>
+								<p:commandButton value="Next" update="pageText"
+									action="#{publicationBean.currentPublication.nextPage()}">
+								</p:commandButton>
+							</p:dialog>
+					
+					</f:facet>	
 				</p:dataTable>
 				<p:commandButton process="publication_actions_form"
 					value="#{pubMan['listPublications.button']}" update="publicationDT"
