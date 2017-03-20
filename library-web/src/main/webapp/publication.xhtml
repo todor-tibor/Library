@@ -124,7 +124,7 @@
 							oncomplete="PF('publicationDialog').show()"
 							disabled="#{publicationBean.currentPublication == null}" />
 						<p:commandButton id="showContentButton" process="publicationDT"
-							icon="ui-icon-search" value="Show content" update="contentD"
+							icon="ui-icon-search" value="#{pubMan['publication.content']}" update="contentD"
 							oncomplete="PF('publicationContentDialog').show()"
 							disabled="#{publicationBean.currentPublication == null}" />
 						<p:commandButton id="deleteButton" process="publicationDT"
@@ -237,17 +237,17 @@
 											style="width: 100%; height: 100%; overflow-x: scroll; display:block;" />
 									</c:when>
 									<c:otherwise>
-										<h:outputText value="No content to show"
+										<h:outputText value="#{pubMan['publication.noContent']}"
 											style="width: 100%; height: 100%; overflow-x: scroll; display:block;" />
 									</c:otherwise>
 								</c:choose>
 							</h:panelGrid>
 
 							<br />
-							<p:commandButton value="Previous" update="pageText"
+							<p:commandButton value="#{pubMan['prev.button']}" update="pageText"
 								action="#{publicationBean.currentPublication.previousPage()}">
 							</p:commandButton>
-							<p:commandButton value="Next" update="pageText"
+							<p:commandButton value="#{pubMan['next.button']}" update="pageText"
 								action="#{publicationBean.currentPublication.nextPage()}">
 							</p:commandButton>
 						</p:dialog>
