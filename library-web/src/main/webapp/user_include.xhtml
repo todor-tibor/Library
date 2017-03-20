@@ -89,25 +89,9 @@
 					update="userDT" icon="ui-icon-user" action="#{userbean.getAll}"
 					oncomplete="PF('userDetailDialog').show()">
 				</p:commandButton>
-				<h:commandButton value="JASPER" update="userDT"
-					action="#{jasperBean.toPdf}" />
-				<p:commandButton process="actions_form" value="PDF export"
-					update="actions_form" icon="ui-icon-save"
-					action="#{pdfExporterBean.writeUsers()}">
-				</p:commandButton>
-				<c:if test="${pdfExporterBean.isWritten()}">
-					<h3>PDF</h3>
-
-					<object type="application/pdf"
-						data="http://localhost:8080/msgLibrary_user.pdf" height="700px"
-						width="100%">
-						Your browser can't display pdf, <a
-							href="http://localhost:8080/msgLibrary_user">click</a> to
-						download pdf instead.
-					</object>
-
-				</c:if>
-
+				<p:commandButton value="#{msg['Jasper.save']}" update="userDT"
+					action="#{jasperBean.toPdf}" ajax="false"  />
+				
 				<p:dialog id="addUserDialog" modal="true" showEffect="fade"
 					hideEffect="fade" widgetVar="userDetailDialog"
 					header="#{userMan['addUser.button']}" width="500" height="300">

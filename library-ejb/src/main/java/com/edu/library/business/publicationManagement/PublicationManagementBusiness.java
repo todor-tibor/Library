@@ -60,8 +60,20 @@ public class PublicationManagementBusiness {
 		return this.dataAcces.search(searchText);
 	}
 
-	public List<Publication> searchContent(final String searchText) {
-		return this.dataAcces.searchContent(searchText);
+	/**
+	 * Searches for the text given by @{code searchText} in the publication's
+	 * content
+	 * 
+	 * @param searchText
+	 *            - the text to search for in the content
+	 * @param start
+	 *            - start row number
+	 * @param fin
+	 *            - number of data per page
+	 * @return List of publications founds, empty list if there was no match
+	 */
+	public List<Publication> searchContent(final String searchText, final int start, final int fin) {
+		return this.dataAcces.searchContent(searchText, start, fin);
 	}
 
 	/**

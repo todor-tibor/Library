@@ -2,7 +2,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
 <f:view locale="#{localeBean.userLocale}" />
 <h:head>
 	<f:metadata>
@@ -19,12 +20,12 @@
 			</h2>
 
 			<p:commandButton value="#{msg['lang.hungarian']}"
-				action="#{amibeanunk.hungarianNow()}" update="@form tabViewId">
+				action="#{amibeanunk.hungarianNow()}" update="@form tabViewId foother">
 
 			</p:commandButton>
 
 			<p:commandButton value="#{msg['lang.english']}"
-				action="#{amibeanunk.englishNow()}" update="@form tabViewId">
+				action="#{amibeanunk.englishNow()}" update="@form tabViewId foother">
 			</p:commandButton>
 
 			<p:commandButton style="float:right;" value="#{msg['logout.text']}"
@@ -102,12 +103,29 @@
 		<h:form id="form_foother">
 			<p:panel>
 				<p:commandButton value="#{pubMan['publication.export']}"
-					icon="ui-icon-search" action="#{importExportBean.exportList()}">
+					icon="ui-icon-search" action="#{importExportBean.exportList()}"
+					ajax="false">
 				</p:commandButton>
-				<p:commandButton value="#{pubMan['publication.import']}"
-					icon="ui-icon-search" action="#{importExportBean.importList()}">
+				<p:commandButton value="#{msg['PDF.export']}" icon="ui-icon-save"
+					action="#{importExportBean.savePDF()}" update="foother">
 				</p:commandButton>
+				<c:if test="${importExportBean.isWritten()}">
+					<h3>PDF</h3>
+
+					<object type="application/pdf" data="#{importExportBean.data}"
+						height="700px" width="100%">
+						Your browser can't display pdf, <a href="#{importExportBean.data}">click</a>
+						to download pdf instead. 
+					</object>
+
+				</c:if>
 			</p:panel>
+		</h:form>
+		<h:form id="chooseFile" enctype="multipart/form-data">
+			<p:fileUpload value="#{importExportBean.file}" mode="simple" />
+
+			<p:commandButton value="#{pubMan['publication.import']}"
+				action="#{importExportBean.importList}" ajax="false" />
 		</h:form>
 	</p:panel>
 </h:body>

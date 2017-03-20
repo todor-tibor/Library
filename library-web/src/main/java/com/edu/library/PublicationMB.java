@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.jboss.logging.Logger;
+import org.primefaces.component.datatable.DataTable;
 import org.primefaces.model.LazyDataModel;
 
 import com.edu.library.filter.PublicationFilter;
@@ -36,6 +37,7 @@ import com.edu.library.util.PublicationLazyModel;
  */
 @Named("publicationBean")
 @SessionScoped
+
 public class PublicationMB implements Serializable {
 
 	private final Logger logger = Logger.getLogger(PublicationMB.class);
@@ -54,6 +56,8 @@ public class PublicationMB implements Serializable {
 	PublicationFilter filter = new PublicationFilter();
 	private Date date = new Date();
 
+	private DataTable dataTable;;
+
 	/**
 	 * Variables to select publication type, authors or publisher for update and
 	 * insert
@@ -71,6 +75,8 @@ public class PublicationMB implements Serializable {
 	 * Currently selected publication.
 	 */
 	private Publication currentPublication = null;
+
+	private String content;
 
 	/**
 	 * Initialize dataTable with first page
@@ -119,34 +125,7 @@ public class PublicationMB implements Serializable {
 	public void search(final String searchTxt) {
 		if (searchTxt.length() >= 3) {
 			try {
-				// this.lazyModel = new PublicationLazyModel(searchTxt,
-				// this.publicationBean);
-				this.publicationList.clear();
-				this.publicationList = this.publicationBean.search(searchTxt);
-				final List<Publication> temp = this.publicationBean.searchContent(searchTxt);
-				temp.forEach(p -> {
-					if (!this.publicationList.contains(p)) {
-						this.publicationList.add(p);
-					}
-				});
-				System.out.println("Searchtetxt ------" + searchTxt);
-				System.out.println(this.publicationList.size());
-			} catch (final Exception e) {
-				this.logger.error(e);
-				this.exceptionHandler.showMessage(e);
-			}
-		} else {
-			this.message.warn("managedbean.string");
-		}
-	}
-
-	public void searchContent(final String searchTxt) {
-		if (searchTxt.length() >= 3) {
-			try {
-				this.publicationList.clear();
-				this.publicationList = this.publicationBean.searchContent(searchTxt);
-				System.out.println("Searchtetxt ------" + searchTxt);
-				System.out.println(this.publicationList.size());
+				this.lazyModel = new PublicationLazyModel(searchTxt, this.publicationBean);
 			} catch (final Exception e) {
 				this.logger.error(e);
 				this.exceptionHandler.showMessage(e);
@@ -203,10 +182,7 @@ public class PublicationMB implements Serializable {
 		publication.setNrOfCopys(nrOfCopies);
 		publication.setOnStock(nrOfCopies);
 		publication.setPublisher(this.currentPublisher);
-		// System.out.println(this.fileContent.getFile().getFileName() + " " +
-		// this.fileContent.getFile().getContents());
 		final String content = this.fileContent.getText();
-		System.out.println("TTTTTeeeeeeeeeeexxxxxxxxxrttttttttt      " + content);
 		publication.setContent(content);
 		final Calendar c = Calendar.getInstance();
 		c.setTime(this.date);
@@ -421,5 +397,26 @@ public class PublicationMB implements Serializable {
 
 	public Date getToday() {
 		return new Date();
+	}
+
+	public DataTable getDataTable() {
+		return this.dataTable;
+	}
+
+	public void setDataTable(final DataTable dataTable) {
+		this.dataTable = dataTable;
+	}
+
+	public String getContent(final Publication pub) {
+		return pub.getContent();
+	}
+
+	public String getContent() {
+		// System.out.println("Content " + this.content.length());
+		return this.content;
+	}
+
+	public void setContent(final String content) {
+		this.content = content;
 	}
 }

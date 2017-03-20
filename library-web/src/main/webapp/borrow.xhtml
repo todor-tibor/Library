@@ -117,6 +117,8 @@
 					value="#{borrowMan['button.add']}" update="addDialog"
 					oncomplete="PF('addDialog').show()">
 				</p:commandButton>
+				<p:commandButton value="#{msg['Jasper.save']}" update="borrowDT"
+					action="#{jasperBean.toPdfChart}" ajax="false" />
 
 				<p:dialog id="addDialog" modal="true" showEffect="fade"
 					hideEffect="fade" widgetVar="addDialog"

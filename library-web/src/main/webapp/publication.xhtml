@@ -120,10 +120,11 @@
 					<f:facet name="footer">
 						<p:commandButton id="detailsButton" process="publicationDT"
 							icon="ui-icon-search" value="#{msg['details.button']}"
-							update="first" oncomplete="PF('publicationDialog').show()"
+							ajax="true" update="first"
+							oncomplete="PF('publicationDialog').show()"
 							disabled="#{publicationBean.currentPublication == null}" />
-<p:commandButton id="showContentButton" process="publicationDT"
-							icon="ui-icon-search" value="Show content" update="contentD"
+						<p:commandButton id="showContentButton" process="publicationDT"
+							icon="ui-icon-search" value="#{pubMan['publication.content']}" update="contentD"
 							oncomplete="PF('publicationContentDialog').show()"
 							disabled="#{publicationBean.currentPublication == null}" />
 						<p:commandButton id="deleteButton" process="publicationDT"
@@ -218,18 +219,39 @@
 
 							</c:if>
 						</p:dialog>
+
 						<p:dialog id="contentD" modal="true" showEffect="fade"
 							hideEffect="fade" widgetVar="publicationContentDialog"
-							header="#{publicationBean.currentPublication.title}" width="1000"
-							height="500">
+							header="#{publicationBean.currentPublication.title}" width="75%"
+							height="100%">
 							<p:messages id="contentMessages" showDetail="true"
 								autoUpdate="true" closable="true" />
 							<br />
-							<h:outputText
-								value="#{publicationBean.currentPublication.content}"
-								style="width: 950px; height: 450px; overflow-x: scroll; display:block;" />
+							<h:panelGrid id="pageText">
+
+								<c:choose>
+									<c:when
+										test="#{publicationBean.currentPublication.content.length() gt 0}">
+										<h:outputText
+											value="#{publicationBean.currentPublication.getPageContent()}"
+											style="width: 100%; height: 100%; overflow-x: scroll; display:block;" />
+									</c:when>
+									<c:otherwise>
+										<h:outputText value="#{pubMan['publication.noContent']}"
+											style="width: 100%; height: 100%; overflow-x: scroll; display:block;" />
+									</c:otherwise>
+								</c:choose>
+							</h:panelGrid>
+
 							<br />
+							<p:commandButton value="#{msg['prev.button']}" update="pageText"
+								action="#{publicationBean.currentPublication.previousPage()}">
+							</p:commandButton>
+							<p:commandButton value="#{msg['next.button']}" update="pageText"
+								action="#{publicationBean.currentPublication.nextPage()}">
+							</p:commandButton>
 						</p:dialog>
+
 					</f:facet>
 				</p:dataTable>
 				<p:commandButton process="publication_actions_form"
@@ -248,24 +270,7 @@
 					value="#{pubMan['add.book']}" update="addDialog"
 					oncomplete="PF('addDialog').show()"
 					action="#{publicationBean.setType('Book')}" />
-				<h:commandButton value="JASPER" update="publicationDT"
-					action="#{jasperBean.toPdfChart}" />
-				<p:commandButton process="publication_actions_form"
-					value="PDF export" update="publication_actions_form"
-					icon="ui-icon-save" action="#{pdfExporterBean.writePublications()}">
-				</p:commandButton>
-				<c:if test="${pdfExporterBean.isWritten()}">
-					<h3>PDF</h3>
 
-					<object type="application/pdf"
-						data="http://localhost:8080/msgLibrary_publication.pdf"
-						height="700px" width="100%">
-						Your browser can't display pdf, <a
-							href="http://localhost:8080/msgLibrary_publication.pdf">click</a>
-						to download pdf instead.
-					</object>
-
-				</c:if>
 				<p:dialog id="addDialog" modal="true" showEffect="fade"
 					hideEffect="fade" widgetVar="addDialog"
 					header="#{pubMan['add.newPublication']}" width="500" height="500">
