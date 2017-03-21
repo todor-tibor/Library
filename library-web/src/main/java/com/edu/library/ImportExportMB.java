@@ -18,7 +18,7 @@ import org.primefaces.model.UploadedFile;
 import com.edu.library.model.BaseEntity;
 import com.edu.library.model.Role;
 import com.edu.library.model.util.JAXB;
-import com.edu.library.model.util.JaxbException;
+import com.edu.library.model.util.JpaException;
 import com.edu.library.porting.IPdfExporter;
 import com.edu.library.util.ExceptionHandler;
 import com.edu.library.util.MessageService;
@@ -83,7 +83,7 @@ public class ImportExportMB implements Serializable {
 			JAXB.marshall(entities, this.clazz, httpServletResponse.getOutputStream());
 			this.message.info("export.done");
 			this.logger.info("exported " + entities.size() + " element");
-		} catch (final JaxbException e) {
+		} catch (final JpaException e) {
 			this.logger.error(e);
 			this.exceptionHandler.showMessage(e);
 		} catch (IOException e) {
@@ -259,6 +259,9 @@ public class ImportExportMB implements Serializable {
 		this.pdfName = this.pdfExporter.getPdfName();
 	}
 
+	/**
+	 * Using for select file from file system
+	 */
 	private UploadedFile file;
 
 	public UploadedFile getFile() {
@@ -285,7 +288,7 @@ public class ImportExportMB implements Serializable {
 				this.message.info("import.done");
 				this.logger.info("imported " + list.size() + " element");
 				// FacesContext.getCurrentInstance().getExternalContext().redirect("admin.xhtml");
-			} catch (JaxbException | IOException e) {
+			} catch (JpaException | IOException e) {
 				this.logger.error(e.getMessage());
 				this.exceptionHandler.showMessage(e);
 			}

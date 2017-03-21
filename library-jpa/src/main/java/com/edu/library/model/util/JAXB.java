@@ -52,7 +52,7 @@ public class JAXB implements Serializable {
 			return wrapper.getEntities();
 		} catch (JAXBException e) {
 			logger.error(e);
-			throw new JaxbException("import.fail");
+			throw new JpaException("import.fail");
 		}
 	}
 
@@ -81,7 +81,7 @@ public class JAXB implements Serializable {
 			marshaller.marshal(jaxbElement, out);
 		} catch (Exception e) {
 			logger.error(e);
-			throw new JaxbException("export.fail");
+			throw new JpaException("export.fail");
 		}
 	}
 }
