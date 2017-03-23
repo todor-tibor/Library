@@ -4,29 +4,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashMap;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jboss.logging.Logger;
 
+import com.edu.library.model.util.JasperReports;
+import com.edu.library.model.util.JpaException;
 import com.edu.library.util.ExceptionHandler;
 import com.edu.library.util.MessageService;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
 /**
  *
- * Publication manager.
+ * Jasper controller for making reports.
  *
  * @author sipost
  * @author kiska
@@ -48,59 +42,47 @@ public class JasperControllerMB implements Serializable {
 	ExceptionHandler exceptionHandler;
 	@Inject
 	MessageService message;
-	private JasperPrint jasperPrint;
-
-	/**
-	 * Creates a JASPER printer based on the given template and data collection
-	 */
-	private <T> void initReport(final Collection<T> collection, final String templateName) {
-		JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(collection);
-		InputStream reportPath = FacesContext.getCurrentInstance().getExternalContext()
-				.getResourceAsStream("/WEB-INF/classes/reports/jasper/" + templateName + ".jasper");
-		try {
-			this.jasperPrint = JasperFillManager.fillReport(reportPath, new HashMap<String, Object>(),
-					beanCollectionDataSource);
-		} catch (JRException e) {
-			this.logger.error(e);
-			this.exceptionHandler.showMessage(e);
-		}
-	}
-
-	/**
-	 * Saves a JASPER report to the file given by {@code filename}.
-	 * 
-	 * @param filename
-	 *            - the name of the file to which the report will be saved
-	 */
-	public void savePdf(final String filename) {
-		HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance()
-				.getExternalContext().getResponse();
-		httpServletResponse.reset();
-		httpServletResponse.setHeader("Content-disposition", "attachment; filename=" + filename + ".pdf");
-		httpServletResponse.setContentType("application/pdf");
-		try {
-			ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream();
-			JasperExportManager.exportReportToPdfStream(this.jasperPrint, servletOutputStream);
-		} catch (JRException | IOException e) {
-			this.logger.error(e);
-			this.exceptionHandler.showMessage(e);
-		}
-		FacesContext.getCurrentInstance().responseComplete();
-	}
 
 	/**
 	 * Saves the users to the PDF file.
 	 */
 	public void toPdf() {
-		initReport(this.userBean.getAll(), "template");
-		savePdf("userReport");
+		makeReport("template", "userReport", this.userBean.getAll());
 	}
 
 	/**
 	 * Saves the borrowings to the PDF file.
 	 */
 	public void toPdfChart() {
-		initReport(this.borrowBean.borrowLateStatistic().entrySet(), "pieChart_template");
-		savePdf("borrowReport");
+		makeReport("pieChart_template", "borrowReport", this.borrowBean.borrowLateStatistic().entrySet());
+	}
+
+	/**
+	 * Get input stream for template, get output stream for saving the file and
+	 * call static function JasperReport savePdf
+	 *
+	 * @param template
+	 *            -name of the template file
+	 * @param output
+	 *            -name of the output file
+	 * @param collection
+	 *            - collection of entities for report
+	 */
+	private <T> void makeReport(final String template, final String output, final Collection<T> collection) {
+		InputStream reportFile = FacesContext.getCurrentInstance().getExternalContext()
+				.getResourceAsStream("/WEB-INF/classes/reports/jasper/" + template + ".jasper");
+		HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance()
+				.getExternalContext().getResponse();
+		httpServletResponse.reset();
+		httpServletResponse.setHeader("Content-disposition", "attachment; filename=" + output + ".pdf");
+		httpServletResponse.setContentType("application/pdf");
+		try {
+			JasperReports.savePdf(collection, reportFile, httpServletResponse.getOutputStream());
+		} catch (IOException | JpaException e) {
+			this.logger.error(e);
+			this.exceptionHandler.showMessage(e);
+		} finally {
+			FacesContext.getCurrentInstance().responseComplete();
+		}
 	}
 }

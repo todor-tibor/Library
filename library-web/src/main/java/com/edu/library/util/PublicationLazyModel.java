@@ -84,7 +84,7 @@ public class PublicationLazyModel extends LazyDataModel<Publication> {
 		try {
 			int dataSize = (int) (this.publicationService.countSearch(this.title));
 			this.setRowCount(dataSize);
-			this.data = this.publicationService.search(this.title, first, pageSize);
+			this.data = this.publicationService.searchContent(this.title, first, pageSize);
 		} catch (Exception e) {
 			this.logger.error(e);
 		}

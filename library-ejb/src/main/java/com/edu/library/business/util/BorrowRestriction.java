@@ -6,6 +6,7 @@ import com.edu.library.business.exception.BusinessException;
 import com.edu.library.business.exception.ErrorMessages;
 import com.edu.library.data.publicationManagement.BorrowDAO;
 import com.edu.library.data.publicationManagement.PublicationBean;
+import com.edu.library.data.userManagement.UserDao;
 import com.edu.library.model.Borrow;
 import com.edu.library.model.Publication;
 import com.edu.library.model.User;
@@ -24,7 +25,7 @@ public class BorrowRestriction {
 	/**
 	 * Invokes both user and publication restrictions when the use ris trying to
 	 * borrow a publication.
-	 * 
+	 *
 	 * @param tmpUser
 	 *            - the user that wants to borrow
 	 * @param pubDAO
@@ -34,20 +35,19 @@ public class BorrowRestriction {
 	 * @param id
 	 *            - the borrowing the user wants to borrow
 	 */
-	public static void checkBorrowRestriction(final User tmpUser, final PublicationBean pubDAO,
+	public static void checkBorrowRestriction(final UserDao userDAO, final PublicationBean pubDAO,
 			final BorrowDAO borrowDAO, final Borrow id) {
 		// final User tmpUser = this.userDAO.getById(id.getUser().getUuid());
 		// check if trust index is OK
+		final User tmpUser = userDAO.getById(id.getUser().getUuid());
 		userRestriction(tmpUser);
 		final Publication tmpPub = pubDAO.getById(id.getPublication().getUuid());
 		publicationResctriction(tmpUser, tmpPub);
-		tmpPub.setOnStock(tmpPub.getOnStock() - 1);
-		borrowDAO.store(id);
 	}
 
 	/**
 	 * Checks the restrictions of a user when trying to borrow.
-	 * 
+	 *
 	 * @param tmpUser
 	 *            - the user for which to check the restrictions
 	 */
@@ -157,7 +157,7 @@ public class BorrowRestriction {
 	 *            - the number to check if it is less than zero
 	 */
 	private static void notOnStock(final int stock) {
-		if (stock < 0) {
+		if (stock <= 0) {
 			throw new BusinessException(ErrorMessages.ERROR_STOCK);
 		}
 	}

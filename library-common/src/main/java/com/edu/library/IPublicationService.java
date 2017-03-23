@@ -31,9 +31,27 @@ public interface IPublicationService extends IService<Publication> {
 	 *
 	 * @param searchTxt
 	 *            - String to search for
+	 * @param start
+	 *            - start row number
+	 * @param fin
+	 *            - number of data per page
 	 * @return List of entities found, empty list if nothing found.
 	 */
 	public List<Publication> search(final String text, final int start, final int fin);
+
+	/**
+	 * Lists the publications that have in content the text given by
+	 * {@code searchText}
+	 *
+	 * @param searchText
+	 *            - the text to search for in the content
+	 * @param start
+	 *            - start row number
+	 * @param fin
+	 *            - number of data per page
+	 * @return List of publications founds, empty list if there was no match
+	 */
+	public List<Publication> searchContent(final String searchText, final int start, final int fin);
 
 	/**
 	 * Count publications that is in the database.

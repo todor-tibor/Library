@@ -88,10 +88,13 @@ public class BorrowManagementBusiness {
 	 *            - the unique identifier of a borrow
 	 */
 	public void store(final Borrow id) {
-		// get current data of user
-		final User tmpUser = this.userDAO.getById(id.getUser().getUuid());
 
-		BorrowRestriction.checkBorrowRestriction(tmpUser, this.pubDAO, this.borrowDAO, id);
+		BorrowRestriction.checkBorrowRestriction(this.userDAO, this.pubDAO, this.borrowDAO, id);
+		final Publication publication = this.pubDAO.getById(id.getPublication().getUuid());
+		publication.setOnStock(publication.getOnStock() - 1);
+		this.pubDAO.update(publication);
+		id.setPublication(publication);
+		this.borrowDAO.store(id);
 	}
 
 	/**
@@ -180,8 +183,8 @@ public class BorrowManagementBusiness {
 	 *         borrowings and the number of late borrowings
 	 */
 	public HashMap<String, Integer> borrowLateStatistic() {
-		HashMap<String, Integer> map = new HashMap<>();
-		int lateNr = this.borrowDAO.countBorrwUntilDate(new Date()).intValue();
+		final HashMap<String, Integer> map = new HashMap<>();
+		final int lateNr = this.borrowDAO.countBorrwUntilDate(new Date()).intValue();
 		map.put(this.inTime, this.borrowDAO.getBorrowCount().intValue() - lateNr);
 		map.put(this.late, lateNr);
 		return map;

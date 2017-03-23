@@ -1,6 +1,8 @@
 package com.edu.library.model.util;
 
-import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -24,8 +26,9 @@ import com.edu.library.model.Newspaper;
  * @author sipost
  *
  */
-public class JAXB {
+public class JAXB implements Serializable {
 
+	private static final long serialVersionUID = 6848520504203333083L;
 	private static final Logger logger = Logger.getLogger(JAXB.class);
 
 	private JAXB() {
@@ -33,23 +36,23 @@ public class JAXB {
 	}
 
 	/**
-	 * Unmarshal XML to EntityList and return List value.
+	 * Unmarshal InputStream (XML) to EntityList and return List value.
 	 *
 	 * @return List of entities
 	 */
-	public static <T extends BaseEntity> List<T> unmarshallList(final Class<T> type, final String filename) {
+	public static <T extends BaseEntity> List<T> unmarshallList(final Class<T> type, final InputStream file) {
 		try {
 			JAXBContext context = JAXBContext.newInstance(EntityList.class, type, Book.class, Magazine.class,
 					Newspaper.class);
 
 			Unmarshaller unmarshaller = context.createUnmarshaller();
-			StreamSource xml = new StreamSource("C:\\" + filename + ".xml");
+			StreamSource xml = new StreamSource(file);
 			@SuppressWarnings("unchecked")
 			EntityList<T> wrapper = unmarshaller.unmarshal(xml, EntityList.class).getValue();
 			return wrapper.getEntities();
 		} catch (JAXBException e) {
 			logger.error(e);
-			throw new JaxbException("import.fail");
+			throw new JpaException("import.fail");
 		}
 	}
 
@@ -61,9 +64,11 @@ public class JAXB {
 	 *            - List entities
 	 * @param type
 	 *            - Class of entities
+	 * @param out
+	 *            - OutputStream
 	 */
 	public static <T extends BaseEntity> void marshall(final List<T> entities, final Class<T> type,
-			final String filename) {
+			final OutputStream out) {
 		try {
 			JAXBContext context = JAXBContext.newInstance(EntityList.class, type, Book.class, Magazine.class,
 					Newspaper.class);
@@ -73,10 +78,10 @@ public class JAXB {
 			EntityList<T> wrapper = new EntityList<T>(entities);
 			@SuppressWarnings("rawtypes")
 			JAXBElement<EntityList> jaxbElement = new JAXBElement<EntityList>(qName, EntityList.class, wrapper);
-			marshaller.marshal(jaxbElement, new File("C:\\" + filename + ".xml"));
+			marshaller.marshal(jaxbElement, out);
 		} catch (Exception e) {
 			logger.error(e);
-			throw new JaxbException("export.fail");
+			throw new JpaException("export.fail");
 		}
 	}
 }

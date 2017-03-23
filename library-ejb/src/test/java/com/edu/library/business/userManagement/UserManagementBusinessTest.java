@@ -1,4 +1,4 @@
-package test;
+package com.edu.library.business.userManagement;
 
 import static org.mockito.Mockito.times;
 
@@ -86,21 +86,9 @@ public class UserManagementBusinessTest {
 
 	@Test
 	public void testUpdate() {
-		final String name = "KisKate";
 		final String password = "Almafa.123";
-		final String email = "kiskate@gmail.com";
-		final int loyaltyIndex = 10;
 		final User tmpUser = new User();
-		tmpUser.setUserName(name);
-		tmpUser.setLoyaltyIndex(loyaltyIndex);
 		tmpUser.setPassword(password);
-		tmpUser.setEmail(email);
-		final List<Role> roles = new ArrayList<>();
-		final Role role = new Role();
-		role.setUuid("1423");
-		role.setRole("LIBRARIAN");
-		roles.add(role);
-		tmpUser.setRoles(roles);
 
 		Mockito.doNothing().when(this.dataAcces).update(tmpUser);
 		this.userManagementBusiness.update(tmpUser);
@@ -133,7 +121,7 @@ public class UserManagementBusinessTest {
 		Mockito.when(this.dataAcces.getById("123")).thenReturn(user);
 		Mockito.doThrow(e).when(this.dataAcces).remove(user);
 		this.userManagementBusiness.remove(user.getUuid());
-		Mockito.verify(this.dataAcces, times(0)).remove(user);
+		Mockito.verify(this.dataAcces, times(1)).remove(user);
 	}
 
 	@Test

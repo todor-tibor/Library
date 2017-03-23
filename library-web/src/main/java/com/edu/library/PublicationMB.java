@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.jboss.logging.Logger;
+import org.primefaces.component.datatable.DataTable;
 import org.primefaces.model.LazyDataModel;
 
 import com.edu.library.filter.PublicationFilter;
@@ -36,6 +37,7 @@ import com.edu.library.util.PublicationLazyModel;
  */
 @Named("publicationBean")
 @SessionScoped
+
 public class PublicationMB implements Serializable {
 
 	private final Logger logger = Logger.getLogger(PublicationMB.class);
@@ -48,9 +50,13 @@ public class PublicationMB implements Serializable {
 	ExceptionHandler exceptionHandler;
 	@Inject
 	MessageService message;
+	@Inject
+	FileContentManager fileContent;
 
 	PublicationFilter filter = new PublicationFilter();
 	private Date date = new Date();
+
+	private DataTable dataTable;;
 
 	/**
 	 * Variables to select publication type, authors or publisher for update and
@@ -69,6 +75,8 @@ public class PublicationMB implements Serializable {
 	 * Currently selected publication.
 	 */
 	private Publication currentPublication = null;
+
+	private String content;
 
 	/**
 	 * Initialize dataTable with first page
@@ -174,6 +182,8 @@ public class PublicationMB implements Serializable {
 		publication.setNrOfCopys(nrOfCopies);
 		publication.setOnStock(nrOfCopies);
 		publication.setPublisher(this.currentPublisher);
+		final String content = this.fileContent.getText();
+		publication.setContent(content);
 		final Calendar c = Calendar.getInstance();
 		c.setTime(this.date);
 		c.add(Calendar.DATE, 1);
@@ -387,5 +397,26 @@ public class PublicationMB implements Serializable {
 
 	public Date getToday() {
 		return new Date();
+	}
+
+	public DataTable getDataTable() {
+		return this.dataTable;
+	}
+
+	public void setDataTable(final DataTable dataTable) {
+		this.dataTable = dataTable;
+	}
+
+	public String getContent(final Publication pub) {
+		return pub.getContent();
+	}
+
+	public String getContent() {
+		// System.out.println("Content " + this.content.length());
+		return this.content;
+	}
+
+	public void setContent(final String content) {
+		this.content = content;
 	}
 }
